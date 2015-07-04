@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Spring MVC -->
+    <logger name="org.springframework.web" level="DEBUG"/>
+
+    <!-- log4jdbc-log4j2 -->
+    <logger name="jdbc.sqlonly" level="DEBUG"/>
+    <logger name="jdbc.sqltiming" level="INFO"/>
+    <logger name="jdbc.audit" level="INFO"/>
+    <logger name="jdbc.resultset" level="ERROR"/>
+    <logger name="jdbc.resultsettable" level="ERROR"/>
+    <logger name="jdbc.connection" level="DEBUG"/>
+
+    <!-- Doma 2 -->
+    <logger name="org.seasar.doma" level="ERROR"/>
+</included>
