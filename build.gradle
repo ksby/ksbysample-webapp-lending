@@ -98,15 +98,53 @@ test {
 // for Doma-Gen
 task gen << {
     def rootPackageName = 'ksbysample.webapp.lending'
-
+    def daoPackagePath  = 'src/main/java/ksbysample/webapp/lending/dao'
+    def workDirPath     = 'work'
+    def workDaoDirPath  = "${workDirPath}/dao"
+    
+    // 現在の Dao インターフェースのバックアップを取得する
+    delete "${workDirPath}"
+    copy() {
+        from "${daoPackagePath}"
+        into "${workDaoDirPath}/org"
+    }
+    
+    // Dao インターフェース、Entity クラスを生成する
     ant.taskdef(resource: 'domagentask.properties',
             classpath: configurations.domaGenRuntime.asPath)
-    ant.gen(url: 'jdbc:postgresql://localhost/lendingdb', user: 'lending_user', password: 'xxxxxxxx') {
+    ant.gen(url: 'jdbc:postgresql://localhost/ksbylending'
+                , user: 'ksbylending_user'
+                , password: 'xxxxxxxx'
+            ) {
         entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
         daoConfig(packageName: "${rootPackageName}.dao")
         sqlConfig()
     }
 
+    // 生成された Dao インターフェースを作業用ディレクトリにコピーし、
+    // @ComponentAndAutowiredDomaConfig アノテーションを付加する
+    copy() {
+        from "${daoPackagePath}"
+        into "${workDaoDirPath}/replace"
+        filter {
+            line -> line.replaceAll('import org.seasar.doma.Dao;', 'import ksbysample.webapp.lending.util.doma.ComponentAndAutowiredDomaConfig;\nimport org.seasar.doma.Dao;')
+                        .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+        }
+    }
+    // @ComponentAndAutowiredDomaConfig アノテーションを付加した Dao インターフェースを
+    // dao パッケージへ戻す
+    copy() {
+        from "${workDaoDirPath}/replace"
+        into "${daoPackagePath}"
+    }
+    // 元々 dao パッケージ内にあったファイルを元に戻す
+    copy() {
+        from "${workDaoDirPath}/org"
+        into "${daoPackagePath}"
+    }
+    // 作業用ディレクトリを削除する
+    delete "${workDirPath}"
+    
     // 自動生成したファイルを git add する
     def grgit = org.ajoberstar.grgit.Grgit.open(dir: project.projectDir)
     grgit.add(patterns: ['.'])
