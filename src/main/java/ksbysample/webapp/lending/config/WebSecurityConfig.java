@@ -25,6 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 認証の対象外にしたいURLがある場合には、以下のような記述を追加します
                 // 複数URLがある場合はantMatchersメソッドにカンマ区切りで対象URLを複数列挙します
                 // .antMatchers("/country/**").permitAll()
+                .antMatchers("/fonts/**").permitAll()
+                .antMatchers("/html/**").permitAll()
                 .anyRequest().authenticated();
         http.formLogin()
                 .loginPage("/")
