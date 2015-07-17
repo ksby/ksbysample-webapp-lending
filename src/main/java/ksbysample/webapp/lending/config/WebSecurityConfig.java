@@ -7,17 +7,17 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import javax.sql.DataSource;
 
 @Configuration
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
-    private DataSource dataSource;
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -27,11 +27,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // .antMatchers("/country/**").permitAll()
                 .antMatchers("/fonts/**").permitAll()
                 .antMatchers("/html/**").permitAll()
+                .antMatchers("/encode").permitAll()
                 .anyRequest().authenticated();
         http.formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/xxxxxxxx")
+                .defaultSuccessUrl("/loginsuccess")
                 .failureUrl("/")
                 .usernameParameter("id")
                 .passwordParameter("password")
@@ -47,9 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("select id, password, enabled from user where id = ?")
-                .authoritiesByUsernameQuery("select id, role from user_role where id = ?")
+        auth.userDetailsService(userDetailsService)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
 

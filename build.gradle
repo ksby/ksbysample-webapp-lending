@@ -66,6 +66,7 @@ dependencies {
     // Appendix E. Dependency versions ( http://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity3")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-velocity")
     compile("org.springframework.boot:spring-boot-starter-mail")
