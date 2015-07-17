@@ -1,10 +1,11 @@
 create table user_info (
     user_id                 bigserial primary key
     , username              varchar(32) not null
-    , password              varchar(32) not null
+    , password              varchar(256) not null
     , mail_address          varchar(256) not null
     , enabled               smallint not null default 1
 );
+create index user_info_idx_01 on user_info(mail_address);
 
 create table user_role (
     role_id                 bigserial primary key

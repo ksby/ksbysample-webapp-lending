@@ -21,6 +21,9 @@ public interface UserInfoDao {
     @Select
     UserInfo selectById(Long userId);
 
+    @Select
+    UserInfo selectByMailAddress(String mailAddress);
+    
     /**
      * @param entity
      * @return affected rows
