@@ -4,6 +4,7 @@ create table user_info (
     , password              varchar(256) not null
     , mail_address          varchar(256) not null
     , enabled               smallint not null default 1
+    , cnt_badcredentials    smallint not null default 0
 );
 create index user_info_idx_01 on user_info(mail_address);
 

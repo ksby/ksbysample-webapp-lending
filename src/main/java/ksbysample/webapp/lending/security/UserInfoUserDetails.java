@@ -19,12 +19,11 @@ public class UserInfoUserDetails implements UserDetails {
     public UserInfoUserDetails(UserInfo userInfo
             , Set<? extends GrantedAuthority> authorities
             , boolean accountNonExpired
-            , boolean accountNonLocked
             , boolean credentialsNonExpired) {
         this.userInfo = userInfo;
         this.authorities = authorities;
         this.accountNonExpired = accountNonExpired;
-        this.accountNonLocked = accountNonLocked;
+        this.accountNonLocked = (userInfo.getCntBadcredentials() < 5);
         this.credentialsNonExpired = credentialsNonExpired;
         this.enabled = (userInfo.getEnabled() == 1);
     }

@@ -35,6 +35,10 @@ public class UserInfo {
     @Column(name = "enabled")
     Short enabled;
 
+    /** */
+    @Column(name = "cnt_badcredentials")
+    Short cntBadcredentials;
+
     /** 
      * Returns the userId.
      * 
@@ -123,5 +127,23 @@ public class UserInfo {
      */
     public void setEnabled(Short enabled) {
         this.enabled = enabled;
+    }
+
+    /** 
+     * Returns the cntBadcredentials.
+     * 
+     * @return the cntBadcredentials
+     */
+    public Short getCntBadcredentials() {
+        return cntBadcredentials;
+    }
+
+    /** 
+     * Sets the cntBadcredentials.
+     * 
+     * @param cntBadcredentials the cntBadcredentials
+     */
+    public void setCntBadcredentials(Short cntBadcredentials) {
+        this.cntBadcredentials = cntBadcredentials;
     }
 }
