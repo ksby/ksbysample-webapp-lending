@@ -38,6 +38,12 @@ public interface UserInfoDao {
     @Update
     int update(UserInfo entity);
 
+    @Update(sqlFile = true)
+    int incCntBadcredentialsByMailAddress(String mailAddress);
+
+    @Update(sqlFile = true)
+    int initCntBadcredentialsByUsername(String username);
+    
     /**
      * @param entity
      * @return affected rows

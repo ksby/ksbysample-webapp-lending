@@ -5,6 +5,8 @@ import ksbysample.webapp.lending.dao.UserRoleDao;
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.entity.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,11 +27,16 @@ public class UserInfoUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRoleDao userRoleDao;
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo = userInfoDao.selectByMailAddress(username);
         if (userInfo == null) {
-            throw new UsernameNotFoundException(String.format("username(%s) not found.", username));
+            throw new UsernameNotFoundException(
+                    messageSource.getMessage("UserInfoUserDetailsService.usernameNotFound"
+                            , new Object[]{}, LocaleContextHolder.getLocale()));
         }
 
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
@@ -40,7 +47,7 @@ public class UserInfoUserDetailsService implements UserDetailsService {
                             .collect(Collectors.toList()));
         }
 
-        return new UserInfoUserDetails(userInfo, authorities, true, true, true);
+        return new UserInfoUserDetails(userInfo, authorities, true, true);
     }
 
 }
