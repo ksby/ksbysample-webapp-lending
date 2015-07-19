@@ -22,9 +22,9 @@ public class UserInfoUserDetails implements UserDetails {
         LocalDateTime now = LocalDateTime.now(); 
         this.userInfo = userInfo;
         this.authorities = authorities;
-        this.accountNonExpired = userInfo.getExpiredAccount().isAfter(now);
+        this.accountNonExpired = !userInfo.getExpiredAccount().isBefore(now);
         this.accountNonLocked = (userInfo.getCntBadcredentials() < 5);
-        this.credentialsNonExpired = userInfo.getExpiredPassword().isAfter(now);
+        this.credentialsNonExpired = !userInfo.getExpiredPassword().isBefore(now);
         this.enabled = (userInfo.getEnabled() == 1);
     }
 
