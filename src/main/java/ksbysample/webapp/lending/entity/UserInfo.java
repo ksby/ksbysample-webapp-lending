@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.entity;
 
+import java.time.LocalDateTime;
 import org.seasar.doma.Column;
 import org.seasar.doma.Entity;
 import org.seasar.doma.GeneratedValue;
@@ -38,6 +39,14 @@ public class UserInfo {
     /** */
     @Column(name = "cnt_badcredentials")
     Short cntBadcredentials;
+
+    /** */
+    @Column(name = "expired_account")
+    LocalDateTime expiredAccount;
+
+    /** */
+    @Column(name = "expired_password")
+    LocalDateTime expiredPassword;
 
     /** 
      * Returns the userId.
@@ -145,5 +154,41 @@ public class UserInfo {
      */
     public void setCntBadcredentials(Short cntBadcredentials) {
         this.cntBadcredentials = cntBadcredentials;
+    }
+
+    /** 
+     * Returns the expiredAccount.
+     * 
+     * @return the expiredAccount
+     */
+    public LocalDateTime getExpiredAccount() {
+        return expiredAccount;
+    }
+
+    /** 
+     * Sets the expiredAccount.
+     * 
+     * @param expiredAccount the expiredAccount
+     */
+    public void setExpiredAccount(LocalDateTime expiredAccount) {
+        this.expiredAccount = expiredAccount;
+    }
+
+    /** 
+     * Returns the expiredPassword.
+     * 
+     * @return the expiredPassword
+     */
+    public LocalDateTime getExpiredPassword() {
+        return expiredPassword;
+    }
+
+    /** 
+     * Sets the expiredPassword.
+     * 
+     * @param expiredPassword the expiredPassword
+     */
+    public void setExpiredPassword(LocalDateTime expiredPassword) {
+        this.expiredPassword = expiredPassword;
     }
 }

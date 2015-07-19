@@ -4,6 +4,7 @@ import ksbysample.webapp.lending.entity.UserInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -17,14 +18,13 @@ public class UserInfoUserDetails implements UserDetails {
     private final boolean enabled;
 
     public UserInfoUserDetails(UserInfo userInfo
-            , Set<? extends GrantedAuthority> authorities
-            , boolean accountNonExpired
-            , boolean credentialsNonExpired) {
+            , Set<? extends GrantedAuthority> authorities) {
+        LocalDateTime now = LocalDateTime.now(); 
         this.userInfo = userInfo;
         this.authorities = authorities;
-        this.accountNonExpired = accountNonExpired;
+        this.accountNonExpired = userInfo.getExpiredAccount().isAfter(now);
         this.accountNonLocked = (userInfo.getCntBadcredentials() < 5);
-        this.credentialsNonExpired = credentialsNonExpired;
+        this.credentialsNonExpired = userInfo.getExpiredPassword().isAfter(now);
         this.enabled = (userInfo.getEnabled() == 1);
     }
 
