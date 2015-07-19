@@ -47,7 +47,7 @@ public class UserInfoUserDetailsService implements UserDetailsService {
                             .collect(Collectors.toList()));
         }
 
-        return new UserInfoUserDetails(userInfo, authorities, true, true);
+        return new UserInfoUserDetails(userInfo, authorities);
     }
 
 }

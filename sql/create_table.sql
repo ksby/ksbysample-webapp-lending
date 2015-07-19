@@ -5,6 +5,8 @@ create table user_info (
     , mail_address          varchar(256) not null
     , enabled               smallint not null default 1
     , cnt_badcredentials    smallint not null default 0
+    , expired_account       timestamp not null default now() + interval '90 day'
+    , expired_password      timestamp not null default now() + interval '30 day'
 );
 create index user_info_idx_01 on user_info(mail_address);
 
