@@ -42,7 +42,7 @@ public interface UserInfoDao {
     int incCntBadcredentialsByMailAddress(String mailAddress);
 
     @Update(sqlFile = true)
-    int initCntBadcredentialsByUsername(String username);
+    int initCntBadcredentialsByMailAddress(String mailAddress);
     
     /**
      * @param entity
