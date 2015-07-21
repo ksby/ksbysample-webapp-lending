@@ -15,7 +15,7 @@ public class UserInfoService {
     }
 
     public void initCntBadcredentials(String mailAddress) {
-        userInfoDao.initCntBadcredentialsByUsername(mailAddress);
+        userInfoDao.initCntBadcredentialsByMailAddress(mailAddress);
     }
     
 }

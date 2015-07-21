@@ -19,7 +19,7 @@ public class UserInfoUserDetails implements UserDetails {
 
     public UserInfoUserDetails(UserInfo userInfo
             , Set<? extends GrantedAuthority> authorities) {
-        LocalDateTime now = LocalDateTime.now(); 
+        LocalDateTime now = LocalDateTime.now();
         this.userInfo = userInfo;
         this.authorities = authorities;
         this.accountNonExpired = !userInfo.getExpiredAccount().isBefore(now);
@@ -40,11 +40,11 @@ public class UserInfoUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return userInfo.getUsername();
+        return userInfo.getMailAddress();
     }
 
-    public String getMailAddress() {
-        return userInfo.getMailAddress();
+    public String getName() {
+        return userInfo.getUsername();
     }
 
     @Override

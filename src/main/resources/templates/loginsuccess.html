@@ -50,8 +50,8 @@
             <!-- Main content -->
             <section class="content">
                 ログイン成功！<br/>
-                ユーザ名: <span sec:authentication="name">Bob</span><br/>
-                メールアドレス: <span sec:authentication="principal.mailAddress">test@sample.com</span><br/>
+                ユーザ名: <span sec:authentication="principal.name">Bob</span><br/>
+                メールアドレス: <span sec:authentication="name">test@sample.com</span><br/>
                 Roles: <span sec:authentication="principal.authorities">[ROLE_USER, ROLE_ADMIN]</span><br/>
                 <div sec:authorize="hasRole('ROLE_ADMIN')">ROLE_ADMIN が付与されています</div>
                 <div sec:authorize="hasRole('ROLE_APPROVER')">ROLE_APPROVER が付与されています</div>
