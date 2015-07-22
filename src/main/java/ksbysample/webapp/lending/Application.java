@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import java.text.MessageFormat;
 
-@ImportResource("classpath:applicationContext.xml")
+@ImportResource("classpath:applicationContext-${spring.profiles.active}.xml")
 @SpringBootApplication
 public class Application {
 
