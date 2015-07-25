@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -22,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     private UserDetailsService userDetailsService;
-    
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

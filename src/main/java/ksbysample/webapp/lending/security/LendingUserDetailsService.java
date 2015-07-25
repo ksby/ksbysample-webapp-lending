@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class UserInfoUserDetailsService implements UserDetailsService {
+public class LendingUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserInfoDao userInfoDao;
@@ -47,7 +47,7 @@ public class UserInfoUserDetailsService implements UserDetailsService {
                             .collect(Collectors.toList()));
         }
 
-        return new UserInfoUserDetails(userInfo, authorities);
+        return new LendingUserDetails(userInfo, authorities);
     }
 
 }
