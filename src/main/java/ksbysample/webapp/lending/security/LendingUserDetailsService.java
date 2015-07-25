@@ -36,14 +36,15 @@ public class LendingUserDetailsService implements UserDetailsService {
         if (userInfo == null) {
             throw new UsernameNotFoundException(
                     messageSource.getMessage("UserInfoUserDetailsService.usernameNotFound"
-                            , new Object[]{}, LocaleContextHolder.getLocale()));
+                            , null, LocaleContextHolder.getLocale()));
         }
 
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         List<UserRole> userRoleList = userRoleDao.selectByUserId(userInfo.getUserId());
         if (userRoleList != null) {
             authorities.addAll(
-                    userRoleList.stream().map(userRole -> new SimpleGrantedAuthority(userRole.getRole()))
+                    userRoleList.stream()
+                            .map(userRole -> new SimpleGrantedAuthority(userRole.getRole()))
                             .collect(Collectors.toList()));
         }
 

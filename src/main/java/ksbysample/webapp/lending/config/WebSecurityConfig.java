@@ -18,7 +18,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @SuppressWarnings("SpringJavaAutowiringInspection")
+    public static final String DEFAULT_SUCCESS_URL = "/loginsuccess";
+    
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -31,11 +32,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/fonts/**").permitAll()
                 .antMatchers("/html/**").permitAll()
                 .antMatchers("/encode").permitAll()
+                .antMatchers("/urllogin").permitAll()
                 .anyRequest().authenticated();
         http.formLogin()
                 .loginPage("/")
                 .loginProcessingUrl("/login")
-                .defaultSuccessUrl("/loginsuccess")
+                .defaultSuccessUrl(WebSecurityConfig.DEFAULT_SUCCESS_URL)
                 .failureUrl("/")
                 .usernameParameter("id")
                 .passwordParameter("password")
