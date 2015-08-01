@@ -1,6 +1,7 @@
 package ksbysample.webapp.lending.security;
 
 import ksbysample.webapp.lending.entity.UserInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,19 +9,19 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
-public class UserInfoUserDetails implements UserDetails {
+public class LendingUserDetails implements UserDetails {
 
-    private UserInfo userInfo;
+    private LendingUser lendingUser;
     private final Set<? extends GrantedAuthority> authorities;
     private final boolean accountNonExpired;
     private final boolean accountNonLocked;
     private final boolean credentialsNonExpired;
     private final boolean enabled;
 
-    public UserInfoUserDetails(UserInfo userInfo
+    public LendingUserDetails(UserInfo userInfo
             , Set<? extends GrantedAuthority> authorities) {
         LocalDateTime now = LocalDateTime.now();
-        this.userInfo = userInfo;
+        lendingUser = new LendingUser(userInfo);
         this.authorities = authorities;
         this.accountNonExpired = !userInfo.getExpiredAccount().isBefore(now);
         this.accountNonLocked = (userInfo.getCntBadcredentials() < 5);
@@ -35,16 +36,16 @@ public class UserInfoUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return userInfo.getPassword();
+        return lendingUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return userInfo.getMailAddress();
+        return lendingUser.getMailAddress();
     }
 
     public String getName() {
-        return userInfo.getUsername();
+        return lendingUser.getUsername();
     }
 
     @Override

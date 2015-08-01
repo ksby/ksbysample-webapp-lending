@@ -71,6 +71,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-velocity")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-redis")
     compile("org.codehaus.janino:janino")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.security:spring-security-test:4.0.1.RELEASE")
@@ -83,6 +84,7 @@ dependencies {
     compile("org.apache.commons:commons-lang3:3.4")
     compile("org.projectlombok:lombok:1.16.4")
     compile("com.google.guava:guava:18.0")
+    compile("org.springframework.session:spring-session:1.0.1.RELEASE")
     testCompile("org.dbunit:dbunit:2.5.1")
     testCompile("com.icegreen:greenmail:1.4.1")
 
