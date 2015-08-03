@@ -19,6 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String DEFAULT_SUCCESS_URL = "/loginsuccess";
+    public static final String REMEMBERME_KEY = "ksbysample-webapp-lending";
     
     @Autowired
     private UserDetailsService userDetailsService;
@@ -52,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .rememberMe()
-                .key("ksbysample-webapp-lending")
+                .key(REMEMBERME_KEY)
                 .tokenValiditySeconds(60 * 60 * 24 * 30);
     }
 

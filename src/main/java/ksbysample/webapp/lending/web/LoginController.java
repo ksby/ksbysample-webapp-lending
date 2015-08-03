@@ -11,17 +11,21 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,8 +44,21 @@ public class LoginController {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+    
     @RequestMapping
-    public String index() {
+    public String index(HttpServletRequest request, HttpServletResponse response) {
+        // 有効な remember-me Cookie が存在する場合にはログイン画面を表示させず自動ログインさせる
+        TokenBasedRememberMeServices rememberMeServices
+                = new TokenBasedRememberMeServices(WebSecurityConfig.REMEMBERME_KEY, userDetailsService);
+        rememberMeServices.setCookieName("remember-me");
+        Authentication rememberMeAuth = rememberMeServices.autoLogin(request, response);
+        if (rememberMeAuth != null) {
+            SecurityContextHolder.getContext().setAuthentication(rememberMeAuth);
+            return "redirect:" + WebSecurityConfig.DEFAULT_SUCCESS_URL;
+        }
+
         return "login";
     }
 
