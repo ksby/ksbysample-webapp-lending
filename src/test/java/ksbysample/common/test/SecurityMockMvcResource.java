@@ -2,6 +2,8 @@ package ksbysample.common.test;
 
 import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -15,26 +17,44 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @Component
 public class SecurityMockMvcResource extends ExternalResource {
 
+    public final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
+    public final String MAILADDR_SUZUKI_HANAKO = "suzuki.hanako@test.co.jp";
+    public final String MAILADDR_KIMURA_MASAO = "kimura.masao@test.co.jp";
+    public final String MAILADDR_ENDO_YOKO = "endo.yoko@sample.com";
+    public final String MAILADDR_SATO_MASAHIKO = "sato.masahiko@sample.com";
+    public final String MAILADDR_TAKAHASI_NAOKO = "takahasi.naoko@test.co.jp";
+
     @Autowired
     private WebApplicationContext context;
 
     @Autowired
     private Filter springSecurityFilterChain;
 
-    public MockMvc auth;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
-    public MockMvc nonauth;
+    public MockMvc authTanakaTaro;
+    public MockMvc authSuzukiHanako;
+    public MockMvc noauth;
 
     @Override
     protected void before() throws Throwable {
-        // 認証ユーザ用MockMvc ( user = test, role = USER )
-        this.auth = MockMvcBuilders.webAppContextSetup(this.context)
-                .defaultRequest(get("/").with(user("test").roles("USER")))
+        // 認証ユーザ用MockMvc ( user = tanaka.taro@sample.com )
+        UserDetails userDetailsTanakaTaro = userDetailsService.loadUserByUsername(MAILADDR_TANAKA_TARO);
+        this.authTanakaTaro = MockMvcBuilders.webAppContextSetup(this.context)
+                .defaultRequest(get("/").with(user(userDetailsTanakaTaro)))
                 .addFilter(springSecurityFilterChain)
                 .build();
 
-        // 非認証用MockMvc
-        this.nonauth = MockMvcBuilders.webAppContextSetup(this.context)
+        // 認証ユーザ用MockMvc ( user = suzuki.hanako@test.co.jp )
+        UserDetails userDetailsSuzukiHanako = userDetailsService.loadUserByUsername(MAILADDR_SUZUKI_HANAKO);
+        this.authSuzukiHanako = MockMvcBuilders.webAppContextSetup(this.context)
+                .defaultRequest(get("/").with(user(userDetailsSuzukiHanako)))
+                .addFilter(springSecurityFilterChain)
+                .build();
+
+        // 非認証ユーザ用MockMvc
+        this.noauth = MockMvcBuilders.webAppContextSetup(this.context)
                 .addFilter(springSecurityFilterChain)
                 .build();
     }
