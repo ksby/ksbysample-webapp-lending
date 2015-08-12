@@ -87,6 +87,7 @@ dependencies {
     compile("org.springframework.session:spring-session:1.0.1.RELEASE")
     testCompile("org.dbunit:dbunit:2.5.1")
     testCompile("com.icegreen:greenmail:1.4.1")
+    testCompile("org.assertj:assertj-core:3.1.0")
 
     // for Doma-Gen
     domaGenRuntime("org.seasar.doma:doma-gen:2.3.1")

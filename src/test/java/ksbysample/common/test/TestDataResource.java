@@ -23,12 +23,12 @@ import java.util.List;
 @Component
 public class TestDataResource extends ExternalResource {
 
-    private final List<String> BACKUP_TABLES = Arrays.asList(
-            "xxxxxxxx"
-            , "xxxxxxxx"
-    );
-
+    private final String TESTDATA_DIR = "src/test/resources/testdata/base";
     private final String BACKUP_FILE_NAME = "ksbylending_backup";
+    private final List<String> BACKUP_TABLES = Arrays.asList(
+            "user_info"
+            , "user_role"
+    );
 
     @Autowired
     private DataSource dataSource;
@@ -54,7 +54,7 @@ public class TestDataResource extends ExternalResource {
             }
 
             // テストデータに入れ替える
-            IDataSet dataSet = new CsvDataSet(new File("src/test/resources/testdata"));
+            IDataSet dataSet = new CsvDataSet(new File(TESTDATA_DIR));
             ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
             replacementDataset.addReplacementObject("[null]", null);
             DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDataset);

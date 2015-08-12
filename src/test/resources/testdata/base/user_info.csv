@@ -1,0 +1,8 @@
+user_id,username,password,mail_address,enabled,cnt_badcredentials,expired_account,expired_password
+1,"tanaka taro",$2a$10$LKKepbcPCiT82NxSIdzJr.9ph.786Mxvr.VoXFl4hNcaaAn9u7jje,tanaka.taro@sample.com,1,0,"2015-10-17 12:46:14.790000","2015-08-18 12:46:30.354000"
+2,"suzuki hanako",$2a$10$.fiPEZ155Rl41/e.mdM3A.mG0iEQNPmhjFL/aIiV8dZnXsCd.oqji,suzuki.hanako@test.co.jp,1,0,"2015-09-30 22:19:02.783000","2015-08-31 22:19:22.176000"
+3,"kimura masao",$2a$10$yP1dLPIq9j7WQVH6ruSwkepf8jIkPxTtncbSnYM0/jAGQ4HCQO8R.,kimura.masao@test.co.jp,0,0,"2015-12-31 22:30:54.425000","2015-10-15 22:31:03.316000"
+4,"endo yoko",$2a$10$PVFe8Lh1Pkjc54DWS9mJL.q407x51ZK8MSXhwuTF9zxCnnt80LKwy,endo.yoko@sample.com,1,0,"2015-01-10 22:31:55.454000","2015-12-31 22:32:11.886000"
+5,"sato masahiko",$2a$10$qIU0kM/p1pa7KSIjF6YA4eORd2wL1Eo6TlvH./DmPs7D.xXQPEq7a,sato.masahiko@sample.com,1,0,"2015-12-31 22:34:14.827000","2014-08-05 22:34:22.818000"
+6,"takahasi naoko",$2a$10$iXp/d4wXmfaLKTjQKBvik.kETgx4nQ.FL1NjYt4ALJOGSyVOSchW6,takahasi.naoko@test.co.jp,1,0,"2015-12-01 22:39:48.475000","2015-11-10 22:39:55.422000"
+7,"kato hiroshi",$2a$10$g5dtFTtNBdJO30aHg50rluGNa2pEAzArcwYkYyCG91ElBZPs9sDi2,kato.hiroshi@sample.com,0,5,"2014-01-01 15:58:53.295000","2013-12-31 15:59:07.668000"
