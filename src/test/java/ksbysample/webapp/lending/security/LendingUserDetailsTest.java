@@ -36,10 +36,25 @@ public class LendingUserDetailsTest {
 
     @Autowired
     private UserInfoDao userInfoDao;
-    
+
+    @Test
+    public void 利用不可能でロック中で全て有効期限切れのユーザでのテスト() {
+        UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_KATO_HIROSHI);
+        LendingUserDetails lendingUserDetails = new LendingUserDetails(userInfo, null);
+
+        assertThat(lendingUserDetails.getUsername()).isEqualTo(userInfo.getMailAddress());
+        assertThat(lendingUserDetails.getPassword()).isEqualTo(userInfo.getPassword());
+        assertThat(lendingUserDetails.getName()).isEqualTo(userInfo.getUsername());
+        assertThat(lendingUserDetails.getAuthorities()).isNull();
+        assertThat(lendingUserDetails.isAccountNonExpired()).isFalse();
+        assertThat(lendingUserDetails.isAccountNonLocked()).isFalse();
+        assertThat(lendingUserDetails.isCredentialsNonExpired()).isFalse();
+        assertThat(lendingUserDetails.isEnabled()).isFalse();
+    }
+
     @Autowired
     private UserRoleDao userRoleDao;
-    
+
     @Test
     public void 利用可能でロックされておらず有効期限切れもないユーザでのテスト() {
         UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_TANAKA_TARO);
@@ -61,21 +76,6 @@ public class LendingUserDetailsTest {
         assertThat(lendingUserDetails.isAccountNonLocked()).isTrue();
         assertThat(lendingUserDetails.isCredentialsNonExpired()).isTrue();
         assertThat(lendingUserDetails.isEnabled()).isTrue();
-    }
-
-    @Test
-    public void 利用不可能でロック中で全て有効期限切れのユーザでのテスト() {
-        UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_KATO_HIROSHI);
-        LendingUserDetails lendingUserDetails = new LendingUserDetails(userInfo, null);
-
-        assertThat(lendingUserDetails.getUsername()).isEqualTo(userInfo.getMailAddress());
-        assertThat(lendingUserDetails.getPassword()).isEqualTo(userInfo.getPassword());
-        assertThat(lendingUserDetails.getName()).isEqualTo(userInfo.getUsername());
-        assertThat(lendingUserDetails.getAuthorities()).isNull();
-        assertThat(lendingUserDetails.isAccountNonExpired()).isFalse();
-        assertThat(lendingUserDetails.isAccountNonLocked()).isFalse();
-        assertThat(lendingUserDetails.isCredentialsNonExpired()).isFalse();
-        assertThat(lendingUserDetails.isEnabled()).isFalse();
     }
     
 }

@@ -46,11 +46,8 @@ public class LendingUserDetailsServiceTest {
 
     @Test
     public void 存在しないユーザならばUsernameNotFoundExceptionが発生する() {
-        assertThatThrownBy(new ThrowableAssert.ThrowingCallable() {
-            @Override
-            public void call() throws Throwable {
-                UserDetails userDetails = userDetailsService.loadUserByUsername(MAILADDR_TEST_TARO);
-            }
+        assertThatThrownBy(() -> {
+            UserDetails userDetails = userDetailsService.loadUserByUsername(MAILADDR_TEST_TARO);
         }).isInstanceOf(UsernameNotFoundException.class)
                 .hasMessage(messageSource.getMessage("UserInfoUserDetailsService.usernameNotFound"
                         , null, LocaleContextHolder.getLocale()));
