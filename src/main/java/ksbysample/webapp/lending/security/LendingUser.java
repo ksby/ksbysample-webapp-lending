@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Data
 public class LendingUser implements Serializable {
 
+    private static final long serialVersionUID = 511849715573196163L;
+
     String username;
 
     String password;
