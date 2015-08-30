@@ -94,6 +94,7 @@ dependencies {
     compile("org.springframework.session:spring-session:1.0.1.RELEASE")
     compile("org.simpleframework:simple-xml:2.7.1")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.1")
+    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.3")
     testCompile("org.dbunit:dbunit:2.5.1")
     testCompile("com.icegreen:greenmail:1.4.1")
     testCompile("org.assertj:assertj-core:3.1.0")

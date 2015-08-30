@@ -1,7 +1,6 @@
 package ksbysample.webapp.lending.service.calilapi;
 
 import ksbysample.webapp.lending.Application;
-import org.assertj.core.api.ThrowableAssert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simpleframework.xml.core.ValueRequiredException;
@@ -9,9 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import javax.activation.DataSource;
-import javax.annotation.Resource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.StrictAssertions.assertThatThrownBy;
@@ -40,4 +36,14 @@ public class CalilApiServiceTest {
         }).isInstanceOf(ValueRequiredException.class);
     }
 
+    @Test
+    public void testGetLibraryListByJackson2Xml() throws Exception {
+        LibrariesForJackson2Xml libraries = calilApiService.getLibraryListByJackson2Xml("東京都");
+        assertThat(libraries).isNotNull();
+        // systemname が "国立国会図書館" のデータがあるかチェックする
+        assertThat(libraries.getLibraryList())
+                .extracting("systemname")
+                .contains("国立国会図書館");
+    }
+    
 }
