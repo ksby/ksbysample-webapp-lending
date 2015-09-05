@@ -5,6 +5,7 @@ import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.dao.UserRoleDao;
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.entity.UserRole;
+import ksbysample.webapp.lending.helper.url.UrlAfterLoginHelper;
 import ksbysample.webapp.lending.security.LendingUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -56,7 +57,7 @@ public class LoginController {
         Authentication rememberMeAuth = rememberMeServices.autoLogin(request, response);
         if (rememberMeAuth != null) {
             SecurityContextHolder.getContext().setAuthentication(rememberMeAuth);
-            return "redirect:" + WebSecurityConfig.DEFAULT_SUCCESS_URL;
+            return "redirect:" + UrlAfterLoginHelper.getUrlAfterLogin(rememberMeAuth);
         }
 
         return "login";

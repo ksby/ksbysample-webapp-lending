@@ -34,3 +34,8 @@ create table lending_book (
     , approval_result       varchar(1)
     , approval_reason       varchar(128)
 );
+
+create table library_forsearch (
+      systemid              text primary key
+    , formal                text
+);

@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import java.io.Serializable;
@@ -14,6 +15,7 @@ import java.text.MessageFormat;
 @SpringBootApplication
 @ComponentScan("ksbysample")
 @EnableRedisHttpSession
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Application {
 
     public static void main(String[] args) {
