@@ -33,7 +33,7 @@ public class LibraryControllerTest {
                 .andExpect(jsonPath("$.errcode", is(0)))
                 .andExpect(jsonPath("$.errmsg", is("")))
                 .andExpect(jsonPath("$.content[0].address", startsWith("東京都")))
-                .andExpect(jsonPath("$.content[?(@.formalName=='国立国会図書館東京本館')]").exists());
+                .andExpect(jsonPath("$.content[?(@.formal=='国立国会図書館東京本館')]").exists());
     }
 
     @Test

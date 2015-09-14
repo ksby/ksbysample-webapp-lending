@@ -28,6 +28,7 @@ public class TestDataResource extends ExternalResource {
     private final List<String> BACKUP_TABLES = Arrays.asList(
             "user_info"
             , "user_role"
+            , "library_forsearch"
     );
 
     @Autowired

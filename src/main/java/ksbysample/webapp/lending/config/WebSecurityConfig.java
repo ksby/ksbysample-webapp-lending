@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.config;
 
+import ksbysample.webapp.lending.security.RoleAwareAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/")
                 .usernameParameter("id")
                 .passwordParameter("password")
+                .successHandler(new RoleAwareAuthenticationSuccessHandler())
                 .permitAll()
                 .and()
                 .logout()

@@ -4,6 +4,7 @@ import ksbysample.common.test.SecurityMockMvcResource;
 import ksbysample.common.test.SimpleRequestBuilder;
 import ksbysample.common.test.TestDataResource;
 import ksbysample.webapp.lending.Application;
+import ksbysample.webapp.lending.config.Constant;
 import ksbysample.webapp.lending.config.WebSecurityConfig;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.entity.UserInfo;
@@ -80,7 +81,7 @@ public class LoginControllerTest {
                             .password("password", "taro")
             )
                     .andExpect(status().isFound())
-                    .andExpect(redirectedUrl(WebSecurityConfig.DEFAULT_SUCCESS_URL))
+                    .andExpect(redirectedUrl(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
                     .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO));
         }
 
@@ -256,7 +257,7 @@ public class LoginControllerTest {
         public void 次回から自動的にログインするをチェックすれば次はログインしていなくてもログイン後の画面にアクセスできる()
                 throws Exception {
             // ログイン前にはログイン後の画面にアクセスできない
-            mvc.noauth.perform(get(WebSecurityConfig.DEFAULT_SUCCESS_URL))
+            mvc.noauth.perform(get(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("http://localhost/"))
                     .andExpect(unauthenticated());
@@ -272,23 +273,22 @@ public class LoginControllerTest {
             SimpleRequestBuilder simpleRequestBuilder = new SimpleRequestBuilder(request);
             MvcResult result = mvc.noauth.perform(simpleRequestBuilder)
                     .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/loginsuccess"))
+                    .andExpect(redirectedUrl(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
                     .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO))
                     .andReturn();
             Cookie[] cookie = result.getResponse().getCookies();
 
             // remember-me Cookie を引き継いでログイン後の画面にアクセスするとアクセスできる
-            mvc.noauth.perform(get(WebSecurityConfig.DEFAULT_SUCCESS_URL).cookie(cookie))
+            mvc.noauth.perform(get(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN).cookie(cookie))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
-                    .andExpect(view().name("loginsuccess"))
                     .andExpect(model().hasNoErrors())
                     .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO));
 
             // ログイン画面にアクセスしても有効な remember-me Cookie があればログイン後の画面にリダイレクトする 
             mvc.noauth.perform(get("/").cookie(cookie))
                     .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/loginsuccess"))
+                    .andExpect(redirectedUrl(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
                     .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO));
         }
 
@@ -310,7 +310,7 @@ public class LoginControllerTest {
         @Test
         public void 有効なユーザ名とパスワードを入力すればログインに成功する() throws Exception {
             // ログイン前にはログイン後の画面にアクセスできない
-            mvc.noauth.perform(get(WebSecurityConfig.DEFAULT_SUCCESS_URL))
+            mvc.noauth.perform(get(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("http://localhost/"))
                     .andExpect(unauthenticated());
@@ -321,17 +321,16 @@ public class LoginControllerTest {
                             .password("password", "taro")
             )
                     .andExpect(status().isFound())
-                    .andExpect(redirectedUrl(WebSecurityConfig.DEFAULT_SUCCESS_URL))
+                    .andExpect(redirectedUrl(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
                     .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO))
                     .andReturn();
             HttpSession session = result.getRequest().getSession();
             assertThat(session).isNotNull();
 
             // ログインしたのでログイン後の画面にアクセスできる
-            mvc.noauth.perform(get(WebSecurityConfig.DEFAULT_SUCCESS_URL).session((MockHttpSession) session))
+            mvc.noauth.perform(get(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN).session((MockHttpSession) session))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
-                    .andExpect(view().name("loginsuccess"))
                     .andExpect(model().hasNoErrors())
                     .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO));
 
@@ -342,7 +341,7 @@ public class LoginControllerTest {
                     .andExpect(unauthenticated());
 
             // ログアウトしたのでログイン後の画面にアクセスできない
-            mvc.noauth.perform(get(WebSecurityConfig.DEFAULT_SUCCESS_URL).session((MockHttpSession) session))
+            mvc.noauth.perform(get(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN).session((MockHttpSession) session))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("http://localhost/"))
                     .andExpect(unauthenticated());
