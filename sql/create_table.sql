@@ -20,7 +20,7 @@ create table lending_app (
     lending_app_id          bigserial primary key
     , status                varchar(1) not null
     , lending_user_id       bigint not null references user_info(user_id)
-    , approval_user_id      bigint not null references user_info(user_id)
+    , approval_user_id      bigint references user_info(user_id)
 );
 
 create table lending_book (

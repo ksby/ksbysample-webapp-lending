@@ -1,3 +1,5 @@
+import java.nio.file.Files
+
 buildscript {
     ext {
         springBootVersion = '1.2.6.RELEASE'
@@ -74,6 +76,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.codehaus.janino:janino")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     // (ここから) gradle でテストを実行した場合に spring-security-test-4.0.2.RELEASE.jar しか classpath に指定されず
@@ -202,11 +205,43 @@ task downloadCssFontsJs << {
     // respond.min.js
     downloadRespondMinJs("${respondMinJsVersion}", "${workDirPath}", "${staticDirPath}")
 
+    // fileinput.min.js ( v4.2.7 )
+    downloadBootstrapFileInputMinJs("${workDirPath}", "${staticDirPath}")
+
     // 作業用ディレクトリを削除する
     clearDir("${workDirPath}")
     
     // 追加したファイルを git add する
     addGit()
+}
+
+task printClassWhatNotMakeTest << {
+    def srcDir = new File("src/main/java");
+    def excludePaths = [
+            "src/main/java/ksbysample/webapp/lending/Application.java"
+            , "src/main/java/ksbysample/webapp/lending/config"
+            , "src/main/java/ksbysample/webapp/lending/dao"
+            , "src/main/java/ksbysample/webapp/lending/entity"
+            , "src/main/java/ksbysample/webapp/lending/exception"
+            , "src/main/java/ksbysample/webapp/lending/helper/page/PagenationHelper.java"
+            , "src/main/java/ksbysample/webapp/lending/security/LendingUser.java"
+            , "src/main/java/ksbysample/webapp/lending/security/RoleAwareAuthenticationSuccessHandler.java"
+            , "src/main/java/ksbysample/webapp/lending/service/calilapi/Librar"
+            , "src/main/java/ksbysample/webapp/lending/service/file/BooklistCSVRecord.java"
+            , "src/main/java/ksbysample/webapp/lending/service/openweathermapapi"
+            , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"
+            , "src/main/java/ksbysample/webapp/lending/util/doma"
+            , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
+            , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
+            , "src/main/java/ksbysample/webapp/lending/webapi/weather"
+    ];
+    def excludeFileNamePatterns = [
+            ".*EventListener.java"
+            , ".*Form.java"
+            , ".*Values.java"
+    ];
+
+    compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns);
 }
 
 /* -----------------------------------------------------------------------------
@@ -315,5 +350,63 @@ void downloadRespondMinJs(String respondMinJsVersion, String workDirPath, String
     copy {
         from "${workDirPath}/download/respond.min.js"
         into "${staticDirPath}/js"
+    }
+}
+
+void downloadBootstrapFileInputMinJs(String workDirPath, String staticDirPath) {
+    download {
+        src "https://github.com/kartik-v/bootstrap-fileinput/zipball/master"
+        dest new File("${workDirPath}/download/kartik-v-bootstrap-fileinput.zip")
+    }
+    copy {
+        from zipTree("${workDirPath}/download/kartik-v-bootstrap-fileinput.zip")
+        into "${workDirPath}/unzip"
+    }
+    copy {
+        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/js/fileinput.min.js"
+        into "${staticDirPath}/js"
+    }
+    copy {
+        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/js/fileinput_locale_ja.js"
+        into "${staticDirPath}/js"
+    }
+    copy {
+        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/css/fileinput.min.css"
+        into "${staticDirPath}/css"
+    }
+}
+
+def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
+    def existFlg;
+
+    for (srcFile in srcDir.listFiles()) {
+        String srcFilePath = (srcFile.toPath() as String).replaceAll("\\\\", "/");
+        existFlg = false;
+
+        for (exclude in excludePaths) {
+            if (srcFilePath =~ /^${exclude as String}/) {
+                existFlg = true;
+                break;
+            }
+        }
+        if (existFlg == true) continue;
+
+        for (exclude in excludeFileNamePatterns) {
+            if (srcFilePath =~ /${exclude as String}/) {
+                existFlg = true
+                break;
+            }
+        }
+        if (existFlg == true) continue;
+        
+        if (srcFile.isDirectory()) {
+            compareSrcAndTestDir(srcFile, excludePaths, excludeFileNamePatterns);
+        } else {
+            String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, "src/test/java").replaceFirst(/\.java$/, "Test.java");
+            def testFile = new File(testFilePath);
+            if (!testFile.exists()) {
+                println(srcFilePath);
+            }
+        }
     }
 }

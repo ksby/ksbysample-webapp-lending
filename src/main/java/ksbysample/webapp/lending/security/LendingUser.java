@@ -12,6 +12,8 @@ public class LendingUser implements Serializable {
 
     private static final long serialVersionUID = 511849715573196163L;
 
+    Long userId;
+
     String username;
 
     String password;

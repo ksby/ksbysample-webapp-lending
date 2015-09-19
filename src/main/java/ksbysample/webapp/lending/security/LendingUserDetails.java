@@ -41,6 +41,10 @@ public class LendingUserDetails implements UserDetails {
         return lendingUser.getPassword();
     }
 
+    public Long getUserId() {
+        return lendingUser.getUserId();
+    }
+
     @Override
     public String getUsername() {
         return lendingUser.getMailAddress();
