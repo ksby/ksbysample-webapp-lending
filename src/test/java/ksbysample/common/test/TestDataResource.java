@@ -3,6 +3,8 @@ package ksbysample.common.test;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
+import org.dbunit.dataset.DefaultDataSet;
+import org.dbunit.dataset.DefaultTable;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;
@@ -29,6 +31,8 @@ public class TestDataResource extends ExternalResource {
             "user_info"
             , "user_role"
             , "library_forsearch"
+            , "lending_app"
+            , "lending_book"
     );
 
     @Autowired
@@ -53,6 +57,11 @@ public class TestDataResource extends ExternalResource {
             try (FileOutputStream fos = new FileOutputStream(backupFile)) {
                 FlatXmlDataSet.write(replacementDatasetBackup, fos);
             }
+
+/*
+            DatabaseOperation.TRUNCATE_TABLE.execute(conn, new DefaultDataSet(new DefaultTable("lending_app")));
+            DatabaseOperation.TRUNCATE_TABLE.execute(conn, new DefaultDataSet(new DefaultTable("lending_book")));
+*/
 
             // テストデータに入れ替える
             IDataSet dataSet = new CsvDataSet(new File(TESTDATA_DIR));

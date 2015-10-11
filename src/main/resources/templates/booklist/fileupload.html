@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>貸出希望書籍 CSV ファイルアップロード</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style type="text/css">
+        <!--
+        .box-body.no-padding {
+            padding-bottom: 10px !important;
+        }
+        -->
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>貸出希望書籍 CSV ファイルアップロード</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-body no-padding">
+                                <form id="registerBooklistForm" method="post" action="/booklist/register" th:action="@{/booklist/register}" th:object="${registerBooklistForm}">
+                                    <table class="table table-hover">
+                                        <colgroup>
+                                            <col width="5%"/>
+                                            <col width="35%"/>
+                                            <col width="60%"/>
+                                        </colgroup>
+                                        <thead class="bg-purple">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>ISBN</th>
+                                            <th>書名</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="jp-gothic">
+                                        <tr th:each="row, iterStat : *{registerBooklistRowList}">
+                                            <th th:text="${iterStat.count}">1</th>
+                                            <th th:text="${row.isbn}">978-1-4302-5908-4</th>
+                                            <th th:text="${row.bookName}">Spring Recipes</th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <input type="hidden" name="lendingAppId" th:value="*{lendingAppId}"/>
+                                    <div class="text-center">
+                                        <button class="btn bg-blue js-btn-register"><i class="fa fa-save"></i>　登録</button>
+                                        <button class="btn bg-orange js-btn-backindex"><i class="fa fa-undo"></i>　ファイルをアップロードし直す</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $(".js-btn-register").click(function(){
+            $("#registerBooklistForm").submit();
+           return false;
+        });
+
+        $(".js-btn-backindex").click(function(){
+            location.href = "/booklist";
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>

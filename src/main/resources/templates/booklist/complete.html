@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>貸出希望書籍 CSV ファイルアップロード</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style type="text/css">
+        <!--
+        .lending-oneline-msgbox {
+            height: 70px;
+            padding-top: 10px;
+        }
+        -->
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>貸出希望書籍 CSV ファイルアップロード</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="lending-oneline-msgbox">
+                            <p><span class="text-bold">貸出申請ID：<span th:text="${lendingAppId}">1</span></span><br/>
+                                で貸出希望書籍を登録しました。選択中の図書館に蔵書の有無と貸出状況を問い合わせます。</p>
+                        </div>
+                        <button class="btn bg-blue js-btn-moveindex"><i class="fa fa-file-text"></i>　別の貸出希望書籍を登録する</button>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $(".js-btn-moveindex").click(function(){
+            location.href = "/booklist";
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>
