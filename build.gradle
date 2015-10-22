@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.6.RELEASE'
+        springBootVersion = '1.2.7.RELEASE'
     }
     repositories {
         jcenter()
@@ -10,7 +10,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("io.spring.gradle:dependency-management-plugin:0.5.3.RELEASE")
         // for Grgit
-        classpath("org.ajoberstar:grgit:1.4.0")
+        classpath("org.ajoberstar:grgit:1.4.1")
         // Gradle Download Task
         classpath("de.undercouch:gradle-download-task:2.0.0")
     }
@@ -62,7 +62,7 @@ repositories {
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:9.4-1203-jdbc41"
+    def jdbcDriver = "org.postgresql:postgresql:9.4-1204-jdbc41"
 
     // spring-boot-gradle-plugin によりバージョン番号が自動で設定されるもの
     // Appendix E. Dependency versions ( http://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -76,6 +76,8 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-redis")
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.codehaus.janino:janino")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     // (ここから) gradle でテストを実行した場合に spring-security-test-4.0.2.RELEASE.jar しか classpath に指定されず
     // テストが失敗したため、3.2.8.RELEASE を明記している
@@ -87,15 +89,13 @@ dependencies {
 
     // spring-boot-gradle-plugin によりバージョン番号が自動で設定されないもの
     compile("${jdbcDriver}")
-    compile("org.seasar.doma:doma:2.4.1")
+    compile("org.seasar.doma:doma:2.5.0")
     compile("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
     compile("org.apache.commons:commons-lang3:3.4")
-    compile("org.projectlombok:lombok:1.16.4")
+    compile("org.projectlombok:lombok:1.16.6")
     compile("com.google.guava:guava:18.0")
     compile("org.springframework.session:spring-session:1.0.1.RELEASE")
     compile("org.simpleframework:simple-xml:2.7.1")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.6.2")
-    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.6.2")
     compile("com.univocity:univocity-parsers:1.5.6")
     testCompile("org.dbunit:dbunit:2.5.1")
     testCompile("com.icegreen:greenmail:1.4.1")
@@ -104,7 +104,7 @@ dependencies {
     testCompile("org.jmockit:jmockit:1.19")
 
     // for Doma-Gen
-    domaGenRuntime("org.seasar.doma:doma-gen:2.4.1")
+    domaGenRuntime("org.seasar.doma:doma-gen:2.5.0")
     domaGenRuntime("${jdbcDriver}")
 }
 
