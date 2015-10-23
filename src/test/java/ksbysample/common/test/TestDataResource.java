@@ -58,11 +58,6 @@ public class TestDataResource extends ExternalResource {
                 FlatXmlDataSet.write(replacementDatasetBackup, fos);
             }
 
-/*
-            DatabaseOperation.TRUNCATE_TABLE.execute(conn, new DefaultDataSet(new DefaultTable("lending_app")));
-            DatabaseOperation.TRUNCATE_TABLE.execute(conn, new DefaultDataSet(new DefaultTable("lending_book")));
-*/
-
             // テストデータに入れ替える
             IDataSet dataSet = new CsvDataSet(new File(TESTDATA_DIR));
             ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
