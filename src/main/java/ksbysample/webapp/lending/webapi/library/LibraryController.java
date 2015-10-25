@@ -1,8 +1,8 @@
 package ksbysample.webapp.lending.webapi.library;
 
 import ksbysample.webapp.lending.service.calilapi.CalilApiService;
-import ksbysample.webapp.lending.service.calilapi.Libraries;
-import ksbysample.webapp.lending.service.calilapi.Library;
+import ksbysample.webapp.lending.service.calilapi.response.Libraries;
+import ksbysample.webapp.lending.service.calilapi.response.Library;
 import ksbysample.webapp.lending.webapi.common.CommonWebApiResponse;
 import org.simpleframework.xml.core.ValueRequiredException;
 import org.slf4j.Logger;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

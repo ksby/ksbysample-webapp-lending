@@ -1,5 +1,8 @@
 package ksbysample.webapp.lending.service.file;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multiset;
 import com.univocity.parsers.common.processor.BeanListProcessor;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
@@ -14,7 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class BooklistCsvFileService {
@@ -34,6 +39,7 @@ public class BooklistCsvFileService {
             List<String[]> allRows = parser.parseAll(isr);
 
             String isbn;
+            Multiset<String> isbnList = HashMultiset.create();
             int line = 1;
             for (String[] csvdata : allRows) {
                 line++;
@@ -64,7 +70,17 @@ public class BooklistCsvFileService {
                 if (csvdata[1].length() > 128) {
                     errors.reject("UploadBooklistForm.fileupload.bookname.lengtherr", new Object[]{line, csvdata[1]}, null);
                 }
+
+                // ISBN を重複チェック用リストに追加する
+                isbnList.add(csvdata[0]);
             }
+
+            // 重複している ISBN があればエラーメッセージをセットする
+            isbnList.stream()
+                    .filter(str -> isbnList.count(str) >= 2)
+                    .distinct()
+                    .forEach(str -> errors.reject("UploadBooklistForm.fileupload.isbn.duplicateerr"
+                            , new Object[]{str, isbnList.count(str)}, null));
         } catch (IOException e) {
             throw new WebApplicationRuntimeException(messagesPropertiesHelper.getMessage("UploadBooklistForm.fileupload.openerr", null));
         }
@@ -86,13 +102,13 @@ public class BooklistCsvFileService {
             // CSVファイルを解析する
             CsvParser parser = new CsvParser(csvParserSettings);
             parser.parse(isr);
-            
+
             // 変換した JavaBean のリストを取得する
             booklistCSVRecordList = rowProcessor.getBeans();
         } catch (IOException e) {
             throw new WebApplicationRuntimeException(messagesPropertiesHelper.getMessage("UploadBooklistForm.fileupload.openerr", null));
         }
-        
+
         return booklistCSVRecordList;
     }
 
@@ -102,5 +118,5 @@ public class BooklistCsvFileService {
         csvParserSettings.getFormat().setLineSeparator("\r\n");
         return csvParserSettings;
     }
-    
+
 }

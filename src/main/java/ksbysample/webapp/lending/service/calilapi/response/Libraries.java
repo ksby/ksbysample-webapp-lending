@@ -1,4 +1,4 @@
-package ksbysample.webapp.lending.service.calilapi;
+package ksbysample.webapp.lending.service.calilapi.response;
 
 import lombok.Data;
 import org.simpleframework.xml.ElementList;

@@ -224,7 +224,7 @@ task printClassWhatNotMakeTest << {
             , "src/main/java/ksbysample/webapp/lending/helper/page/PagenationHelper.java"
             , "src/main/java/ksbysample/webapp/lending/security/LendingUser.java"
             , "src/main/java/ksbysample/webapp/lending/security/RoleAwareAuthenticationSuccessHandler.java"
-            , "src/main/java/ksbysample/webapp/lending/service/calilapi/Librar"
+            , "src/main/java/ksbysample/webapp/lending/service/calilapi/response"
             , "src/main/java/ksbysample/webapp/lending/service/file/BooklistCSVRecord.java"
             , "src/main/java/ksbysample/webapp/lending/service/openweathermapapi"
             , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"

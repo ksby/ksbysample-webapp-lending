@@ -7,6 +7,7 @@ import org.seasar.doma.Delete;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
+import org.seasar.doma.jdbc.SelectOptions;
 
 import java.util.List;
 
@@ -25,6 +26,8 @@ public interface LendingBookDao {
 
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId);
+    @Select
+    List<LendingBook> selectByLendingAppId(Long lendingAppId, SelectOptions options);
     
     /**
      * @param entity
@@ -40,6 +43,9 @@ public interface LendingBookDao {
     @Update
     int update(LendingBook entity);
 
+    @Update(include = {"lendingState"})
+    int updateLendingState(LendingBook entity);
+    
     /**
      * @param entity
      * @return affected rows

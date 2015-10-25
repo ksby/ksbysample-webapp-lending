@@ -7,6 +7,7 @@ import org.seasar.doma.Delete;
 import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
+import org.seasar.doma.jdbc.SelectOptions;
 
 /**
  */
@@ -20,6 +21,8 @@ public interface LendingAppDao {
      */
     @Select
     LendingApp selectById(Long lendingAppId);
+    @Select
+    LendingApp selectById(Long lendingAppId, SelectOptions options);
 
     /**
      * @param entity
