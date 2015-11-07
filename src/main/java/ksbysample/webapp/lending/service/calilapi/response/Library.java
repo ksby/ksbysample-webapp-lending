@@ -1,4 +1,4 @@
-package ksbysample.webapp.lending.service.calilapi;
+package ksbysample.webapp.lending.service.calilapi.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
