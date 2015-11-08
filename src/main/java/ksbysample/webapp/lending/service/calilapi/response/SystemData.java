@@ -1,9 +1,9 @@
 package ksbysample.webapp.lending.service.calilapi.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import ksbysample.webapp.lending.service.calilapi.response.Libkey;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlAttribute;
@@ -14,6 +14,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @ToString
+@NoArgsConstructor
 @AllArgsConstructor
 public class SystemData {
 
