@@ -135,7 +135,8 @@
                                         <colgroup>
                                             <col width="5%"/>
                                             <col width="20%"/>
-                                            <col width="35%"/>
+                                            <col width="20%"/>
+                                            <col width="15%"/>
                                             <col width="15%"/>
                                             <col width="25%"/>
                                         </colgroup>
@@ -144,6 +145,7 @@
                                             <th>No.</th>
                                             <th>ISBN</th>
                                             <th>書名</th>
+                                            <th>貸出状況</th>
                                             <th>申請</th>
                                             <th>申請理由</th>
                                         </tr>
@@ -153,20 +155,17 @@
                                             <th>1</th>
                                             <th>978-1-4302-5908-4</th>
                                             <th>Spring Recipes</th>
+                                            <th>蔵書なし</th>
                                             <th>
-                                                <select name="type" class="form-control input-sm">
-                                                    <option value="">しない</option>
-                                                    <option value="1">する</option>
-                                                </select>
                                             </th>
                                             <th>
-                                                <input type="text" name="reason"class="form-control input-sm" value=""/>
                                             </th>
                                         </tr>
                                         <tr>
                                             <th>2</th>
                                             <th>978-4-7741-5380-3</th>
                                             <th>Spring3入門</th>
+                                            <th>貸出可</th>
                                             <th>
                                                 <select name="type" class="form-control input-sm">
                                                     <option value="">しない</option>
@@ -174,13 +173,14 @@
                                                 </select>
                                             </th>
                                             <th>
-                                                <input type="text" name="reason"class="form-control input-sm" value=""/>
+                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
                                             </th>
                                         </tr>
                                         <tr>
                                             <th>3</th>
                                             <th>978-4-87311-718-8</th>
                                             <th>Javaパフォーマンス</th>
+                                            <th>貸出可</th>
                                             <th>
                                                 <select name="type" class="form-control input-sm">
                                                     <option value="">しない</option>
@@ -188,15 +188,15 @@
                                                 </select>
                                             </th>
                                             <th>
-                                                <input type="text" name="reason"class="form-control input-sm" value=""/>
+                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
                                             </th>
                                         </tr>
                                         </tbody>
-                                        <div class="text-center">
-                                            <button class="btn bg-blue"><i class="fa fa-thumbs-up"></i>　申請</button>
-                                            <button class="btn bg-orange"><i class="fa fa-tag"></i>　一時保存（まだ申請しない）</button>
-                                        </div>
                                     </table>
+                                    <div class="text-center">
+                                        <button class="btn bg-blue"><i class="fa fa-thumbs-up"></i>　申請</button>
+                                        <button class="btn bg-orange"><i class="fa fa-tag"></i>　一時保存（まだ申請しない）</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
