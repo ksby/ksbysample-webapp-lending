@@ -55,96 +55,77 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="box">
-                            <div class="box-body no-padding">
-                                <div class="col-xs-6 no-padding">
-                                    <table class="table table-bordered">
+                        <form id="lendingappForm" method="post" action="/lendingapp/apply" th:action="@{/lendingapp/apply}" th:object="${lendingappForm}">
+                            <div class="box">
+                                <div class="box-body no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <table class="table table-bordered">
+                                            <colgroup>
+                                                <col width="30%"/>
+                                                <col width="70%"/>
+                                            </colgroup>
+                                            <tr>
+                                                <th class="bg-purple">貸出申請ID</th>
+                                                <th th:text="*{lendingApp.lendingAppId}">1</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">ステータス</th>
+                                                <th th:text="${@vh.getText('LendingAppStatusValues', lendingappForm.lendingApp.status)}">申請中</th>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <br/>
+    
+                                    <table class="table table-hover">
                                         <colgroup>
-                                            <col width="30%"/>
-                                            <col width="70%"/>
+                                            <col width="5%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="15%"/>
+                                            <col width="15%"/>
+                                            <col width="25%"/>
                                         </colgroup>
+                                        <thead class="bg-purple">
                                         <tr>
-                                            <th class="bg-purple">貸出申請ID</th>
-                                            <th>1</th>
+                                            <th>No.</th>
+                                            <th>ISBN</th>
+                                            <th>書名</th>
+                                            <th>貸出状況</th>
+                                            <th>申請</th>
+                                            <th>申請理由</th>
                                         </tr>
-                                        <tr>
-                                            <th class="bg-purple">ステータス</th>
-                                            <th>申請中</th>
+                                        </thead>
+                                        <tbody class="jp-gothic">
+                                        <tr th:each="lendingBook, iterStat : *{lendingBookList}">
+                                            <th th:text="${iterStat.count}">1</th>
+                                            <th th:text="${lendingBook.isbn}">978-1-4302-5908-4</th>
+                                            <th th:text="${lendingBook.bookName}">Spring Recipes</th>
+                                            <th th:text="${lendingBook.lendingState}">蔵書なし</th>
+                                            <th>
+                                                <select class="form-control input-sm"
+                                                        th:field="*{lendingBookList[__${iterStat.index}__].lendingAppFlg}"
+                                                        th:if="${lendingBook.lendingState} == '蔵書あり'">
+                                                    <option th:each="lendingAppFlg : ${@vh.values('LendingBookLendingAppFlgValues')}"
+                                                            th:value="${lendingAppFlg.getValue()}"
+                                                            th:text="${lendingAppFlg.getText()}">しない</option>
+                                                </select>
+                                            </th>
+                                            <th>
+                                                <input type="text" class="form-control input-sm"
+                                                       th:field="*{lendingBookList[__${iterStat.index}__].lendingAppReason}"
+                                                       th:if="${lendingBook.lendingState} == '蔵書あり'"/>
+                                            </th>
+                                            <input type="hidden" th:field="*{lendingBookList[__${iterStat.index}__].lendingBookId}"/>
                                         </tr>
+                                        </tbody>
                                     </table>
+                                    <div class="text-center">
+                                        <button class="btn bg-blue js-btn-apply"><i class="fa fa-thumbs-up"></i>　申請</button>
+                                        <button class="btn bg-orange js-btn-temporarySave"><i class="fa fa-tag"></i>　一時保存（まだ申請しない）</button>
+                                    </div>
                                 </div>
-                                <br/>
-
-                                <form id="lendingappForm" method="post" action="/lendingapp/apply" th:action="@{/lendingapp/apply}" th:object="${lendingappForm}">
-                                <table class="table table-hover">
-                                    <colgroup>
-                                        <col width="5%"/>
-                                        <col width="20%"/>
-                                        <col width="20%"/>
-                                        <col width="15%"/>
-                                        <col width="15%"/>
-                                        <col width="25%"/>
-                                    </colgroup>
-                                    <thead class="bg-purple">
-                                    <tr>
-                                        <th>No.</th>
-                                        <th>ISBN</th>
-                                        <th>書名</th>
-                                        <th>貸出状況</th>
-                                        <th>申請</th>
-                                        <th>申請理由</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody class="jp-gothic">
-                                    <tr>
-                                        <th>1</th>
-                                        <th>978-1-4302-5908-4</th>
-                                        <th>Spring Recipes</th>
-                                        <th>蔵書なし</th>
-                                        <th>
-                                        </th>
-                                        <th>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>2</th>
-                                        <th>978-4-7741-5380-3</th>
-                                        <th>Spring3入門</th>
-                                        <th>貸出可</th>
-                                        <th>
-                                            <select name="type" class="form-control input-sm">
-                                                <option value="">しない</option>
-                                                <option value="1">する</option>
-                                            </select>
-                                        </th>
-                                        <th>
-                                            <input type="text" name="reason" class="form-control input-sm" value=""/>
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th>3</th>
-                                        <th>978-4-87311-718-8</th>
-                                        <th>Javaパフォーマンス</th>
-                                        <th>貸出可</th>
-                                        <th>
-                                            <select name="type" class="form-control input-sm">
-                                                <option value="">しない</option>
-                                                <option value="1">する</option>
-                                            </select>
-                                        </th>
-                                        <th>
-                                            <input type="text" name="reason" class="form-control input-sm" value=""/>
-                                        </th>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                                <div class="text-center">
-                                    <button class="btn bg-blue js-btn-apply"><i class="fa fa-thumbs-up"></i>　申請</button>
-                                    <button class="btn bg-orange js-btn-temporarySave"><i class="fa fa-tag"></i>　一時保存（まだ申請しない）</button>
-                                </div>
-                            </form>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </section>
