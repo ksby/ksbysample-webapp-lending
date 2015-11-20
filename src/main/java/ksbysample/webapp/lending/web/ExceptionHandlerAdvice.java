@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
@@ -25,8 +26,14 @@ public class ExceptionHandlerAdvice {
     public ModelAndView handleException(Exception e
             , HttpServletRequest request
             , HttpServletResponse response) {
-        String url = request.getRequestURL().toString()
-                + (StringUtils.isNotEmpty(request.getQueryString()) ? "?" + request.getQueryString() : "");
+        String url;
+        if (!StringUtils.endsWith(request.getRequestURL().toString(), "/error")) {
+            url = request.getRequestURL().toString();
+        }
+        else {
+            url = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+        }
+        url += (StringUtils.isNotEmpty(request.getQueryString()) ? "?" + request.getQueryString() : "");
         logger.error("URL = {}", url, e);
 
         ModelAndView model = new ModelAndView("error");
