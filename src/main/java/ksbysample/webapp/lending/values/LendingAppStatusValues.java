@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 @Getter
-public enum LendingAppStatusValues {
+public enum LendingAppStatusValues implements Values {
 
     TENPORARY_SAVE("1", "一時保存")
     , UNAPPLIED("2", "未申請")

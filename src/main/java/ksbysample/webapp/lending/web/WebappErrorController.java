@@ -8,6 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/error")
@@ -22,7 +23,8 @@ public class WebappErrorController implements ErrorController {
     }
 
     @RequestMapping
-    public ModelAndView index(Exception e, HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView index(Exception e, HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
         ModelAndView model = exceptionHandlerAdvice.handleException(e, request, response);
         return model;
     }

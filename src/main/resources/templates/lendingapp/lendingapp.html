@@ -33,6 +33,9 @@
         .jp-gothic {
             font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
         }
+        .has-error {
+            background-color: #ffcccc;
+        }
     </style>
 </head>
 
@@ -56,6 +59,9 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <form id="lendingappForm" method="post" action="/lendingapp/apply" th:action="@{/lendingapp/apply}" th:object="${lendingappForm}">
+                            <div class="callout callout-danger" th:if="${#fields.hasGlobalErrors()}">
+                                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">共通エラーメッセージ表示エリア</p>
+                            </div>
                             <div class="box">
                                 <div class="box-body no-padding">
                                     <div class="col-xs-6 no-padding">
@@ -73,6 +79,8 @@
                                                 <th th:text="${@vh.getText('LendingAppStatusValues', lendingappForm.lendingApp.status)}">申請中</th>
                                             </tr>
                                         </table>
+                                        <input type="hidden" th:field="*{lendingApp.lendingAppId}"/>
+                                        <input type="hidden" th:field="*{lendingApp.status}"/>
                                     </div>
                                     <br/>
     
@@ -96,30 +104,41 @@
                                         </tr>
                                         </thead>
                                         <tbody class="jp-gothic">
-                                        <tr th:each="lendingBook, iterStat : *{lendingBookList}">
+                                        <tr th:each="lendingBookDto, iterStat : *{lendingBookDtoList}">
                                             <th th:text="${iterStat.count}">1</th>
-                                            <th th:text="${lendingBook.isbn}">978-1-4302-5908-4</th>
-                                            <th th:text="${lendingBook.bookName}">Spring Recipes</th>
-                                            <th th:text="${lendingBook.lendingState}">蔵書なし</th>
+                                            <th th:text="${lendingBookDto.isbn}">978-1-4302-5908-4</th>
+                                            <th th:text="${lendingBookDto.bookName}">Spring Recipes</th>
+                                            <th th:text="${lendingBookDto.lendingState}">蔵書なし</th>
                                             <th>
                                                 <select class="form-control input-sm"
-                                                        th:field="*{lendingBookList[__${iterStat.index}__].lendingAppFlg}"
-                                                        th:if="${lendingBook.lendingState} == '蔵書あり'">
+                                                        th:classappend="${#fields.hasErrors('*{lendingBookDtoList[__${iterStat.index}__].lendingAppFlg}')} ? 'has-error' : ''"
+                                                        th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingAppFlg}"
+                                                        th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')} and ${lendingBookDto.lendingState} == '蔵書あり'">
                                                     <option th:each="lendingAppFlg : ${@vh.values('LendingBookLendingAppFlgValues')}"
                                                             th:value="${lendingAppFlg.getValue()}"
                                                             th:text="${lendingAppFlg.getText()}">しない</option>
                                                 </select>
+                                                <span th:text="${@vh.getText('LendingBookLendingAppFlgValues', lendingBookDto.lendingAppFlg)}"
+                                                      th:if="*{lendingApp.status} != ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')}">しない
+                                                </span>
                                             </th>
                                             <th>
                                                 <input type="text" class="form-control input-sm"
-                                                       th:field="*{lendingBookList[__${iterStat.index}__].lendingAppReason}"
-                                                       th:if="${lendingBook.lendingState} == '蔵書あり'"/>
+                                                       th:classappend="${#fields.hasErrors('*{lendingBookDtoList[__${iterStat.index}__].lendingAppReason}')} ? 'has-error' : ''"
+                                                       th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingAppReason}"
+                                                       th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')} and ${lendingBookDto.lendingState} == '蔵書あり'"/>
+                                                <span th:text="${lendingBookDto.lendingAppReason}"
+                                                      th:if="*{lendingApp.status} != ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')}">入力された申請理由を表示する
+                                                </span>
                                             </th>
-                                            <input type="hidden" th:field="*{lendingBookList[__${iterStat.index}__].lendingBookId}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingBookId}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].isbn}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].bookName}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingState}"/>
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div class="text-center">
+                                    <div class="text-center" th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')}">
                                         <button class="btn bg-blue js-btn-apply"><i class="fa fa-thumbs-up"></i>　申請</button>
                                         <button class="btn bg-orange js-btn-temporarySave"><i class="fa fa-tag"></i>　一時保存（まだ申請しない）</button>
                                     </div>

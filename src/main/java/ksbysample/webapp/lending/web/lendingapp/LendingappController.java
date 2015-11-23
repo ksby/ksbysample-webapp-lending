@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -22,6 +24,14 @@ public class LendingappController {
 
     @Autowired
     private MessagesPropertiesHelper messagesPropertiesHelper;
+
+    @Autowired
+    private LendingappFormValidator lendingappFormValidator;
+
+    @InitBinder(value = "lendingappForm")
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(lendingappFormValidator);
+    }
     
     @RequestMapping
     public String index(@Validated LendingappParamForm lendingappParamForm
@@ -32,16 +42,25 @@ public class LendingappController {
                     messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
-        LendingApp lendingApp = lendingappService.getLendingApp(lendingappParamForm.getLendingAppId());
-        List<LendingBook> lendingBookList = lendingappService.getLendingBookList(lendingappParamForm.getLendingAppId());
-        lendingappForm.setLendingApp(lendingApp);
-        lendingappForm.setLendingBookList(lendingBookList);
-        
+        // 画面に表示するデータを取得する
+        setDispData(lendingappParamForm.getLendingAppId(), lendingappForm);
+
         return "lendingapp/lendingapp";
     }
 
     @RequestMapping(value = "/apply", method = RequestMethod.POST)
-    public String apply() {
+    public String apply(@Validated LendingappForm lendingappForm
+            , BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "lendingapp/lendingapp";
+        }
+
+        // 入力された内容で申請する
+        lendingappService.apply(lendingappForm);
+
+        // 画面に表示するデータを取得する
+        setDispData(lendingappForm.getLendingApp().getLendingAppId(), lendingappForm);
+        
         return "lendingapp/lendingapp";
     }
 
@@ -50,4 +69,11 @@ public class LendingappController {
         return "lendingapp/lendingapp";
     }
 
+    private void setDispData(Long lendingAppId, LendingappForm lendingappForm) {
+        LendingApp lendingApp = lendingappService.getLendingApp(lendingAppId);
+        List<LendingBook> lendingBookList = lendingappService.getLendingBookList(lendingAppId);
+        lendingappForm.setLendingApp(lendingApp);
+        lendingappForm.setLendingBookList(lendingBookList);
+    }
+    
 }

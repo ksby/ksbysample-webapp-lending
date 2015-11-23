@@ -22,6 +22,14 @@ public class ValuesHelper {
                 .filter(classInfo -> !StringUtils.equals(classInfo.getName(), this.getClass().getName()))
                 .collect(Collectors.toMap(ClassPath.ClassInfo::getSimpleName, ClassPath.ClassInfo::getName));
     }
+
+    public String getValue(String classSimpleName, String valueName)
+            throws ClassNotFoundException, NoSuchFieldException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class<?> clazz = Class.forName(this.valuesObjList.get(classSimpleName));
+        Method method = clazz.getMethod("valueOf", String.class);
+        Values value = (Values) method.invoke(null, valueName);
+        return value.getValue();
+    }
     
     public String getText(String classSimpleName, String value)
             throws ClassNotFoundException, IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {

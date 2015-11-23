@@ -12,8 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -25,13 +29,12 @@ public class ExceptionHandlerAdvice {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception e
             , HttpServletRequest request
-            , HttpServletResponse response) {
+            , HttpServletResponse response) throws IOException {
         String url;
-        if (!StringUtils.endsWith(request.getRequestURL().toString(), "/error")) {
-            url = request.getRequestURL().toString();
-        }
-        else {
+        if (StringUtils.equals(request.getRequestURI(), "/error")) {
             url = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+        } else {
+            url = request.getRequestURL().toString();
         }
         url += (StringUtils.isNotEmpty(request.getQueryString()) ? "?" + request.getQueryString() : "");
         logger.error("URL = {}", url, e);
@@ -57,12 +60,17 @@ public class ExceptionHandlerAdvice {
                 .forEach(param -> errorInfoList.add(param.getKey() + "：" + Joiner.on(", ").join(param.getValue())));
         model.addObject("errorInfoList", errorInfoList);
         // スタックトレース
-        if (e != null) {
+        try (
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw)
+        ) {
+            e.printStackTrace(pw);
+            pw.flush();
+            String stacktrace = sw.toString();
             errorInfoList.add("　");
-            for (StackTraceElement trace : e.getStackTrace()) {
-                errorInfoList.add(trace.toString());
-            }
-        }
+            Arrays.asList(stacktrace.split(System.lineSeparator())).stream()
+                    .forEach(line -> errorInfoList.add(line));
+        };
         
         return model;
     }

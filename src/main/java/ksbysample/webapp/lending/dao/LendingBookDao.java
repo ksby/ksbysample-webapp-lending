@@ -23,7 +23,6 @@ public interface LendingBookDao {
      */
     @Select
     LendingBook selectById(Long lendingBookId);
-
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId);
     @Select
@@ -42,9 +41,10 @@ public interface LendingBookDao {
      */
     @Update
     int update(LendingBook entity);
-
     @Update(include = {"lendingState"})
     int updateLendingState(LendingBook entity);
+    @Update(include = {"lendingAppFlg", "lendingAppReason"})
+    int updateLendingAppFlgAndReason(LendingBook entity);
     
     /**
      * @param entity
