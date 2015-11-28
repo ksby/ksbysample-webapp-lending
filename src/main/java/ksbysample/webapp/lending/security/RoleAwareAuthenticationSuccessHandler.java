@@ -1,6 +1,8 @@
 package ksbysample.webapp.lending.security;
 
+import ksbysample.webapp.lending.cookie.CookieLastLendingAppId;
 import ksbysample.webapp.lending.helper.url.UrlAfterLoginHelper;
+import ksbysample.webapp.lending.util.cookie.CookieUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
@@ -25,8 +27,8 @@ public class RoleAwareAuthenticationSuccessHandler extends SavedRequestAwareAuth
             super.onAuthenticationSuccess(request, response, authentication);
             return;
         }
-
-        String targetUrl = UrlAfterLoginHelper.getUrlAfterLogin(authentication);
+        
+        String targetUrl = UrlAfterLoginHelper.getUrlAfterLogin(authentication, request);
         clearAuthenticationAttributes(request);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }

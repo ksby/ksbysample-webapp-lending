@@ -1,9 +1,12 @@
 package ksbysample.webapp.lending.web.lendingapp;
 
+import ksbysample.webapp.lending.cookie.CookieLastLendingAppId;
 import ksbysample.webapp.lending.entity.LendingApp;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
+import ksbysample.webapp.lending.util.cookie.CookieUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -13,7 +16,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+
+import static ksbysample.webapp.lending.values.LendingAppStatusValues.UNAPPLIED;
 
 @Controller
 @RequestMapping("/lendingapp")
@@ -32,11 +38,12 @@ public class LendingappController {
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(lendingappFormValidator);
     }
-    
+
     @RequestMapping
     public String index(@Validated LendingappParamForm lendingappParamForm
             , BindingResult bindingResultForLendingappParamForm
-            , LendingappForm lendingappForm) {
+            , LendingappForm lendingappForm
+            , HttpServletResponse response) {
         if (bindingResultForLendingappParamForm.hasErrors()) {
             throw new WebApplicationRuntimeException(
                     messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
@@ -45,12 +52,19 @@ public class LendingappController {
         // 画面に表示するデータを取得する
         setDispData(lendingappParamForm.getLendingAppId(), lendingappForm);
 
+        // 未申請の場合には LastLendingAppId Cookie に貸出申請ID をセットする
+        if (StringUtils.equals(lendingappForm.getLendingApp().getStatus(), UNAPPLIED.getValue())) {
+            CookieUtils.addCookie(CookieLastLendingAppId.class
+                    , response, String.valueOf(lendingappParamForm.getLendingAppId()));
+        }
+
         return "lendingapp/lendingapp";
     }
 
     @RequestMapping(value = "/apply", method = RequestMethod.POST)
     public String apply(@Validated LendingappForm lendingappForm
-            , BindingResult bindingResult) {
+            , BindingResult bindingResult
+            , HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             return "lendingapp/lendingapp";
         }
@@ -60,6 +74,9 @@ public class LendingappController {
 
         // 画面に表示するデータを取得する
         setDispData(lendingappForm.getLendingApp().getLendingAppId(), lendingappForm);
+
+        // LastLendingAppId Cookie を削除する
+        CookieUtils.removeCookie(CookieLastLendingAppId.class, response);
         
         return "lendingapp/lendingapp";
     }
@@ -75,5 +92,5 @@ public class LendingappController {
         lendingappForm.setLendingApp(lendingApp);
         lendingappForm.setLendingBookList(lendingBookList);
     }
-    
+
 }
