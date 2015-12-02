@@ -1,9 +1,10 @@
 package ksbysample.webapp.lending.values;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 
 @Getter
+@AllArgsConstructor
 public enum LendingBookLendingAppFlgValues implements Values {
 
     NOT_APPLY("", "しない")
@@ -11,21 +12,5 @@ public enum LendingBookLendingAppFlgValues implements Values {
 
     private final String value;
     private final String text;
-
-    LendingBookLendingAppFlgValues(String value, String text) {
-        this.value = value;
-        this.text = text;
-    }
-
-    public static String getText(String value) {
-        String result = "";
-        for (Values val : LendingBookLendingAppFlgValues.values()) {
-            if (StringUtils.equals(val.getValue(), value)) {
-                result = val.getText();
-            }
-        }
-
-        return result;
-    }
 
 }
