@@ -5,10 +5,12 @@ import ksbysample.webapp.lending.entity.LendingApp;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
+import ksbysample.webapp.lending.helper.thymeleaf.SuccessMessagesHelper;
 import ksbysample.webapp.lending.util.cookie.CookieUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 import static ksbysample.webapp.lending.values.LendingAppStatusValues.UNAPPLIED;
@@ -77,12 +80,25 @@ public class LendingappController {
 
         // LastLendingAppId Cookie を削除する
         CookieUtils.removeCookie(CookieLastLendingAppId.class, response);
-        
+
         return "lendingapp/lendingapp";
     }
 
     @RequestMapping(value = "/temporarySave", method = RequestMethod.POST)
-    public String temporarySave() {
+    public String temporarySave(@Validated LendingappForm lendingappForm
+            , BindingResult bindingResult
+            , Model model) {
+        if (bindingResult.hasErrors()) {
+            return "lendingapp/lendingapp";
+        }
+
+        // 入力された内容を一時保存する
+        lendingappService.temporarySave(lendingappForm);
+
+        // 画面に表示する通常メッセージをセットする
+        SuccessMessagesHelper successMessagesHelper = new SuccessMessagesHelper("一時保存しました");
+        successMessagesHelper.setToModel(model);
+        
         return "lendingapp/lendingapp";
     }
 

@@ -19,6 +19,11 @@ public class LendingappFormValidator implements Validator {
     public void validate(Object target, Errors errors) {
         LendingappForm lendingappForm = (LendingappForm) target;
 
+        // 「一時保存」ボタンが押された時は validate メソッドの入力チェックは実行しない
+        if (StringUtils.equals(lendingappForm.getBtn(), "temporarySave")) {
+            return;
+        }
+        
         // 以下の点をチェックする
         // ・最低１つ「申請する」が選択されているか
         // ・「申請する」が選択されている場合に申請理由が入力されているか

@@ -65,5 +65,21 @@ public class LendingappService {
                     lendingBookDao.updateLendingAppFlgAndReason(lendingBook);
                 });
     }
+
+    public void temporarySave(LendingappForm lendingappForm) {
+        // 更新対象のデータを取得する(ロックする)
+        LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
+                , SelectOptions.get().forUpdate());
+        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingappForm.getLendingApp().getLendingAppId()
+                , SelectOptions.get().forUpdate());
+    
+        // lending_book.lending_app_flg, lending_app_reason に画面に入力された内容をセットする
+        lendingappForm.getLendingBookDtoList().stream()
+                .forEach(lendingBookDto -> {
+                    LendingBook lendingBook = new LendingBook();
+                    BeanUtils.copyProperties(lendingBookDto, lendingBook);
+                    lendingBookDao.updateLendingAppFlgAndReason(lendingBook);
+                });
+    }
     
 }

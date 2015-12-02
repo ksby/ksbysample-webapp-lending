@@ -13,6 +13,8 @@ public class LendingappForm {
 
     private LendingApp lendingApp;
 
+    private String btn;
+    
     @Valid
     private List<LendingBookDto> lendingBookDtoList;
 
