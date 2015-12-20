@@ -5,13 +5,18 @@ import ksbysample.webapp.lending.dao.LendingBookDao;
 import ksbysample.webapp.lending.entity.LendingApp;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
+import ksbysample.webapp.lending.helper.mail.EmailHelper;
+import ksbysample.webapp.lending.helper.mail.Mail002Helper;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
+import ksbysample.webapp.lending.helper.user.UserHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.util.List;
 
 import static ksbysample.webapp.lending.values.LendingAppStatusValues.PENDING;
@@ -29,6 +34,15 @@ public class LendingappService {
     @Autowired
     private MessagesPropertiesHelper messagesPropertiesHelper;
 
+    @Autowired
+    private EmailHelper emailHelper;
+
+    @Autowired
+    private Mail002Helper mail002Helper;
+
+    @Autowired
+    private UserHelper userHelper;
+    
     public LendingApp getLendingApp(Long lendingAppId) {
         LendingApp lendingApp = lendingAppDao.selectById(lendingAppId);
         if (lendingApp == null) {
@@ -44,7 +58,7 @@ public class LendingappService {
         return lendingBookList;
     }
 
-    public void apply(LendingappForm lendingappForm) {
+    public void apply(LendingappForm lendingappForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
         LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
@@ -64,6 +78,11 @@ public class LendingappService {
                     BeanUtils.copyProperties(lendingBookDto, lendingBook);
                     lendingBookDao.updateLendingAppFlgAndReason(lendingBook);
                 });
+
+        // 承認者にメールを送信する
+        String[] approverMailAddrList = userHelper.getApprovalMailAddrList();
+        MimeMessage mimeMessage = mail002Helper.createMessage(approverMailAddrList, lendingApp.getLendingAppId());
+        emailHelper.sendMail(mimeMessage);
     }
 
     public void temporarySave(LendingappForm lendingappForm) {

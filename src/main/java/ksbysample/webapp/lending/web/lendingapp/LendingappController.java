@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ksbysample.webapp.lending.values.LendingAppStatusValues.UNAPPLIED;
@@ -67,7 +67,7 @@ public class LendingappController {
     @RequestMapping(value = "/apply", method = RequestMethod.POST)
     public String apply(@Validated LendingappForm lendingappForm
             , BindingResult bindingResult
-            , HttpServletResponse response) {
+            , HttpServletResponse response) throws MessagingException {
         if (bindingResult.hasErrors()) {
             return "lendingapp/lendingapp";
         }

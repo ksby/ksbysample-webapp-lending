@@ -45,6 +45,11 @@ public class ExceptionHandlerAdvice {
         // エラーメッセージ
         if (e != null && StringUtils.isNotEmpty(e.getMessage())) {
             model.addObject("errorMessage", e.getMessage());
+
+            // Spring Security の機能でアクセス不可と判断された場合に HTTPステータスコードが 403 になるようにする
+            if (e instanceof org.springframework.security.access.AccessDeniedException) {
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+            }
         } else {
             model.addObject("errorMessage", response.getStatus() + " " + HttpStatus.valueOf(response.getStatus()).getReasonPhrase());
         }
