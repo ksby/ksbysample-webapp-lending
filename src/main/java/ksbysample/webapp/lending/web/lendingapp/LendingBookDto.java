@@ -14,18 +14,20 @@ public class LendingBookDto {
 
     private Long lendingBookId;
 
-    String isbn;
+    private String isbn;
 
-    String bookName;
+    private String bookName;
 
-    String lendingState;
+    private String lendingState;
 
     @Pattern(regexp = "^(|1)$")
-    String lendingAppFlg;
+    private String lendingAppFlg;
 
     @Size(max = 128)
-    String lendingAppReason;
+    private String lendingAppReason;
 
+    private Long version;
+    
     LendingBookDto(LendingBook lendingBook) {
         BeanUtils.copyProperties(lendingBook, this);
     }

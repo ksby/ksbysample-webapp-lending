@@ -118,28 +118,32 @@ test {
 }
 
 // for Doma-Gen
-task gen << {
-    def rootPackageName = 'ksbysample.webapp.lending'
-    def daoPackagePath  = 'src/main/java/ksbysample/webapp/lending/dao'
-    def workDirPath     = 'work'
-    def workDaoDirPath  = "${workDirPath}/dao"
+task domaGen << {
+    // まず変更が必要なもの
+    def rootPackageName  = 'ksbysample.webapp.lending'
+    def daoPackagePath   = 'src/main/java/ksbysample/webapp/lending/dao'
+    def dbUrl            = 'jdbc:postgresql://localhost/ksbylending'
+    def dbUser           = 'ksbylending_user'
+    def dbPassword       = 'xxxxxxxx'
+    def tableNamePattern = '.*'
+    // おそらく変更不要なもの
+    def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
+    def workDirPath      = 'work'
+    def workDaoDirPath   = "${workDirPath}/dao"
 
     // 作業用ディレクトリを削除する
     clearDir("${workDirPath}")
-    
+
     // 現在の Dao インターフェースのバックアップを取得する
     copy() {
         from "${daoPackagePath}"
         into "${workDaoDirPath}/org"
     }
-    
+
     // Dao インターフェース、Entity クラスを生成する
     ant.taskdef(resource: 'domagentask.properties',
             classpath: configurations.domaGenRuntime.asPath)
-    ant.gen(url: 'jdbc:postgresql://localhost/ksbylending'
-                , user: 'ksbylending_user'
-                , password: 'xxxxxxxx'
-            ) {
+    ant.gen(url: "${dbUrl}", user: "${dbUser}", password: "${dbPassword}", tableNamePattern: "${tableNamePattern}") {
         entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
         daoConfig(packageName: "${rootPackageName}.dao")
         sqlConfig()
@@ -151,8 +155,8 @@ task gen << {
         from "${daoPackagePath}"
         into "${workDaoDirPath}/replace"
         filter {
-            line -> line.replaceAll('import org.seasar.doma.Dao;', 'import ksbysample.webapp.lending.util.doma.ComponentAndAutowiredDomaConfig;\nimport org.seasar.doma.Dao;')
-                        .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+            line -> line.replaceAll('import org.seasar.doma.Dao;', "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
+                    .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
         }
     }
 
@@ -171,7 +175,7 @@ task gen << {
 
     // 作業用ディレクトリを削除する
     clearDir("${workDirPath}")
-    
+
     // 自動生成したファイルを git add する
     addGit()
 }

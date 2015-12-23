@@ -85,6 +85,7 @@
                                         </table>
                                         <input type="hidden" th:field="*{lendingApp.lendingAppId}"/>
                                         <input type="hidden" th:field="*{lendingApp.status}"/>
+                                        <input type="hidden" th:field="*{lendingApp.version}"/>
                                     </div>
                                     <br/>
     
@@ -139,6 +140,7 @@
                                             <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].isbn}"/>
                                             <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].bookName}"/>
                                             <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingState}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].version}"/>
                                         </tr>
                                         </tbody>
                                     </table>

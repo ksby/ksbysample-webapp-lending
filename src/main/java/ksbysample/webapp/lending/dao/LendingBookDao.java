@@ -23,6 +23,8 @@ public interface LendingBookDao {
      */
     @Select
     LendingBook selectById(Long lendingBookId);
+    @Select(ensureResult = true)
+    LendingBook selectByIdAndVersion(Long lendingBookId, Long version);
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId);
     @Select

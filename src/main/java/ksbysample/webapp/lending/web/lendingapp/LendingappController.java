@@ -8,6 +8,7 @@ import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.helper.thymeleaf.SuccessMessagesHelper;
 import ksbysample.webapp.lending.util.cookie.CookieUtils;
 import org.apache.commons.lang.StringUtils;
+import org.seasar.doma.jdbc.OptimisticLockException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -72,14 +73,18 @@ public class LendingappController {
             return "lendingapp/lendingapp";
         }
 
-        // 入力された内容で申請する
-        lendingappService.apply(lendingappForm);
+        try {
+            // 入力された内容で申請する
+            lendingappService.apply(lendingappForm);
 
-        // 画面に表示するデータを取得する
-        setDispData(lendingappForm.getLendingApp().getLendingAppId(), lendingappForm);
+            // 画面に表示するデータを取得する
+            setDispData(lendingappForm.getLendingApp().getLendingAppId(), lendingappForm);
 
-        // LastLendingAppId Cookie を削除する
-        CookieUtils.removeCookie(CookieLastLendingAppId.class, response);
+            // LastLendingAppId Cookie を削除する
+            CookieUtils.removeCookie(CookieLastLendingAppId.class, response);
+        } catch (OptimisticLockException e) {
+            bindingResult.reject("Global.optimisticLockException");
+        }
 
         return "lendingapp/lendingapp";
     }
@@ -92,12 +97,16 @@ public class LendingappController {
             return "lendingapp/lendingapp";
         }
 
-        // 入力された内容を一時保存する
-        lendingappService.temporarySave(lendingappForm);
-
-        // 画面に表示する通常メッセージをセットする
-        SuccessMessagesHelper successMessagesHelper = new SuccessMessagesHelper("一時保存しました");
-        successMessagesHelper.setToModel(model);
+        try {
+            // 入力された内容を一時保存する
+            lendingappService.temporarySave(lendingappForm);
+    
+            // 画面に表示する通常メッセージをセットする
+            SuccessMessagesHelper successMessagesHelper = new SuccessMessagesHelper("一時保存しました");
+            successMessagesHelper.setToModel(model);
+        } catch (OptimisticLockException e) {
+            bindingResult.reject("Global.optimisticLockException");
+        }
         
         return "lendingapp/lendingapp";
     }

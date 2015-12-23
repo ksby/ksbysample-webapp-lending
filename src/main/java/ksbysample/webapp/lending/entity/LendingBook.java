@@ -6,6 +6,7 @@ import org.seasar.doma.GeneratedValue;
 import org.seasar.doma.GenerationType;
 import org.seasar.doma.Id;
 import org.seasar.doma.Table;
+import org.seasar.doma.Version;
 
 /**
  */
@@ -50,6 +51,11 @@ public class LendingBook {
     /** */
     @Column(name = "approval_reason")
     String approvalReason;
+
+    /** */
+    @Version
+    @Column(name = "version")
+    Long version;
 
     /** 
      * Returns the lendingBookId.
@@ -211,5 +217,23 @@ public class LendingBook {
      */
     public void setApprovalReason(String approvalReason) {
         this.approvalReason = approvalReason;
+    }
+
+    /** 
+     * Returns the version.
+     * 
+     * @return the version
+     */
+    public Long getVersion() {
+        return version;
+    }
+
+    /** 
+     * Sets the version.
+     * 
+     * @param version the version
+     */
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }
