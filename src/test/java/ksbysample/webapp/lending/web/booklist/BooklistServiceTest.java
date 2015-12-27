@@ -55,8 +55,8 @@ public class BooklistServiceTest {
         assertThat(lendingAppId).isNotEqualTo(new Long(0));
         IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/booklist/assertdata/001"));
         TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
-        tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id", "approval_user_id"});
-        tableDataAssert.assertEquals("lending_book", new String[]{"lending_book_id", "lending_app_id", "lending_state", "lending_app_flg", "lending_app_reason", "approval_result", "approval_reason"});
+        tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id", "approval_user_id", "version"});
+        tableDataAssert.assertEquals("lending_book", new String[]{"lending_book_id", "lending_app_id", "lending_state", "lending_app_flg", "lending_app_reason", "approval_result", "approval_reason", "version"});
 
         List<LendingBook> lendingBookList = booklistService.getLendingBookList(lendingAppId);
         assertThat(lendingBookList).hasSize(5);

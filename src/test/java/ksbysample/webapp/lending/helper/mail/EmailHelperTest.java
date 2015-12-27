@@ -1,4 +1,4 @@
-package ksbysample.webapp.lending.service;
+package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.common.test.MailServerResource;
 import ksbysample.webapp.lending.Application;
