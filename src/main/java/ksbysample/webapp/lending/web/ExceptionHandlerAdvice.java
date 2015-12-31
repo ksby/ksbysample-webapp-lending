@@ -65,17 +65,19 @@ public class ExceptionHandlerAdvice {
                 .forEach(param -> errorInfoList.add(param.getKey() + "：" + Joiner.on(", ").join(param.getValue())));
         model.addObject("errorInfoList", errorInfoList);
         // スタックトレース
-        try (
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw)
-        ) {
-            e.printStackTrace(pw);
-            pw.flush();
-            String stacktrace = sw.toString();
-            errorInfoList.add("　");
-            Arrays.asList(stacktrace.split(System.lineSeparator())).stream()
-                    .forEach(line -> errorInfoList.add(line));
-        };
+        if (e != null) {
+            try (
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new PrintWriter(sw)
+            ) {
+                e.printStackTrace(pw);
+                pw.flush();
+                String stacktrace = sw.toString();
+                errorInfoList.add("　");
+                Arrays.asList(stacktrace.split(System.lineSeparator())).stream()
+                        .forEach(line -> errorInfoList.add(line));
+            }
+        }
         
         return model;
     }

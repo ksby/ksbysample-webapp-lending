@@ -45,12 +45,18 @@ public class LendingappController {
 
     @RequestMapping
     public String index(@Validated LendingappParamForm lendingappParamForm
-            , BindingResult bindingResultForLendingappParamForm
+            , BindingResult bindingResult
             , LendingappForm lendingappForm
             , HttpServletResponse response) {
-        if (bindingResultForLendingappParamForm.hasErrors()) {
-            throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+        if (bindingResult.hasErrors()) {
+            if (lendingappParamForm.getLendingAppId() == null) {
+                throw new WebApplicationRuntimeException(
+                        messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+            }
+            else {
+                throw new WebApplicationRuntimeException(
+                        messagesPropertiesHelper.getMessage("LendingappForm.lendingApp.nodataerr", null));
+            }
         }
 
         // 画面に表示するデータを取得する
