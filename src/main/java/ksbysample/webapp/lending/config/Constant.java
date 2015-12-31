@@ -11,6 +11,7 @@ public class Constant {
      * URL一覧
      */
     public static final String URL_ADMIN_LIBRARY = "/admin/library";
+    public static final String URL_LENDINGAPP = "/lendingapp";
 
     /* 
      * ログイン後ページのURL

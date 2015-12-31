@@ -8,6 +8,8 @@ import org.seasar.doma.Insert;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
 
+import java.util.List;
+
 /**
  */
 @Dao
@@ -20,9 +22,10 @@ public interface UserInfoDao {
      */
     @Select
     UserInfo selectById(Long userId);
-
     @Select
     UserInfo selectByMailAddress(String mailAddress);
+    @Select
+    List<String> selectApproverMailAddrList();
     
     /**
      * @param entity
@@ -37,10 +40,8 @@ public interface UserInfoDao {
      */
     @Update
     int update(UserInfo entity);
-
     @Update(sqlFile = true)
     int incCntBadcredentialsByMailAddress(String mailAddress);
-
     @Update(sqlFile = true)
     int initCntBadcredentialsByMailAddress(String mailAddress);
     

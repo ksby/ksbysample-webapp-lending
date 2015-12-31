@@ -41,7 +41,7 @@ public class LibraryHelperTest {
     public void testGetSelectedLibrary_図書館が選択されている場合() throws Exception {
         new NonStrictExpectations() {{
             libraryForsearchDao.selectSelectedLibrary();
-            result = new Delegate() {
+            result = new Delegate<LibraryForsearch>() {
                 LibraryForsearch aDelegateMethod() {
                     LibraryForsearch libraryForsearch = new LibraryForsearch();
                     libraryForsearch.setSystemid("System_Id");

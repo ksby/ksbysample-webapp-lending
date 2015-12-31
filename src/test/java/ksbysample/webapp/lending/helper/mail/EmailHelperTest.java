@@ -1,7 +1,8 @@
-package ksbysample.webapp.lending.service;
+package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.common.test.MailServerResource;
 import ksbysample.webapp.lending.Application;
+import ksbysample.webapp.lending.helper.mail.EmailHelper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +23,7 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-public class EmailServiceTest {
+public class EmailHelperTest {
 
     @Rule
     @Autowired
@@ -32,7 +33,7 @@ public class EmailServiceTest {
     private JavaMailSender mailSender;
     
     @Autowired
-    private EmailService emailService;
+    private EmailHelper emailHelper;
 
     @Test
     public void testSendSimpleMail() throws Exception {
@@ -41,7 +42,7 @@ public class EmailServiceTest {
         message.setTo("xxx@yyy.zzz");
         message.setSubject("テスト");
         message.setText("これはテストです");
-        emailService.sendSimpleMail(message);
+        emailHelper.sendSimpleMail(message);
 
         assertThat(mailServer.getMessagesCount(), is(1));
         MimeMessage receiveMessage = mailServer.getFirstMessage();
@@ -59,7 +60,7 @@ public class EmailServiceTest {
         message.setTo("xxx@yyy.zzz");
         message.setSubject("テスト");
         message.setText("これはテストです");
-        emailService.sendMail(message.getMimeMessage());
+        emailHelper.sendMail(message.getMimeMessage());
         
         assertThat(mailServer.getMessagesCount(), is(1));
         MimeMessage receiveMessage = mailServer.getFirstMessage();

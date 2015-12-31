@@ -21,6 +21,7 @@ create table lending_app (
     , status                varchar(1) not null
     , lending_user_id       bigint not null references user_info(user_id)
     , approval_user_id      bigint references user_info(user_id)
+    , version               bigint not null default 1
 );
 
 create table lending_book (
@@ -33,6 +34,7 @@ create table lending_book (
     , lending_app_reason    varchar(128)
     , approval_result       varchar(1)
     , approval_reason       varchar(128)
+    , version               bigint not null default 1
 );
 
 create table library_forsearch (

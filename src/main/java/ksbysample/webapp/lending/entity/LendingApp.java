@@ -6,6 +6,7 @@ import org.seasar.doma.GeneratedValue;
 import org.seasar.doma.GenerationType;
 import org.seasar.doma.Id;
 import org.seasar.doma.Table;
+import org.seasar.doma.Version;
 
 /**
  */
@@ -30,6 +31,11 @@ public class LendingApp {
     /** */
     @Column(name = "approval_user_id")
     Long approvalUserId;
+
+    /** */
+    @Version
+    @Column(name = "version")
+    Long version;
 
     /** 
      * Returns the lendingAppId.
@@ -101,5 +107,23 @@ public class LendingApp {
      */
     public void setApprovalUserId(Long approvalUserId) {
         this.approvalUserId = approvalUserId;
+    }
+
+    /** 
+     * Returns the version.
+     * 
+     * @return the version
+     */
+    public Long getVersion() {
+        return version;
+    }
+
+    /** 
+     * Sets the version.
+     * 
+     * @param version the version
+     */
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

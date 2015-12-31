@@ -10,7 +10,7 @@ import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.helper.mail.Mail001Helper;
-import ksbysample.webapp.lending.service.EmailService;
+import ksbysample.webapp.lending.helper.mail.EmailHelper;
 import ksbysample.webapp.lending.service.calilapi.CalilApiService;
 import ksbysample.webapp.lending.service.calilapi.response.Book;
 import ksbysample.webapp.lending.service.queue.InquiringStatusOfBookQueueMessage;
@@ -42,7 +42,7 @@ public class InquiringStatusOfBookQueueListener {
     private CalilApiService calilApiService;
 
     @Autowired
-    private EmailService emailService;
+    private EmailHelper emailHelper;
 
     @Autowired
     private Mail001Helper mail001Helper;
@@ -96,7 +96,7 @@ public class InquiringStatusOfBookQueueListener {
         // データを登録したユーザへメールを送信する
         UserInfo userInfo = userInfoDao.selectById(lendingApp.getLendingUserId());
         MimeMessage mimeMessage = mail001Helper.createMessage(userInfo.getMailAddress(), convertedMessage.getLendingAppId());
-        emailService.sendMail(mimeMessage);
+        emailHelper.sendMail(mimeMessage);
     }
 
     private void copyLendingStateFromBookListToEntityList(List<Book> bookList, List<LendingBook> lendingBookList) {

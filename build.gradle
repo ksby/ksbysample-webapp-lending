@@ -22,11 +22,14 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'de.undercouch.download'
+apply plugin: 'groovy'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 compileJava.options.compilerArgs = ['-Xlint:all']
+compileTestGroovy.options.compilerArgs = ['-Xlint:all']
+compileTestJava.options.compilerArgs = ['-Xlint:all']
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
@@ -86,6 +89,9 @@ dependencies {
     // (ここまで) ------------------------------------------------------------------------------------------------------
     testCompile("org.springframework.security:spring-security-test:4.0.2.RELEASE")
     testCompile("org.yaml:snakeyaml")
+    testCompile("org.codehaus.groovy:groovy-all")
+    testCompile("org.spockframework:spock-core")
+    testCompile("org.spockframework:spock-spring")
 
     // spring-boot-gradle-plugin によりバージョン番号が自動で設定されないもの
     compile("${jdbcDriver}")
@@ -97,6 +103,7 @@ dependencies {
     compile("org.springframework.session:spring-session:1.0.1.RELEASE")
     compile("org.simpleframework:simple-xml:2.7.1")
     compile("com.univocity:univocity-parsers:1.5.6")
+    compile("org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE")
     testCompile("org.dbunit:dbunit:2.5.1")
     testCompile("com.icegreen:greenmail:1.4.1")
     testCompile("org.assertj:assertj-core:3.2.0")
@@ -117,28 +124,32 @@ test {
 }
 
 // for Doma-Gen
-task gen << {
-    def rootPackageName = 'ksbysample.webapp.lending'
-    def daoPackagePath  = 'src/main/java/ksbysample/webapp/lending/dao'
-    def workDirPath     = 'work'
-    def workDaoDirPath  = "${workDirPath}/dao"
+task domaGen << {
+    // まず変更が必要なもの
+    def rootPackageName  = 'ksbysample.webapp.lending'
+    def daoPackagePath   = 'src/main/java/ksbysample/webapp/lending/dao'
+    def dbUrl            = 'jdbc:postgresql://localhost/ksbylending'
+    def dbUser           = 'ksbylending_user'
+    def dbPassword       = 'xxxxxxxx'
+    def tableNamePattern = '.*'
+    // おそらく変更不要なもの
+    def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
+    def workDirPath      = 'work'
+    def workDaoDirPath   = "${workDirPath}/dao"
 
     // 作業用ディレクトリを削除する
     clearDir("${workDirPath}")
-    
+
     // 現在の Dao インターフェースのバックアップを取得する
     copy() {
         from "${daoPackagePath}"
         into "${workDaoDirPath}/org"
     }
-    
+
     // Dao インターフェース、Entity クラスを生成する
     ant.taskdef(resource: 'domagentask.properties',
             classpath: configurations.domaGenRuntime.asPath)
-    ant.gen(url: 'jdbc:postgresql://localhost/ksbylending'
-                , user: 'ksbylending_user'
-                , password: 'xxxxxxxx'
-            ) {
+    ant.gen(url: "${dbUrl}", user: "${dbUser}", password: "${dbPassword}", tableNamePattern: "${tableNamePattern}") {
         entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
         daoConfig(packageName: "${rootPackageName}.dao")
         sqlConfig()
@@ -150,8 +161,8 @@ task gen << {
         from "${daoPackagePath}"
         into "${workDaoDirPath}/replace"
         filter {
-            line -> line.replaceAll('import org.seasar.doma.Dao;', 'import ksbysample.webapp.lending.util.doma.ComponentAndAutowiredDomaConfig;\nimport org.seasar.doma.Dao;')
-                        .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+            line -> line.replaceAll('import org.seasar.doma.Dao;', "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
+                    .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
         }
     }
 
@@ -170,7 +181,7 @@ task gen << {
 
     // 作業用ディレクトリを削除する
     clearDir("${workDirPath}")
-    
+
     // 自動生成したファイルを git add する
     addGit()
 }
@@ -218,6 +229,7 @@ task printClassWhatNotMakeTest << {
     def excludePaths = [
             "src/main/java/ksbysample/webapp/lending/Application.java"
             , "src/main/java/ksbysample/webapp/lending/config"
+            , "src/main/java/ksbysample/webapp/lending/cookie"
             , "src/main/java/ksbysample/webapp/lending/dao"
             , "src/main/java/ksbysample/webapp/lending/entity"
             , "src/main/java/ksbysample/webapp/lending/exception"
@@ -230,11 +242,13 @@ task printClassWhatNotMakeTest << {
             , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"
             , "src/main/java/ksbysample/webapp/lending/util/doma"
             , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
+            , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/weather"
     ];
     def excludeFileNamePatterns = [
             ".*EventListener.java"
+            , ".*Dto.java"
             , ".*Form.java"
             , ".*Values.java"
     ];
@@ -375,36 +389,50 @@ void downloadBootstrapFileInputMinJs(String workDirPath, String staticDirPath) {
 }
 
 def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
-    def existFlg;
+    def existFlg
+    def testDirAndTestClassNameList = [
+            ["src/test/java", "Test.java"]
+            , ["src/test/groovy", "Test.groovy"]
+    ]
 
     for (srcFile in srcDir.listFiles()) {
-        String srcFilePath = (srcFile.toPath() as String).replaceAll("\\\\", "/");
-        existFlg = false;
+        String srcFilePath = (srcFile.toPath() as String).replaceAll("\\\\", "/")
+        existFlg = false
 
         for (exclude in excludePaths) {
             if (srcFilePath =~ /^${exclude as String}/) {
-                existFlg = true;
-                break;
+                existFlg = true
+                break
             }
         }
-        if (existFlg == true) continue;
+        if (existFlg == true) continue
 
         for (exclude in excludeFileNamePatterns) {
             if (srcFilePath =~ /${exclude as String}/) {
                 existFlg = true
-                break;
+                break
             }
         }
-        if (existFlg == true) continue;
+        if (existFlg == true) continue
         
         if (srcFile.isDirectory()) {
-            compareSrcAndTestDir(srcFile, excludePaths, excludeFileNamePatterns);
+            compareSrcAndTestDir(srcFile, excludePaths, excludeFileNamePatterns)
         } else {
-            String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, "src/test/java").replaceFirst(/\.java$/, "Test.java");
-            def testFile = new File(testFilePath);
-            if (!testFile.exists()) {
-                println(srcFilePath);
+            def nextFlg = false
+            for (testDirAndTestClassName in testDirAndTestClassNameList) {
+                def testDir = testDirAndTestClassName[0]
+                def testClassName = testDirAndTestClassName[1]
+
+                String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, testDir).replaceFirst(/\.java$/, testClassName)
+                def testFile = new File(testFilePath)
+                if (testFile.exists()) {
+                    nextFlg = true
+                    break
+                }
             }
+            if (nextFlg) continue
+
+            println(srcFilePath);
         }
     }
 }

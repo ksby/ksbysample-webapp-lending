@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>共通エラー画面</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style>
+        .content-wrapper {
+            background-color: #fffafa;
+        }
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <header class="main-header" th:fragment="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand"><b>ksbysample-lending</b></a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">メニュー <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/booklist">貸出希望書籍登録</a></li>
+                                <li><a href="/lendingapp">貸出申請</a></li>
+                                <li><a href="/confirmresult">貸出申請結果確認</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/lendingapproval">貸出承認</a></li>
+                                <li class="divider"></li>
+                                <li><a href="/admin/library">検索対象図書館登録</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <ul class="nav navbar-nav">
+                        <li><a href="/logout">ログアウト</a></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-custom-menu -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="callout callout-danger">
+                            <h4><i class="fa fa-warning"></i>　エラーが発生しました。</h4>
+                            <div th:if="${errorMessage}">
+                                <span th:text="${errorMessage}">エラーメッセージ</span><br/>
+                            </div>
+                            発生日時：　<span th:text="${#temporals.format(currentdt, 'yyyy/MMM/dd HH:mm:ss')}">9999/99/99 99:99</span><br/>
+                            <div th:each="errorInfo : ${errorInfoList}">
+                                <span th:text="${errorInfo}">エラー情報</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+</body>
+</html>

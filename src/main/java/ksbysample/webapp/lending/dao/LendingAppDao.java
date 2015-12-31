@@ -21,8 +21,12 @@ public interface LendingAppDao {
      */
     @Select
     LendingApp selectById(Long lendingAppId);
+    @Select(ensureResult = true)
+    LendingApp selectByIdAndVersion(Long lendingAppId, Long version);
     @Select
     LendingApp selectById(Long lendingAppId, SelectOptions options);
+    @Select(ensureResult = true)
+    LendingApp selectByIdAndVersion(Long lendingAppId, Long version, SelectOptions options);
 
     /**
      * @param entity
