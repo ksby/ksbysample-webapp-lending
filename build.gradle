@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.7.RELEASE'
+        springBootVersion = '1.2.8.RELEASE'
     }
     repositories {
         jcenter()
@@ -82,10 +82,10 @@ dependencies {
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    // (ここから) gradle でテストを実行した場合に spring-security-test-4.0.2.RELEASE.jar しか classpath に指定されず
-    // テストが失敗したため、3.2.8.RELEASE を明記している
-    testCompile("org.springframework.security:spring-security-core:3.2.8.RELEASE")
-    testCompile("org.springframework.security:spring-security-web:3.2.8.RELEASE")
+    // (ここから) gradle でテストを実行した場合に spring-security-test-4.0.3.RELEASE.jar しか classpath に指定されず
+    // テストが失敗したため、3.2.9.RELEASE を明記している
+    testCompile("org.springframework.security:spring-security-core:3.2.9.RELEASE")
+    testCompile("org.springframework.security:spring-security-web:3.2.9.RELEASE")
     // (ここまで) ------------------------------------------------------------------------------------------------------
     testCompile("org.springframework.security:spring-security-test:4.0.2.RELEASE")
     testCompile("org.yaml:snakeyaml")
