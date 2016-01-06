@@ -1,7 +1,10 @@
 package ksbysample.webapp.lending.listener.rabbitmq;
 
 import com.google.common.base.Charsets;
-import ksbysample.common.test.*;
+import ksbysample.common.test.MailServerResource;
+import ksbysample.common.test.TableDataAssert;
+import ksbysample.common.test.TestData;
+import ksbysample.common.test.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
@@ -47,10 +50,6 @@ public class InquiringStatusOfBookQueueListenerTest {
 
     @Rule
     @Autowired
-    public TestDataLoaderResource testDataLoaderResource;
-
-    @Rule
-    @Autowired
     public MailServerResource mailServer;
 
     @Autowired
@@ -63,7 +62,7 @@ public class InquiringStatusOfBookQueueListenerTest {
     private InquiringStatusOfBookQueueListener listener;
 
     @Test
-    @TestDataLoader("src/test/resources/ksbysample/webapp/lending/listener/rabbitmq/testdata/001")
+    @TestData("src/test/resources/ksbysample/webapp/lending/listener/rabbitmq/testdata/001")
     public void testReceiveMessage() throws Exception {
         // モックに入れ替える前のフィールドの実体を退避する
         LibraryForsearchDao libraryForsearchDaoOrg = getField(listener, "libraryForsearchDao");

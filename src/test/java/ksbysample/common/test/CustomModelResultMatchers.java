@@ -12,9 +12,9 @@ import org.springframework.ui.ModelMap;
 
 import java.util.regex.Pattern;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.springframework.test.util.MatcherAssertionErrors.assertThat;
 
 public class CustomModelResultMatchers extends ModelResultMatchers {
 

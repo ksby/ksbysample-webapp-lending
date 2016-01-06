@@ -1,8 +1,7 @@
 package ksbysample.webapp.lending.web.admin.library;
 
 import ksbysample.common.test.TableDataAssert;
-import ksbysample.common.test.TestDataLoader;
-import ksbysample.common.test.TestDataLoaderResource;
+import ksbysample.common.test.TestData;
 import ksbysample.common.test.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import org.dbunit.dataset.IDataSet;
@@ -32,10 +31,6 @@ public class AdminLibraryServiceTest {
     @Autowired
     public TestDataResource testDataResource;
 
-    @Rule
-    @Autowired
-    public TestDataLoaderResource testDataLoaderResource;
-
     @Autowired
     private DataSource dataSource;
 
@@ -43,7 +38,7 @@ public class AdminLibraryServiceTest {
     private AdminLibraryService adminLibraryService;
     
     @Test
-    @TestDataLoader("src/test/resources/ksbysample/webapp/lending/web/admin/library/testdata/001")
+    @TestData("src/test/resources/ksbysample/webapp/lending/web/admin/library/testdata/001")
     public void testDeleteAndInsertLibraryForSearch() throws Exception {
         adminLibraryService.deleteAndInsertLibraryForSearch(setSelectedLibraryForm_001);
 
