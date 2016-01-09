@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>貸出承認</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style>
+        .content-wrapper {
+            background-color: #fffafa;
+        }
+        .selected-library {
+            color: #ffffff !important;
+            font-size: 100%;
+            font-weight: 700;
+        }
+        .box-body.no-padding {
+            padding-bottom: 10px !important;
+        }
+        .table>tbody>tr>td
+        , .table>tbody>tr>th
+        , .table>tfoot>tr>td
+        , .table>tfoot>tr>th
+        , .table>thead>tr>td
+        , .table>thead>tr>th {
+            padding: 5px;
+            font-size: 90%;
+        }
+        .jp-gothic {
+            font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+        }
+        .btn-approval.active {
+            background-color: #00a65a;
+        }
+        .btn-reject.active {
+            background-color: #dd4b39;
+        }
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>貸出承認</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-body no-padding">
+                                <div class="col-xs-6 no-padding">
+                                    <table class="table table-bordered">
+                                        <colgroup>
+                                            <col width="30%"/>
+                                            <col width="70%"/>
+                                        </colgroup>
+                                        <tr>
+                                            <th class="bg-purple">貸出申請ID</th>
+                                            <th>1</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-purple">ステータス</th>
+                                            <th>申請中</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="bg-purple">申請者</th>
+                                            <th>田中　太郎</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <br/>
+
+                                <form id="lendingapprovalForm" method="post" action="/lendingapproval/complete"
+                                      th:action="@{/lendingapproval/complete}" th:object="${lendingapprovalForm}">
+                                    <table class="table">
+                                        <colgroup>
+                                            <col width="5%"/>
+                                            <col width="15%"/>
+                                            <col width="15%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="25%"/>
+                                        </colgroup>
+                                        <thead class="bg-purple">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>ISBN</th>
+                                            <th>書名</th>
+                                            <th>申請理由</th>
+                                            <th>承認／却下</th>
+                                            <th>却下理由</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="jp-gothic">
+                                        <tr>
+                                            <th>1</th>
+                                            <th>978-4-7741-6366-6</th>
+                                            <th>GitHub実践入門</th>
+                                            <th>開発で使用する為</th>
+                                            <th>
+                                                <div class="btn-group-sm" data-toggle="buttons">
+                                                    <label class="btn btn-default btn-approval"><input type="radio" name="approval" value="1" /> 承認</label>
+                                                    <label class="btn btn-default btn-reject"><input type="radio" name="approval" value="2" /> 却下</label>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>2</th>
+                                            <th>978-4-7741-5380-3</th>
+                                            <th>Spring3入門</th>
+                                            <th>開発で使用する為</th>
+                                            <th>
+                                                <div class="btn-group-sm" data-toggle="buttons">
+                                                    <label class="btn btn-default btn-approval"><input type="radio" name="approval" value="1" /> 承認</label>
+                                                    <label class="btn btn-default btn-reject"><input type="radio" name="approval" value="2" /> 却下</label>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>3</th>
+                                            <th>978-4-87311-718-8</th>
+                                            <th>Javaパフォーマンス</th>
+                                            <th>勉強会の為</th>
+                                            <th>
+                                                <div class="btn-group-sm" data-toggle="buttons">
+                                                    <label class="btn btn-default btn-approval"><input type="radio" name="approval" value="1" /> 承認</label>
+                                                    <label class="btn btn-default btn-reject"><input type="radio" name="approval" value="2" /> 却下</label>
+                                                </div>
+                                            </th>
+                                            <th>
+                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
+                                            </th>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center">
+                                        <button class="btn bg-blue js-btn-complete"><i class="fa fa-check-square-o"></i>　確定</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $(".js-btn-complete").click(function(){
+            $("#lendingappForm").submit();
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>
