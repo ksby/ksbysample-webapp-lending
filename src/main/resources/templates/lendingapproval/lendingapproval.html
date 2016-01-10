@@ -61,32 +61,35 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="box">
-                            <div class="box-body no-padding">
-                                <div class="col-xs-6 no-padding">
-                                    <table class="table table-bordered">
-                                        <colgroup>
-                                            <col width="30%"/>
-                                            <col width="70%"/>
-                                        </colgroup>
-                                        <tr>
-                                            <th class="bg-purple">貸出申請ID</th>
-                                            <th>1</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-purple">ステータス</th>
-                                            <th>申請中</th>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-purple">申請者</th>
-                                            <th>田中　太郎</th>
-                                        </tr>
-                                    </table>
-                                </div>
-                                <br/>
-
-                                <form id="lendingapprovalForm" method="post" action="/lendingapproval/complete"
-                                      th:action="@{/lendingapproval/complete}" th:object="${lendingapprovalForm}">
+                        <form id="lendingapprovalForm" method="post" action="/lendingapproval/complete"
+                              th:action="@{/lendingapproval/complete}" th:object="${lendingapprovalForm}">
+                            <div class="alert alert-danger" th:if="${#fields.hasGlobalErrors()}">
+                                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">共通エラーメッセージ表示エリア</p>
+                            </div>
+                            <div class="box" th:if="*{lendingApp != null}">
+                                <div class="box-body no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <table class="table table-bordered">
+                                            <colgroup>
+                                                <col width="30%"/>
+                                                <col width="70%"/>
+                                            </colgroup>
+                                            <tr>
+                                                <th class="bg-purple">貸出申請ID</th>
+                                                <td th:text="*{lendingApp.lendingAppId}">1</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">ステータス</th>
+                                                <td th:text="${@vh.getText('LendingAppStatusValues', lendingapprovalForm.lendingApp.status)}">申請中</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">申請者</th>
+                                                <td th:text="*{username}">田中　太郎</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <br/>
+    
                                     <table class="table">
                                         <colgroup>
                                             <col width="5%"/>
@@ -107,59 +110,42 @@
                                         </tr>
                                         </thead>
                                         <tbody class="jp-gothic">
-                                        <tr>
-                                            <th>1</th>
-                                            <th>978-4-7741-6366-6</th>
-                                            <th>GitHub実践入門</th>
-                                            <th>開発で使用する為</th>
-                                            <th>
+                                        <tr th:each="applyingBookForm, iterStat : *{applyingBookFormList}">
+                                            <td th:text="${iterStat.count}">1</td>
+                                            <td th:text="${applyingBookForm.isbn}">978-4-7741-6366-6</td>
+                                            <td th:text="${applyingBookForm.bookName}">GitHub実践入門</td>
+                                            <td th:text="${applyingBookForm.lendingAppReason}">開発で使用する為</td>
+                                            <td>
                                                 <div class="btn-group-sm" data-toggle="buttons">
-                                                    <label class="btn btn-default btn-approval"><input type="radio" name="approval" value="1" /> 承認</label>
-                                                    <label class="btn btn-default btn-reject"><input type="radio" name="approval" value="2" /> 却下</label>
+                                                    <label class="btn btn-default btn-approval">
+                                                        <input type="radio"
+                                                               th:field="*{applyingBookFormList[__${iterStat.index}__].approvalResult}"
+                                                               th:value="${@vh.getValue('LendingBookApprovalResultValues', 'APPROVAL')}"/>
+                                                        承認
+                                                    </label>
+                                                    <label class="btn btn-default btn-reject">
+                                                        <input type="radio"
+                                                               th:field="*{applyingBookFormList[__${iterStat.index}__].approvalResult}"
+                                                               th:value="${@vh.getValue('LendingBookApprovalResultValues', 'REJECT')}"/>
+                                                        却下
+                                                    </label>
                                                 </div>
-                                            </th>
-                                            <th>
-                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>2</th>
-                                            <th>978-4-7741-5380-3</th>
-                                            <th>Spring3入門</th>
-                                            <th>開発で使用する為</th>
-                                            <th>
-                                                <div class="btn-group-sm" data-toggle="buttons">
-                                                    <label class="btn btn-default btn-approval"><input type="radio" name="approval" value="1" /> 承認</label>
-                                                    <label class="btn btn-default btn-reject"><input type="radio" name="approval" value="2" /> 却下</label>
-                                                </div>
-                                            </th>
-                                            <th>
-                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
-                                            </th>
-                                        </tr>
-                                        <tr>
-                                            <th>3</th>
-                                            <th>978-4-87311-718-8</th>
-                                            <th>Javaパフォーマンス</th>
-                                            <th>勉強会の為</th>
-                                            <th>
-                                                <div class="btn-group-sm" data-toggle="buttons">
-                                                    <label class="btn btn-default btn-approval"><input type="radio" name="approval" value="1" /> 承認</label>
-                                                    <label class="btn btn-default btn-reject"><input type="radio" name="approval" value="2" /> 却下</label>
-                                                </div>
-                                            </th>
-                                            <th>
-                                                <input type="text" name="reason" class="form-control input-sm" value=""/>
-                                            </th>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control input-sm"
+                                                       th:field="*{applyingBookFormList[__${iterStat.index}__].approvalReason}"/>
+                                            </td>
+                                            <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].lendingBookId}"/>
+                                            <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].version}"/>
                                         </tr>
                                         </tbody>
                                     </table>
                                     <div class="text-center">
                                         <button class="btn bg-blue js-btn-complete"><i class="fa fa-check-square-o"></i>　確定</button>
                                     </div>
-                                </form>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </section>
