@@ -39,6 +39,9 @@
         .btn-reject.active {
             background-color: #dd4b39;
         }
+        .has-error {
+            background-color: #ffcccc;
+        }
     </style>
 </head>
 
@@ -86,6 +89,9 @@
                                                 <th class="bg-purple">申請者</th>
                                                 <td th:text="*{username}">田中　太郎</td>
                                             </tr>
+                                            <input type="hidden" th:field="*{lendingApp.lendingAppId}"/>
+                                            <input type="hidden" th:field="*{lendingApp.status}"/>
+                                            <input type="hidden" th:field="*{username}"/>
                                         </table>
                                     </div>
                                     <br/>
@@ -117,13 +123,15 @@
                                             <td th:text="${applyingBookForm.lendingAppReason}">開発で使用する為</td>
                                             <td>
                                                 <div class="btn-group-sm" data-toggle="buttons">
-                                                    <label class="btn btn-default btn-approval">
+                                                    <label class="btn btn-default btn-approval"
+                                                           th:classappend="*{applyingBookFormList[__${iterStat.index}__].approvalResult} == ${@vh.getValue('LendingBookApprovalResultValues', 'APPROVAL')} ? 'active' : ''">
                                                         <input type="radio"
                                                                th:field="*{applyingBookFormList[__${iterStat.index}__].approvalResult}"
                                                                th:value="${@vh.getValue('LendingBookApprovalResultValues', 'APPROVAL')}"/>
                                                         承認
                                                     </label>
-                                                    <label class="btn btn-default btn-reject">
+                                                    <label class="btn btn-default btn-reject"
+                                                           th:classappend="*{applyingBookFormList[__${iterStat.index}__].approvalResult} == ${@vh.getValue('LendingBookApprovalResultValues', 'REJECT')} ? 'active' : ''">
                                                         <input type="radio"
                                                                th:field="*{applyingBookFormList[__${iterStat.index}__].approvalResult}"
                                                                th:value="${@vh.getValue('LendingBookApprovalResultValues', 'REJECT')}"/>
@@ -133,9 +141,13 @@
                                             </td>
                                             <td>
                                                 <input type="text" class="form-control input-sm"
+                                                       th:classappend="${#fields.hasErrors('*{applyingBookFormList[__${iterStat.index}__].approvalReason}')} ? 'has-error' : ''"
                                                        th:field="*{applyingBookFormList[__${iterStat.index}__].approvalReason}"/>
                                             </td>
                                             <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].lendingBookId}"/>
+                                            <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].isbn}"/>
+                                            <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].bookName}"/>
+                                            <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].lendingAppReason}"/>
                                             <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].version}"/>
                                         </tr>
                                         </tbody>

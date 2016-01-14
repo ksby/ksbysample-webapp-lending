@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -18,6 +20,14 @@ public class LendingapprovalController {
 
     @Autowired
     private MessagesPropertiesHelper messagesPropertiesHelper;
+
+    @Autowired
+    private LendingapprovalFormValidator lendingapprovalFormValidator;
+
+    @InitBinder(value = "lendingapprovalForm")
+    public void initBinder(WebDataBinder binder) {
+        binder.addValidators(lendingapprovalFormValidator);
+    }
 
     @RequestMapping
     public String index(@Validated LendingapprovalParamForm lendingapprovalParamForm
@@ -37,11 +47,16 @@ public class LendingapprovalController {
             bindingResultOfLendingapprovalForm.reject("LendingapprovalForm.lendingApp.nodataerr");
         }
         
-        return "lendingapproval/lendingapproval";        
+        return "lendingapproval/lendingapproval";
     }
 
     @RequestMapping(value = "/complete", method = RequestMethod.POST)
-    public String complete() {
+    public String complete(@Validated LendingapprovalForm lendingapprovalForm
+            , BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "lendingapproval/lendingapproval";
+        }
+
         return "lendingapproval/lendingapproval";
     }
 
