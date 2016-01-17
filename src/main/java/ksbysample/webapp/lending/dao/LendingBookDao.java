@@ -51,6 +51,8 @@ public interface LendingBookDao {
     int updateLendingState(LendingBook entity);
     @Update(include = {"lendingAppFlg", "lendingAppReason"})
     int updateLendingAppFlgAndReason(LendingBook entity);
+    @Update(include = {"approvalResult", "approvalReason"})
+    int updateApprovalResultAndReason(LendingBook entity);
     
     /**
      * @param entity

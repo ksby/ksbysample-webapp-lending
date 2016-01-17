@@ -69,6 +69,10 @@
                             <div class="alert alert-danger" th:if="${#fields.hasGlobalErrors()}">
                                 <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">共通エラーメッセージ表示エリア</p>
                             </div>
+                            <div class="alert alert-success" th:if="${successMessages}">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <p th:each="msg : ${successMessages}" th:text="${msg}">通常メッセージ表示エリア</p>
+                            </div>
                             <div class="box" th:if="*{lendingApp != null}">
                                 <div class="box-body no-padding">
                                     <div class="col-xs-6 no-padding">
@@ -122,7 +126,8 @@
                                             <td th:text="${applyingBookForm.bookName}">GitHub実践入門</td>
                                             <td th:text="${applyingBookForm.lendingAppReason}">開発で使用する為</td>
                                             <td>
-                                                <div class="btn-group-sm" data-toggle="buttons">
+                                                <div class="btn-group-sm" data-toggle="buttons"
+                                                     th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'PENDING')}">
                                                     <label class="btn btn-default btn-approval"
                                                            th:classappend="*{applyingBookFormList[__${iterStat.index}__].approvalResult} == ${@vh.getValue('LendingBookApprovalResultValues', 'APPROVAL')} ? 'active' : ''">
                                                         <input type="radio"
@@ -138,11 +143,18 @@
                                                         却下
                                                     </label>
                                                 </div>
+                                                <span th:text="${@vh.getText('LendingBookApprovalResultValues', applyingBookForm.approvalResult)}"
+                                                      th:if="*{lendingApp.status} != ${@vh.getValue('LendingAppStatusValues', 'PENDING')}">
+                                                </span>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control input-sm"
+                                                <input type="text" class="form-control input-sm"                                                       
                                                        th:classappend="${#fields.hasErrors('*{applyingBookFormList[__${iterStat.index}__].approvalReason}')} ? 'has-error' : ''"
-                                                       th:field="*{applyingBookFormList[__${iterStat.index}__].approvalReason}"/>
+                                                       th:field="*{applyingBookFormList[__${iterStat.index}__].approvalReason}"
+                                                       th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'PENDING')}"/>
+                                                <span th:text="${applyingBookForm.approvalReason}"
+                                                        th:if="*{lendingApp.status} != ${@vh.getValue('LendingAppStatusValues', 'PENDING')}">
+                                                </span>
                                             </td>
                                             <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].lendingBookId}"/>
                                             <input type="hidden" th:field="*{applyingBookFormList[__${iterStat.index}__].isbn}"/>
@@ -152,7 +164,8 @@
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <div class="text-center">
+                                    <div class="text-center"
+                                         th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'PENDING')}">
                                         <button class="btn bg-blue js-btn-complete"><i class="fa fa-check-square-o"></i>　確定</button>
                                     </div>
                                 </div>
