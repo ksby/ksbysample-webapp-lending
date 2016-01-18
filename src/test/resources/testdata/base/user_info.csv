@@ -6,3 +6,4 @@ user_id,username,password,mail_address,enabled,cnt_badcredentials,expired_accoun
 5,"sato masahiko",$2a$10$qIU0kM/p1pa7KSIjF6YA4eORd2wL1Eo6TlvH./DmPs7D.xXQPEq7a,sato.masahiko@sample.com,1,0,"9999-12-31 23:59:00.000000","2014-08-05 22:34:22.818000"
 6,"takahasi naoko",$2a$10$iXp/d4wXmfaLKTjQKBvik.kETgx4nQ.FL1NjYt4ALJOGSyVOSchW6,takahasi.naoko@test.co.jp,1,0,"2015-12-01 22:39:48.475000","2015-11-10 22:39:55.422000"
 7,"kato hiroshi",$2a$10$g5dtFTtNBdJO30aHg50rluGNa2pEAzArcwYkYyCG91ElBZPs9sDi2,kato.hiroshi@sample.com,0,5,"2014-01-01 15:58:53.295000","2013-12-31 15:59:07.668000"
+8,"ito aoi",$2a$10$wD9VL.2cfiL0UY05N4PAs.l0Zd/X9CC0LouzGaHqp2W6PKLjQXJNq,ito.aoi@test.co.jp,1,0,"9999-12-31 23:59:00.000000","9999-12-31 23:59:00.000000"

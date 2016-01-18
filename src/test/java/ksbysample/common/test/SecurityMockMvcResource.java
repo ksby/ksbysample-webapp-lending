@@ -23,6 +23,7 @@ public class SecurityMockMvcResource extends ExternalResource {
     public final String MAILADDR_ENDO_YOKO = "endo.yoko@sample.com";
     public final String MAILADDR_SATO_MASAHIKO = "sato.masahiko@sample.com";
     public final String MAILADDR_TAKAHASI_NAOKO = "takahasi.naoko@test.co.jp";
+    public final String MAILADDR_ITO_AOI = "ito.aoi@test.co.jp";
 
     @Autowired
     private WebApplicationContext context;
@@ -35,6 +36,7 @@ public class SecurityMockMvcResource extends ExternalResource {
 
     public MockMvc authTanakaTaro;
     public MockMvc authSuzukiHanako;
+    public MockMvc authItoAoi;
     public MockMvc noauth;
 
     @Override
@@ -50,6 +52,13 @@ public class SecurityMockMvcResource extends ExternalResource {
         UserDetails userDetailsSuzukiHanako = userDetailsService.loadUserByUsername(MAILADDR_SUZUKI_HANAKO);
         this.authSuzukiHanako = MockMvcBuilders.webAppContextSetup(this.context)
                 .defaultRequest(get("/").with(user(userDetailsSuzukiHanako)))
+                .addFilter(springSecurityFilterChain)
+                .build();
+
+        // 認証ユーザ用MockMvc ( user = ito.aoi@test.co.jp )
+        UserDetails userDetailsItoAoi = userDetailsService.loadUserByUsername(MAILADDR_ITO_AOI);
+        this.authItoAoi = MockMvcBuilders.webAppContextSetup(this.context)
+                .defaultRequest(get("/").with(user(userDetailsItoAoi)))
                 .addFilter(springSecurityFilterChain)
                 .build();
 
