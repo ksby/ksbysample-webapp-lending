@@ -20,7 +20,7 @@ public class LendingapprovalForm {
     @Valid
     private List<ApplyingBookForm> applyingBookFormList;
 
-    public void setApplyingBookFormList(List<LendingBook> lendingBookList) {
+    public void setApplyingBookFormListFromLendingBookList(List<LendingBook> lendingBookList) {
         this.applyingBookFormList = null;
         if (lendingBookList != null) {
             this.applyingBookFormList = lendingBookList.stream()

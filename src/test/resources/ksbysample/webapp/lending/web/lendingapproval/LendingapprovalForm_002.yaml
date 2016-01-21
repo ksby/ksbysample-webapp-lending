@@ -1,0 +1,32 @@
+!!ksbysample.webapp.lending.web.lendingapproval.LendingapprovalForm
+# 「確定」ボタンが押された場合
+# ３件全て「却下」が選択されているが却下理由が入力されていない
+lendingApp: 
+  lendingAppId: 105
+  status: 3
+  lendingUserId: 1
+  approvalUserId: 
+  version: 1
+username: temporarySave
+applyingBookFormList: 
+  - lendingBookId: 522
+    isbn: 978-4-7741-6366-6
+    bookName: GitHub実践入門
+    lendingAppReason: 開発で使用する為
+    approvalResult: 2
+    approvalReason: 
+    version: 1
+  - lendingBookId: 524
+    isbn: 978-4-7741-5377-3
+    bookName: JUnit実践入門
+    lendingAppReason: 勉強の為
+    approvalResult: 2
+    approvalReason: 
+    version: 1
+  - lendingBookId: 525
+    isbn: 978-4-7973-8014-9
+    bookName: Java最強リファレンス
+    lendingAppReason: 勉強会の調査の為
+    approvalResult: 2
+    approvalReason: 
+    version: 1

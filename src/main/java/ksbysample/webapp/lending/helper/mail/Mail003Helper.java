@@ -2,6 +2,7 @@ package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.util.velocity.VelocityUtils;
+import ksbysample.webapp.lending.values.LendingBookApprovalResultValues;
 import ksbysample.webapp.lending.values.ValuesHelper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class Mail003Helper {
     private JavaMailSender mailSender;
 
     @Autowired
-    private ValuesHelper<?> vh;
+    private ValuesHelper vh;
 
     public MimeMessage createMessage(String toAddr, Long lendingAppId, List<LendingBook> lendingBookList)
             throws MessagingException {
@@ -61,12 +62,8 @@ public class Mail003Helper {
         private String bookName;
 
         public Mail003BookData(LendingBook lendingBook) {
-            try {
-                this.approvalResultStr = vh.getText("LendingBookApprovalResultValues", lendingBook.getApprovalResult());
-                this.bookName = lendingBook.getBookName();
-            } catch (ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            this.approvalResultStr = vh.getText(LendingBookApprovalResultValues.class, lendingBook.getApprovalResult());
+            this.bookName = lendingBook.getBookName();
         }
     }
 

@@ -242,6 +242,7 @@ task printClassWhatNotMakeTest << {
             , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"
             , "src/main/java/ksbysample/webapp/lending/util/doma"
             , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
+            , "src/main/java/ksbysample/webapp/lending/values/validation/ValuesEnum.java"
             , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/weather"

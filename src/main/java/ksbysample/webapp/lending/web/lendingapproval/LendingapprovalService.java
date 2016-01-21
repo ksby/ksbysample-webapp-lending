@@ -54,7 +54,7 @@ public class LendingapprovalService {
 
         lendingapprovalForm.setLendingApp(lendingApp);
         lendingapprovalForm.setUsername(username);
-        lendingapprovalForm.setApplyingBookFormList(lendingBookList);
+        lendingapprovalForm.setApplyingBookFormListFromLendingBookList(lendingBookList);
     }
 
     public void complete(LendingapprovalForm lendingapprovalForm) throws MessagingException {
