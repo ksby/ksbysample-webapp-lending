@@ -9,6 +9,8 @@ import org.seasar.doma.Select;
 import org.seasar.doma.Update;
 import org.seasar.doma.jdbc.SelectOptions;
 
+import java.util.List;
+
 /**
  */
 @Dao
@@ -27,6 +29,10 @@ public interface LendingAppDao {
     LendingApp selectById(Long lendingAppId, SelectOptions options);
     @Select(ensureResult = true)
     LendingApp selectByIdAndVersion(Long lendingAppId, Long version, SelectOptions options);
+    @Select
+    LendingApp selectByIdAndStatus(Long lendingAppId, List<String> statusList);
+    @Select
+    LendingApp selectByIdAndStatus(Long lendingAppId, List<String> statusList, SelectOptions options);
 
     /**
      * @param entity

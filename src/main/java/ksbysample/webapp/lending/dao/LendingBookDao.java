@@ -29,6 +29,10 @@ public interface LendingBookDao {
     List<LendingBook> selectByLendingAppId(Long lendingAppId);
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId, SelectOptions options);
+    @Select
+    List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg);
+    @Select
+    List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg, SelectOptions options);
     
     /**
      * @param entity
@@ -47,6 +51,8 @@ public interface LendingBookDao {
     int updateLendingState(LendingBook entity);
     @Update(include = {"lendingAppFlg", "lendingAppReason"})
     int updateLendingAppFlgAndReason(LendingBook entity);
+    @Update(include = {"approvalResult", "approvalReason"})
+    int updateApprovalResultAndReason(LendingBook entity);
     
     /**
      * @param entity
