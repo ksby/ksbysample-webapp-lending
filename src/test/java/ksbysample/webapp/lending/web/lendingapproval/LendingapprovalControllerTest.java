@@ -252,7 +252,8 @@ public class LendingapprovalControllerTest {
             IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/assertdata/002"));
             TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
             tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id", "approval_user_id"});
-            tableDataAssert.assertEquals("lending_book", new String[]{"lending_app_id", "isbn,book_name", "lending_state", "lending_app_flg", "lending_app_reason"});
+            tableDataAssert.assertEquals("lending_book", new String[]{"approval_result", "approval_reason", "version"}
+                    , AssertOptions.INCLUDE_COLUMN);
             // メール
             assertThat(mailServerResource.getMessagesCount()).isEqualTo(1);
             MimeMessage mimeMessage = mailServerResource.getFirstMessage();
