@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.webapi.library;
 
-import ksbysample.common.test.SecurityMockMvcResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.Application;
 import org.junit.Rule;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package ksbysample.common.test;
+package ksbysample.common.test.rule.mockmvc;
 
 import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;

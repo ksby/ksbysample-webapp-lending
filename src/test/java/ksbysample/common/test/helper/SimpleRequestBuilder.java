@@ -1,4 +1,4 @@
-package ksbysample.common.test;
+package ksbysample.common.test.helper;
 
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.test.web.servlet.RequestBuilder;

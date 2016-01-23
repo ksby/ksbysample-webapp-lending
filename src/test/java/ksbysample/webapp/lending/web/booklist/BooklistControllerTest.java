@@ -1,7 +1,7 @@
 package ksbysample.webapp.lending.web.booklist;
 
-import ksbysample.common.test.SecurityMockMvcResource;
-import ksbysample.common.test.TestDataResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
 import org.junit.Rule;
@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static ksbysample.common.test.ErrorsResultMatchers.errors;
+import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

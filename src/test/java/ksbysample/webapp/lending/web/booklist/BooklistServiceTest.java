@@ -1,7 +1,7 @@
 package ksbysample.webapp.lending.web.booklist;
 
-import ksbysample.common.test.TableDataAssert;
-import ksbysample.common.test.TestDataResource;
+import ksbysample.common.test.rule.db.TableDataAssert;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
