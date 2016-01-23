@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.web.lendingapproval;
 
+import ksbysample.common.test.TestHelper;
 import ksbysample.webapp.lending.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,7 +40,7 @@ public class LendingapprovalFormValidatorTest {
 
     @Test
     public void testValidate_全ての書籍で承認も却下も選択されていない場合はエラーになる() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingapprovalFormValidator.validate(lendingapprovalForm_001, errors);
         assertThat(errors.hasGlobalErrors()).isTrue();
         assertThat(errors.getGlobalErrorCount()).isEqualTo(1);
@@ -51,7 +52,7 @@ public class LendingapprovalFormValidatorTest {
 
     @Test
     public void testValidate_全ての書籍で却下が選択されいるが却下理由が入力されていない場合はエラーになる() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingapprovalFormValidator.validate(lendingapprovalForm_002, errors);
         assertThat(errors.hasGlobalErrors()).isFalse();
         assertThat(errors.hasFieldErrors()).isTrue();
@@ -65,7 +66,7 @@ public class LendingapprovalFormValidatorTest {
 
     @Test
     public void testValidate_一部の書籍は承認却下未選択で一部の書籍は却下理由未入力の場合はエラーになる() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingapprovalFormValidator.validate(lendingapprovalForm_003, errors);
         assertThat(errors.hasGlobalErrors()).isTrue();
         assertThat(errors.getGlobalErrorCount()).isEqualTo(1);
@@ -81,7 +82,7 @@ public class LendingapprovalFormValidatorTest {
 
     @Test
     public void testValidate_全ての書籍で承認が選択されている場合はエラーにならない() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingapprovalFormValidator.validate(lendingapprovalForm_004, errors);
         assertThat(errors.hasGlobalErrors()).isFalse();
         assertThat(errors.hasFieldErrors()).isFalse();
@@ -89,7 +90,7 @@ public class LendingapprovalFormValidatorTest {
 
     @Test
     public void testValidate_全ての書籍で却下が選択され却下理由も入力されている場合はエラーにならない() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingapprovalFormValidator.validate(lendingapprovalForm_005, errors);
         assertThat(errors.hasGlobalErrors()).isFalse();
         assertThat(errors.hasFieldErrors()).isFalse();

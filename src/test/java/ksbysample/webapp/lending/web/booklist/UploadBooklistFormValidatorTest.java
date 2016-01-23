@@ -2,6 +2,7 @@ package ksbysample.webapp.lending.web.booklist;
 
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
+import ksbysample.common.test.TestHelper;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
 import org.junit.Test;
@@ -41,7 +42,7 @@ public class UploadBooklistFormValidatorTest {
         UploadBooklistForm uploadBooklistForm = new UploadBooklistForm();
         MultipartFile multipartFile = booklistCsvFileServiceTest.createNoErrorCsvFile();
         uploadBooklistForm.setFileupload(multipartFile);
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         uploadBooklistFormValidator.validate(uploadBooklistForm, errors);
         assertThat(errors.hasErrors()).isFalse();
     }
@@ -51,7 +52,7 @@ public class UploadBooklistFormValidatorTest {
         UploadBooklistForm uploadBooklistForm = new UploadBooklistForm();
         MultipartFile multipartFile = booklistCsvFileServiceTest.createErrorCsvFile();
         uploadBooklistForm.setFileupload(multipartFile);
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         uploadBooklistFormValidator.validate(uploadBooklistForm, errors);
         assertThat(errors.hasErrors()).isTrue();
         assertThat(errors.getErrorCount()).isEqualTo(6);

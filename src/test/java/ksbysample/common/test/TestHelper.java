@@ -2,9 +2,12 @@ package ksbysample.common.test;
 
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.validation.Errors;
+import org.springframework.validation.MapBindingResult;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
@@ -27,6 +30,16 @@ public class TestHelper {
         return request;
     }
 
+    /**
+     * FormValidator クラスのテスト等で使用するための Errors オブジェクト
+     * ( MapBindingResult クラスのインスタンス ) を生成する
+     * 
+     * @return
+     */
+    public static Errors createErrors() {
+        return new MapBindingResult(new HashMap<String, String>(), "");
+    }
+    
     /**
      * EntityクラスとFormクラスの値が同じかチェックする
      * 
