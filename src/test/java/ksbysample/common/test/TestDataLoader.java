@@ -14,26 +14,27 @@ import java.io.File;
 
 @Component
 public class TestDataLoader {
+
+    private static final String NULL_STRING = "[null]";
     
     @Autowired
     private DataSource dataSource;
 
     public void load(String csvDir) {
+        IDatabaseConnection conn = null;
         try {
-            IDatabaseConnection conn = null;
-            try {
-                conn = new DatabaseConnection(dataSource.getConnection());
+            conn = new DatabaseConnection(dataSource.getConnection());
 
-                IDataSet dataSet = new CsvDataSet(new File(csvDir));
-                ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
-                replacementDataset.addReplacementObject("[null]", null);
-                DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDataset);
-            } finally {
+            IDataSet dataSet = new CsvDataSet(new File(csvDir));
+            ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
+            replacementDataset.addReplacementObject(NULL_STRING, null);
+            DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDataset);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
                 if (conn != null) conn.close();
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+            } catch (Exception ignored) {}
         }
     }
 
