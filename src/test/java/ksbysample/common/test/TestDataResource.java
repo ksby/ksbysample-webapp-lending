@@ -1,11 +1,12 @@
 package ksbysample.common.test;
 
+import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.dataset.csv.CsvDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
@@ -17,8 +18,11 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -26,7 +30,7 @@ import java.util.List;
 @Component
 public class TestDataResource extends TestWatcher {
 
-    private final String TESTDATA_DIR = "src/test/resources/testdata/base";
+    private final String TESTDATA_BASE_DIR = "src/test/resources/testdata/base";
     private final String BACKUP_FILE_NAME = "ksbylending_backup";
     private final List<String> BACKUP_TABLES = Arrays.asList(
             "user_info"
@@ -36,6 +40,8 @@ public class TestDataResource extends TestWatcher {
             , "lending_book"
     );
 
+    private final String NULL_STRING = "[null]";
+    
     @Autowired
     private DataSource dataSource;
 
@@ -48,71 +54,96 @@ public class TestDataResource extends TestWatcher {
     protected void starting(Description description) {
         IDatabaseConnection conn = null;
         try {
-            try {
+            // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
+            if (!hasNouseTestDataResourceAnnotation(description)) {
                 conn = new DatabaseConnection(dataSource.getConnection());
 
                 // バックアップを取得する
-                QueryDataSet partialDataSet = new QueryDataSet(conn);
-                for (String backupTable : BACKUP_TABLES) {
-                    partialDataSet.addTable(backupTable);
-                }
-                ReplacementDataSet replacementDatasetBackup = new ReplacementDataSet(partialDataSet);
-                replacementDatasetBackup.addReplacementObject("", "[null]");
-                backupFile = File.createTempFile(BACKUP_FILE_NAME, "xml");
-                try (FileOutputStream fos = new FileOutputStream(backupFile)) {
-                    FlatXmlDataSet.write(replacementDatasetBackup, fos);
-                }
+                backupDb(conn);
 
-                // テストデータに入れ替える
-                IDataSet dataSet = new CsvDataSet(new File(TESTDATA_DIR));
-                ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
-                replacementDataset.addReplacementObject("[null]", null);
-                DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDataset);
+                // TESTDATA_BASE_DIR で指定されたディレクトリ内のテストデータをロードする
+                testDataLoader.load(TESTDATA_BASE_DIR);
 
                 // テストメソッドに @TestData アノテーションが付加されている場合には、
                 // アノテーションで指定されたテストデータをロードする
-                Collection<Annotation> annotationList = description.getAnnotations();
-                for (Annotation annotation : annotationList) {
-                    if (annotation instanceof TestData) {
-                        TestData testData = (TestData)annotation;
-                        testDataLoader.load(testData.value());
-                    }
-                }
-            } finally {
-                if (conn != null) conn.close();
+                loadTestData(description);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {}
         }
     }
 
     @Override
     protected void finished(Description description) {
+        IDatabaseConnection conn = null;
         try {
-            IDatabaseConnection conn = null;
-            try {
+            // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
+            if (!hasNouseTestDataResourceAnnotation(description)) {
                 conn = new DatabaseConnection(dataSource.getConnection());
 
                 // バックアップからリストアする
-                if (backupFile != null) {
-                    IDataSet dataSet = new FlatXmlDataSetBuilder().build(backupFile);
-                    ReplacementDataSet replacementDatasetRestore = new ReplacementDataSet(dataSet);
-                    replacementDatasetRestore.addReplacementObject("[null]", null);
-                    DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDatasetRestore);
-                }
-            } finally {
-                if (backupFile != null) {
-                    Files.delete(backupFile.toPath());
-                    backupFile = null;
-                }
-                try {
-                    if (conn != null) conn.close();
-                } catch (Exception ignored) {
-                }
+                restoreDb(conn);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {}
+
+            if (backupFile != null) {
+                try {
+                    Files.delete(backupFile.toPath());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+                backupFile = null;
+            }
         }
     }
 
+    private boolean hasNouseTestDataResourceAnnotation(Description description) {
+        Collection<Annotation> annotationList = description.getAnnotations();
+        boolean result = annotationList.stream()
+                .anyMatch(annotation -> annotation instanceof NoUseTestDataResource);
+        return result;
+    }
+    
+    private void backupDb(IDatabaseConnection conn)
+            throws DataSetException, IOException {
+        QueryDataSet partialDataSet = new QueryDataSet(conn);
+        for (String backupTable : BACKUP_TABLES) {
+            partialDataSet.addTable(backupTable);
+        }
+        ReplacementDataSet replacementDatasetBackup = new ReplacementDataSet(partialDataSet);
+        replacementDatasetBackup.addReplacementObject("", NULL_STRING);
+        this.backupFile = File.createTempFile(BACKUP_FILE_NAME, "xml");
+        try (FileOutputStream fos = new FileOutputStream(this.backupFile)) {
+            FlatXmlDataSet.write(replacementDatasetBackup, fos);
+        }
+    }
+
+    private void restoreDb(IDatabaseConnection conn)
+            throws MalformedURLException, DatabaseUnitException, SQLException {
+        if (this.backupFile != null) {
+            IDataSet dataSet = new FlatXmlDataSetBuilder().build(this.backupFile);
+            ReplacementDataSet replacementDatasetRestore = new ReplacementDataSet(dataSet);
+            replacementDatasetRestore.addReplacementObject(NULL_STRING, null);
+            DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDatasetRestore);
+        }
+    }
+
+    private void loadTestData(Description description) {
+        description.getAnnotations().stream()
+                .filter(annotation -> annotation instanceof TestData)
+                .forEach(annotation -> {
+                    TestData testData = (TestData)annotation;
+                    testDataLoader.load(testData.value());
+                });
+    }
+    
 }
