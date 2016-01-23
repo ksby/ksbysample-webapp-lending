@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.web.lendingapp;
 
+import ksbysample.common.test.TestHelper;
 import ksbysample.webapp.lending.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,14 +37,14 @@ public class LendingappFormValidatorTest {
 
     @Test
     public void testValidate_一時保存ボタン押下時は入力チェックは行われない() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingappFormValidator.validate(lendingappForm_001, errors);
         assertThat(errors.hasFieldErrors()).isFalse();
     }
 
     @Test
     public void testValidate_１つも申請するが選択されていない場合はエラーになる() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingappFormValidator.validate(lendingappForm_002, errors);
         assertThat(errors.hasFieldErrors()).isTrue();
         assertThat(errors.getFieldErrorCount()).isEqualTo(3);
@@ -56,7 +57,7 @@ public class LendingappFormValidatorTest {
 
     @Test
     public void testValidate_申請するを選択して申請理由を入力していない場合はエラーになる() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingappFormValidator.validate(lendingappForm_003, errors);
         assertThat(errors.hasFieldErrors()).isTrue();
         assertThat(errors.getFieldErrorCount()).isEqualTo(2);
@@ -68,7 +69,7 @@ public class LendingappFormValidatorTest {
 
     @Test
     public void testValidate_申請するを選択して申請理由も入力している場合はエラーにならない() throws Exception {
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         lendingappFormValidator.validate(lendingappForm_004, errors);
         assertThat(errors.hasFieldErrors()).isFalse();
     }

@@ -2,6 +2,7 @@ package ksbysample.webapp.lending.service.file;
 
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
+import ksbysample.common.test.TestHelper;
 import ksbysample.webapp.lending.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +36,7 @@ public class BooklistCsvFileServiceTest {
     @Test
     public void testValidateUploadFile_NoErrorCsvFile() throws Exception {
         MockMultipartFile multipartFile = createNoErrorCsvFile();
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         booklistCsvFileService.validateUploadFile(multipartFile, errors);
         assertThat(errors.hasErrors()).isFalse();
     }
@@ -43,7 +44,7 @@ public class BooklistCsvFileServiceTest {
     @Test
     public void testValidateUploadFile_ErrorCsvFile() throws Exception {
         MockMultipartFile multipartFile = createErrorCsvFile();
-        Errors errors = new MapBindingResult(new HashMap<String, String>(), "");
+        Errors errors = TestHelper.createErrors();
         booklistCsvFileService.validateUploadFile(multipartFile, errors);
         assertThat(errors.hasErrors()).isTrue();
         assertThat(errors.getErrorCount()).isEqualTo(6);
