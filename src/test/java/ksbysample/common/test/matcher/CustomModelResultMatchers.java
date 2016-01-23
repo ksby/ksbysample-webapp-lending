@@ -1,4 +1,4 @@
-package ksbysample.common.test;
+package ksbysample.common.test.matcher;
 
 import org.hamcrest.Matcher;
 import org.springframework.expression.EvaluationContext;

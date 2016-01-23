@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.service;
 
-import ksbysample.common.test.TestDataResource;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.entity.UserInfo;

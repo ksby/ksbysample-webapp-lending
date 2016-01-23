@@ -1,8 +1,8 @@
 package ksbysample.webapp.lending.web.admin.library;
 
-import ksbysample.common.test.TableDataAssert;
-import ksbysample.common.test.TestData;
-import ksbysample.common.test.TestDataResource;
+import ksbysample.common.test.rule.db.TableDataAssert;
+import ksbysample.common.test.rule.db.TestData;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;

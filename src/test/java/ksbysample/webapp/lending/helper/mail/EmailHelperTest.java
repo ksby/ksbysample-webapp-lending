@@ -1,8 +1,7 @@
 package ksbysample.webapp.lending.helper.mail;
 
-import ksbysample.common.test.MailServerResource;
+import ksbysample.common.test.rule.mail.MailServerResource;
 import ksbysample.webapp.lending.Application;
-import ksbysample.webapp.lending.helper.mail.EmailHelper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;

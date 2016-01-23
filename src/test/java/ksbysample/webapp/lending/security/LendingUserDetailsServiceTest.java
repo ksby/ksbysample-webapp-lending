@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.security;
 
-import ksbysample.common.test.TestDataResource;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import org.junit.Rule;
 import org.junit.Test;

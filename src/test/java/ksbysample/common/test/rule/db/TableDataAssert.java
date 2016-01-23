@@ -1,4 +1,4 @@
-package ksbysample.common.test;
+package ksbysample.common.test.rule.db;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;

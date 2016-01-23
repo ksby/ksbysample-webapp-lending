@@ -1,8 +1,8 @@
 package ksbysample.webapp.lending.web;
 
-import ksbysample.common.test.SecurityMockMvcResource;
-import ksbysample.common.test.SimpleRequestBuilder;
-import ksbysample.common.test.TestDataResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
+import ksbysample.common.test.helper.SimpleRequestBuilder;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.config.Constant;
 import ksbysample.webapp.lending.config.WebSecurityConfig;

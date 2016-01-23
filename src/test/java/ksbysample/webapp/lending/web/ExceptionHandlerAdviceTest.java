@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.web;
 
-import ksbysample.common.test.SecurityMockMvcResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.Application;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import static org.assertj.core.api.Assertions.assertThat;

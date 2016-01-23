@@ -1,4 +1,4 @@
-package ksbysample.common.test;
+package ksbysample.common.test.rule.mail;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;

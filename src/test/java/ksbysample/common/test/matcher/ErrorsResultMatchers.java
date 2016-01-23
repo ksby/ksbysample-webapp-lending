@@ -1,4 +1,4 @@
-package ksbysample.common.test;
+package ksbysample.common.test.matcher;
 
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.ModelResultMatchers;

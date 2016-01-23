@@ -1,10 +1,10 @@
 package ksbysample.webapp.lending.listener.rabbitmq;
 
 import com.google.common.base.Charsets;
-import ksbysample.common.test.MailServerResource;
-import ksbysample.common.test.TableDataAssert;
-import ksbysample.common.test.TestData;
-import ksbysample.common.test.TestDataResource;
+import ksbysample.common.test.rule.mail.MailServerResource;
+import ksbysample.common.test.rule.db.TableDataAssert;
+import ksbysample.common.test.rule.db.TestData;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;

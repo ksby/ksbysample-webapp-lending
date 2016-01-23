@@ -1,7 +1,13 @@
 package ksbysample.webapp.lending.web.lendingapproval;
 
 import com.google.common.base.Charsets;
-import ksbysample.common.test.*;
+import ksbysample.common.test.rule.db.AssertOptions;
+import ksbysample.common.test.rule.db.TableDataAssert;
+import ksbysample.common.test.helper.TestHelper;
+import ksbysample.common.test.rule.mail.MailServerResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
+import ksbysample.common.test.rule.db.TestData;
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import org.dbunit.dataset.IDataSet;
@@ -21,7 +27,7 @@ import javax.mail.internet.MimeMessage;
 import javax.sql.DataSource;
 import java.io.File;
 
-import static ksbysample.common.test.ErrorsResultMatchers.errors;
+import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
