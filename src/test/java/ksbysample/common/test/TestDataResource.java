@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,14 +32,6 @@ public class TestDataResource extends TestWatcher {
 
     private final String TESTDATA_BASE_DIR = "src/test/resources/testdata/base";
     private final String BACKUP_FILE_NAME = "ksbylending_backup";
-    private final List<String> BACKUP_TABLES = Arrays.asList(
-            "user_info"
-            , "user_role"
-            , "library_forsearch"
-            , "lending_app"
-            , "lending_book"
-    );
-
     private final String NULL_STRING = "[null]";
     
     @Autowired
@@ -116,9 +108,14 @@ public class TestDataResource extends TestWatcher {
     private void backupDb(IDatabaseConnection conn)
             throws DataSetException, IOException {
         QueryDataSet partialDataSet = new QueryDataSet(conn);
-        for (String backupTable : BACKUP_TABLES) {
+
+        // TESTDATA_BASE_DIR で指定されたディレクトリ内の table-ordering.txt に記述されたテーブル名一覧を取得し、
+        // バックアップテーブルとしてセットする
+        List<String> backupTableList = Files.readAllLines(Paths.get(TESTDATA_BASE_DIR, "table-ordering.txt"));
+        for (String backupTable :  backupTableList) {
             partialDataSet.addTable(backupTable);
         }
+
         ReplacementDataSet replacementDatasetBackup = new ReplacementDataSet(partialDataSet);
         replacementDatasetBackup.addReplacementObject("", NULL_STRING);
         this.backupFile = File.createTempFile(BACKUP_FILE_NAME, "xml");
