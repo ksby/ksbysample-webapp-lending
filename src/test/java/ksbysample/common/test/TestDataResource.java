@@ -30,9 +30,9 @@ import java.util.List;
 @Component
 public class TestDataResource extends TestWatcher {
 
-    private final String TESTDATA_BASE_DIR = "src/test/resources/testdata/base";
-    private final String BACKUP_FILE_NAME = "ksbylending_backup";
-    private final String NULL_STRING = "[null]";
+    private static final String TESTDATA_BASE_DIR = "src/test/resources/testdata/base";
+    private static final String BACKUP_FILE_NAME = "ksbylending_backup";
+    private static final String NULL_STRING = "[null]";
     
     @Autowired
     private DataSource dataSource;
