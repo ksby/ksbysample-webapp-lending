@@ -39,25 +39,6 @@ public class TestHelper {
     public static Errors createErrors() {
         return new MapBindingResult(new HashMap<String, String>(), "");
     }
-    
-    /**
-     * EntityクラスとFormクラスの値が同じかチェックする
-     * 
-     * @param entity
-     * @param form
-     * @throws IllegalAccessException
-     */
-    public static void assertEntityByForm(Object entity, Object form) throws IllegalAccessException {
-        for (Field entityField : entity.getClass().getDeclaredFields()) {
-            entityField.setAccessible(true);
-            try {
-                Field formField = form.getClass().getDeclaredField(entityField.getName());
-                formField.setAccessible(true);
-                assertThat(entityField.get(entity), is(formField.get(form)));
-            }
-            catch (NoSuchFieldException ignored) {}
-        }
-    }
 
     /**
      * Form クラスのインスタンスのフィールド名と値を request にセットする
