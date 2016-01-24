@@ -46,14 +46,8 @@ public class LendingappController {
             , LendingappForm lendingappForm
             , HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
-            if (lendingappParamForm.getLendingAppId() == null) {
-                throw new WebApplicationRuntimeException(
-                        messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
-            }
-            else {
-                throw new WebApplicationRuntimeException(
-                        messagesPropertiesHelper.getMessage("LendingappForm.lendingApp.nodataerr", null));
-            }
+            throw new WebApplicationRuntimeException(
+                    messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
         // 画面に表示するデータを取得する
