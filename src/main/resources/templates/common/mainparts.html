@@ -100,7 +100,23 @@
 
             <!-- Main content -->
             <section class="content">
-                ここに画面本体を入れる
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form id="lendingapprovalForm" method="post" action="/lendingapproval/complete"
+                              th:action="@{/lendingapproval/complete}" th:object="${lendingapprovalForm}">
+                            <div class="alert alert-danger" th:fragment="alert-danger"
+                                 th:if="${#fields.hasGlobalErrors()}">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <p th:each="err : ${#fields.globalErrors()}" th:text="${err}">共通エラーメッセージ表示エリア</p>
+                            </div>
+                            <div class="alert alert-success" th:fragment="alert-success"
+                                 th:if="${successMessages}">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <p th:each="msg : ${successMessages}" th:text="${msg}">通常メッセージ表示エリア</p>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </section>
             <!-- /.content -->
         </div>

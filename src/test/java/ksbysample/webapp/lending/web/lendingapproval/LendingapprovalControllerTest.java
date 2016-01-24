@@ -159,6 +159,9 @@ public class LendingapprovalControllerTest {
         @Autowired
         public SecurityMockMvcResource mvc;
 
+        @Autowired
+        private MessagesPropertiesHelper messagesPropertiesHelper;
+
         // FormValidator の入力チェックを呼び出せているかチェックできればよいので、１パターンだけテストする 
         @Test
         public void 一部の書籍は承認却下未選択で一部の書籍は却下理由未入力の場合は入力チェックエラー() throws Exception {
@@ -169,7 +172,9 @@ public class LendingapprovalControllerTest {
                     .andExpect(model().hasErrors())
                     .andExpect(model().errorCount(2))
                     .andExpect(errors().hasGlobalError("lendingapprovalForm", "LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr"))
-                    .andExpect(errors().hasFieldError("lendingapprovalForm", "applyingBookFormList[2].approvalReason", ""));
+                    .andExpect(errors().hasFieldError("lendingapprovalForm", "applyingBookFormList[2].approvalReason", ""))
+                    .andExpect(xpath("//*[@class=\"alert alert-danger\"]/p")
+                            .string(messagesPropertiesHelper.getMessage("LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr", null)));
         }
 
         @Test
@@ -221,6 +226,7 @@ public class LendingapprovalControllerTest {
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapproval/lendingapproval"))
                     .andExpect(model().hasNoErrors())
+                    .andExpect(xpath("//*[@class=\"alert alert-success\"]/p").string("確定しました"))
                     .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr[1]/td[6]/input[@type=\"text\"]").doesNotExist());
 
             // then ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )

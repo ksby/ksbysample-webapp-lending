@@ -140,6 +140,9 @@ public class LendingappControllerTest {
         @Autowired
         public SecurityMockMvcResource mvc;
 
+        @Autowired
+        private MessagesPropertiesHelper messagesPropertiesHelper;
+
         @Test
         public void 申請するが１つも選択されていない場合は入力チェックエラー() throws Exception {
             mvc.authTanakaTaro.perform(TestHelper.postForm("/lendingapp/apply", this.lendingappForm_002).with(csrf()))
@@ -151,7 +154,9 @@ public class LendingappControllerTest {
                     .andExpect(errors().hasGlobalError("lendingappForm", "LendingappForm.lendingBookDtoList.notExistApply"))
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[0].lendingAppFlg", ""))
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[1].lendingAppFlg", ""))
-                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", ""));
+                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", ""))
+                    .andExpect(xpath("//*[@class=\"alert alert-danger\"]/p")
+                            .string(messagesPropertiesHelper.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
         }
 
         @Test
@@ -244,7 +249,8 @@ public class LendingappControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapp/lendingapp"))
-                    .andExpect(model().hasNoErrors());
+                    .andExpect(model().hasNoErrors())
+                    .andExpect(xpath("//*[@class=\"alert alert-success\"]/p").string("一時保存しました"));
 
             // then ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
             // DB
