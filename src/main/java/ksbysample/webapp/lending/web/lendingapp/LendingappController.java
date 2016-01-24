@@ -1,8 +1,6 @@
 package ksbysample.webapp.lending.web.lendingapp;
 
 import ksbysample.webapp.lending.cookie.CookieLastLendingAppId;
-import ksbysample.webapp.lending.entity.LendingApp;
-import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.helper.thymeleaf.SuccessMessagesHelper;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 import static ksbysample.webapp.lending.values.LendingAppStatusValues.UNAPPLIED;
 
@@ -60,7 +57,7 @@ public class LendingappController {
         }
 
         // 画面に表示するデータを取得する
-        setDispData(lendingappParamForm.getLendingAppId(), lendingappForm);
+        lendingappService.setDispData(lendingappParamForm.getLendingAppId(), lendingappForm);
 
         // 未申請の場合には LastLendingAppId Cookie に貸出申請ID をセットする
         if (StringUtils.equals(lendingappForm.getLendingApp().getStatus(), UNAPPLIED.getValue())) {
@@ -84,7 +81,7 @@ public class LendingappController {
             lendingappService.apply(lendingappForm);
 
             // 画面に表示するデータを取得する
-            setDispData(lendingappForm.getLendingApp().getLendingAppId(), lendingappForm);
+            lendingappService.setDispData(lendingappForm.getLendingApp().getLendingAppId(), lendingappForm);
 
             // LastLendingAppId Cookie を削除する
             CookieUtils.removeCookie(CookieLastLendingAppId.class, response);
@@ -115,13 +112,6 @@ public class LendingappController {
         }
         
         return "lendingapp/lendingapp";
-    }
-
-    private void setDispData(Long lendingAppId, LendingappForm lendingappForm) {
-        LendingApp lendingApp = lendingappService.getLendingApp(lendingAppId);
-        List<LendingBook> lendingBookList = lendingappService.getLendingBookList(lendingAppId);
-        lendingappForm.setLendingApp(lendingApp);
-        lendingappForm.setLendingBookList(lendingBookList);
     }
 
 }
