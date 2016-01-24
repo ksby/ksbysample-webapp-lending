@@ -42,20 +42,17 @@ public class LendingappService {
 
     @Autowired
     private UserHelper userHelper;
-    
-    public LendingApp getLendingApp(Long lendingAppId) {
+
+    public void setDispData(Long lendingAppId, LendingappForm lendingappForm) {
         LendingApp lendingApp = lendingAppDao.selectById(lendingAppId);
         if (lendingApp == null) {
             throw new WebApplicationRuntimeException(
                     messagesPropertiesHelper.getMessage("LendingappForm.lendingApp.nodataerr", null));
         }
-
-        return lendingApp;
-    }
-    
-    public List<LendingBook> getLendingBookList(Long lendingAppId) {
         List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingAppId);
-        return lendingBookList;
+
+        lendingappForm.setLendingApp(lendingApp);
+        lendingappForm.setLendingBookList(lendingBookList);
     }
 
     public void apply(LendingappForm lendingappForm) throws MessagingException {
@@ -100,5 +97,5 @@ public class LendingappService {
                     lendingBookDao.updateLendingAppFlgAndReason(lendingBook);
                 });
     }
-    
+
 }
