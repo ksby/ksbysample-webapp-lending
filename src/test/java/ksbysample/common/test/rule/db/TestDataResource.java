@@ -47,7 +47,7 @@ public class TestDataResource extends TestWatcher {
         IDatabaseConnection conn = null;
         try {
             // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
-            if (!hasNouseTestDataResourceAnnotation(description)) {
+            if (!hasNoUseTestDataResourceAnnotation(description)) {
                 conn = new DatabaseConnection(dataSource.getConnection());
 
                 // バックアップを取得する
@@ -74,7 +74,7 @@ public class TestDataResource extends TestWatcher {
         IDatabaseConnection conn = null;
         try {
             // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
-            if (!hasNouseTestDataResourceAnnotation(description)) {
+            if (!hasNoUseTestDataResourceAnnotation(description)) {
                 conn = new DatabaseConnection(dataSource.getConnection());
 
                 // バックアップからリストアする
@@ -98,7 +98,7 @@ public class TestDataResource extends TestWatcher {
         }
     }
 
-    private boolean hasNouseTestDataResourceAnnotation(Description description) {
+    private boolean hasNoUseTestDataResourceAnnotation(Description description) {
         Collection<Annotation> annotationList = description.getAnnotations();
         boolean result = annotationList.stream()
                 .anyMatch(annotation -> annotation instanceof NoUseTestDataResource);
