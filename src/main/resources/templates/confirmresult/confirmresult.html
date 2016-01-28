@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>貸出申請結果確認</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style>
+        .content-wrapper {
+            background-color: #fffafa;
+        }
+        .selected-library {
+            color: #ffffff !important;
+            font-size: 100%;
+            font-weight: 700;
+        }
+        .buttom-btn-area {
+            padding-top: 10px;
+        }
+        .box-body.no-padding {
+            padding-bottom: 10px !important;
+        }
+        .table>tbody>tr>td
+        , .table>tbody>tr>th
+        , .table>tfoot>tr>td
+        , .table>tfoot>tr>th
+        , .table>thead>tr>td
+        , .table>thead>tr>th {
+            padding: 5px;
+            font-size: 90%;
+        }
+        .jp-gothic {
+            font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+        }
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>貸出申請結果確認</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form id="confirmresultForm" method="post" action="/confirmresult/filedownload" th:action="@{/confirmresult/filedownload}" th:object="${confirmresultForm}">
+                            <div class="box">
+                                <div class="box-body no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <table class="table table-bordered">
+                                            <colgroup>
+                                                <col width="30%"/>
+                                                <col width="70%"/>
+                                            </colgroup>
+                                            <tr>
+                                                <th class="bg-purple">貸出申請ID</th>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">ステータス</th>
+                                                <td>承認済</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">申請者</th>
+                                                <td>田中　太郎</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">承認者</th>
+                                                <td>鈴木　花子</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <br/>
+
+                                    <table class="table">
+                                        <colgroup>
+                                            <col width="5%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="15%"/>
+                                            <col width="20%"/>
+                                        </colgroup>
+                                        <thead class="bg-purple">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>ISBN</th>
+                                            <th>書名</th>
+                                            <th>申請理由</th>
+                                            <th>承認／却下</th>
+                                            <th>却下理由</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="jp-gothic">
+                                        <tr>
+                                            <td>1</td>
+                                            <td>978-4-7741-6366-6</td>
+                                            <td>GitHub実践入門</td>
+                                            <td>開発で使用する為</td>
+                                            <td>承認</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>978-4-7741-5380-3</td>
+                                            <td>Spring3入門</td>
+                                            <td>開発で使用する為</td>
+                                            <td>却下</td>
+                                            <td>既に購入済です</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>978-4-87311-718-8</td>
+                                            <td>Javaパフォーマンス</td>
+                                            <td>勉強会の為</td>
+                                            <td>承認</td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="buttom-btn-area text-center">
+                                        <button class="btn bg-blue js-btn-filedownload"><i class="fa fa-download"></i>　CSVダウンロード</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $(".js-btn-filedownload").click(function(){
+            $("#confirmresultForm").submit();
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>
