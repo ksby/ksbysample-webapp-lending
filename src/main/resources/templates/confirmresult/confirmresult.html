@@ -58,8 +58,11 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <form id="confirmresultForm" method="post" action="/confirmresult/filedownload" th:action="@{/confirmresult/filedownload}" th:object="${confirmresultForm}">
-                            <div class="box">
+                        <form id="confirmresultForm" method="post" action="/confirmresult/filedownload" 
+                              th:action="@{/confirmresult/filedownload}" th:object="${confirmresultForm}">
+                            <div th:replace="common/mainparts :: alert-danger"></div>
+                            <div th:replace="common/mainparts :: alert-success"></div>
+                            <div class="box" th:if="*{lendingApp != null}">
                                 <div class="box-body no-padding">
                                     <div class="col-xs-6 no-padding">
                                         <table class="table table-bordered">
@@ -69,21 +72,22 @@
                                             </colgroup>
                                             <tr>
                                                 <th class="bg-purple">貸出申請ID</th>
-                                                <td>1</td>
+                                                <td th:text="*{lendingApp.lendingAppId}">1</td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-purple">ステータス</th>
-                                                <td>承認済</td>
+                                                <td th:text="${@vh.getText('LendingAppStatusValues', confirmresultForm.lendingApp.status)}">承認済</td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-purple">申請者</th>
-                                                <td>田中　太郎</td>
+                                                <td th:text="*{lendingUserName}">田中　太郎</td>
                                             </tr>
                                             <tr>
                                                 <th class="bg-purple">承認者</th>
-                                                <td>鈴木　花子</td>
+                                                <td th:text="*{approvalUserName}">鈴木　花子</td>
                                             </tr>
                                         </table>
+                                        <input type="hidden" th:field="*{lendingApp.lendingAppId}"/>
                                     </div>
                                     <br/>
 
@@ -107,29 +111,13 @@
                                         </tr>
                                         </thead>
                                         <tbody class="jp-gothic">
-                                        <tr>
-                                            <td>1</td>
-                                            <td>978-4-7741-6366-6</td>
-                                            <td>GitHub実践入門</td>
-                                            <td>開発で使用する為</td>
-                                            <td>承認</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td>978-4-7741-5380-3</td>
-                                            <td>Spring3入門</td>
-                                            <td>開発で使用する為</td>
-                                            <td>却下</td>
-                                            <td>既に購入済です</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td>978-4-87311-718-8</td>
-                                            <td>Javaパフォーマンス</td>
-                                            <td>勉強会の為</td>
-                                            <td>承認</td>
-                                            <td></td>
+                                        <tr th:each="approvedBookForm, iterStat : *{approvedBookFormList}">
+                                            <td th:text="${iterStat.count}">1</td>
+                                            <td th:text="${approvedBookForm.isbn}">978-4-7741-6366-6</td>
+                                            <td th:text="${approvedBookForm.bookName}">GitHub実践入門</td>
+                                            <td th:text="${approvedBookForm.lendingAppReason}">開発で使用する為</td>
+                                            <td th:text="${@vh.getText('LendingBookApprovalResultValues', approvedBookForm.approvalResult)}">承認</td>
+                                            <td th:text="${approvedBookForm.approvalReason}"></td>
                                         </tr>
                                         </tbody>
                                     </table>
