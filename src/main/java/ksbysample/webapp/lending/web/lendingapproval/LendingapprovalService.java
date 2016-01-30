@@ -8,6 +8,7 @@ import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.helper.mail.EmailHelper;
 import ksbysample.webapp.lending.helper.mail.Mail003Helper;
+import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,7 @@ public class LendingapprovalService {
 
         // lending_app.status を 4(承認済) にする
         lendingApp.setStatus(APPLOVED.getValue());
+        lendingApp.setApprovalUserId(LendingUserDetailsHelper.getLoginUserId());
         lendingAppDao.update(lendingApp);
 
         // lending_book の approval_result, approval_reason を更新する
