@@ -221,7 +221,7 @@ public class LendingapprovalControllerTest {
         @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/testdata/001")
         public void 確定ボタンをクリックした場合_承認() throws Exception {
             // when ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
-            mvc.authTanakaTaro.perform(TestHelper.postForm("/lendingapproval/complete", this.lendingapprovalForm_004).with(csrf()))
+            mvc.authSuzukiHanako.perform(TestHelper.postForm("/lendingapproval/complete", this.lendingapprovalForm_004).with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapproval/lendingapproval"))
@@ -233,7 +233,7 @@ public class LendingapprovalControllerTest {
             // DB
             IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/assertdata/001"));
             TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
-            tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id", "approval_user_id"});
+            tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id"});
             tableDataAssert.assertEquals("lending_book", new String[]{"lending_app_id", "isbn,book_name", "lending_state", "lending_app_flg", "lending_app_reason", "approval_reason"});
             // メール
             assertThat(mailServerResource.getMessagesCount()).isEqualTo(1);
@@ -251,7 +251,7 @@ public class LendingapprovalControllerTest {
         @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/testdata/001")
         public void 確定ボタンをクリックした場合_却下と却下理由() throws Exception {
             // when ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
-            mvc.authTanakaTaro.perform(TestHelper.postForm("/lendingapproval/complete", this.lendingapprovalForm_005).with(csrf()))
+            mvc.authSuzukiHanako.perform(TestHelper.postForm("/lendingapproval/complete", this.lendingapprovalForm_005).with(csrf()))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapproval/lendingapproval"))
@@ -263,7 +263,7 @@ public class LendingapprovalControllerTest {
             // DB
             IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/assertdata/002"));
             TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
-            tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id", "approval_user_id"});
+            tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id"});
             tableDataAssert.assertEquals("lending_book", new String[]{"approval_result", "approval_reason", "version"}
                     , AssertOptions.INCLUDE_COLUMN);
             // メール
