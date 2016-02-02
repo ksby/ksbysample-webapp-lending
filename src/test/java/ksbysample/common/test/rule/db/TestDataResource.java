@@ -1,6 +1,7 @@
 package ksbysample.common.test.rule.db;
 
 import org.dbunit.DatabaseUnitException;
+import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
@@ -33,22 +34,22 @@ public class TestDataResource extends TestWatcher {
     private static final String TESTDATA_BASE_DIR = "src/test/resources/testdata/base";
     private static final String BACKUP_FILE_NAME = "ksbylending_backup";
     private static final String NULL_STRING = "[null]";
-    
+
     @Autowired
     private DataSource dataSource;
 
     @Autowired
     private TestDataLoader testDataLoader;
-    
+
     private File backupFile;
-    
+
     @Override
     protected void starting(Description description) {
         IDatabaseConnection conn = null;
         try {
             // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
             if (!hasNoUseTestDataResourceAnnotation(description)) {
-                conn = new DatabaseConnection(dataSource.getConnection());
+                conn = createDatabaseConnection(dataSource);
 
                 // バックアップを取得する
                 backupDb(conn);
@@ -75,7 +76,7 @@ public class TestDataResource extends TestWatcher {
         try {
             // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
             if (!hasNoUseTestDataResourceAnnotation(description)) {
-                conn = new DatabaseConnection(dataSource.getConnection());
+                conn = createDatabaseConnection(dataSource);
 
                 // バックアップからリストアする
                 restoreDb(conn);
@@ -98,13 +99,20 @@ public class TestDataResource extends TestWatcher {
         }
     }
 
+    private IDatabaseConnection createDatabaseConnection(DataSource dataSource) throws SQLException, DatabaseUnitException {
+        IDatabaseConnection conn = new DatabaseConnection(dataSource.getConnection());
+        DatabaseConfig databaseConfig = conn.getConfig();
+        databaseConfig.setProperty(DatabaseConfig.FEATURE_ALLOW_EMPTY_FIELDS, true);
+        return conn;
+    }
+
     private boolean hasNoUseTestDataResourceAnnotation(Description description) {
         Collection<Annotation> annotationList = description.getAnnotations();
         boolean result = annotationList.stream()
                 .anyMatch(annotation -> annotation instanceof NoUseTestDataResource);
         return result;
     }
-    
+
     private void backupDb(IDatabaseConnection conn)
             throws DataSetException, IOException {
         QueryDataSet partialDataSet = new QueryDataSet(conn);
@@ -117,7 +125,7 @@ public class TestDataResource extends TestWatcher {
         }
 
         ReplacementDataSet replacementDatasetBackup = new ReplacementDataSet(partialDataSet);
-        replacementDatasetBackup.addReplacementObject("", NULL_STRING);
+        replacementDatasetBackup.addReplacementObject(null, NULL_STRING);
         this.backupFile = File.createTempFile(BACKUP_FILE_NAME, "xml");
         try (FileOutputStream fos = new FileOutputStream(this.backupFile)) {
             FlatXmlDataSet.write(replacementDatasetBackup, fos);
@@ -142,5 +150,5 @@ public class TestDataResource extends TestWatcher {
                     testDataLoader.load(testData.value());
                 });
     }
-    
+
 }

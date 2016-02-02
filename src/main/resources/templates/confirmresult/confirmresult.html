@@ -122,7 +122,8 @@
                                         </tbody>
                                     </table>
                                     <div class="buttom-btn-area text-center">
-                                        <button class="btn bg-blue js-btn-filedownload"><i class="fa fa-download"></i>　CSVダウンロード</button>
+                                        <button class="btn bg-blue js-btn-filedownload-response"><i class="fa fa-download"></i>　CSVダウンロード ( HttpServletResponse )</button>
+                                        <button class="btn bg-orange js-btn-filedownload-view"><i class="fa fa-download"></i>　CSVダウンロード ( AbstractView )</button>
                                     </div>
                                 </div>
                             </div>
@@ -142,7 +143,13 @@
 <script type="text/javascript">
     <!--
     $(document).ready(function() {
-        $(".js-btn-filedownload").click(function(){
+        $(".js-btn-filedownload-response").click(function(){
+            $("#confirmresultForm").attr("action", "/confirmresult/filedownloadByResponse");
+            $("#confirmresultForm").submit();
+            return false;
+        });
+        $(".js-btn-filedownload-view").click(function(){
+            $("#confirmresultForm").attr("action", "/confirmresult/filedownloadByView");
             $("#confirmresultForm").submit();
             return false;
         });

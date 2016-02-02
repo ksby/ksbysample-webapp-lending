@@ -1,15 +1,20 @@
 package ksbysample.webapp.lending.web.confirmresult;
 
 import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
+import ksbysample.webapp.lending.helper.download.DataDownloadHelper;
+import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvData;
+import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvDownloadHelper;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
-import ksbysample.webapp.lending.web.lendingapproval.LendingapprovalForm;
-import ksbysample.webapp.lending.web.lendingapproval.LendingapprovalParamForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/confirmresult")
@@ -20,7 +25,7 @@ public class ConfirmresultController {
 
     @Autowired
     private ConfirmresultService confirmresultService;
-    
+
     @RequestMapping
     public String index(@Validated ConfirmresultParamForm confirmresultParamForm
             , BindingResult bindingResult
@@ -42,9 +47,30 @@ public class ConfirmresultController {
         return "confirmresult/confirmresult";
     }
 
-    @RequestMapping(value = "/filedownload", method = RequestMethod.POST)
-    public String filedownload() {
+    @RequestMapping(value = "/filedownloadByResponse", method = RequestMethod.POST)
+    public void filedownloadByResponse(@Validated ConfirmresultForm confirmresultForm
+            , BindingResult bindingResult
+            , HttpServletResponse response) throws IOException {
+        if (bindingResult.hasErrors()) {
+            throw new WebApplicationRuntimeException(
+                    messagesPropertiesHelper.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
+        }
+
+        // データを取得する
+        List<BookListCsvData> bookListCsvDataList
+                = confirmresultService.getDownloadData(confirmresultForm.getLendingApp().getLendingAppId());
+
+        // response に CSVデータを出力する
+        DataDownloadHelper dataDownloadHelper
+                = new BookListCsvDownloadHelper(confirmresultForm.getLendingApp().getLendingAppId(), bookListCsvDataList);
+        dataDownloadHelper.setFileNameToResponse(response);
+        dataDownloadHelper.writeDataToResponse(response);
+    }
+
+    @RequestMapping(value = "/filedownloadByView", method = RequestMethod.POST)
+    public String filedownloadByView(ConfirmresultForm confirmresultForm
+            , BindingResult bindingResult) {
         return "confirmresult/confirmresult";
     }
-    
+
 }

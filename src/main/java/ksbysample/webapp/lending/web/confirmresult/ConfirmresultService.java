@@ -6,6 +6,8 @@ import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.entity.LendingApp;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.entity.UserInfo;
+import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvData;
+import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvDataConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,9 @@ public class ConfirmresultService {
     @Autowired
     private LendingBookDao lendingBookDao;
 
+    @Autowired
+    private BookListCsvDataConverter bookListCsvDataConverter;
+
     public void setDispData(Long lendingAppId, ConfirmresultForm confirmresultForm) {
         LendingApp lendingApp = lendingAppDao.selectByIdAndStatus(lendingAppId, Arrays.asList(APPLOVED.getValue()));
         String lendingUserName = "";
@@ -44,6 +49,13 @@ public class ConfirmresultService {
         confirmresultForm.setLendingUserName(lendingUserName);
         confirmresultForm.setApprovalUserName(approvalUserName);
         confirmresultForm.setApprovedBookFormListFromLendingBookList(lendingBookList);
+    }
+
+    public List<BookListCsvData> getDownloadData(Long lendingAppId) {
+        List<LendingBook> lendingBookList
+                = lendingBookDao.selectByLendingAppIdAndLendingAppFlg(lendingAppId, APPLY.getValue());
+        List<BookListCsvData> bookListCsvDataList = bookListCsvDataConverter.convertFrom(lendingBookList);
+        return bookListCsvDataList;
     }
 
 }
