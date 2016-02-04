@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -68,9 +69,22 @@ public class ConfirmresultController {
     }
 
     @RequestMapping(value = "/filedownloadByView", method = RequestMethod.POST)
-    public String filedownloadByView(ConfirmresultForm confirmresultForm
+    public ModelAndView filedownloadByView(ConfirmresultForm confirmresultForm
             , BindingResult bindingResult) {
-        return "confirmresult/confirmresult";
+        if (bindingResult.hasErrors()) {
+            throw new WebApplicationRuntimeException(
+                    messagesPropertiesHelper.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
+        }
+
+        // データを取得する
+        List<BookListCsvData> bookListCsvDataList
+                = confirmresultService.getDownloadData(confirmresultForm.getLendingApp().getLendingAppId());
+
+        ModelAndView modelAndView = new ModelAndView("BookListCsvView");
+        modelAndView.addObject("lendingAppId", confirmresultForm.getLendingApp().getLendingAppId());
+        modelAndView.addObject("bookListCsvDataList", bookListCsvDataList);
+
+        return modelAndView;
     }
 
 }
