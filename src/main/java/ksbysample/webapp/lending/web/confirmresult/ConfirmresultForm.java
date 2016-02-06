@@ -14,6 +14,8 @@ public class ConfirmresultForm {
 
     private LendingApp lendingApp;
 
+    private Long lendingUserId;
+
     private String lendingUserName;
 
     private String approvalUserName;

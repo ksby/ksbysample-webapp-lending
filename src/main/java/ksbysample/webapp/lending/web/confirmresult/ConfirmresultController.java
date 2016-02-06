@@ -5,7 +5,9 @@ import ksbysample.webapp.lending.helper.download.DataDownloadHelper;
 import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvData;
 import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvDownloadHelper;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
+import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/confirmresult")
@@ -31,7 +34,8 @@ public class ConfirmresultController {
     public String index(@Validated ConfirmresultParamForm confirmresultParamForm
             , BindingResult bindingResult
             , ConfirmresultForm confirmresultForm
-            , BindingResult bindingResultOfConfirmresultForm) {
+            , BindingResult bindingResultOfConfirmresultForm
+            , HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             throw new WebApplicationRuntimeException(
                     messagesPropertiesHelper.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
@@ -44,12 +48,21 @@ public class ConfirmresultController {
         if (confirmresultForm.getLendingApp() == null) {
             bindingResultOfConfirmresultForm.reject("ConfirmresultForm.lendingApp.nodataerr");
         }
+        else {
+            // 指定された貸出申請IDの申請者とログインしているユーザが一致しない場合にはエラーメッセージを表示し、
+            // HTTP ステータスコードも 403 を返す
+            if (!Objects.equals(confirmresultForm.getLendingUserId(), LendingUserDetailsHelper.getLoginUserId())) {
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                throw new WebApplicationRuntimeException(
+                        messagesPropertiesHelper.getMessage("Confirmresult.lendingUserId.notequalerr", null));
+            }
+        }
 
         return "confirmresult/confirmresult";
     }
 
     @RequestMapping(value = "/filedownloadByResponse", method = RequestMethod.POST)
-    public void filedownloadByResponse(@Validated ConfirmresultForm confirmresultForm
+    public void filedownloadByResponse(ConfirmresultForm confirmresultForm
             , BindingResult bindingResult
             , HttpServletResponse response) throws IOException {
         if (bindingResult.hasErrors()) {

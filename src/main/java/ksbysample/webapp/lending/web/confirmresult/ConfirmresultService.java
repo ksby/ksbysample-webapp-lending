@@ -34,20 +34,23 @@ public class ConfirmresultService {
 
     public void setDispData(Long lendingAppId, ConfirmresultForm confirmresultForm) {
         LendingApp lendingApp = lendingAppDao.selectByIdAndStatus(lendingAppId, Arrays.asList(APPLOVED.getValue()));
-        String lendingUserName = "";
-        String approvalUserName = "";
+        UserInfo lendingUserInfo = null;
+        UserInfo approvalUserInfo = null;
         if (lendingApp != null) {
-            UserInfo lendingUserInfo = userInfoDao.selectById(lendingApp.getLendingUserId());
-            lendingUserName = lendingUserInfo.getUsername();
-            UserInfo approvalUserInfo = userInfoDao.selectById(lendingApp.getApprovalUserId());
-            approvalUserName = approvalUserInfo.getUsername();
+            lendingUserInfo = userInfoDao.selectById(lendingApp.getLendingUserId());
+            approvalUserInfo = userInfoDao.selectById(lendingApp.getApprovalUserId());
         }
         List<LendingBook> lendingBookList
                 = lendingBookDao.selectByLendingAppIdAndLendingAppFlg(lendingAppId, APPLY.getValue());
 
         confirmresultForm.setLendingApp(lendingApp);
-        confirmresultForm.setLendingUserName(lendingUserName);
-        confirmresultForm.setApprovalUserName(approvalUserName);
+        if (lendingUserInfo != null) {
+            confirmresultForm.setLendingUserId(lendingUserInfo.getUserId());
+            confirmresultForm.setLendingUserName(lendingUserInfo.getUsername());
+        }
+        if (approvalUserInfo != null) {
+            confirmresultForm.setApprovalUserName(approvalUserInfo.getUsername());
+        }
         confirmresultForm.setApprovedBookFormListFromLendingBookList(lendingBookList);
     }
 
