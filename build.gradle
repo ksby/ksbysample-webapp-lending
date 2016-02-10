@@ -198,16 +198,16 @@ task downloadCssFontsJs << {
 
     // 作業用ディレクトリを削除する
     clearDir("${workDirPath}")
-    
+
     // Bootstrap & AdminLTE Dashboard & Control Panel Template
     downloadAdminLTE("${adminLTEVersion}", "${jQueryVersion}", "${workDirPath}", "${staticDirPath}")
-    
+
     // Font Awesome Icons
     downloadFontAwesome("${fontAwesomeVersion}", "${workDirPath}", "${staticDirPath}")
 
     // Ionicons
     downloadIonicons("${ioniconsVersion}", "${workDirPath}", "${staticDirPath}")
-    
+
     // html5shiv.js
     downloadHtml5shivJs("${html5shivJsVersion}", "${workDirPath}", "${staticDirPath}")
 
@@ -219,7 +219,7 @@ task downloadCssFontsJs << {
 
     // 作業用ディレクトリを削除する
     clearDir("${workDirPath}")
-    
+
     // 追加したファイルを git add する
     addGit()
 }
@@ -233,6 +233,8 @@ task printClassWhatNotMakeTest << {
             , "src/main/java/ksbysample/webapp/lending/dao"
             , "src/main/java/ksbysample/webapp/lending/entity"
             , "src/main/java/ksbysample/webapp/lending/exception"
+            , "src/main/java/ksbysample/webapp/lending/helper/download/booklistcsv"
+            , "src/main/java/ksbysample/webapp/lending/helper/download/DataDownloadHelper.java"
             , "src/main/java/ksbysample/webapp/lending/helper/page/PagenationHelper.java"
             , "src/main/java/ksbysample/webapp/lending/security/LendingUser.java"
             , "src/main/java/ksbysample/webapp/lending/security/RoleAwareAuthenticationSuccessHandler.java"
@@ -243,6 +245,7 @@ task printClassWhatNotMakeTest << {
             , "src/main/java/ksbysample/webapp/lending/util/doma"
             , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
             , "src/main/java/ksbysample/webapp/lending/values/validation/ValuesEnum.java"
+            , "src/main/java/ksbysample/webapp/lending/view/BookListCsvView.java"
             , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/weather"
@@ -415,7 +418,7 @@ def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
             }
         }
         if (existFlg == true) continue
-        
+
         if (srcFile.isDirectory()) {
             compareSrcAndTestDir(srcFile, excludePaths, excludeFileNamePatterns)
         } else {

@@ -1,6 +1,5 @@
 package ksbysample.common.test.rule.db;
 
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
@@ -15,19 +14,17 @@ import java.io.File;
 @Component
 public class TestDataLoader {
 
-    private static final String NULL_STRING = "[null]";
-    
     @Autowired
     private DataSource dataSource;
 
     public void load(String csvDir) {
         IDatabaseConnection conn = null;
         try {
-            conn = new DatabaseConnection(dataSource.getConnection());
+            conn = DbUnitUtils.createDatabaseConnection(dataSource);
 
             IDataSet dataSet = new CsvDataSet(new File(csvDir));
             ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
-            replacementDataset.addReplacementObject(NULL_STRING, null);
+            replacementDataset.addReplacementObject(DbUnitUtils.NULL_STRING, null);
             DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDataset);
         } catch (Exception e) {
             throw new RuntimeException(e);
