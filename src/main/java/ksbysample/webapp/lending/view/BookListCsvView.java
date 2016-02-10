@@ -18,6 +18,7 @@ public class BookListCsvView extends AbstractView {
     private static final String[] CSV_HEADER = new String[]{"ISBN", "書名", "申請理由", "承認／却下", "却下理由"};
     private static final String CSV_FILE_NAME_FORMAT = "booklist-%s.csv";
 
+    @SuppressWarnings("unchecked")
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model
             , HttpServletRequest request, HttpServletResponse response) throws Exception {
