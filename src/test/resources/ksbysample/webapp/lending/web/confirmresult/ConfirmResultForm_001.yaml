@@ -1,0 +1,29 @@
+!!ksbysample.webapp.lending.web.confirmresult.ConfirmresultForm
+lendingApp:
+  lendingAppId: 105
+  status: 4
+  lendingUserId: 1
+  approvalUserId: 2
+  version: 2
+lendingUserId: 1
+lendingUserName: tanaka taro
+approvalUserName: suzuki hanako
+approvedBookFormList:
+  - lendingBookId: 522
+    isbn: 978-4-7741-5377-3
+    bookName: JUnit実践入門
+    lendingAppReason: 開発で使用する為
+    approvalResult: 2
+    approvalReason: 購入済です
+  - lendingBookId: 524
+    isbn: 978-4-7973-4778-4
+    bookName: アジャイルソフトウェア開発の奥義
+    lendingAppReason: 勉強の為
+    approvalResult: 1
+    approvalReason:
+  - lendingBookId: 525
+    isbn: 978-4-87311-704-1
+    bookName: Javaによる関数型プログラミング
+    lendingAppReason: 勉強会の調査の為
+    approvalResult: 1
+    approvalReason:

@@ -33,6 +33,7 @@ public class BookListCsvView extends AbstractView {
         BeanWriterProcessor<BookListCsvData> writerProcessor = new BeanWriterProcessor<>(BookListCsvData.class);
         settings.setRowWriterProcessor(writerProcessor);
 
+        response.setCharacterEncoding("MS932");
         CsvWriter writer = new CsvWriter(response.getWriter(), settings);
         writer.writeHeaders();
         writer.processRecordsAndClose(bookListCsvDataList);

@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.helper.download.booklistcsv;
 
+import com.google.common.base.Charsets;
 import com.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
@@ -39,6 +40,7 @@ public class BookListCsvDownloadHelper implements DataDownloadHelper {
         BeanWriterProcessor<BookListCsvData> writerProcessor = new BeanWriterProcessor<>(BookListCsvData.class);
         settings.setRowWriterProcessor(writerProcessor);
 
+        response.setCharacterEncoding("UTF-8");
         CsvWriter writer = new CsvWriter(response.getWriter(), settings);
         writer.writeHeaders();
         writer.processRecordsAndClose(bookListCsvDataList);
