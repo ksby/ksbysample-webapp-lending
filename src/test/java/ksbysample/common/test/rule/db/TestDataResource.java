@@ -12,7 +12,6 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -58,6 +57,11 @@ public class TestDataResource extends TestWatcher {
 
                 // テストデータをロードする
                 testDataLoader.load(testDataBaseDir);
+
+                // @BaseTestSql アノテーションで指定された SQL を実行する
+                TestSqlExecutor<BaseTestSqlList, BaseTestSql> baseTestSqlExecutor
+                        = new TestSqlExecutor<>(BaseTestSqlList.class, BaseTestSql.class);
+                baseTestSqlExecutor.execute(dataSource, description);
 
                 // テストメソッドに @TestData アノテーションが付加されている場合には、
                 // アノテーションで指定されたテストデータをロードする
@@ -133,7 +137,7 @@ public class TestDataResource extends TestWatcher {
 
         // テストクラスに @BaseTestData アノテーションが付加されているかチェックする
         Class<?> testClass = description.getTestClass();
-        baseTestData = AnnotationUtils.findAnnotation(testClass, BaseTestData.class);
+        baseTestData = testClass.getAnnotation(BaseTestData.class);
         if (baseTestData != null) {
             return baseTestData.value();
         }

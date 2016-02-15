@@ -49,7 +49,7 @@ public class TableDataAssert {
             throws DatabaseUnitException, SQLException {
         assertEquals(tableName, columnNames, AssertOptions.INCLUDE_COLUMN);
     }
-    
+
     private ITable expectedTable(String tableName, String[] columnNames, AssertOptions options) throws DataSetException {
         ITable table = dataSet.getTable(tableName);
         if (columnNames != null) {
@@ -78,5 +78,5 @@ public class TableDataAssert {
         }
         return table;
     }
-    
+
 }
