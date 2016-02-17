@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.sql.Connection;
 
 @Component
 public class TestDataLoader {
@@ -19,19 +20,27 @@ public class TestDataLoader {
 
     public void load(String csvDir) {
         IDatabaseConnection conn = null;
-        try {
-            conn = DbUnitUtils.createDatabaseConnection(dataSource);
+        try (Connection connection = dataSource.getConnection()) {
+            conn = DbUnitUtils.createDatabaseConnection(connection);
+            load(conn, csvDir);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {
+            }
+        }
+    }
 
+    public void load(IDatabaseConnection conn, String csvDir) {
+        try {
             IDataSet dataSet = new CsvDataSet(new File(csvDir));
             ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
             replacementDataset.addReplacementObject(DbUnitUtils.NULL_STRING, null);
             DatabaseOperation.CLEAN_INSERT.execute(conn, replacementDataset);
         } catch (Exception e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception ignored) {}
         }
     }
 

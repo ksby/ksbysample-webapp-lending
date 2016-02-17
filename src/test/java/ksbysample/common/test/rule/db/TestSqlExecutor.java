@@ -2,11 +2,11 @@ package ksbysample.common.test.rule.db;
 
 import org.junit.runner.Description;
 
-import javax.sql.DataSource;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Arrays;
@@ -24,8 +24,8 @@ public class TestSqlExecutor<L extends Annotation, I extends Annotation> {
         this.testSqlClass = testSqlClass;
     }
 
-    public void execute(DataSource dataSource, Description description) throws SQLException {
-        try (Statement stmt = dataSource.getConnection().createStatement()) {
+    public void execute(Connection connection, Description description) throws SQLException {
+        try (Statement stmt = connection.createStatement()) {
             // テストクラスに付加されている @BaseTestSql, @TestSql アノテーションの SQL を実行する
             Class<?> testClass = description.getTestClass();
             executeTestSqlListOrTestSql(stmt
@@ -58,9 +58,7 @@ public class TestSqlExecutor<L extends Annotation, I extends Annotation> {
         if (testSqlList != null) {
             Arrays.asList(value(testSqlList)).stream()
                     .sorted(comparing(testSql -> order(testSql)))
-                    .forEach(testSql -> {
-                        executeTestSql(stmt, testSql);
-                    });
+                    .forEach(testSql -> executeTestSql(stmt, testSql));
         }
     }
 
