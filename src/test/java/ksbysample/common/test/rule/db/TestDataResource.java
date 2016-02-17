@@ -66,6 +66,11 @@ public class TestDataResource extends TestWatcher {
                 // テストメソッドに @TestData アノテーションが付加されている場合には、
                 // アノテーションで指定されたテストデータをロードする
                 loadTestData(description);
+
+                // @TestSql アノテーションで指定された SQL を実行する
+                TestSqlExecutor<TestSqlList, TestSql> testSqlExecutor
+                        = new TestSqlExecutor<>(TestSqlList.class, TestSql.class);
+                testSqlExecutor.execute(dataSource, description);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
