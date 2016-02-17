@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
@@ -43,11 +44,11 @@ public class TestDataResource extends TestWatcher {
 
     @Override
     protected void starting(Description description) {
-        IDatabaseConnection conn = null;
-        try {
-            // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
-            if (!hasNoUseTestDataResourceAnnotation(description)) {
-                conn = DbUnitUtils.createDatabaseConnection(dataSource);
+        // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
+        if (!hasNoUseTestDataResourceAnnotation(description)) {
+            IDatabaseConnection conn = null;
+            try (Connection connection = dataSource.getConnection()) {
+                conn = DbUnitUtils.createDatabaseConnection(connection);
 
                 // バックアップ＆ロード＆リストア対象のテストデータのパスを取得する
                 String testDataBaseDir = getBaseTestDir(description);
@@ -56,28 +57,28 @@ public class TestDataResource extends TestWatcher {
                 backupDb(conn, testDataBaseDir);
 
                 // テストデータをロードする
-                testDataLoader.load(testDataBaseDir);
+                testDataLoader.load(conn, testDataBaseDir);
 
                 // @BaseTestSql アノテーションで指定された SQL を実行する
                 TestSqlExecutor<BaseTestSqlList, BaseTestSql> baseTestSqlExecutor
                         = new TestSqlExecutor<>(BaseTestSqlList.class, BaseTestSql.class);
-                baseTestSqlExecutor.execute(dataSource, description);
+                baseTestSqlExecutor.execute(connection, description);
 
                 // テストメソッドに @TestData アノテーションが付加されている場合には、
                 // アノテーションで指定されたテストデータをロードする
-                loadTestData(description);
+                loadTestData(conn, description);
 
                 // @TestSql アノテーションで指定された SQL を実行する
                 TestSqlExecutor<TestSqlList, TestSql> testSqlExecutor
                         = new TestSqlExecutor<>(TestSqlList.class, TestSql.class);
-                testSqlExecutor.execute(dataSource, description);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            try {
-                if (conn != null) conn.close();
-            } catch (Exception ignored) {
+                testSqlExecutor.execute(connection, description);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            } finally {
+                try {
+                    if (conn != null) conn.close();
+                } catch (Exception ignored) {
+                }
             }
         }
     }
@@ -85,10 +86,10 @@ public class TestDataResource extends TestWatcher {
     @Override
     protected void finished(Description description) {
         IDatabaseConnection conn = null;
-        try {
+        try (Connection connection = dataSource.getConnection()) {
             // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
             if (!hasNoUseTestDataResourceAnnotation(description)) {
-                conn = DbUnitUtils.createDatabaseConnection(dataSource);
+                conn = DbUnitUtils.createDatabaseConnection(connection);
 
                 // バックアップからリストアする
                 restoreDb(conn);
@@ -179,12 +180,12 @@ public class TestDataResource extends TestWatcher {
         }
     }
 
-    private void loadTestData(Description description) {
+    private void loadTestData(IDatabaseConnection conn, Description description) {
         description.getAnnotations().stream()
                 .filter(annotation -> annotation instanceof TestData)
                 .forEach(annotation -> {
                     TestData testData = (TestData) annotation;
-                    testDataLoader.load(testData.value());
+                    testDataLoader.load(conn, testData.value());
                 });
     }
 

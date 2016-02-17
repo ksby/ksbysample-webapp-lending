@@ -2,7 +2,6 @@ package ksbysample.common.test.rule.db;
 
 import org.dbunit.Assertion;
 import org.dbunit.DatabaseUnitException;
-import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
@@ -11,6 +10,7 @@ import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.filter.DefaultColumnFilter;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class TableDataAssert {
@@ -60,10 +60,19 @@ public class TableDataAssert {
 
     private ITable actualTable(String tableName, String[] columnNames, AssertOptions options)
             throws DatabaseUnitException, SQLException {
-        IDatabaseConnection conn = new DatabaseConnection(this.dataSource.getConnection());
-        ITable table = conn.createDataSet().getTable(tableName);
-        if (columnNames != null) {
-            table = columnFilter(table, columnNames, options);
+        IDatabaseConnection conn = null;
+        ITable table = null;
+        try (Connection connection = this.dataSource.getConnection()) {
+            conn = DbUnitUtils.createDatabaseConnection(connection);
+            table = conn.createDataSet().getTable(tableName);
+            if (columnNames != null) {
+                table = columnFilter(table, columnNames, options);
+            }
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {
+            }
         }
         return table;
     }
@@ -72,8 +81,7 @@ public class TableDataAssert {
             throws DataSetException {
         if (options == AssertOptions.EXCLUDE_COLUM) {
             table = DefaultColumnFilter.excludedColumnsTable(table, columnNames);
-        }
-        else {
+        } else {
             table = DefaultColumnFilter.includedColumnsTable(table, columnNames);
         }
         return table;
