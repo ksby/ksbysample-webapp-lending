@@ -1,0 +1,4 @@
+user_id,username,password,mail_address,enabled,cnt_badcredentials,expired_account,expired_password
+1,"tanaka jiro",$2a$10$LKKepbcPCiT82NxSIdzJr.9ph.786Mxvr.VoXFl4hNcaaAn9u7jje,tanaka.taro@sample.com,1,0,"9999-12-31 23:59:00.000000","9999-12-31 23:59:00.000000"
+2,"suzuki hanako",$2a$10$.fiPEZ155Rl41/e.mdM3A.mG0iEQNPmhjFL/aIiV8dZnXsCd.oqji,suzuki.hanako@test.co.jp,1,0,"9999-12-31 23:59:00.000000","9999-12-31 23:59:00.000000"
+3,"kimura masao",$2a$10$yP1dLPIq9j7WQVH6ruSwkepf8jIkPxTtncbSnYM0/jAGQ4HCQO8R.,kimura.masao@test.co.jp,0,0,"2015-12-31 22:30:54.425000","2015-10-15 22:31:03.316000"
