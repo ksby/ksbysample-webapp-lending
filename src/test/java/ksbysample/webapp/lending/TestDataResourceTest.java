@@ -21,7 +21,7 @@ public class TestDataResourceTest {
     @RunWith(SpringJUnit4ClassRunner.class)
     @SpringApplicationConfiguration(classes = Application.class)
     @WebAppConfiguration
-    @BaseTestData("src/test/resources/testdata/base")
+    @BaseTestData("testdata/base")
     @BaseTestSql(order = 1, sql = "insert into library_forsearch values ('Kanagawa_Sample', null)")
     @BaseTestSql(order = 2, sql = "update library_forsearch set formal = '図書館サンプル' where systemid = 'Kanagawa_Sample'")
     public static class テストクラス {
@@ -37,7 +37,7 @@ public class TestDataResourceTest {
         @Test
         @BaseTestSql(sql = "delete from user_info where user_id in (4, 5, 6, 7, 8)")
         @BaseTestSql(sql = "update user_info set username = 'tanaka jiro' where user_id = 1")
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData("web/confirmresult/testdata/001")
         @TestSql(sql = "update lending_app set status = '3' where lending_app_id = 105")
         public void テストメソッド() throws Exception {
             IDataSet dataSet = new CsvDataSet(new File("src/test/resources/testdata/assertdata"));
@@ -64,7 +64,7 @@ public class TestDataResourceTest {
         private DataSource dataSource;
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
+        @TestData("web/lendingapp/testdata/001")
         public void テストメソッド_lendingapp() throws Exception {
             IDataSet dataSet = new CsvDataSet(
                     new File("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001"));
@@ -74,7 +74,7 @@ public class TestDataResourceTest {
         }
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData("web/confirmresult/testdata/001")
         public void テストメソッド_confirmresult() throws Exception {
             IDataSet dataSet = new CsvDataSet(
                     new File("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001"));
@@ -84,8 +84,8 @@ public class TestDataResourceTest {
         }
 
         @Test
-        @TestData(order = 1, value = "src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
-        @TestData(order = 2, value = "src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData(order = 1, value = "web/lendingapp/testdata/001")
+        @TestData(order = 2, value = "web/confirmresult/testdata/001")
         public void テストメソッド_lendingapp_confirmresult() throws Exception {
             IDataSet dataSet = new CsvDataSet(
                     new File("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001"));
@@ -95,8 +95,8 @@ public class TestDataResourceTest {
         }
 
         @Test
-        @TestData(order = 2, value = "src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
-        @TestData(order = 1, value = "src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData(order = 2, value = "web/lendingapp/testdata/001")
+        @TestData(order = 1, value = "web/confirmresult/testdata/001")
         public void テストメソッド_confirmresult_lendingapp() throws Exception {
             IDataSet dataSet = new CsvDataSet(
                     new File("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001"));

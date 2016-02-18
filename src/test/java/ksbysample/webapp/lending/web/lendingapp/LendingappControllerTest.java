@@ -98,13 +98,13 @@ public class LendingappControllerTest {
         @Rule
         @Autowired
         public TestDataResource testDataResource;
-        
+
         @Rule
         @Autowired
         public SecurityMockMvcResource mvc;
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
+        @TestData("web/lendingapp/testdata/001")
         public void lendingAppIdパラメータで指定されたデータが登録されていれば貸出申請画面が表示される() throws Exception {
             MvcResult result = mvc.authTanakaTaro.perform(get("/lendingapp?lendingAppId=105"))
                     .andExpect(status().isOk())
@@ -120,7 +120,7 @@ public class LendingappControllerTest {
                     .contains("978-4-7741-5377-3").contains("JUnit実践入門")
                     .contains("978-4-7973-4778-4").contains("アジャイルソフトウェア開発の奥義");
         }
-        
+
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
@@ -213,7 +213,7 @@ public class LendingappControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
+        @TestData("web/lendingapp/testdata/001")
         public void 申請ボタンをクリックした場合() throws Exception {
             // when ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
             mvc.authTanakaTaro.perform(TestHelper.postForm("/lendingapp/apply", this.lendingappForm_006).with(csrf()))
@@ -243,7 +243,7 @@ public class LendingappControllerTest {
         }
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
+        @TestData("web/lendingapp/testdata/001")
         public void 一時保存ボタンをクリックした場合() throws Exception {
             mvc.authTanakaTaro.perform(TestHelper.postForm("/lendingapp/temporarySave", this.lendingappForm_007).with(csrf()))
                     .andExpect(status().isOk())

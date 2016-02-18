@@ -111,7 +111,7 @@ public class LendingapprovalControllerTest {
                     .andExpect(model().errorCount(1))
                     .andExpect(errors().hasGlobalError("lendingapprovalForm", "LendingapprovalForm.lendingApp.nodataerr"));
         }
-        
+
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
@@ -128,7 +128,7 @@ public class LendingapprovalControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/testdata/001")
+        @TestData("web/lendingapproval/testdata/001")
         public void lendingAppIdパラメータで指定されたデータが登録されており承認権限を持つユーザならば貸出承認画面が表示される() throws Exception {
             mvc.authSuzukiHanako.perform(get("/lendingapproval?lendingAppId=105"))
                     .andExpect(status().isOk())
@@ -162,7 +162,7 @@ public class LendingapprovalControllerTest {
         @Autowired
         private MessagesPropertiesHelper messagesPropertiesHelper;
 
-        // FormValidator の入力チェックを呼び出せているかチェックできればよいので、１パターンだけテストする 
+        // FormValidator の入力チェックを呼び出せているかチェックできればよいので、１パターンだけテストする
         @Test
         public void 一部の書籍は承認却下未選択で一部の書籍は却下理由未入力の場合は入力チェックエラー() throws Exception {
             mvc.authTanakaTaro.perform(TestHelper.postForm("/lendingapproval/complete", this.lendingapprovalForm_003).with(csrf()))
@@ -216,9 +216,9 @@ public class LendingapprovalControllerTest {
         @Rule
         @Autowired
         public SecurityMockMvcResource mvc;
-        
+
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/testdata/001")
+        @TestData("web/lendingapproval/testdata/001")
         public void 確定ボタンをクリックした場合_承認() throws Exception {
             // when ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
             mvc.authSuzukiHanako.perform(TestHelper.postForm("/lendingapproval/complete", this.lendingapprovalForm_004).with(csrf()))
@@ -248,7 +248,7 @@ public class LendingapprovalControllerTest {
         }
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/testdata/001")
+        @TestData("web/lendingapproval/testdata/001")
         public void 確定ボタンをクリックした場合_却下と却下理由() throws Exception {
             // when ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
             mvc.authSuzukiHanako.perform(TestHelper.postForm("/lendingapproval/complete", this.lendingapprovalForm_005).with(csrf()))
