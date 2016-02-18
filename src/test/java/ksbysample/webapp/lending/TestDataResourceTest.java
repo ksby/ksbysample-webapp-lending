@@ -51,4 +51,60 @@ public class TestDataResourceTest {
 
     }
 
+    @RunWith(SpringJUnit4ClassRunner.class)
+    @SpringApplicationConfiguration(classes = Application.class)
+    @WebAppConfiguration
+    public static class テストクラス_TestData_Annotation {
+
+        @Rule
+        @Autowired
+        public TestDataResource testDataResource;
+
+        @Autowired
+        private DataSource dataSource;
+
+        @Test
+        @TestData("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
+        public void テストメソッド_lendingapp() throws Exception {
+            IDataSet dataSet = new CsvDataSet(
+                    new File("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001"));
+            TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
+            tableDataAssert.assertEquals("lending_app", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+            tableDataAssert.assertEquals("lending_book", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+        }
+
+        @Test
+        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        public void テストメソッド_confirmresult() throws Exception {
+            IDataSet dataSet = new CsvDataSet(
+                    new File("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001"));
+            TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
+            tableDataAssert.assertEquals("lending_app", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+            tableDataAssert.assertEquals("lending_book", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+        }
+
+        @Test
+        @TestData(order = 1, value = "src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
+        @TestData(order = 2, value = "src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        public void テストメソッド_lendingapp_confirmresult() throws Exception {
+            IDataSet dataSet = new CsvDataSet(
+                    new File("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001"));
+            TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
+            tableDataAssert.assertEquals("lending_app", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+            tableDataAssert.assertEquals("lending_book", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+        }
+
+        @Test
+        @TestData(order = 2, value = "src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001")
+        @TestData(order = 1, value = "src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        public void テストメソッド_confirmresult_lendingapp() throws Exception {
+            IDataSet dataSet = new CsvDataSet(
+                    new File("src/test/resources/ksbysample/webapp/lending/web/lendingapp/testdata/001"));
+            TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
+            tableDataAssert.assertEquals("lending_app", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+            tableDataAssert.assertEquals("lending_book", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+        }
+
+    }
+
 }
