@@ -62,7 +62,7 @@ public class InquiringStatusOfBookQueueListenerTest {
     private InquiringStatusOfBookQueueListener listener;
 
     @Test
-    @TestData("src/test/resources/ksbysample/webapp/lending/listener/rabbitmq/testdata/001")
+    @TestData("listener/rabbitmq/testdata/001")
     public void testReceiveMessage() throws Exception {
         // モックに入れ替える前のフィールドの実体を退避する
         LibraryForsearchDao libraryForsearchDaoOrg = getField(listener, "libraryForsearchDao");

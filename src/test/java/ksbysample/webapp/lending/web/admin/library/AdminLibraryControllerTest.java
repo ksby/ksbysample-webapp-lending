@@ -51,7 +51,7 @@ public class AdminLibraryControllerTest {
         }
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/admin/library/testdata/001")
+        @TestData("web/admin/library/testdata/001")
         public void 管理権限を持つユーザは検索対象図書館登録画面を表示できる_図書館選択時() throws Exception {
             mvc.authTanakaTaro.perform(get("/admin/library"))
                     .andExpect(status().isOk())
@@ -89,7 +89,7 @@ public class AdminLibraryControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/admin/library/testdata/001")
+        @TestData("web/admin/library/testdata/001")
         public void 管理権限を持つユーザが検索ボタンをクリックすると図書館を登録できる() throws Exception {
             mvc.authTanakaTaro.perform(TestHelper.postForm("/admin/library/addSearchLibrary", this.setSelectedLibraryForm_001).with(csrf()))
                     .andExpect(status().isFound())

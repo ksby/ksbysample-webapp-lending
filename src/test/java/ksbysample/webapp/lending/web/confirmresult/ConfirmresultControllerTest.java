@@ -78,7 +78,7 @@ public class ConfirmresultControllerTest {
         }
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData("web/confirmresult/testdata/001")
         public void lendingAppIdパラメータで指定されたデータが登録されていなければエラーになる() throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult?lendingAppId=1"))
                     .andExpect(status().isOk())
@@ -89,7 +89,7 @@ public class ConfirmresultControllerTest {
         }
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData("web/confirmresult/testdata/001")
         public void 申請者でなければ貸出申請結果確認画面を表示できない() throws Exception {
             mvc.authSuzukiHanako.perform(get("/confirmresult?lendingAppId=105"))
                     .andExpect(status().isForbidden())
@@ -115,7 +115,7 @@ public class ConfirmresultControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData("web/confirmresult/testdata/001")
         public void lendingAppIdパラメータで指定されたデータが登録されており申請者ならば貸出申請結果確認画面が表示される()
                 throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult?lendingAppId=105"))
@@ -154,7 +154,7 @@ public class ConfirmresultControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData("web/confirmresult/testdata/001")
         public void CSVダウンロード_HttpServletResponse_をクリックした場合() throws Exception {
             MvcResult result = mvc.authTanakaTaro.perform(TestHelper.postForm("/confirmresult/filedownloadByResponse", this.confirmresultForm_001).with(csrf()))
                     .andExpect(status().isOk())
@@ -169,7 +169,7 @@ public class ConfirmresultControllerTest {
         }
 
         @Test
-        @TestData("src/test/resources/ksbysample/webapp/lending/web/confirmresult/testdata/001")
+        @TestData("web/confirmresult/testdata/001")
         public void CSVダウンロード_AbstractView_をクリックした場合() throws Exception {
             MvcResult result = mvc.authTanakaTaro.perform(TestHelper.postForm("/confirmresult/filedownloadByView", this.confirmresultForm_001).with(csrf()))
                     .andExpect(status().isOk())

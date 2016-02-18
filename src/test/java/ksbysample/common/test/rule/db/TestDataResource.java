@@ -34,7 +34,9 @@ import static java.util.Comparator.comparing;
 @Component
 public class TestDataResource extends TestWatcher {
 
-    private static final String TESTDATA_BASE_DIR = "src/test/resources/testdata/base";
+    private static final String BASETESTDATA_ROOT_DIR = "src/test/resources/";
+    private static final String TESTDATA_ROOT_DIR = "src/test/resources/ksbysample/webapp/lending/";
+    private static final String BASETESTDATA_DIR = BASETESTDATA_ROOT_DIR + "testdata/base";
     private static final String BACKUP_FILE_NAME = "ksbylending_backup";
 
     @Autowired
@@ -125,12 +127,12 @@ public class TestDataResource extends TestWatcher {
 
     private String getBaseTestDir(Description description) {
         // @BaseTestData アノテーションで指定されている場合にはそれを使用し、指定されていない場合には
-        // TESTDATA_BASE_DIR 定数で指定されているものと使用する
+        // BASETESTDATA_DIR 定数で指定されているものと使用する
 
         // テストメソッドに @BaseTestData アノテーションが付加されているかチェックする
         BaseTestData baseTestData = description.getAnnotation(BaseTestData.class);
         if (baseTestData != null) {
-            return baseTestData.value();
+            return BASETESTDATA_ROOT_DIR + baseTestData.value();
         }
 
         // TestDataResource クラスのフィールドに @BaseTestData アノテーションが付加されているかチェックする
@@ -139,7 +141,7 @@ public class TestDataResource extends TestWatcher {
             if (field.getType().equals(TestDataResource.class)) {
                 baseTestData = field.getAnnotation(BaseTestData.class);
                 if (baseTestData != null) {
-                    return baseTestData.value();
+                    return BASETESTDATA_ROOT_DIR + baseTestData.value();
                 }
             }
         }
@@ -148,17 +150,17 @@ public class TestDataResource extends TestWatcher {
         Class<?> testClass = description.getTestClass();
         baseTestData = testClass.getAnnotation(BaseTestData.class);
         if (baseTestData != null) {
-            return baseTestData.value();
+            return BASETESTDATA_ROOT_DIR + baseTestData.value();
         }
 
-        return TESTDATA_BASE_DIR;
+        return BASETESTDATA_DIR;
     }
 
     private void backupDb(IDatabaseConnection conn, String testDataBaseDir)
             throws DataSetException, IOException {
         QueryDataSet partialDataSet = new QueryDataSet(conn);
 
-        // TESTDATA_BASE_DIR で指定されたディレクトリ内の table-ordering.txt に記述されたテーブル名一覧を取得し、
+        // BASETESTDATA_DIR で指定されたディレクトリ内の table-ordering.txt に記述されたテーブル名一覧を取得し、
         // バックアップテーブルとしてセットする
         List<String> backupTableList = Files.readAllLines(Paths.get(testDataBaseDir, "table-ordering.txt"));
         for (String backupTable : backupTableList) {
@@ -191,10 +193,10 @@ public class TestDataResource extends TestWatcher {
                         TestDataList testDataList = (TestDataList) annotation;
                         Arrays.asList(testDataList.value()).stream()
                                 .sorted(comparing(testData -> testData.order()))
-                                .forEach(testData -> testDataLoader.load(conn, testData.value()));
+                                .forEach(testData -> testDataLoader.load(conn, TESTDATA_ROOT_DIR + testData.value()));
                     } else {
                         TestData testData = (TestData) annotation;
-                        testDataLoader.load(conn, testData.value());
+                        testDataLoader.load(conn, TESTDATA_ROOT_DIR + testData.value());
                     }
                 });
     }

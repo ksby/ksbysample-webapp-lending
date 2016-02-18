@@ -36,9 +36,9 @@ public class AdminLibraryServiceTest {
 
     @Autowired
     private AdminLibraryService adminLibraryService;
-    
+
     @Test
-    @TestData("src/test/resources/ksbysample/webapp/lending/web/admin/library/testdata/001")
+    @TestData("web/admin/library/testdata/001")
     public void testDeleteAndInsertLibraryForSearch() throws Exception {
         adminLibraryService.deleteAndInsertLibraryForSearch(setSelectedLibraryForm_001);
 
