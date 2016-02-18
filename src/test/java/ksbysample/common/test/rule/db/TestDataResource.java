@@ -25,8 +25,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import static java.util.Comparator.comparing;
 
 @Component
 public class TestDataResource extends TestWatcher {
@@ -182,10 +185,17 @@ public class TestDataResource extends TestWatcher {
 
     private void loadTestData(IDatabaseConnection conn, Description description) {
         description.getAnnotations().stream()
-                .filter(annotation -> annotation instanceof TestData)
+                .filter(annotation -> annotation instanceof TestDataList || annotation instanceof TestData)
                 .forEach(annotation -> {
-                    TestData testData = (TestData) annotation;
-                    testDataLoader.load(conn, testData.value());
+                    if (annotation instanceof TestDataList) {
+                        TestDataList testDataList = (TestDataList) annotation;
+                        Arrays.asList(testDataList.value()).stream()
+                                .sorted(comparing(testData -> testData.order()))
+                                .forEach(testData -> testDataLoader.load(conn, testData.value()));
+                    } else {
+                        TestData testData = (TestData) annotation;
+                        testDataLoader.load(conn, testData.value());
+                    }
                 });
     }
 
