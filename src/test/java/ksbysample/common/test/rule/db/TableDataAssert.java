@@ -67,16 +67,6 @@ public class TableDataAssert {
         }
     }
 
-    public void assertEqualsByExcludingColumn(String tableName, String[] columnNames)
-            throws DatabaseUnitException, SQLException {
-        assertEquals(tableName, columnNames, AssertOptions.EXCLUDE_COLUM);
-    }
-
-    public void assertEqualsByIncludingColumn(String tableName, String[] columnNames)
-            throws DatabaseUnitException, SQLException {
-        assertEquals(tableName, columnNames, AssertOptions.INCLUDE_COLUMN);
-    }
-
     private ITable expectedTable(String tableName, String[] columnNames, AssertOptions options) throws DataSetException {
         ITable table = dataSet.getTable(tableName);
         if (columnNames != null) {
