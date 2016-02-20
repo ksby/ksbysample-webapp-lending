@@ -15,15 +15,13 @@ import java.sql.SQLException;
 
 public class TableDataAssert {
 
-    private static final String NULL_STRING = "[null]";
-
     private final IDataSet dataSet;
 
     private final DataSource dataSource;
 
     public TableDataAssert(IDataSet dataSet, DataSource dataSource) {
         ReplacementDataSet replacementDataset = new ReplacementDataSet(dataSet);
-        replacementDataset.addReplacementObject(NULL_STRING, null);
+        replacementDataset.addReplacementObject(DbUnitUtils.NULL_STRING, null);
         this.dataSet = replacementDataset;
         this.dataSource = dataSource;
     }
