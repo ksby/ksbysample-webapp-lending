@@ -45,6 +45,28 @@ public class TableDataAssert {
         Assertion.assertEquals(expected, actual);
     }
 
+    public void assertEqualsByQuery(String sqlQuery, String tableName)
+            throws SQLException {
+        assertEqualsByQuery(sqlQuery, tableName, null, AssertOptions.EXCLUDE_COLUM);
+    }
+
+    public void assertEqualsByQuery(String sqlQuery, String tableName, String[] columnNames, AssertOptions options)
+            throws SQLException {
+        IDatabaseConnection conn = null;
+        try (Connection connection = dataSource.getConnection()) {
+            conn = DbUnitUtils.createDatabaseConnection(connection);
+            ITable expected = expectedTable(tableName, columnNames, options);
+            Assertion.assertEqualsByQuery(expected, conn, tableName, sqlQuery, new String[]{});
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (conn != null) conn.close();
+            } catch (Exception ignored) {
+            }
+        }
+    }
+
     public void assertEqualsByExcludingColumn(String tableName, String[] columnNames)
             throws DatabaseUnitException, SQLException {
         assertEquals(tableName, columnNames, AssertOptions.EXCLUDE_COLUM);
