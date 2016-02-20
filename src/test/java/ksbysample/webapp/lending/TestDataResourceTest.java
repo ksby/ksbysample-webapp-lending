@@ -42,8 +42,9 @@ public class TestDataResourceTest {
         public void テストメソッド() throws Exception {
             IDataSet dataSet = new CsvDataSet(new File("src/test/resources/testdata/assertdata"));
             TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
-            tableDataAssert.assertEquals("lending_app");
-            tableDataAssert.assertEquals("lending_book");
+            tableDataAssert.assertEqualsByQuery("select status from lending_app where lending_app_id = 105"
+                    , "lending_app", new String[]{"status"}, AssertOptions.INCLUDE_COLUMN);
+            tableDataAssert.assertEqualsByQuery("select * from lending_book order by lending_book_id", "lending_book");
             tableDataAssert.assertEquals("library_forsearch");
             tableDataAssert.assertEquals("user_info");
             tableDataAssert.assertEquals("user_role");
