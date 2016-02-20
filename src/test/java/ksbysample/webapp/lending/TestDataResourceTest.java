@@ -42,11 +42,11 @@ public class TestDataResourceTest {
         public void テストメソッド() throws Exception {
             IDataSet dataSet = new CsvDataSet(new File("src/test/resources/testdata/assertdata"));
             TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
-            tableDataAssert.assertEquals("lending_app", new String[]{}, AssertOptions.EXCLUDE_COLUM);
-            tableDataAssert.assertEquals("lending_book", new String[]{}, AssertOptions.EXCLUDE_COLUM);
-            tableDataAssert.assertEquals("library_forsearch", new String[]{}, AssertOptions.EXCLUDE_COLUM);
-            tableDataAssert.assertEquals("user_info", new String[]{}, AssertOptions.EXCLUDE_COLUM);
-            tableDataAssert.assertEquals("user_role", new String[]{}, AssertOptions.EXCLUDE_COLUM);
+            tableDataAssert.assertEquals("lending_app");
+            tableDataAssert.assertEquals("lending_book");
+            tableDataAssert.assertEquals("library_forsearch");
+            tableDataAssert.assertEquals("user_info");
+            tableDataAssert.assertEquals("user_role");
         }
 
     }

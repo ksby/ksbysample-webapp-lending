@@ -28,6 +28,11 @@ public class TableDataAssert {
         this.dataSource = dataSource;
     }
 
+    public void assertEquals(String tableName)
+            throws DatabaseUnitException, SQLException {
+        assertEquals(tableName, new String[]{}, AssertOptions.EXCLUDE_COLUM);
+    }
+
     public void assertEquals(String tableName, String[] columnNames)
             throws DatabaseUnitException, SQLException {
         assertEquals(tableName, columnNames, AssertOptions.EXCLUDE_COLUM);
