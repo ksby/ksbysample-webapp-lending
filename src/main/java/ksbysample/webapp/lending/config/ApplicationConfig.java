@@ -8,7 +8,8 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 @Configuration
@@ -16,7 +17,7 @@ public class ApplicationConfig {
 
     @Autowired
     private ConnectionFactory connectionFactory;
-    
+
     @Bean
     public Queue inquiringStatusOfBookQueue() {
         return new Queue(Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK, false);
@@ -39,5 +40,10 @@ public class ApplicationConfig {
     public Java8TimeDialect java8TimeDialect() {
         return new Java8TimeDialect();
     }
-    
+
+    @Bean
+    public Validator validator() {
+        return new LocalValidatorFactoryBean();
+    }
+
 }
