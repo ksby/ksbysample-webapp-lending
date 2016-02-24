@@ -21,7 +21,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String DEFAULT_SUCCESS_URL = "/loginsuccess";
     public static final String REMEMBERME_KEY = "ksbysample-webapp-lending";
-    
+
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/encode").permitAll()
                 .antMatchers("/urllogin").permitAll()
                 .antMatchers("/webapi/**").permitAll()
+                .antMatchers("/springMvcMemo/**").permitAll()
                 .anyRequest().authenticated();
         http.formLogin()
                 .loginPage("/")

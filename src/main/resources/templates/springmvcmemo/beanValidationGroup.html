@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Spring MVC メモ書き</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+    <!-- Bootstrap File Input -->
+    <link href="/css/fileinput.min.css" rel="stylesheet" type="text/css"/>
+
+    <style type="text/css">
+        <!--
+        .table {
+            background-color: #ffccff;
+            margin-bottom: 10px;
+        }
+        .has-error .form-control {
+            background-color: #fff5ee;
+        }
+        .form-group {
+            margin-bottom: 0px;
+        }
+        -->
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>Spring MVC メモ書き</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- @thymesVar id="beanValidationGroupForm" type="ksbysample.webapp.lending.web.springmvcmemo.BeanValidationGroupForm" -->
+                        <form id="beanValidationGroupForm" enctype="multipart/form-data" method="post"
+                              action="/springMvcMemo/beanValidationGroup/fileupload" th:action="@{/springMvcMemo/beanValidationGroup/fileupload}"
+                              th:object="${beanValidationGroupForm}">
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col width="20%"/>
+                                    <col width="80%"/>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th>ID</th>
+                                        <td>
+                                            <div class="row"><div class="col-xs-12">
+                                                <span th:text="*{id}">1</span>
+                                            </div></div>
+                                            <div class="row" th:if="${#fields.hasErrors('*{id}')}"><div class="col-xs-12">
+                                                <p class="form-control-static text-danger" th:errors="*{id}">ここにエラーメッセージを表示します</p>
+                                            </div></div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>アップロードファイル</th>
+                                        <td>
+                                            <div class="col-xs-12">
+                                                <div class="form-group">
+                                                    <input type="file" name="fileupload" class="js-fileupload"/>
+                                                </div>
+                                                <div class="callout callout-danger" th:if="${#fields.hasGlobalErrors()}">
+                                                    <h4><i class="fa fa-warning"></i>　アップロードされたCSVファイルでエラーが発生しました。</h4>
+                                                    <ul th:each="err : ${#fields.globalErrors()}">
+                                                        <li th:text="${err}">エラーメッセージ</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>名前</th>
+                                        <td>
+                                            <div class="col-xs-12">
+                                                <div class="form-group" th:classappend="${#fields.hasErrors('*{name}')} ? 'has-error' : ''">
+                                                    <div class="row"><div class="col-xs-8">
+                                                        <input type="text" name="name" id="name" class="form-control input-sm" value=""
+                                                               placeholder="（例）　田中　太郎" th:field="*{name}"/>
+                                                    </div></div>
+                                                    <div class="row" th:if="${#fields.hasErrors('*{name}')}"><div class="col-xs-12">
+                                                        <p class="form-control-static text-danger" th:errors="*{name}">ここにエラーメッセージを表示します</p>
+                                                    </div></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>住所</th>
+                                        <td>
+                                            <div class="col-xs-12">
+                                                <div class="form-group" th:classappend="${#fields.hasErrors('*{address}')} ? 'has-error' : ''">
+                                                    <div class="row"><div class="col-xs-12">
+                                                        <input type="text" name="address" id="address" class="form-control input-sm" value=""
+                                                               placeholder="住所を都道府県から入力してください" th:field="*{address}"/>
+                                                    </div></div>
+                                                    <div class="row" th:if="${#fields.hasErrors('*{address}')}"><div class="col-xs-12">
+                                                        <p class="form-control-static text-danger" th:errors="*{address}">ここにエラーメッセージを表示します</p>
+                                                    </div></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>メールアドレス</th>
+                                        <td>
+                                            <div class="col-xs-12">
+                                                <div class="form-group" th:classappend="${#fields.hasErrors('*{mailAddress}')} ? 'has-error' : ''">
+                                                    <div class="row"><div class="col-xs-12">
+                                                        <input type="text" name="mailAddress" id="mailAddress" class="form-control input-sm" value=""
+                                                               placeholder="（例）　test@sample.com" th:field="*{mailAddress}"/>
+                                                    </div></div>
+                                                    <div class="row" th:if="${#fields.hasErrors('*{mailAddress}')}"><div class="col-xs-12">
+                                                        <p class="form-control-static text-danger" th:errors="*{mailAddress}">ここにエラーメッセージを表示します</p>
+                                                    </div></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <input type="hidden" th:field="*{id}"/>
+                            <div class="text-center">
+                                <button class="btn bg-blue js-btn-edit"><i class="fa fa-edit"></i>　データ更新</button>
+                                <button class="btn bg-orange js-btn-sendmail"><i class="fa fa-envelope-o"></i>　メール送信</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<!-- Bootstrap File Input -->
+<script src="/js/fileinput.min.js" type="text/javascript"></script>
+<script src="/js/fileinput_locale_ja.js" type="text/javascript"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $('.js-fileupload').fileinput({
+            language: 'ja',
+            showPreview: false,
+            maxFileCount: 1,
+            browseClass: 'btn btn-info fileinput-browse-button',
+            browseIcon: '',
+            browseLabel: ' ファイル選択',
+            removeClass: 'btn btn-warning',
+            removeIcon: '',
+            removeLabel: ' 削除',
+            uploadClass: 'btn btn-success fileinput-upload-button',
+            uploadIcon: '<i class="fa fa-upload"></i>',
+            uploadLabel: ' アップロード',
+            allowedFileExtensions: ['jpg', 'gif', 'png'],
+            msgValidationError: '<span class="text-danger"><i class="fa fa-warning"></i> JPG,GIF,PNG ファイルのみ有効です。'
+        });
+
+        $('.js-btn-edit').bind('click', function(){
+            $('#beanValidationGroupForm').attr('action', '/springMvcMemo/beanValidationGroup/edit');
+            $('#beanValidationGroupForm').submit();
+            return false;
+        });
+
+        $('.js-btn-sendmail').bind('click', function(){
+            $('#beanValidationGroupForm').attr('action', '/springMvcMemo/beanValidationGroup/sendmail');
+            $('#beanValidationGroupForm').submit();
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>
