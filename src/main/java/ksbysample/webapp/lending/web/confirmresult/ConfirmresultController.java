@@ -1,5 +1,7 @@
 package ksbysample.webapp.lending.web.confirmresult;
 
+import ksbysample.webapp.lending.aspect.logging.LoggingControllerName;
+import ksbysample.webapp.lending.aspect.logging.LoggingEventName;
 import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.download.DataDownloadHelper;
 import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvData;
@@ -22,6 +24,7 @@ import java.util.Objects;
 
 @Controller
 @RequestMapping("/confirmresult")
+@LoggingControllerName("貸出申請結果確認画面")
 public class ConfirmresultController {
 
     @Autowired
@@ -31,6 +34,7 @@ public class ConfirmresultController {
     private ConfirmresultService confirmresultService;
 
     @RequestMapping
+    @LoggingEventName("初期表示処理")
     public String index(@Validated ConfirmresultParamForm confirmresultParamForm
             , BindingResult bindingResult
             , ConfirmresultForm confirmresultForm
