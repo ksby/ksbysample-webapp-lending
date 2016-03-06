@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>Thymeleaf で textarea に入力された改行があるデータをテキスト表示する</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style type="text/css">
+        <!--
+        .table {
+            background-color: #ffccff;
+            margin-bottom: 10px;
+        }
+        .form-group {
+            margin-bottom: 0px;
+        }
+        -->
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>Thymeleaf で textarea に入力された改行があるデータをテキスト表示する</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- @thymesVar id="textareaMemoForm" type="ksbysample.webapp.lending.web.textareamemo.TextareaMemoForm" -->
+                        <form id="textareaMemoForm" method="post"
+                              action="/textareamemo/display" th:action="@{/textareamemo/display}"
+                              th:object="${textareaMemoForm}">
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col width="20%"/>
+                                    <col width="80%"/>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th>メモ</th>
+                                        <td>
+                                            <div class="col-xs-12">
+                                                <div class="form-group">
+                                                    <div class="row"><div class="col-xs-12">
+                                                        <textarea name="memo" id="memo" class="form-control input-sm"
+                                                               rows="5"
+                                                               th:field="*{memo}">
+                                                        </textarea>
+                                                    </div></div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <button class="btn bg-blue js-btn-confirm"><i class="fa fa-edit"></i>　確認画面へ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $('.js-btn-confirm').bind('click', function(){
+            $('#textareaMemoForm').submit();
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>
