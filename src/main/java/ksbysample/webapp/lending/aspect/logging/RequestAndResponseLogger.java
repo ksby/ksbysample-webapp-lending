@@ -96,24 +96,26 @@ public class RequestAndResponseLogger {
     }
 
     private void loggingRequestCookies(HttpServletRequest request) {
-        Arrays.asList(request.getCookies()).forEach(cookie -> {
-            StringBuilder sb = new StringBuilder();
-            sb.append("name = ");
-            sb.append(cookie.getName());
-            sb.append(", value = ");
-            sb.append(cookie.getValue());
-            sb.append(", domain = ");
-            sb.append(cookie.getDomain());
-            sb.append(", path = ");
-            sb.append(cookie.getPath());
-            sb.append(", maxage = ");
-            sb.append(cookie.getMaxAge());
-            sb.append(", secure = ");
-            sb.append(cookie.getSecure());
-            sb.append(", httponly = ");
-            sb.append(cookie.isHttpOnly());
-            logging(LOG_REQUEST_COOKIE, null, sb.toString());
-        });
+        if (request.getCookies() != null) {
+            Arrays.asList(request.getCookies()).forEach(cookie -> {
+                StringBuilder sb = new StringBuilder();
+                sb.append("name = ");
+                sb.append(cookie.getName());
+                sb.append(", value = ");
+                sb.append(cookie.getValue());
+                sb.append(", domain = ");
+                sb.append(cookie.getDomain());
+                sb.append(", path = ");
+                sb.append(cookie.getPath());
+                sb.append(", maxage = ");
+                sb.append(cookie.getMaxAge());
+                sb.append(", secure = ");
+                sb.append(cookie.getSecure());
+                sb.append(", httponly = ");
+                sb.append(cookie.isHttpOnly());
+                logging(LOG_REQUEST_COOKIE, null, sb.toString());
+            });
+        }
     }
 
     private void loggingRequestParameters(HttpServletRequest request) {
