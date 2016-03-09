@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.web;
 
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.Application;
 import org.junit.Rule;
@@ -24,14 +25,18 @@ public class ExceptionHandlerAdviceTest {
 
     private static final String MESSAGE_EXCEPTION = "Exception が throw されました";
     private static final String MESSAGE_RUNTIMEEXCEPTION = "RuntimeException が throw されました";
-    
+
     @Autowired
     private ExceptionHandlerAdvice exceptionHandlerAdvice;
 
     @Rule
     @Autowired
+    public TestDataResource testDataResource;
+
+    @Rule
+    @Autowired
     public SecurityMockMvcResource mvc;
-    
+
     @Controller
     @RequestMapping("/exceptionHandlerAdviceTest")
     public static class ExceptionHandlerAdviceTestController {
@@ -51,7 +56,7 @@ public class ExceptionHandlerAdviceTest {
             return null;
         }
     }
-    
+
     @Test
     public void testHandleException_Controllerクラス内でExceptionがthrowされた場合() throws Exception {
         // when

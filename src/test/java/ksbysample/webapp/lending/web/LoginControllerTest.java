@@ -285,7 +285,7 @@ public class LoginControllerTest {
                     .andExpect(model().hasNoErrors())
                     .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO));
 
-            // ログイン画面にアクセスしても有効な remember-me Cookie があればログイン後の画面にリダイレクトする 
+            // ログイン画面にアクセスしても有効な remember-me Cookie があればログイン後の画面にリダイレクトする
             mvc.noauth.perform(get("/").cookie(cookie))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
@@ -366,6 +366,10 @@ public class LoginControllerTest {
         @SpringApplicationConfiguration(classes = Application.class)
         @WebAppConfiguration
         public static class encodeのテスト {
+
+            @Rule
+            @Autowired
+            public TestDataResource testDataResource;
 
             @Rule
             @Autowired
