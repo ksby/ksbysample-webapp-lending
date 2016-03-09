@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.webapi.library;
 
+import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.Application;
 import org.junit.Rule;
@@ -20,6 +21,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class LibraryControllerTest {
+
+    @Rule
+    @Autowired
+    public TestDataResource testDataResource;
 
     @Rule
     @Autowired

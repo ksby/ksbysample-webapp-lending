@@ -48,7 +48,6 @@ public class ConfirmresultControllerTest {
         private MessagesPropertiesHelper messagesPropertiesHelper;
 
         @Test
-        @NoUseTestDataResource
         public void ログインしていなければ貸出申請結果確認画面は表示できない() throws Exception {
             mvc.noauth.perform(get("/confirmresult?lendingAppId=105"))
                     .andExpect(status().isFound())
@@ -56,7 +55,6 @@ public class ConfirmresultControllerTest {
         }
 
         @Test
-        @NoUseTestDataResource
         public void lendingAppIdパラメータがなければエラーになる() throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult"))
                     .andExpect(status().isOk())
@@ -67,7 +65,6 @@ public class ConfirmresultControllerTest {
         }
 
         @Test
-        @NoUseTestDataResource
         public void lendingAppIdパラメータで指定された値が数値でなければエラーになる() throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult?lendingAppId=a"))
                     .andExpect(status().isOk())

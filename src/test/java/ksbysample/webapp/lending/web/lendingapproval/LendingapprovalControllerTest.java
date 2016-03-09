@@ -43,6 +43,10 @@ public class LendingapprovalControllerTest {
 
         @Rule
         @Autowired
+        public TestDataResource testDataResource;
+
+        @Rule
+        @Autowired
         public SecurityMockMvcResource mvc;
 
         @Autowired
@@ -154,6 +158,9 @@ public class LendingapprovalControllerTest {
                 = (LendingapprovalForm) new Yaml().load(getClass().getResourceAsStream("LendingapprovalForm_003.yaml"));
         private LendingapprovalForm lendingapprovalForm_006
                 = (LendingapprovalForm) new Yaml().load(getClass().getResourceAsStream("LendingapprovalForm_006.yaml"));
+        @Rule
+        @Autowired
+        public TestDataResource testDataResource;
 
         @Rule
         @Autowired
