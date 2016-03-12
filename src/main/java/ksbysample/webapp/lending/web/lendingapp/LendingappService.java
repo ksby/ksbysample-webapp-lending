@@ -19,8 +19,8 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.List;
 
-import static ksbysample.webapp.lending.values.LendingAppStatusValues.PENDING;
-import static ksbysample.webapp.lending.values.LendingBookLendingAppFlgValues.APPLY;
+import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.PENDING;
+import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues.APPLY;
 
 @Service
 public class LendingappService {
@@ -68,7 +68,7 @@ public class LendingappService {
 
         // lending_book.lending_app_flg を 1(する) に、lending_app_reason に画面に入力された申請理由をセットする
         lendingappForm.getLendingBookDtoList().stream()
-                .filter(lendingBookDto -> 
+                .filter(lendingBookDto ->
                         StringUtils.equals(lendingBookDto.getLendingAppFlg(), APPLY.getValue()))
                 .forEach(lendingBookDto -> {
                     LendingBook lendingBook = new LendingBook();
@@ -88,7 +88,7 @@ public class LendingappService {
                 , SelectOptions.get().forUpdate());
         List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
-    
+
         // lending_book.lending_app_flg, lending_app_reason に画面に入力された内容をセットする
         lendingappForm.getLendingBookDtoList().stream()
                 .forEach(lendingBookDto -> {

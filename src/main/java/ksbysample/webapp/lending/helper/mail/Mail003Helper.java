@@ -2,7 +2,7 @@ package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.util.velocity.VelocityUtils;
-import ksbysample.webapp.lending.values.LendingBookApprovalResultValues;
+import ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues;
 import ksbysample.webapp.lending.values.ValuesHelper;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

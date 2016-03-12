@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static ksbysample.webapp.lending.values.LendingAppStatusValues.TENPORARY_SAVE;
+import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.TENPORARY_SAVE;
 
 @Service
 public class BooklistService {
@@ -30,12 +30,12 @@ public class BooklistService {
 
     @Autowired
     private InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService;
-    
+
     public Long temporarySaveBookListCsvFile(UploadBooklistForm uploadBooklistForm) {
         // アップロードされたCSVファイルのデータを List に変換する
         List<BooklistCSVRecord> booklistCSVRecordList
                 = booklistCsvFileService.convertFileToList(uploadBooklistForm.getFileupload());
-        
+
         // lending_app テーブルにデータを保存する
         LendingApp lendingApp = new LendingApp();
         lendingApp.setStatus(TENPORARY_SAVE.getValue());
@@ -62,5 +62,5 @@ public class BooklistService {
     public void sendMessageToInquiringStatusOfBookQueue(RegisterBooklistForm registerBooklistForm) {
         inquiringStatusOfBookQueueService.sendMessage(registerBooklistForm.getLendingAppId());
     }
-    
+
 }

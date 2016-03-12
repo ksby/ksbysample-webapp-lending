@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import static ksbysample.webapp.lending.values.LendingBookLendingAppFlgValues.APPLY;
+import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues.APPLY;
 
 @Component
 public class LendingappFormValidator implements Validator {
@@ -23,7 +23,7 @@ public class LendingappFormValidator implements Validator {
         if (StringUtils.equals(lendingappForm.getBtn(), "temporarySave")) {
             return;
         }
-        
+
         // 以下の点をチェックする
         // ・最低１つ「申請する」が選択されているか
         // ・「申請する」が選択されている場合に申請理由が入力されているか

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import static ksbysample.webapp.lending.values.LendingBookApprovalResultValues.REJECT;
+import static ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues.REJECT;
 
 @Component
 public class LendingapprovalFormValidator implements Validator {

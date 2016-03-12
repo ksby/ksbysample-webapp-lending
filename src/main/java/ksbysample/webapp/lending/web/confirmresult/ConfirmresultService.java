@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 
-import static ksbysample.webapp.lending.values.LendingAppStatusValues.APPLOVED;
-import static ksbysample.webapp.lending.values.LendingBookLendingAppFlgValues.APPLY;
+import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.APPLOVED;
+import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues.APPLY;
 
 @Service
 public class ConfirmresultService {
