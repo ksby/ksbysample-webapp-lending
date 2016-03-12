@@ -1,5 +1,6 @@
-package ksbysample.webapp.lending.values;
+package ksbysample.webapp.lending.values.lendingbook;
 
+import ksbysample.webapp.lending.values.Values;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

@@ -1,6 +1,8 @@
 package ksbysample.webapp.lending.values
 
 import ksbysample.webapp.lending.Application
+import ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues
+import ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.SpringApplicationContextLoader
 import org.springframework.test.context.ContextConfiguration
@@ -31,7 +33,7 @@ class ValuesHelperTest extends Specification {
     def "GetText(#classSimpleName, #value) --> #result"() {
         expect:
         vh.getText(classSimpleName, value) == result
-        
+
         where:
         classSimpleName                       | value || result
         "LendingAppStatusValues"          | "1"   || "一時保存"

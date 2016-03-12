@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 
-import static ksbysample.webapp.lending.values.LendingAppStatusValues.UNAPPLIED;
+import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.UNAPPLIED;
 
 @Controller
 @RequestMapping("/lendingapp")
@@ -97,14 +97,14 @@ public class LendingappController {
         try {
             // 入力された内容を一時保存する
             lendingappService.temporarySave(lendingappForm);
-    
+
             // 画面に表示する通常メッセージをセットする
             SuccessMessagesHelper successMessagesHelper = new SuccessMessagesHelper("一時保存しました");
             successMessagesHelper.setToModel(model);
         } catch (OptimisticLockException e) {
             bindingResult.reject("Global.optimisticLockException");
         }
-        
+
         return "lendingapp/lendingapp";
     }
 

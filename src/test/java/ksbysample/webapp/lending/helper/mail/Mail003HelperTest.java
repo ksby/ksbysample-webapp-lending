@@ -18,8 +18,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static ksbysample.webapp.lending.values.LendingBookApprovalResultValues.APPROVAL;
-import static ksbysample.webapp.lending.values.LendingBookApprovalResultValues.REJECT;
+import static ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues.APPROVAL;
+import static ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues.REJECT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,7 +32,7 @@ public class Mail003HelperTest {
 
     @Autowired
     private ValuesHelper vh;
-    
+
     @Test
     public void testCreateMessage() throws Exception {
         List<LendingBook> lendingBookList = new ArrayList<>();
@@ -46,7 +46,7 @@ public class Mail003HelperTest {
         lendingBook.setBookName(Strings.repeat("Ｘ", 128));
         lendingBook.setApprovalResult(REJECT.getValue());
         lendingBookList.add(lendingBook);
-        
+
         MimeMessage message = mail003Helper.createMessage("test@sample.com", 1L, lendingBookList);
         assertThat(message.getRecipients(Message.RecipientType.TO))
                 .extracting(Object::toString)

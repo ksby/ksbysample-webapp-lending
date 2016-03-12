@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static ksbysample.webapp.lending.values.LendingAppStatusValues.APPLOVED;
-import static ksbysample.webapp.lending.values.LendingAppStatusValues.PENDING;
-import static ksbysample.webapp.lending.values.LendingBookLendingAppFlgValues.APPLY;
+import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.APPLOVED;
+import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.PENDING;
+import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues.APPLY;
 
 @Service
 public class LendingapprovalService {
@@ -41,7 +41,7 @@ public class LendingapprovalService {
 
     @Autowired
     private EmailHelper emailHelper;
-    
+
     public void setDispData(Long lendingAppId, LendingapprovalForm lendingapprovalForm) {
         LendingApp lendingApp = lendingAppDao.selectByIdAndStatus(lendingAppId
                 , Arrays.asList(PENDING.getValue(), APPLOVED.getValue()));
@@ -84,5 +84,5 @@ public class LendingapprovalService {
         MimeMessage mimeMessage = mail003Helper.createMessage(userInfo.getMailAddress(), lendingAppId, lendingBookList);
         emailHelper.sendMail(mimeMessage);
     }
-    
+
 }

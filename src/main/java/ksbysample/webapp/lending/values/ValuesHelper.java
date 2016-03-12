@@ -14,9 +14,16 @@ public class ValuesHelper {
 
     private ValuesHelper() throws IOException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        valuesObjList = ClassPath.from(loader).getTopLevelClasses(this.getClass().getPackage().getName())
+        valuesObjList = ClassPath.from(loader).getTopLevelClassesRecursive(this.getClass().getPackage().getName())
                 .stream()
-                .filter(classInfo -> !classInfo.getName().equals(this.getClass().getName()))
+                .filter(classInfo -> {
+                    try {
+                        Class<?> clazz = Class.forName(classInfo.getName());
+                        return !clazz.equals(Values.class) && Values.class.isAssignableFrom(clazz);
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toMap(ClassPath.ClassInfo::getSimpleName, ClassPath.ClassInfo::getName));
     }
 

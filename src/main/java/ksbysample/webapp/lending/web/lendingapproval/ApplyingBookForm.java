@@ -1,7 +1,7 @@
 package ksbysample.webapp.lending.web.lendingapproval;
 
 import ksbysample.webapp.lending.entity.LendingBook;
-import ksbysample.webapp.lending.values.LendingBookApprovalResultValues;
+import ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues;
 import ksbysample.webapp.lending.values.validation.ValuesEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;

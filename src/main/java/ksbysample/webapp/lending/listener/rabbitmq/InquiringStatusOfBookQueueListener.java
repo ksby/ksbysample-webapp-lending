@@ -15,7 +15,7 @@ import ksbysample.webapp.lending.service.calilapi.CalilApiService;
 import ksbysample.webapp.lending.service.calilapi.response.Book;
 import ksbysample.webapp.lending.service.queue.InquiringStatusOfBookQueueMessage;
 import ksbysample.webapp.lending.service.queue.InquiringStatusOfBookQueueService;
-import ksbysample.webapp.lending.values.LendingAppStatusValues;
+import ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues;
 import org.apache.commons.lang3.StringUtils;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.slf4j.Logger;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 public class InquiringStatusOfBookQueueListener {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     private InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService;
 
@@ -46,7 +46,7 @@ public class InquiringStatusOfBookQueueListener {
 
     @Autowired
     private Mail001Helper mail001Helper;
-    
+
     @Autowired
     private LibraryForsearchDao libraryForsearchDao;
 
@@ -55,10 +55,10 @@ public class InquiringStatusOfBookQueueListener {
 
     @Autowired
     private LendingBookDao lendingBookDao;
-    
+
     @Autowired
     private UserInfoDao userInfoDao;
-    
+
     @RabbitListener(queues = {Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK})
     public void receiveMessage(Message message) throws MessagingException {
         // 受信したメッセージを InquiringStatusOfBookQueueMessage クラスのインスタンスに変換する
@@ -74,7 +74,7 @@ public class InquiringStatusOfBookQueueListener {
             logger.error("lending_app テーブルに対象のデータがありませんでした ( lending_app_id = {} )。", convertedMessage.getLendingAppId());
             return;
         }
-        
+
         // lending_book テーブルから調査対象の ISBN 一覧を取得する
         List<LendingBook> lendingBookList
                 = lendingBookDao.selectByLendingAppId(convertedMessage.getLendingAppId(), SelectOptions.get().forUpdate());
@@ -85,7 +85,7 @@ public class InquiringStatusOfBookQueueListener {
         List<String> isbnList = lendingBookList.stream()
                 .map(LendingBook::getIsbn)
                 .collect(Collectors.toList());
-        
+
         // カーリルの蔵書検索 WebAPI を呼び出して貸出状況を取得する
         List<Book> bookList = calilApiService.check(libraryForsearch.getSystemid(), isbnList);
 
@@ -120,5 +120,5 @@ public class InquiringStatusOfBookQueueListener {
         lendingApp.setStatus(LendingAppStatusValues.UNAPPLIED.getValue());
         lendingAppDao.update(lendingApp);
     }
-    
+
 }
