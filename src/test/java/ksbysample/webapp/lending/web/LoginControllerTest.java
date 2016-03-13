@@ -397,10 +397,10 @@ public class LoginControllerTest {
                     .andExpect(unauthenticated());
 
             // 存在するメールアドレスを指定して /urllogin にアクセスすればログインできる
-            MvcResult result = mvc.noauth.perform(get("/urllogin?user=" + mvc.MAILADDR_TANAKA_TARO))
+            MvcResult result = mvc.noauth.perform(get("/urllogin?user=" + mvc.MAILADDR_SUZUKI_HANAKO))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl(WebSecurityConfig.DEFAULT_SUCCESS_URL))
-                    .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO))
+                    .andExpect(authenticated().withUsername(mvc.MAILADDR_SUZUKI_HANAKO))
                     .andReturn();
             HttpSession session = result.getRequest().getSession();
             assertThat(session).isNotNull();
@@ -409,9 +409,9 @@ public class LoginControllerTest {
             mvc.noauth.perform(get(WebSecurityConfig.DEFAULT_SUCCESS_URL).session((MockHttpSession) session))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
-                    .andExpect(view().name("loginsuccess"))
+                    .andExpect(view().name("booklist/booklist"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(authenticated().withUsername(mvc.MAILADDR_TANAKA_TARO));
+                    .andExpect(authenticated().withUsername(mvc.MAILADDR_SUZUKI_HANAKO));
         }
 
     }

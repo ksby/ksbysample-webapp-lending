@@ -19,7 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    public static final String DEFAULT_SUCCESS_URL = "/loginsuccess";
+    public static final String DEFAULT_SUCCESS_URL = "/booklist";
     public static final String REMEMBERME_KEY = "ksbysample-webapp-lending";
 
     @Autowired
