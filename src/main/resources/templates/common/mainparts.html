@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <meta charset="UTF-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -65,12 +66,8 @@
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">メニュー <span class="caret"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="/booklist">貸出希望書籍登録</a></li>
-                                <li><a href="/lendingapp">貸出申請</a></li>
-                                <li><a href="/confirmresult">貸出申請結果確認</a></li>
-                                <li class="divider"></li>
-                                <li><a href="/lendingapproval">貸出承認</a></li>
-                                <li class="divider"></li>
-                                <li><a href="/admin/library">検索対象図書館登録</a></li>
+                                <li class="divider" sec:authorize="hasRole('ROLE_ADMIN')"></li>
+                                <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/admin/library">検索対象図書館登録</a></li>
                             </ul>
                         </li>
                     </ul>
