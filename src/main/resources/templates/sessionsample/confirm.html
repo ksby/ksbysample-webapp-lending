@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>セッションサンプル</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style type="text/css">
+        <!--
+        .table {
+            background-color: #ffccff;
+            margin-bottom: 10px;
+        }
+        .has-error .form-control {
+            background-color: #fff5ee;
+        }
+        .form-group {
+            margin-bottom: 0px;
+        }
+        -->
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>セッションサンプル（確認）</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <!-- @thymesVar id="sessionSampleForm" type="ksbysample.webapp.lending.web.sessionsample.SessionSampleForm" -->
+                        <form id="sessionSampleForm" method="post" action="/sessionsample/clear" th:action="@{/sessionsample/clear}"
+                              th:object="${sessionSampleForm}">
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col width="20%"/>
+                                    <col width="80%"/>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <th>名前</th>
+                                        <td th:text="*{name}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>年齢</th>
+                                        <td th:text="*{age}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>住所</th>
+                                        <td th:text="*{address}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>メールアドレス</th>
+                                        <td th:text="*{email}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center">
+                                <button class="btn bg-blue js-btn-first"><i class="fa fa-hand-o-left"></i>　入力その１へ戻る</button>
+                                <button class="btn bg-blue js-btn-next"><i class="fa fa-hand-o-left"></i>　入力その２へ戻る</button>
+                                <button class="btn bg-blue js-btn-clear"><i class="fa fa-eraser"></i>　セッションをクリアする</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function () {
+        $('.js-btn-first').bind('click', function () {
+            $("#sessionSampleForm").attr("action", "/sessionsample");
+            $('#sessionSampleForm').submit();
+            return false;
+        });
+
+        $('.js-btn-next').bind('click', function () {
+            $("#sessionSampleForm").attr("action", "/sessionsample/next");
+            $('#sessionSampleForm').submit();
+            return false;
+        });
+
+        $('.js-btn-clear').bind('click', function () {
+            $('#sessionSampleForm').submit();
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>
