@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/urllogin").permitAll()
                 .antMatchers("/webapi/**").permitAll()
                 .antMatchers("/springMvcMemo/**").permitAll()
+                .antMatchers("/sessionsample/**").permitAll()
                 .antMatchers("/textareamemo/**").permitAll()
                 .anyRequest().authenticated();
         http.formLogin()
