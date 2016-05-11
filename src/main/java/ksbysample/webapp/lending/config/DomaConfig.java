@@ -8,8 +8,6 @@ import org.seasar.doma.jdbc.SqlFileRepository;
 import org.seasar.doma.jdbc.dialect.Dialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +18,6 @@ public class DomaConfig implements Config {
 
     private DataSource dataSource;
 
-    @Autowired
     private Dialect dialect;
 
     private SqlFileRepository sqlFileRepository;
@@ -28,9 +25,16 @@ public class DomaConfig implements Config {
     public DomaConfig() {
     }
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.dataSource = new TransactionAwareDataSourceProxy(dataSource);
+    }
+
+    @Autowired
+    public void setDialect(@Value("${doma.dialect}") String domaDialect)
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        this.dialect = (Dialect) Class.forName(domaDialect).newInstance();
     }
 
     @Autowired
@@ -42,7 +46,7 @@ public class DomaConfig implements Config {
             this.sqlFileRepository = new GreedyCacheSqlFileRepository();
         }
     }
-    
+
     @Override
     public DataSource getDataSource() {
         return this.dataSource;
@@ -56,20 +60,6 @@ public class DomaConfig implements Config {
     @Override
     public SqlFileRepository getSqlFileRepository() {
         return this.sqlFileRepository;
-    }
-
-    @Configuration
-    protected static class DomaBeanConfig {
-
-        @Value("${doma.dialect}")
-        private String domaDialect;
-
-        @Bean
-        public Dialect dialect()
-                throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-            return (Dialect) Class.forName(domaDialect).newInstance();
-        }
-
     }
 
 }

@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.5.RELEASE'
+        springBootVersion = '1.2.8.RELEASE'
     }
     repositories {
         jcenter()
@@ -8,9 +8,11 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("io.spring.gradle:dependency-management-plugin:0.5.1.RELEASE")
+        classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
         // for Grgit
-        classpath("org.ajoberstar:grgit:1.1.0")
+        classpath("org.ajoberstar:grgit:1.5.0")
+        // Gradle Download Task
+        classpath("de.undercouch:gradle-download-task:2.1.0")
     }
 }
 
@@ -19,6 +21,15 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'de.undercouch.download'
+apply plugin: 'groovy'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+compileJava.options.compilerArgs = ['-Xlint:all']
+compileTestGroovy.options.compilerArgs = ['-Xlint:all']
+compileTestJava.options.compilerArgs = ['-Xlint:all']
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
@@ -28,11 +39,8 @@ compileJava.dependsOn processResources
 
 jar {
     baseName = 'ksbysample-webapp-lending'
-    version = '1.0.0-SNAPSHOT'
+    version = '1.0.0-RELEASE'
 }
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 eclipse {
     classpath {
@@ -57,33 +65,53 @@ repositories {
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:9.4-1201-jdbc41"
+    def jdbcDriver = "org.postgresql:postgresql:9.4.1208"
 
     // spring-boot-gradle-plugin によりバージョン番号が自動で設定されるもの
     // Appendix E. Dependency versions ( http://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity3")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-velocity")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile("org.springframework.boot:spring-boot-starter-security")
+    compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.codehaus.janino:janino")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("org.springframework.security:spring-security-test:4.0.1.RELEASE")
+    // (ここから) gradle でテストを実行した場合に spring-security-test-4.0.3.RELEASE.jar しか classpath に指定されず
+    // テストが失敗したため、3.2.9.RELEASE を明記している
+    testCompile("org.springframework.security:spring-security-core:3.2.9.RELEASE")
+    testCompile("org.springframework.security:spring-security-web:3.2.9.RELEASE")
+    // (ここまで) ------------------------------------------------------------------------------------------------------
+    testCompile("org.springframework.security:spring-security-test:4.0.2.RELEASE")
     testCompile("org.yaml:snakeyaml")
+    testCompile("org.codehaus.groovy:groovy-all")
+    testCompile("org.spockframework:spock-core")
+    testCompile("org.spockframework:spock-spring")
 
     // spring-boot-gradle-plugin によりバージョン番号が自動で設定されないもの
     compile("${jdbcDriver}")
-    compile("org.seasar.doma:doma:2.3.1")
+    compile("org.seasar.doma:doma:2.7.0")
     compile("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
     compile("org.apache.commons:commons-lang3:3.4")
-    compile("org.projectlombok:lombok:1.16.4")
-    compile("com.google.guava:guava:18.0")
+    compile("org.projectlombok:lombok:1.16.8")
+    compile("com.google.guava:guava:19.0")
+    compile("org.springframework.session:spring-session:1.0.1.RELEASE")
+    compile("org.simpleframework:simple-xml:2.7.1")
+    compile("com.univocity:univocity-parsers:2.0.0")
+    compile("org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE")
     testCompile("org.dbunit:dbunit:2.5.1")
     testCompile("com.icegreen:greenmail:1.4.1")
+    testCompile("org.assertj:assertj-core:3.3.0")
+    testCompile("com.jayway.jsonpath:json-path:2.2.0")
+    testCompile("org.jmockit:jmockit:1.22")
 
     // for Doma-Gen
-    domaGenRuntime("org.seasar.doma:doma-gen:2.3.1")
+    domaGenRuntime("org.seasar.doma:doma-gen:2.7.0")
     domaGenRuntime("${jdbcDriver}")
 }
 
@@ -96,18 +124,319 @@ test {
 }
 
 // for Doma-Gen
-task gen << {
-    def rootPackageName = 'ksbysample.webapp.lending'
+task domaGen << {
+    // まず変更が必要なもの
+    def rootPackageName  = 'ksbysample.webapp.lending'
+    def daoPackagePath   = 'src/main/java/ksbysample/webapp/lending/dao'
+    def dbUrl            = 'jdbc:postgresql://localhost/ksbylending'
+    def dbUser           = 'ksbylending_user'
+    def dbPassword       = 'xxxxxxxx'
+    def tableNamePattern = '.*'
+    // おそらく変更不要なもの
+    def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
+    def workDirPath      = 'work'
+    def workDaoDirPath   = "${workDirPath}/dao"
 
+    // 作業用ディレクトリを削除する
+    clearDir("${workDirPath}")
+
+    // 現在の Dao インターフェースのバックアップを取得する
+    copy() {
+        from "${daoPackagePath}"
+        into "${workDaoDirPath}/org"
+    }
+
+    // Dao インターフェース、Entity クラスを生成する
     ant.taskdef(resource: 'domagentask.properties',
             classpath: configurations.domaGenRuntime.asPath)
-    ant.gen(url: 'jdbc:postgresql://localhost/lendingdb', user: 'lending_user', password: 'xxxxxxxx') {
+    ant.gen(url: "${dbUrl}", user: "${dbUser}", password: "${dbPassword}", tableNamePattern: "${tableNamePattern}") {
         entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
         daoConfig(packageName: "${rootPackageName}.dao")
         sqlConfig()
     }
 
+    // 生成された Dao インターフェースを作業用ディレクトリにコピーし、
+    // @ComponentAndAutowiredDomaConfig アノテーションを付加する
+    copy() {
+        from "${daoPackagePath}"
+        into "${workDaoDirPath}/replace"
+        filter {
+            line -> line.replaceAll('import org.seasar.doma.Dao;', "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
+                    .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+        }
+    }
+
+    // @ComponentAndAutowiredDomaConfig アノテーションを付加した Dao インターフェースを
+    // dao パッケージへ戻す
+    copy() {
+        from "${workDaoDirPath}/replace"
+        into "${daoPackagePath}"
+    }
+
+    // 元々 dao パッケージ内にあったファイルを元に戻す
+    copy() {
+        from "${workDaoDirPath}/org"
+        into "${daoPackagePath}"
+    }
+
+    // 作業用ディレクトリを削除する
+    clearDir("${workDirPath}")
+
     // 自動生成したファイルを git add する
+    addGit()
+}
+
+task downloadCssFontsJs << {
+    def staticDirPath   = 'src/main/resources/static'
+    def workDirPath     = 'work'
+    def adminLTEVersion     = '2.2.0'
+    def jQueryVersion       = '2.1.4'
+    def fontAwesomeVersion  = '4.3.0'
+    def ioniconsVersion     = '2.0.1'
+    def html5shivJsVersion  = '3.7.2'
+    def respondMinJsVersion = '1.4.2'
+
+    // 作業用ディレクトリを削除する
+    clearDir("${workDirPath}")
+
+    // Bootstrap & AdminLTE Dashboard & Control Panel Template
+    downloadAdminLTE("${adminLTEVersion}", "${jQueryVersion}", "${workDirPath}", "${staticDirPath}")
+
+    // Font Awesome Icons
+    downloadFontAwesome("${fontAwesomeVersion}", "${workDirPath}", "${staticDirPath}")
+
+    // Ionicons
+    downloadIonicons("${ioniconsVersion}", "${workDirPath}", "${staticDirPath}")
+
+    // html5shiv.js
+    downloadHtml5shivJs("${html5shivJsVersion}", "${workDirPath}", "${staticDirPath}")
+
+    // respond.min.js
+    downloadRespondMinJs("${respondMinJsVersion}", "${workDirPath}", "${staticDirPath}")
+
+    // fileinput.min.js ( v4.2.7 )
+    downloadBootstrapFileInputMinJs("${workDirPath}", "${staticDirPath}")
+
+    // 作業用ディレクトリを削除する
+    clearDir("${workDirPath}")
+
+    // 追加したファイルを git add する
+    addGit()
+}
+
+task printClassWhatNotMakeTest << {
+    def srcDir = new File("src/main/java");
+    def excludePaths = [
+            "src/main/java/ksbysample/webapp/lending/Application.java"
+            , "src/main/java/ksbysample/webapp/lending/config"
+            , "src/main/java/ksbysample/webapp/lending/cookie"
+            , "src/main/java/ksbysample/webapp/lending/dao"
+            , "src/main/java/ksbysample/webapp/lending/entity"
+            , "src/main/java/ksbysample/webapp/lending/exception"
+            , "src/main/java/ksbysample/webapp/lending/helper/download/booklistcsv"
+            , "src/main/java/ksbysample/webapp/lending/helper/download/DataDownloadHelper.java"
+            , "src/main/java/ksbysample/webapp/lending/helper/page/PagenationHelper.java"
+            , "src/main/java/ksbysample/webapp/lending/security/LendingUser.java"
+            , "src/main/java/ksbysample/webapp/lending/security/RoleAwareAuthenticationSuccessHandler.java"
+            , "src/main/java/ksbysample/webapp/lending/service/calilapi/response"
+            , "src/main/java/ksbysample/webapp/lending/service/file/BooklistCSVRecord.java"
+            , "src/main/java/ksbysample/webapp/lending/service/openweathermapapi"
+            , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"
+            , "src/main/java/ksbysample/webapp/lending/util/doma"
+            , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
+            , "src/main/java/ksbysample/webapp/lending/values/validation/ValuesEnum.java"
+            , "src/main/java/ksbysample/webapp/lending/view/BookListCsvView.java"
+            , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
+            , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
+            , "src/main/java/ksbysample/webapp/lending/webapi/weather"
+    ];
+    def excludeFileNamePatterns = [
+            ".*EventListener.java"
+            , ".*Dto.java"
+            , ".*Form.java"
+            , ".*Values.java"
+    ];
+
+    compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns);
+}
+
+/* -----------------------------------------------------------------------------
+ * メソッド定義部
+ ---------------------------------------------------------------------------- */
+void clearDir(String dirPath) {
+    delete dirPath
+}
+
+void addGit() {
     def grgit = org.ajoberstar.grgit.Grgit.open(dir: project.projectDir)
     grgit.add(patterns: ['.'])
+}
+
+void downloadAdminLTE(String adminLTEVersion, String jQueryVersion, String workDirPath, String staticDirPath) {
+    download {
+        src "https://codeload.github.com/almasaeed2010/AdminLTE/zip/v${adminLTEVersion}"
+        dest new File("${workDirPath}/download/AdminLTE-${adminLTEVersion}.zip")
+    }
+    copy {
+        from zipTree("${workDirPath}/download/AdminLTE-${adminLTEVersion}.zip")
+        into "${workDirPath}/unzip"
+    }
+    copy {
+        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/bootstrap/css"
+        into "${staticDirPath}/css"
+    }
+    copy {
+        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/bootstrap/fonts"
+        into "${staticDirPath}/fonts"
+    }
+    copy {
+        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/bootstrap/js"
+        into "${staticDirPath}/js"
+    }
+    copy {
+        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/dist/css"
+        into "${staticDirPath}/css"
+    }
+    copy {
+        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/dist/js"
+        into "${staticDirPath}/js"
+    }
+    copy {
+        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/plugins/jQuery/jQuery-${jQueryVersion}.min.js"
+        into "${staticDirPath}/js"
+    }
+    delete "${staticDirPath}/js/pages"
+    delete "${staticDirPath}/js/demo.js"
+}
+
+void downloadFontAwesome(String fontAwesomeVersion, String workDirPath, String staticDirPath) {
+    download {
+        src "http://fortawesome.github.io/Font-Awesome/assets/font-awesome-${fontAwesomeVersion}.zip"
+        dest new File("${workDirPath}/download/font-awesome-${fontAwesomeVersion}.zip")
+    }
+    copy {
+        from zipTree("${workDirPath}/download/font-awesome-${fontAwesomeVersion}.zip")
+        into "${workDirPath}/unzip"
+    }
+    copy {
+        from "${workDirPath}/unzip/font-awesome-${fontAwesomeVersion}/css/font-awesome.min.css"
+        into "${staticDirPath}/css"
+    }
+    copy {
+        from "${workDirPath}/unzip/font-awesome-${fontAwesomeVersion}/fonts"
+        into "${staticDirPath}/fonts"
+    }
+}
+
+void downloadIonicons(String ioniconsVersion, String workDirPath, String staticDirPath) {
+    download {
+        src "https://codeload.github.com/driftyco/ionicons/zip/v${ioniconsVersion}"
+        dest new File("${workDirPath}/download/ionicons-${ioniconsVersion}.zip")
+    }
+    copy {
+        from zipTree("${workDirPath}/download/ionicons-${ioniconsVersion}.zip")
+        into "${workDirPath}/unzip"
+    }
+    copy {
+        from "${workDirPath}/unzip/ionicons-${ioniconsVersion}/css/ionicons.min.css"
+        into "${staticDirPath}/css"
+    }
+    copy {
+        from "${workDirPath}/unzip/ionicons-${ioniconsVersion}/fonts"
+        into "${staticDirPath}/fonts"
+    }
+}
+
+void downloadHtml5shivJs(String html5shivJsVersion, String workDirPath, String staticDirPath) {
+    download {
+        src "https://oss.maxcdn.com/html5shiv/${html5shivJsVersion}/html5shiv.min.js"
+        dest new File("${workDirPath}/download/html5shiv.min.js")
+    }
+    copy {
+        from "${workDirPath}/download/html5shiv.min.js"
+        into "${staticDirPath}/js"
+    }
+}
+
+void downloadRespondMinJs(String respondMinJsVersion, String workDirPath, String staticDirPath) {
+    download {
+        src "https://oss.maxcdn.com/respond/${respondMinJsVersion}/respond.min.js"
+        dest new File("${workDirPath}/download/respond.min.js")
+    }
+    copy {
+        from "${workDirPath}/download/respond.min.js"
+        into "${staticDirPath}/js"
+    }
+}
+
+void downloadBootstrapFileInputMinJs(String workDirPath, String staticDirPath) {
+    download {
+        src "https://github.com/kartik-v/bootstrap-fileinput/zipball/master"
+        dest new File("${workDirPath}/download/kartik-v-bootstrap-fileinput.zip")
+    }
+    copy {
+        from zipTree("${workDirPath}/download/kartik-v-bootstrap-fileinput.zip")
+        into "${workDirPath}/unzip"
+    }
+    copy {
+        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/js/fileinput.min.js"
+        into "${staticDirPath}/js"
+    }
+    copy {
+        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/js/fileinput_locale_ja.js"
+        into "${staticDirPath}/js"
+    }
+    copy {
+        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/css/fileinput.min.css"
+        into "${staticDirPath}/css"
+    }
+}
+
+def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
+    def existFlg
+    def testDirAndTestClassNameList = [
+            ["src/test/java", "Test.java"]
+            , ["src/test/groovy", "Test.groovy"]
+    ]
+
+    for (srcFile in srcDir.listFiles()) {
+        String srcFilePath = (srcFile.toPath() as String).replaceAll("\\\\", "/")
+        existFlg = false
+
+        for (exclude in excludePaths) {
+            if (srcFilePath =~ /^${exclude as String}/) {
+                existFlg = true
+                break
+            }
+        }
+        if (existFlg == true) continue
+
+        for (exclude in excludeFileNamePatterns) {
+            if (srcFilePath =~ /${exclude as String}/) {
+                existFlg = true
+                break
+            }
+        }
+        if (existFlg == true) continue
+
+        if (srcFile.isDirectory()) {
+            compareSrcAndTestDir(srcFile, excludePaths, excludeFileNamePatterns)
+        } else {
+            def nextFlg = false
+            for (testDirAndTestClassName in testDirAndTestClassNameList) {
+                def testDir = testDirAndTestClassName[0]
+                def testClassName = testDirAndTestClassName[1]
+
+                String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, testDir).replaceFirst(/\.java$/, testClassName)
+                def testFile = new File(testFilePath)
+                if (testFile.exists()) {
+                    nextFlg = true
+                    break
+                }
+            }
+            if (nextFlg) continue
+
+            println(srcFilePath);
+        }
+    }
 }

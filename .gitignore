@@ -33,3 +33,6 @@ proguard/
 .gradle/
 build/
 bin/
+
+#カーリル図書館API用設定ファイル
+calilapi.properties

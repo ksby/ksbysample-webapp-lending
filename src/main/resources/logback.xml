@@ -9,17 +9,21 @@
         </encoder>
     </appender>
 
-    <property name="LOG_FILE" value="C:/webapps/ksbysample-webapp-lending/logs/ksbysample-webapp-lending.log"/>
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder>
-            <pattern>${FILE_LOG_PATTERN}</pattern>
-        </encoder>
-        <file>${LOG_FILE}</file>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}</fileNamePattern>
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-    </appender>
+    <if condition='"${spring.profiles.active}" == "product"'>
+        <then>
+            <property name="LOG_FILE" value="C:/webapps/ksbysample-webapp-lending/logs/ksbysample-webapp-lending.log"/>
+            <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+                <encoder>
+                    <pattern>${FILE_LOG_PATTERN}</pattern>
+                </encoder>
+                <file>${LOG_FILE}</file>
+                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                    <fileNamePattern>${LOG_FILE}.%d{yyyy-MM-dd}</fileNamePattern>
+                    <maxHistory>30</maxHistory>
+                </rollingPolicy>
+            </appender>
+        </then>
+    </if>
 
     <if condition='"${spring.profiles.active}" == "develop"'>
         <then>

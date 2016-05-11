@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>貸出申請</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style>
+        .content-wrapper {
+            background-color: #fffafa;
+        }
+        .selected-library {
+            color: #ffffff !important;
+            font-size: 100%;
+            font-weight: 700;
+        }
+        .box-body.no-padding {
+            padding-bottom: 10px !important;
+        }
+        .table>tbody>tr>td
+        , .table>tbody>tr>th
+        , .table>tfoot>tr>td
+        , .table>tfoot>tr>th
+        , .table>thead>tr>td
+        , .table>thead>tr>th {
+            padding: 5px;
+            font-size: 90%;
+        }
+        .jp-gothic {
+            font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+        }
+        .has-error {
+            background-color: #ffcccc;
+        }
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>貸出申請</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form id="lendingappForm" method="post" action="/lendingapp/apply" th:action="@{/lendingapp/apply}" th:object="${lendingappForm}">
+                            <div th:replace="common/mainparts :: alert-danger"></div>
+                            <div th:replace="common/mainparts :: alert-success"></div>
+                            <div class="box">
+                                <div class="box-body no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <table class="table table-bordered">
+                                            <colgroup>
+                                                <col width="30%"/>
+                                                <col width="70%"/>
+                                            </colgroup>
+                                            <tr>
+                                                <th class="bg-purple">貸出申請ID</th>
+                                                <th th:text="*{lendingApp.lendingAppId}">1</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">ステータス</th>
+                                                <th th:text="${@vh.getText('LendingAppStatusValues', lendingappForm.lendingApp.status)}">申請中</th>
+                                            </tr>
+                                        </table>
+                                        <input type="hidden" th:field="*{lendingApp.lendingAppId}"/>
+                                        <input type="hidden" th:field="*{lendingApp.status}"/>
+                                        <input type="hidden" th:field="*{lendingApp.version}"/>
+                                    </div>
+                                    <br/>
+    
+                                    <table class="table table-hover">
+                                        <colgroup>
+                                            <col width="5%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="15%"/>
+                                            <col width="15%"/>
+                                            <col width="25%"/>
+                                        </colgroup>
+                                        <thead class="bg-purple">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>ISBN</th>
+                                            <th>書名</th>
+                                            <th>貸出状況</th>
+                                            <th>申請</th>
+                                            <th>申請理由</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="jp-gothic">
+                                        <tr th:each="lendingBookDto, iterStat : *{lendingBookDtoList}">
+                                            <td th:text="${iterStat.count}">1</td>
+                                            <td th:text="${lendingBookDto.isbn}">978-1-4302-5908-4</td>
+                                            <td th:text="${lendingBookDto.bookName}">Spring Recipes</td>
+                                            <td th:text="${lendingBookDto.lendingState}">蔵書なし</td>
+                                            <td>
+                                                <select class="form-control input-sm"
+                                                        th:classappend="${#fields.hasErrors('*{lendingBookDtoList[__${iterStat.index}__].lendingAppFlg}')} ? 'has-error' : ''"
+                                                        th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingAppFlg}"
+                                                        th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')} and ${lendingBookDto.lendingState} == '蔵書あり'">
+                                                    <option th:each="lendingAppFlg : ${@vh.values('LendingBookLendingAppFlgValues')}"
+                                                            th:value="${lendingAppFlg.getValue()}"
+                                                            th:text="${lendingAppFlg.getText()}">しない</option>
+                                                </select>
+                                                <span th:text="${@vh.getText('LendingBookLendingAppFlgValues', lendingBookDto.lendingAppFlg)}"
+                                                      th:if="*{lendingApp.status} != ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')}">しない
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control input-sm"
+                                                       th:classappend="${#fields.hasErrors('*{lendingBookDtoList[__${iterStat.index}__].lendingAppReason}')} ? 'has-error' : ''"
+                                                       th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingAppReason}"
+                                                       th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')} and ${lendingBookDto.lendingState} == '蔵書あり'"/>
+                                                <span th:text="${lendingBookDto.lendingAppReason}"
+                                                      th:if="*{lendingApp.status} != ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')}">入力された申請理由を表示する
+                                                </span>
+                                            </td>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingBookId}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].isbn}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].bookName}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].lendingState}"/>
+                                            <input type="hidden" th:field="*{lendingBookDtoList[__${iterStat.index}__].version}"/>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="text-center" th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'UNAPPLIED')}">
+                                        <button class="btn bg-blue js-btn-apply"><i class="fa fa-thumbs-up"></i>　申請</button>
+                                        <button class="btn bg-orange js-btn-temporarySave"><i class="fa fa-tag"></i>　一時保存（まだ申請しない）</button>
+                                        <input type="hidden" th:field="*{btn}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $(".js-btn-apply").click(function(){
+            $("#btn").val("apply");
+            $("#lendingappForm").submit();
+            return false;
+        });
+
+        $(".js-btn-temporarySave").click(function(){
+            $("#btn").val("temporarySave");
+            $("#lendingappForm").attr("action", "/lendingapp/temporarySave");
+            $("#lendingappForm").submit();
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>

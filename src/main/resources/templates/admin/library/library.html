@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>検索対象図書館登録</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <link th:replace="common/head-cssjs"/>
+
+    <style type="text/css">
+        <!--
+        -->
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <!-- Main Header -->
+    <div th:replace="common/mainparts :: main-header"></div>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>検索対象図書館登録</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-head">
+                                <form id="searchLibraryForm" method="post" action="#" th:action="@{/}">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th class="col-xs-8 col-sm-4">
+                                                    <input type="text" name="pref" id="pref" class="form-control input-sm" value="" placeholder="都道府県名を入力してください"/>
+                                                </th>
+                                                <th class="col-xs-2 col-sm-2">
+                                                    <button class="btn btn-sm bg-orange js-search-library"><i class="fa fa-search"></i>　検索</button>
+                                                </th>
+                                                <th></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </form>
+                            </div>
+                            <div class="box-body no-padding">
+                                <table id="library-list" class="table table-hover">
+                                    <colgroup>
+                                        <col width="5%"/>
+                                        <col width="20%"/>
+                                        <col width="30%"/>
+                                        <col width="45%"/>
+                                    </colgroup>
+                                    <thead class="bg-purple">
+                                        <tr>
+                                            <th></th>
+                                            <th>systemname</th>
+                                            <th class="hidden-xs">formal</th>
+                                            <th>address</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="library-list-body" class="jp-gothic">
+                                        <!-- ここにカーリル図書館APIで取得した図書館データを表示する -->
+                                    </tbody>
+                                </table>
+                                <form id="setSelectedLibraryForm" method="post" action="/admin/library/addSearchLibrary" th:action="@{/admin/library/addSearchLibrary}">
+                                    <input type="hidden" name="systemid" value=""/>
+                                    <input type="hidden" name="formal" value=""/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<script th:replace="common/bottom-js"></script>
+<script type="text/javascript">
+    <!--
+    $(document).ready(function() {
+        $('#pref').focus();
+
+        $('.js-search-library').click(function(){
+            if (!$('#pref').val()) {
+                alert("都道府県名を入力してください");
+                return false;
+            }
+            
+            $.ajax({
+                type: "get",
+                url: "/webapi/library/getLibraryList",
+                data: { pref: $('#pref').val() },
+                async: false,
+                dataType: "json",
+                success: function(json) {
+                    if (json.errcode == 0) {
+                        $('#library-list-body tr').remove();
+                        for (var i = 0; i < json.content.length; i++) {
+                            var library = "<tr>"
+                                                + "<th>"
+                                                    + "<button class=\"btn btn-sm bg-blue js-select-library\""
+                                                        + "data-systemid=\"" + json.content[i].systemid + "\""
+                                                        + "data-formal=\"" + json.content[i].formal + "\">選択</button>"
+                                                + "</th>"
+                                                + "<th class=\"hidden-xs\">" + json.content[i].systemname + "</th>"
+                                                + "<th>" + json.content[i].formal + "</th>"
+                                                + "<th>" + json.content[i].address + "</th>"
+                                            + "</tr>";
+                            $('#library-list-body').append(library);
+                        }
+                    }
+                    else {
+                        alert(json.errmsg);
+                    }
+                }
+            });
+
+            $('.js-select-library').each(function(){
+                $(this).click(function(){
+                    $("#setSelectedLibraryForm input[name='systemid']").val($(this).attr('data-systemid'));
+                    $("#setSelectedLibraryForm input[name='formal']").val($(this).attr('data-formal'));
+                    $('#setSelectedLibraryForm').submit();
+                });
+            });
+
+            $('#pref').focus().select();
+            
+            return false;
+        });
+    });
+    -->
+</script>
+</body>
+</html>

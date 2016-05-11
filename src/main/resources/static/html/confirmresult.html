@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <title>貸出申請結果確認</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <!-- Bootstrap 3.3.4 -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Font Awesome Icons -->
+    <link href="/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Ionicons -->
+    <link href="/css/ionicons.min.css" rel="stylesheet" type="text/css"/>
+    <!-- Theme style -->
+    <link href="/css/AdminLTE.min.css" rel="stylesheet" type="text/css"/>
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link href="/css/skins/_all-skins.min.css" rel="stylesheet" type="text/css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="/js/html5shiv.min.js"></script>
+    <script src="/js/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .content-wrapper {
+            background-color: #fffafa;
+        }
+        .selected-library {
+            color: #ffffff !important;
+            font-size: 100%;
+            font-weight: 700;
+        }
+        .buttom-btn-area {
+            padding-top: 10px;
+        }
+        .box-body.no-padding {
+            padding-bottom: 10px !important;
+        }
+        .table>tbody>tr>td
+        , .table>tbody>tr>th
+        , .table>tfoot>tr>td
+        , .table>tfoot>tr>th
+        , .table>thead>tr>td
+        , .table>thead>tr>th {
+            padding: 5px;
+            font-size: 90%;
+        }
+        .jp-gothic {
+            font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+        }
+    </style>
+</head>
+
+<!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+<body class="skin-blue layout-top-nav">
+<div class="wrapper">
+
+    <header class="main-header">
+        <nav class="navbar navbar-static-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="#" class="navbar-brand"><b>ksbysample-lending</b></a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">メニュー <span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">Separated link</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+
+                <!-- Navbar Right Menu -->
+                <div class="navbar-custom-menu">
+                    <p class="navbar-text selected-library">選択中：テスト図書館</p>
+                    <ul class="nav navbar-nav">
+                        <li><a href="#">ログアウト</a></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-custom-menu -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </header>
+
+    <!-- Full Width Column -->
+    <div class="content-wrapper">
+        <div class="container">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <h1>貸出申請結果確認</h1>
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <form id="confirmresult" method="post" action="">
+                            <div class="box">
+                                <div class="box-body no-padding">
+                                    <div class="col-xs-6 no-padding">
+                                        <table class="table table-bordered">
+                                            <colgroup>
+                                                <col width="30%"/>
+                                                <col width="70%"/>
+                                            </colgroup>
+                                            <tr>
+                                                <th class="bg-purple">貸出申請ID</th>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">ステータス</th>
+                                                <td>承認済</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">申請者</th>
+                                                <td>田中　太郎</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bg-purple">承認者</th>
+                                                <td>鈴木　花子</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <br/>
+
+                                    <table class="table">
+                                        <colgroup>
+                                            <col width="5%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="20%"/>
+                                            <col width="15%"/>
+                                            <col width="20%"/>
+                                        </colgroup>
+                                        <thead class="bg-purple">
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>ISBN</th>
+                                            <th>書名</th>
+                                            <th>申請理由</th>
+                                            <th>承認／却下</th>
+                                            <th>却下理由</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="jp-gothic">
+                                        <tr>
+                                            <td>1</td>
+                                            <td>978-4-7741-6366-6</td>
+                                            <td>GitHub実践入門</td>
+                                            <td>開発で使用する為</td>
+                                            <td>承認</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>978-4-7741-5380-3</td>
+                                            <td>Spring3入門</td>
+                                            <td>開発で使用する為</td>
+                                            <td>却下</td>
+                                            <td>既に購入済です</td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>978-4-87311-718-8</td>
+                                            <td>Javaパフォーマンス</td>
+                                            <td>勉強会の為</td>
+                                            <td>承認</td>
+                                            <td></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="buttom-btn-area text-center">
+                                        <button class="btn bg-blue js-btn-filedownload"><i class="fa fa-download"></i>　CSVダウンロード</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.container -->
+    </div>
+
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery 2.1.4 -->
+<script src="/js/jQuery-2.1.4.min.js" type="text/javascript"></script>
+<!-- Bootstrap 3.3.2 JS -->
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+<!-- AdminLTE App -->
+<script src="/js/app.min.js" type="text/javascript"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+!!ksbysample.webapp.lending.web.lendingapp.LendingappForm
+# 「一時保存」ボタンクリック時の正常処理の試験用データ
+# 「蔵書あり」の４件中３件で「申請する」を選択し、申請理由を入力している
+#   * １件は「申請する」を選択するが申請理由は入力しない
+#   * １件は「申請する」を選択しないが申請理由は入力する
+#   * １件は「申請する」を選択し、かつ申請理由も入力する
+lendingApp: 
+  lendingAppId: 105
+  status: 2
+  lendingUserId: 1
+  approvalUserId: 
+  version: 1
+btn: temporarySave
+lendingBookDtoList: 
+  - lendingBookId: 521
+    isbn: 978-4-7741-6366-6
+    bookName: GitHub実践入門
+    lendingState: 蔵書なし
+    lendingAppFlg: 
+    lendingAppReason: 
+    version: 1
+  - lendingBookId: 522
+    isbn: 978-4-7741-5377-3
+    bookName: JUnit実践入門
+    lendingState: 蔵書あり
+    lendingAppFlg: 1
+    lendingAppReason: 
+    version: 1
+  - lendingBookId: 523
+    isbn: 978-4-7973-8014-9
+    bookName: Java最強リファレンス
+    lendingState: 蔵書あり
+    lendingAppFlg: 
+    lendingAppReason: 検討中
+    version: 1
+  - lendingBookId: 524
+    isbn: 978-4-7973-4778-4
+    bookName: アジャイルソフトウェア開発の奥義
+    lendingState: 蔵書あり
+    lendingAppFlg: 1
+    lendingAppReason: 勉強の為
+    version: 1
+  - lendingBookId: 525
+    isbn: 978-4-87311-704-1
+    bookName: Javaによる関数型プログラミング
+    lendingState: 蔵書あり
+    lendingAppFlg: 
+    lendingAppReason: 
+    version: 1

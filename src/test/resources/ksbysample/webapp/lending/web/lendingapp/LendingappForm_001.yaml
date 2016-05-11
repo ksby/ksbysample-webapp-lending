@@ -1,0 +1,32 @@
+!!ksbysample.webapp.lending.web.lendingapp.LendingappForm
+# 「一時保存」ボタンが押された場合
+# １件だけ lendingBookDtoList.lendingAppFlg = 1(申請する)、 lendingAppReason = (空) にしている
+lendingApp: 
+  lendingAppId: 1
+  status: 2
+  lendingUserId: 1
+  approvalUserId: 
+  version: 1
+btn: temporarySave
+lendingBookDtoList: 
+  - lendingBookId: 1
+    isbn: 978-4-7741-6366-6
+    bookName: GitHub実践入門
+    lendingState: 蔵書あり
+    lendingAppFlg: 1
+    lendingAppReason: 
+    version: 1
+  - lendingBookId: 2
+    isbn: 978-4-7741-5377-3
+    bookName: JUnit実践入門
+    lendingState: 蔵書あり
+    lendingAppFlg: 
+    lendingAppReason: 
+    version: 1
+  - lendingBookId: 3
+    isbn: 978-4-7973-8014-9
+    bookName: Java最強リファレンス
+    lendingState: 蔵書あり
+    lendingAppFlg: 
+    lendingAppReason: 
+    version: 1
