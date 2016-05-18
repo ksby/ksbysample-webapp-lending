@@ -3,13 +3,9 @@ package ksbysample.webapp.lending.helper.library;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
-import mockit.Delegate;
-import mockit.Injectable;
-import mockit.NonStrictExpectations;
-import mockit.Tested;
+import mockit.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -29,7 +25,7 @@ public class LibraryHelperTest {
 
     @Test
     public void testGetSelectedLibrary_図書館が選択されていない場合() throws Exception {
-        new NonStrictExpectations() {{
+        new Expectations() {{
             libraryForsearchDao.selectSelectedLibrary(); result = null;
         }};
 
@@ -39,7 +35,7 @@ public class LibraryHelperTest {
 
     @Test
     public void testGetSelectedLibrary_図書館が選択されている場合() throws Exception {
-        new NonStrictExpectations() {{
+        new Expectations() {{
             libraryForsearchDao.selectSelectedLibrary();
             result = new Delegate<LibraryForsearch>() {
                 LibraryForsearch aDelegateMethod() {
