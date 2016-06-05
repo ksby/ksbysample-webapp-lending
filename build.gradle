@@ -70,6 +70,11 @@ dependencyManagement {
     }
 }
 
+bootRepackage {
+    mainClass = 'ksbysample.webapp.lending.Application'
+    excludeDevtools = true
+}
+
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:9.4.1208"
 
@@ -84,6 +89,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-redis")
     compile("org.springframework.boot:spring-boot-starter-amqp")
+    compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.session:spring-session")
     compile("org.codehaus.janino:janino")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
