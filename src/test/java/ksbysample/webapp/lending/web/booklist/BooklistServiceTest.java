@@ -6,7 +6,7 @@ import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
-import mockit.NonStrictExpectations;
+import mockit.Expectations;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;
 import org.junit.Rule;
@@ -36,13 +36,13 @@ public class BooklistServiceTest {
 
     @Autowired
     private DataSource dataSource;
-    
+
     @Autowired
     private BooklistService booklistService;
-    
+
     @Test
     public void testTemporarySaveBookListCsvFile() throws Exception {
-        new NonStrictExpectations(LendingUserDetailsHelper.class) {{
+        new Expectations(LendingUserDetailsHelper.class) {{
             LendingUserDetailsHelper.getLoginUserId(); result = new Long(1);
         }};
 
@@ -50,7 +50,7 @@ public class BooklistServiceTest {
         // テスト用のユーティリティクラスを作るべきですが、今回は他のテストクラスのメソッドをそのまま使います
         BooklistCsvFileServiceTest booklistCsvFileServiceTest = new BooklistCsvFileServiceTest();
         uploadBooklistForm.setFileupload(booklistCsvFileServiceTest.createNoErrorCsvFile());
-        
+
         Long lendingAppId = booklistService.temporarySaveBookListCsvFile(uploadBooklistForm);
         assertThat(lendingAppId).isNotEqualTo(new Long(0));
         IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/booklist/assertdata/001"));
@@ -61,7 +61,7 @@ public class BooklistServiceTest {
         List<LendingBook> lendingBookList = booklistService.getLendingBookList(lendingAppId);
         assertThat(lendingBookList).hasSize(5);
     }
-    
+
     @Test
     public void testSendMessageToInquiringStatusOfBookQueue() throws Exception {
         // 現在の実装では InquiringStatusOfBookQueueServiceTest が通ればOKなので、こちらは実装しない

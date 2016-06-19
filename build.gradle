@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.8.RELEASE'
+        springBootVersion = '1.3.5.RELEASE'
     }
     repositories {
         jcenter()
@@ -10,9 +10,9 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
         // for Grgit
-        classpath("org.ajoberstar:grgit:1.5.0")
+        classpath("org.ajoberstar:grgit:1.7.0")
         // Gradle Download Task
-        classpath("de.undercouch:gradle-download-task:2.1.0")
+        classpath("de.undercouch:gradle-download-task:3.0.0")
     }
 }
 
@@ -39,7 +39,7 @@ compileJava.dependsOn processResources
 
 jar {
     baseName = 'ksbysample-webapp-lending'
-    version = '1.0.0-RELEASE'
+    version = '1.1.0-RELEASE'
 }
 
 eclipse {
@@ -64,54 +64,64 @@ repositories {
     jcenter()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:2.0.5.RELEASE'
+    }
+}
+
+bootRepackage {
+    mainClass = 'ksbysample.webapp.lending.Application'
+    excludeDevtools = true
+}
+
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:9.4.1208"
 
-    // spring-boot-gradle-plugin によりバージョン番号が自動で設定されるもの
-    // Appendix E. Dependency versions ( http://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
+    // dependency-management-plugin によりバージョン番号が自動で設定されるもの
+    // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
-    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity3")
+    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile("org.springframework.boot:spring-boot-starter-velocity")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-redis")
     compile("org.springframework.boot:spring-boot-starter-amqp")
+    compile("org.springframework.boot:spring-boot-devtools")
+    compile("org.springframework.session:spring-session")
     compile("org.codehaus.janino:janino")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     testCompile("org.springframework.boot:spring-boot-starter-test")
-    // (ここから) gradle でテストを実行した場合に spring-security-test-4.0.3.RELEASE.jar しか classpath に指定されず
-    // テストが失敗したため、3.2.9.RELEASE を明記している
-    testCompile("org.springframework.security:spring-security-core:3.2.9.RELEASE")
-    testCompile("org.springframework.security:spring-security-web:3.2.9.RELEASE")
-    // (ここまで) ------------------------------------------------------------------------------------------------------
-    testCompile("org.springframework.security:spring-security-test:4.0.2.RELEASE")
+    testCompile("org.springframework.security:spring-security-test")
     testCompile("org.yaml:snakeyaml")
-    testCompile("org.codehaus.groovy:groovy-all")
-    testCompile("org.spockframework:spock-core")
-    testCompile("org.spockframework:spock-spring")
+    testCompile("org.spockframework:spock-core") {
+        exclude module: "groovy-all"
+    }
+    testCompile("org.spockframework:spock-spring") {
+        exclude module: "groovy-all"
+    }
 
-    // spring-boot-gradle-plugin によりバージョン番号が自動で設定されないもの
-    compile("${jdbcDriver}")
-    compile("org.seasar.doma:doma:2.7.0")
+    // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
+    runtime("${jdbcDriver}")
+    compile("org.seasar.doma:doma:2.8.0")
     compile("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
     compile("org.apache.commons:commons-lang3:3.4")
     compile("org.projectlombok:lombok:1.16.8")
     compile("com.google.guava:guava:19.0")
-    compile("org.springframework.session:spring-session:1.0.1.RELEASE")
     compile("org.simpleframework:simple-xml:2.7.1")
-    compile("com.univocity:univocity-parsers:2.0.0")
+    compile("com.univocity:univocity-parsers:2.1.1")
     compile("org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE")
     testCompile("org.dbunit:dbunit:2.5.1")
-    testCompile("com.icegreen:greenmail:1.4.1")
-    testCompile("org.assertj:assertj-core:3.3.0")
+    testCompile("com.icegreen:greenmail:1.5.0")
+    testCompile("org.assertj:assertj-core:3.4.1")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
-    testCompile("org.jmockit:jmockit:1.22")
+    testCompile("org.jmockit:jmockit:1.23")
 
     // for Doma-Gen
-    domaGenRuntime("org.seasar.doma:doma-gen:2.7.0")
+    domaGenRuntime("org.seasar.doma:doma-gen:2.8.0")
     domaGenRuntime("${jdbcDriver}")
 }
 
