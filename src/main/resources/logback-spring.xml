@@ -11,7 +11,7 @@
 
     <if condition='"${spring.profiles.active}" == "product"'>
         <then>
-            <property name="LOG_FILE" value="C:/webapps/ksbysample-webapp-lending/logs/ksbysample-webapp-lending.log"/>
+            <property name="LOG_FILE" value="${LOG_FILE}"/>
             <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
                 <encoder>
                     <pattern>${FILE_LOG_PATTERN}</pattern>

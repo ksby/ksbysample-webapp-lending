@@ -33,10 +33,12 @@ public class CookieUtils {
         Optional<String> result = Optional.empty();
         if (request != null) {
             Cookie[] cookies = request.getCookies();
-            result = Arrays.asList(cookies).stream()
-                    .filter(cookie -> StringUtils.equals(cookie.getName(), cookieName))
-                    .map(cookie -> cookie.getValue())
-                    .findFirst();
+            if (cookies != null) {
+                result = Arrays.asList(cookies).stream()
+                        .filter(cookie -> StringUtils.equals(cookie.getName(), cookieName))
+                        .map(cookie -> cookie.getValue())
+                        .findFirst();
+            }
         }
         return result.orElse(null);
     }
