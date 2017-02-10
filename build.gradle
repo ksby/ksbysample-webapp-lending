@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '1.3.5.RELEASE'
+        springBootVersion = '1.4.4.RELEASE'
     }
     repositories {
         jcenter()
@@ -8,18 +8,18 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
+        classpath("io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE")
         // for Grgit
-        classpath("org.ajoberstar:grgit:1.7.0")
+        classpath("org.ajoberstar:grgit:1.8.0")
         // Gradle Download Task
-        classpath("de.undercouch:gradle-download-task:3.0.0")
+        classpath("de.undercouch:gradle-download-task:3.2.0")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'de.undercouch.download'
 apply plugin: 'groovy'
@@ -27,9 +27,11 @@ apply plugin: 'groovy'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-compileJava.options.compilerArgs = ['-Xlint:all']
-compileTestGroovy.options.compilerArgs = ['-Xlint:all']
-compileTestJava.options.compilerArgs = ['-Xlint:all']
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}
+
+[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing']
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
@@ -40,13 +42,6 @@ compileJava.dependsOn processResources
 jar {
     baseName = 'ksbysample-webapp-lending'
     version = '1.1.0-RELEASE'
-}
-
-eclipse {
-    classpath {
-        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-    }
 }
 
 idea {
@@ -66,7 +61,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:2.0.5.RELEASE'
+        mavenBom 'io.spring.platform:platform-bom:Athens-SR3'
     }
 }
 
@@ -76,7 +71,7 @@ bootRepackage {
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:9.4.1208"
+    def jdbcDriver = "org.postgresql:postgresql:9.4.1212"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
@@ -106,22 +101,25 @@ dependencies {
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtime("${jdbcDriver}")
-    compile("org.seasar.doma:doma:2.8.0")
+    compile("org.seasar.doma:doma:2.15.0")
     compile("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
-    compile("org.apache.commons:commons-lang3:3.4")
-    compile("org.projectlombok:lombok:1.16.8")
-    compile("com.google.guava:guava:19.0")
+    compile("org.apache.commons:commons-lang3:3.5")
+    compile("com.google.guava:guava:21.0")
     compile("org.simpleframework:simple-xml:2.7.1")
-    compile("com.univocity:univocity-parsers:2.1.1")
-    compile("org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE")
-    testCompile("org.dbunit:dbunit:2.5.1")
-    testCompile("com.icegreen:greenmail:1.5.0")
-    testCompile("org.assertj:assertj-core:3.4.1")
+    compile("com.univocity:univocity-parsers:2.3.1")
+    compile("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.0.RELEASE")
+    testCompile("org.dbunit:dbunit:2.5.3")
+    testCompile("com.icegreen:greenmail:1.5.3")
+    testCompile("org.assertj:assertj-core:3.6.2")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
-    testCompile("org.jmockit:jmockit:1.23")
+    testCompile("org.jmockit:jmockit:1.30")
+
+    // for lombok
+    compileOnly("org.projectlombok:lombok:1.16.12")
+    testCompileOnly("org.projectlombok:lombok:1.16.12")
 
     // for Doma-Gen
-    domaGenRuntime("org.seasar.doma:doma-gen:2.8.0")
+    domaGenRuntime("org.seasar.doma:doma-gen:2.15.0")
     domaGenRuntime("${jdbcDriver}")
 }
 
