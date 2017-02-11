@@ -1,10 +1,10 @@
 package ksbysample.webapp.lending.listener.rabbitmq;
 
 import com.google.common.base.Charsets;
-import ksbysample.common.test.rule.mail.MailServerResource;
 import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.rule.db.TestData;
 import ksbysample.common.test.rule.db.TestDataResource;
+import ksbysample.common.test.rule.mail.MailServerResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
@@ -24,7 +24,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -40,7 +40,7 @@ import static mockit.Deencapsulation.setField;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class InquiringStatusOfBookQueueListenerTest {
 

@@ -50,7 +50,7 @@ public class BooklistCsvFileService {
                     continue;
                 }
 
-                // ISBN のデータに数字、ハイフン以外の文字が使用されている 
+                // ISBN のデータに数字、ハイフン以外の文字が使用されている
                 if (!ISBN_FORMAT_PATTERN.matcher(csvdata[0]).matches()) {
                     errors.reject("UploadBooklistForm.fileupload.isbn.patternerr", new Object[]{line, csvdata[0]}, null);
                 }
@@ -97,7 +97,7 @@ public class BooklistCsvFileService {
 
             // JavaBean に変換するための Processor クラスを生成して設定する
             BeanListProcessor<BooklistCSVRecord> rowProcessor = new BeanListProcessor<>(BooklistCSVRecord.class);
-            csvParserSettings.setRowProcessor(rowProcessor);
+            csvParserSettings.setProcessor(rowProcessor);
 
             // CSVファイルを解析する
             CsvParser parser = new CsvParser(csvParserSettings);

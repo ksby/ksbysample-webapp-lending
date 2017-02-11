@@ -3,17 +3,20 @@ package ksbysample.webapp.lending.helper.library;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
-import mockit.*;
+import mockit.Delegate;
+import mockit.Expectations;
+import mockit.Injectable;
+import mockit.Tested;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class LibraryHelperTest {
 

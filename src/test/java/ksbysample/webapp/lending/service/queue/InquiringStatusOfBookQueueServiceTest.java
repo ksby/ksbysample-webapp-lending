@@ -9,14 +9,14 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class InquiringStatusOfBookQueueServiceTest {
 
@@ -25,13 +25,13 @@ public class InquiringStatusOfBookQueueServiceTest {
 
     @Autowired
     private Queue queue;
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
     private InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService;
-    
+
     @Test
     public void testSendMessage() throws Exception {
         RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);

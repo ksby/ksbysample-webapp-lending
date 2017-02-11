@@ -1,7 +1,7 @@
 package ksbysample.webapp.lending.web.booklist;
 
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.common.test.rule.db.TestDataResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
 import org.junit.Rule;
@@ -9,7 +9,7 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class BooklistControllerTest {
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class ユーザ権限とURLの呼び出し可否のテスト {
 
@@ -65,7 +65,7 @@ public class BooklistControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class ファイルアップロードのテスト_エラーになる場合 {
 
@@ -102,7 +102,7 @@ public class BooklistControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class ファイルアップロードのテスト_正常な場合 {
 

@@ -1,8 +1,8 @@
 package ksbysample.webapp.lending.web;
 
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.common.test.helper.SimpleRequestBuilder;
 import ksbysample.common.test.rule.db.TestDataResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.config.Constant;
 import ksbysample.webapp.lending.config.WebSecurityConfig;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.authentication.*;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LoginControllerTest {
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class ログイン画面の初期表示のテスト {
 
@@ -62,7 +62,7 @@ public class LoginControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class ログイン成功のテスト {
 
@@ -88,7 +88,7 @@ public class LoginControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class ログインエラーのテスト {
 
@@ -241,7 +241,7 @@ public class LoginControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class 次回から自動的にログインするのテスト {
 
@@ -295,7 +295,7 @@ public class LoginControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class ログアウトのテスト {
 
@@ -350,7 +350,7 @@ public class LoginControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class urlloginのテスト {
 
@@ -363,7 +363,7 @@ public class LoginControllerTest {
         public SecurityMockMvcResource mvc;
 
         @RunWith(SpringJUnit4ClassRunner.class)
-        @SpringApplicationConfiguration(classes = Application.class)
+        @SpringBootTest(classes = Application.class)
         @WebAppConfiguration
         public static class encodeのテスト {
 

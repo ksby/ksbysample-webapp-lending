@@ -6,7 +6,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,7 +20,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class EmailHelperTest {
 
@@ -30,7 +30,7 @@ public class EmailHelperTest {
 
     @Autowired
     private JavaMailSender mailSender;
-    
+
     @Autowired
     private EmailHelper emailHelper;
 
@@ -60,7 +60,7 @@ public class EmailHelperTest {
         message.setSubject("テスト");
         message.setText("これはテストです");
         emailHelper.sendMail(message.getMimeMessage());
-        
+
         assertThat(mailServer.getMessagesCount(), is(1));
         MimeMessage receiveMessage = mailServer.getFirstMessage();
         assertThat(receiveMessage.getFrom()[0], is(new InternetAddress("test@sample.com")));

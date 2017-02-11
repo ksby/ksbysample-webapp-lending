@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.simpleframework.xml.core.ValueRequiredException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -15,13 +15,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class CalilApiServiceTest {
 
     @Autowired
     private CalilApiService calilApiService;
-    
+
     @Test
     public void testGetLibraryList_都道府県名が正しい場合() throws Exception {
         Libraries libraries = calilApiService.getLibraryList("東京都");
@@ -47,5 +47,5 @@ public class CalilApiServiceTest {
                 .extracting("systemname")
                 .contains("国立国会図書館");
     }
-    
+
 }

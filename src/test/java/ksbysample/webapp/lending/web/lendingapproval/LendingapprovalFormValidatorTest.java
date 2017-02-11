@@ -5,7 +5,7 @@ import ksbysample.webapp.lending.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.validation.Errors;
@@ -16,7 +16,7 @@ import org.yaml.snakeyaml.Yaml;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class LendingapprovalFormValidatorTest {
 
@@ -92,5 +92,5 @@ public class LendingapprovalFormValidatorTest {
         assertThat(errors.hasGlobalErrors()).isFalse();
         assertThat(errors.hasFieldErrors()).isFalse();
     }
-    
+
 }

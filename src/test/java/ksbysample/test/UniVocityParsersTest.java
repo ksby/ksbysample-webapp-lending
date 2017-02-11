@@ -13,7 +13,7 @@ import ksbysample.webapp.lending.Application;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -30,7 +30,7 @@ import java.util.List;
 
 @Ignore("CSVライブラリuniVocity-parsersのテストで本機能とは関係ないのでテストを実行対象外にする")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@SpringBootTest(classes = Application.class)
 @WebAppConfiguration
 public class UniVocityParsersTest {
 
@@ -84,7 +84,7 @@ public class UniVocityParsersTest {
         // 商品コードは必ず英大文字に変換する
         ObjectRowListProcessor rowProcessor = new ObjectRowListProcessor();
         rowProcessor.convertFields(Conversions.toUpperCase()).set("商品コード");
-        settings.setRowProcessor(rowProcessor);
+        settings.setProcessor(rowProcessor);
 
         CsvParser parser = new CsvParser(settings);
 
@@ -100,7 +100,7 @@ public class UniVocityParsersTest {
             allRows.stream().forEach(row -> System.out.println(Joiner.on(", ").join(row)));
         }
     }
-    
+
     @Test
     public void uniVocityParsersTest_004() throws Exception {
         CsvParserSettings settings = new CsvParserSettings();
@@ -108,7 +108,7 @@ public class UniVocityParsersTest {
         settings.setHeaderExtractionEnabled(true);      // 1行目はヘッダ行としてスキップする
 
         BeanListProcessor<Item> rowProcessor = new BeanListProcessor<>(Item.class);
-        settings.setRowProcessor(rowProcessor);
+        settings.setProcessor(rowProcessor);
 
         CsvParser parser = new CsvParser(settings);
 
@@ -174,7 +174,7 @@ public class UniVocityParsersTest {
 
             BeanWriterProcessor<Item> writerProcessor = new BeanWriterProcessor<>(Item.class);
             settings.setRowWriterProcessor(writerProcessor);
-            
+
             CsvWriter writer = new CsvWriter(bw, settings);
             writer.writeHeaders();
             writer.processRecordsAndClose(itemList);

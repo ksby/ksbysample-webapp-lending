@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
@@ -19,7 +19,7 @@ import java.io.File;
 public class TestDataResourceTest {
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     @BaseTestData("testdata/base")
     @BaseTestSql(order = 1, sql = "insert into library_forsearch values ('Kanagawa_Sample', null)")
@@ -53,7 +53,7 @@ public class TestDataResourceTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class テストクラス_TestData_Annotation {
 

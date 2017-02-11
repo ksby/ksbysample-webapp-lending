@@ -1,12 +1,12 @@
 package ksbysample.webapp.lending.web.lendingapp;
 
 import com.google.common.base.Charsets;
-import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.helper.TestHelper;
-import ksbysample.common.test.rule.mail.MailServerResource;
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
+import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.rule.db.TestData;
 import ksbysample.common.test.rule.db.TestDataResource;
+import ksbysample.common.test.rule.mail.MailServerResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import org.dbunit.dataset.IDataSet;
@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MvcResult;
@@ -37,7 +37,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class LendingappControllerTest {
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class 貸出申請画面の初期表示のテスト_エラー処理 {
 
@@ -95,7 +95,7 @@ public class LendingappControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class 貸出申請画面の初期表示のテスト_正常処理 {
 
@@ -128,7 +128,7 @@ public class LendingappControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class 貸出申請画面の入力チェックエラーのテスト {
 
@@ -194,7 +194,7 @@ public class LendingappControllerTest {
     }
 
     @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
+    @SpringBootTest(classes = Application.class)
     @WebAppConfiguration
     public static class 貸出申請画面の正常処理時のテスト {
 
