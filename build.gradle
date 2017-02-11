@@ -72,14 +72,16 @@ bootRepackage {
 
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:9.4.1212"
+    def spockVersion = "1.1-groovy-2.4-rc-3"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
+    compile("org.thymeleaf.extras:thymeleaf-extras-java8time")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-velocity")
+    compile("org.springframework.boot:spring-boot-starter-freemarker")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-redis")
@@ -92,12 +94,6 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.security:spring-security-test")
     testCompile("org.yaml:snakeyaml")
-    testCompile("org.spockframework:spock-core") {
-        exclude module: "groovy-all"
-    }
-    testCompile("org.spockframework:spock-spring") {
-        exclude module: "groovy-all"
-    }
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtime("${jdbcDriver}")
@@ -107,12 +103,17 @@ dependencies {
     compile("com.google.guava:guava:21.0")
     compile("org.simpleframework:simple-xml:2.7.1")
     compile("com.univocity:univocity-parsers:2.3.1")
-    compile("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.0.RELEASE")
     testCompile("org.dbunit:dbunit:2.5.3")
     testCompile("com.icegreen:greenmail:1.5.3")
     testCompile("org.assertj:assertj-core:3.6.2")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
     testCompile("org.jmockit:jmockit:1.30")
+    testCompile("org.spockframework:spock-core:${spockVersion}") {
+        exclude module: "groovy-all"
+    }
+    testCompile("org.spockframework:spock-spring:${spockVersion}") {
+        exclude module: "groovy-all"
+    }
 
     // for lombok
     compileOnly("org.projectlombok:lombok:1.16.12")

@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.helper.mail;
 
-import ksbysample.webapp.lending.util.velocity.VelocityUtils;
+import ksbysample.webapp.lending.util.freemarker.FreeMarkerUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,13 +14,13 @@ import java.util.Map;
 @Component
 public class Mail001Helper {
 
-    private final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail001-body.vm";
+    private final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail001-body.ftl";
 
     private final String FROM_ADDR = "StatusOfBookChecker@sample.com";
     private final String SUBJECT = "貸出状況を確認しました";
-    
+
     @Autowired
-    private VelocityUtils velocityUtils;
+    private FreeMarkerUtils freeMarkerUtils;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -38,7 +38,7 @@ public class Mail001Helper {
     private String generateTextUsingVelocity(Long lendingAppId) {
         Map<String, Object> model = new HashMap<>();
         model.put("lendingAppId", lendingAppId);
-        return velocityUtils.merge(this.TEMPLATE_LOCATION_TEXTMAIL, model);
+        return freeMarkerUtils.merge(this.TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
 }

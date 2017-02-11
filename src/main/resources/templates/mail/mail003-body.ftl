@@ -2,9 +2,9 @@
 ========================================================================
 承認／却下　書籍
 ------------------------------------------------------------------------
-#foreach ($bookData in $mail003BookDataList)
-　$bookData.approvalResultStr　　　$bookData.bookName
-#end
+<#list mail003BookDataList as bookData>
+　${bookData.approvalResultStr}　　　${bookData.bookName}
+</#list>
 ========================================================================
 
 詳細は以下のURLから確認してください。

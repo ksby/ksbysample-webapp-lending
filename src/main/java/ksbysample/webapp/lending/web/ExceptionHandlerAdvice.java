@@ -1,7 +1,7 @@
 package ksbysample.webapp.lending.web;
 
 import com.google.common.base.Joiner;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ import java.util.Map;
 public class ExceptionHandlerAdvice {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception e
             , HttpServletRequest request
@@ -78,7 +78,7 @@ public class ExceptionHandlerAdvice {
                         .forEach(line -> errorInfoList.add(line));
             }
         }
-        
+
         return model;
     }
 

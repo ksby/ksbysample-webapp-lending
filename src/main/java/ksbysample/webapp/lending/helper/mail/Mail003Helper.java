@@ -1,7 +1,7 @@
 package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.webapp.lending.entity.LendingBook;
-import ksbysample.webapp.lending.util.velocity.VelocityUtils;
+import ksbysample.webapp.lending.util.freemarker.FreeMarkerUtils;
 import ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues;
 import ksbysample.webapp.lending.values.ValuesHelper;
 import lombok.Data;
@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 @Component
 public class Mail003Helper {
 
-    private final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail003-body.vm";
+    private final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail003-body.ftl";
 
     private final String FROM_ADDR = "lendingapp@sample.com";
     private final String SUBJECT = "貸出申請が承認・却下されました";
 
     @Autowired
-    private VelocityUtils velocityUtils;
+    private FreeMarkerUtils freeMarkerUtils;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -53,7 +53,7 @@ public class Mail003Helper {
         Map<String, Object> model = new HashMap<>();
         model.put("lendingAppId", lendingAppId);
         model.put("mail003BookDataList", mail003BookDataList);
-        return velocityUtils.merge(this.TEMPLATE_LOCATION_TEXTMAIL, model);
+        return freeMarkerUtils.merge(this.TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
     @Data
