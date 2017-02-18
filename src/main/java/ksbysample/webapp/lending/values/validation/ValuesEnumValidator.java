@@ -12,7 +12,7 @@ public class ValuesEnumValidator implements ConstraintValidator<ValuesEnum, Stri
     private Class<? extends Enum<?>> enumClass;
 
     private boolean allowEmpty;
-    
+
     @Override
     public void initialize(ValuesEnum constraintAnnotation) {
         this.enumClass = constraintAnnotation.enumClass();
@@ -22,7 +22,8 @@ public class ValuesEnumValidator implements ConstraintValidator<ValuesEnum, Stri
         try {
             if (!Values.class.isAssignableFrom(Class.forName(this.enumClass.getName()))) {
                 throw new RuntimeException(
-                        MessageFormat.format("enumClass 属性に Values インターフェースを実装した列挙型が指定されていません ( {0} )", this.enumClass.getClass()));
+                        MessageFormat.format("enumClass 属性に Values インターフェースを実装した列挙型が指定されていません ( {0} )"
+                                , this.enumClass.getName()));
             }
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);

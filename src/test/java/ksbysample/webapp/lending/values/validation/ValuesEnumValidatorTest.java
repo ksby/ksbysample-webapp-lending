@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ValuesEnumValidatorTest {
 
     // テスト用 Value 列挙型
+    @SuppressWarnings("MissingOverride")
     @Getter
     @AllArgsConstructor
     private enum TestValues implements Values {

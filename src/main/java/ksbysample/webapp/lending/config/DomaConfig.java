@@ -12,6 +12,7 @@ import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.lang.reflect.InvocationTargetException;
 
 @Component
 public class DomaConfig implements Config {
@@ -33,8 +34,9 @@ public class DomaConfig implements Config {
 
     @Autowired
     public void setDialect(@Value("${doma.dialect}") String domaDialect)
-            throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        this.dialect = (Dialect) Class.forName(domaDialect).newInstance();
+            throws ClassNotFoundException, IllegalAccessException, InstantiationException
+            , NoSuchMethodException, InvocationTargetException {
+        this.dialect = (Dialect) Class.forName(domaDialect).getConstructor().newInstance();
     }
 
     @Autowired

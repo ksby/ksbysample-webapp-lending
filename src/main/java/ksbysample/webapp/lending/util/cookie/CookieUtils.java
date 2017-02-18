@@ -6,6 +6,7 @@ import org.springframework.web.util.CookieGenerator;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -13,18 +14,18 @@ public class CookieUtils {
 
     public static <T extends CookieGenerator> void addCookie(Class<T> clazz, HttpServletResponse response, String cookieValue) {
         try {
-            T cookieGenerator = clazz.newInstance();
+            T cookieGenerator = clazz.getConstructor().newInstance();
             cookieGenerator.addCookie(response, cookieValue);
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static <T extends CookieGenerator> void removeCookie(Class<T> clazz, HttpServletResponse response) {
         try {
-            T cookieGenerator = clazz.newInstance();
+            T cookieGenerator = clazz.getConstructor().newInstance();
             cookieGenerator.removeCookie(response);
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }

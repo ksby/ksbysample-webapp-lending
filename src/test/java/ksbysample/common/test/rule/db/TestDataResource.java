@@ -88,6 +88,7 @@ public class TestDataResource extends TestWatcher {
         }
     }
 
+    @SuppressWarnings("Finally")
     @Override
     protected void finished(Description description) {
         IDatabaseConnection conn = null;

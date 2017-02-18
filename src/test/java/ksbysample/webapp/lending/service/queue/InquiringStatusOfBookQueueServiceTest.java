@@ -38,7 +38,7 @@ public class InquiringStatusOfBookQueueServiceTest {
         rabbitAdmin.deleteQueue(Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK);
         rabbitAdmin.declareQueue(queue);
 
-        Long lendingAppId = new Long(1);
+        Long lendingAppId = Long.valueOf(1L);
         inquiringStatusOfBookQueueService.sendMessage(lendingAppId);
 
         InquiringStatusOfBookQueueMessage message

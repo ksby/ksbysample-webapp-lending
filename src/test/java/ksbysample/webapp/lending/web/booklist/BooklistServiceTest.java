@@ -43,7 +43,7 @@ public class BooklistServiceTest {
     @Test
     public void testTemporarySaveBookListCsvFile() throws Exception {
         new Expectations(LendingUserDetailsHelper.class) {{
-            LendingUserDetailsHelper.getLoginUserId(); result = new Long(1);
+            LendingUserDetailsHelper.getLoginUserId(); result = Long.valueOf(1L);
         }};
 
         UploadBooklistForm uploadBooklistForm = new UploadBooklistForm();
@@ -52,7 +52,7 @@ public class BooklistServiceTest {
         uploadBooklistForm.setFileupload(booklistCsvFileServiceTest.createNoErrorCsvFile());
 
         Long lendingAppId = booklistService.temporarySaveBookListCsvFile(uploadBooklistForm);
-        assertThat(lendingAppId).isNotEqualTo(new Long(0));
+        assertThat(lendingAppId).isNotEqualTo(Long.valueOf(0L));
         IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/booklist/assertdata/001"));
         TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
         tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id", "approval_user_id", "version"});
