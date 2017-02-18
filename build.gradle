@@ -5,10 +5,13 @@ buildscript {
     repositories {
         jcenter()
         maven { url "http://repo.spring.io/repo/" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE")
+        // for Error Prone ( http://errorprone.info/ )
+        classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.8")
         // for Grgit
         classpath("org.ajoberstar:grgit:1.8.0")
         // Gradle Download Task
@@ -23,6 +26,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'de.undercouch.download'
 apply plugin: 'groovy'
+apply plugin: 'net.ltgt.errorprone'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -31,7 +35,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '2.13'
 }
 
-[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing']
+[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing,-path']
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
@@ -52,7 +56,13 @@ idea {
 }
 
 configurations {
+    // for Doma 2
     domaGenRuntime
+
+    // for Error Prone ( http://errorprone.info/ )
+    errorprone {
+        resolutionStrategy.force 'com.google.errorprone:error_prone_core:2.0.15'
+    }
 }
 
 repositories {
@@ -115,6 +125,7 @@ dependencies {
     testCompile("org.spockframework:spock-spring:${spockVersion}") {
         exclude module: "groovy-all"
     }
+    testCompile("com.google.code.findbugs:jsr305:3.0.1")
 
     // for lombok
     compileOnly("org.projectlombok:lombok:1.16.12")
