@@ -9,8 +9,8 @@ import ksbysample.webapp.lending.entity.LendingApp;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
 import ksbysample.webapp.lending.entity.UserInfo;
-import ksbysample.webapp.lending.helper.mail.Mail001Helper;
 import ksbysample.webapp.lending.helper.mail.EmailHelper;
+import ksbysample.webapp.lending.helper.mail.Mail001Helper;
 import ksbysample.webapp.lending.service.calilapi.CalilApiService;
 import ksbysample.webapp.lending.service.calilapi.response.Book;
 import ksbysample.webapp.lending.service.queue.InquiringStatusOfBookQueueMessage;
@@ -59,6 +59,10 @@ public class InquiringStatusOfBookQueueListener {
     @Autowired
     private UserInfoDao userInfoDao;
 
+    /**
+     * @param message ???
+     * @throws MessagingException
+     */
     @RabbitListener(queues = {Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK})
     public void receiveMessage(Message message) throws MessagingException {
         // 受信したメッセージを InquiringStatusOfBookQueueMessage クラスのインスタンスに変換する
@@ -69,17 +73,21 @@ public class InquiringStatusOfBookQueueListener {
         LibraryForsearch libraryForsearch = libraryForsearchDao.selectSelectedLibrary();
 
         // 更新対象の lending_app テーブルのデータを取得する
-        LendingApp lendingApp = lendingAppDao.selectById(convertedMessage.getLendingAppId(), SelectOptions.get().forUpdate());
+        LendingApp lendingApp = lendingAppDao.selectById(convertedMessage.getLendingAppId()
+                , SelectOptions.get().forUpdate());
         if (lendingApp == null) {
-            logger.error("lending_app テーブルに対象のデータがありませんでした ( lending_app_id = {} )。", convertedMessage.getLendingAppId());
+            logger.error("lending_app テーブルに対象のデータがありませんでした ( lending_app_id = {} )。"
+                    , convertedMessage.getLendingAppId());
             return;
         }
 
         // lending_book テーブルから調査対象の ISBN 一覧を取得する
         List<LendingBook> lendingBookList
-                = lendingBookDao.selectByLendingAppId(convertedMessage.getLendingAppId(), SelectOptions.get().forUpdate());
+                = lendingBookDao.selectByLendingAppId(convertedMessage.getLendingAppId()
+                , SelectOptions.get().forUpdate());
         if (lendingBookList == null) {
-            logger.error("lending_book テーブルに対象のデータがありませんでした ( lending_app_id = {} )。", convertedMessage.getLendingAppId());
+            logger.error("lending_book テーブルに対象のデータがありませんでした ( lending_app_id = {} )。"
+                    , convertedMessage.getLendingAppId());
             return;
         }
         List<String> isbnList = lendingBookList.stream()
@@ -95,7 +103,8 @@ public class InquiringStatusOfBookQueueListener {
 
         // データを登録したユーザへメールを送信する
         UserInfo userInfo = userInfoDao.selectById(lendingApp.getLendingUserId());
-        MimeMessage mimeMessage = mail001Helper.createMessage(userInfo.getMailAddress(), convertedMessage.getLendingAppId());
+        MimeMessage mimeMessage = mail001Helper.createMessage(userInfo.getMailAddress()
+                , convertedMessage.getLendingAppId());
         emailHelper.sendMail(mimeMessage);
     }
 

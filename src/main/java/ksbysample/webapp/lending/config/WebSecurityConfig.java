@@ -63,6 +63,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(60 * 60 * 24 * 30);
     }
 
+    /**
+     * @return ???
+     */
     @Bean
     public AuthenticationProvider daoAuhthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -72,6 +75,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return daoAuthenticationProvider;
     }
 
+    /**
+     * @param auth ???
+     * @throws Exception
+     */
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuhthenticationProvider())

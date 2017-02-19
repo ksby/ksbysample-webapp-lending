@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @WebAppConfiguration
 public class BooklistServiceTest {
 
-    private final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
+    private static final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
 
     @Rule
     @Autowired
@@ -43,7 +43,8 @@ public class BooklistServiceTest {
     @Test
     public void testTemporarySaveBookListCsvFile() throws Exception {
         new Expectations(LendingUserDetailsHelper.class) {{
-            LendingUserDetailsHelper.getLoginUserId(); result = Long.valueOf(1L);
+            LendingUserDetailsHelper.getLoginUserId();
+            result = Long.valueOf(1L);
         }};
 
         UploadBooklistForm uploadBooklistForm = new UploadBooklistForm();
@@ -53,10 +54,14 @@ public class BooklistServiceTest {
 
         Long lendingAppId = booklistService.temporarySaveBookListCsvFile(uploadBooklistForm);
         assertThat(lendingAppId).isNotEqualTo(Long.valueOf(0L));
-        IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/booklist/assertdata/001"));
+        IDataSet dataSet = new CsvDataSet(
+                new File("src/test/resources/ksbysample/webapp/lending/web/booklist/assertdata/001"));
         TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
-        tableDataAssert.assertEquals("lending_app", new String[]{"lending_app_id", "approval_user_id", "version"});
-        tableDataAssert.assertEquals("lending_book", new String[]{"lending_book_id", "lending_app_id", "lending_state", "lending_app_flg", "lending_app_reason", "approval_result", "approval_reason", "version"});
+        tableDataAssert.assertEquals("lending_app"
+                , new String[]{"lending_app_id", "approval_user_id", "version"});
+        tableDataAssert.assertEquals("lending_book"
+                , new String[]{"lending_book_id", "lending_app_id", "lending_state", "lending_app_flg"
+                        , "lending_app_reason", "approval_result", "approval_reason", "version"});
 
         List<LendingBook> lendingBookList = booklistService.getLendingBookList(lendingAppId);
         assertThat(lendingBookList).hasSize(5);

@@ -11,7 +11,12 @@ public class AdminLibraryService {
 
     @Autowired
     private LibraryForsearchDao libraryForsearchDao;
-    
+
+    /**
+     * library_forsearch テーブルのデータを全て削除してから、指定されたデータを１件登録する
+     *
+     * @param setSelectedLibraryForm ???
+     */
     public void deleteAndInsertLibraryForSearch(SetSelectedLibraryForm setSelectedLibraryForm) {
         // library_forsearch テーブルのデータを全て削除する
         libraryForsearchDao.deleteAll();

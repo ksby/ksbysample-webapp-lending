@@ -39,6 +39,9 @@ public class DomaConfig implements Config {
         this.dialect = (Dialect) Class.forName(domaDialect).getConstructor().newInstance();
     }
 
+    /**
+     * @param springProfilesActive ???
+     */
     @Autowired
     public void setSqlFileRepository(@Value("${spring.profiles.active}") String springProfilesActive) {
         // develop モードの時は SQL ファイルがキャッシュされないようにする

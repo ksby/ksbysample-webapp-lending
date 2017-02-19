@@ -28,11 +28,19 @@ import java.util.Objects;
 public class ConfirmresultController {
 
     @Autowired
-    private MessagesPropertiesHelper messagesPropertiesHelper;
+    private MessagesPropertiesHelper mph;
 
     @Autowired
     private ConfirmresultService confirmresultService;
 
+    /**
+     * @param confirmresultParamForm           ???
+     * @param bindingResult                    ???
+     * @param confirmresultForm                ???
+     * @param bindingResultOfConfirmresultForm ???
+     * @param response                         ???
+     * @return ???
+     */
     @RequestMapping
     @LoggingEventName("初期表示処理")
     public String index(@Validated ConfirmresultParamForm confirmresultParamForm
@@ -42,7 +50,7 @@ public class ConfirmresultController {
             , HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
+                    mph.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
         }
 
         // 画面に表示するデータを取得する
@@ -51,27 +59,32 @@ public class ConfirmresultController {
         // 指定された貸出申請IDで承認済のデータがない場合には、貸出申請結果確認画面上にエラーメッセージを表示する
         if (confirmresultForm.getLendingApp() == null) {
             bindingResultOfConfirmresultForm.reject("ConfirmresultForm.lendingApp.nodataerr");
-        }
-        else {
+        } else {
             // 指定された貸出申請IDの申請者とログインしているユーザが一致しない場合にはエラーメッセージを表示し、
             // HTTP ステータスコードも 403 を返す
             if (!Objects.equals(confirmresultForm.getLendingUserId(), LendingUserDetailsHelper.getLoginUserId())) {
                 response.setStatus(HttpStatus.FORBIDDEN.value());
                 throw new WebApplicationRuntimeException(
-                        messagesPropertiesHelper.getMessage("Confirmresult.lendingUserId.notequalerr", null));
+                        mph.getMessage("Confirmresult.lendingUserId.notequalerr", null));
             }
         }
 
         return "confirmresult/confirmresult";
     }
 
+    /**
+     * @param confirmresultForm ???
+     * @param bindingResult     ???
+     * @param response          ???
+     * @throws IOException
+     */
     @RequestMapping(value = "/filedownloadByResponse", method = RequestMethod.POST)
     public void filedownloadByResponse(ConfirmresultForm confirmresultForm
             , BindingResult bindingResult
             , HttpServletResponse response) throws IOException {
         if (bindingResult.hasErrors()) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
+                    mph.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
         }
 
         // データを取得する
@@ -80,17 +93,23 @@ public class ConfirmresultController {
 
         // response に CSVデータを出力する
         DataDownloadHelper dataDownloadHelper
-                = new BookListCsvDownloadHelper(confirmresultForm.getLendingApp().getLendingAppId(), bookListCsvDataList);
+                = new BookListCsvDownloadHelper(confirmresultForm.getLendingApp().getLendingAppId()
+                , bookListCsvDataList);
         dataDownloadHelper.setFileNameToResponse(response);
         dataDownloadHelper.writeDataToResponse(response);
     }
 
+    /**
+     * @param confirmresultForm ???
+     * @param bindingResult     ???
+     * @return ???
+     */
     @RequestMapping(value = "/filedownloadByView", method = RequestMethod.POST)
     public ModelAndView filedownloadByView(ConfirmresultForm confirmresultForm
             , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
+                    mph.getMessage("ConfirmresultParamForm.lendingAppId.emptyerr", null));
         }
 
         // データを取得する

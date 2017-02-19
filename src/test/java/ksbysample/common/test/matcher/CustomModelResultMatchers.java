@@ -22,6 +22,12 @@ public class CustomModelResultMatchers extends ModelResultMatchers {
         return new CustomModelResultMatchers();
     }
 
+    /**
+     * @param nameAndProperty ???
+     * @param matcher         ???
+     * @param <T>             ???
+     * @return ???
+     */
     @SuppressWarnings("unchecked")
     public <T> ResultMatcher property(final String nameAndProperty, final Matcher<T> matcher) {
         return mvcResult -> {

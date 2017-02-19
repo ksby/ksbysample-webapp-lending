@@ -14,10 +14,10 @@ import java.util.Map;
 @Component
 public class Mail001Helper {
 
-    private final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail001-body.ftl";
+    private static final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail001-body.ftl";
 
-    private final String FROM_ADDR = "StatusOfBookChecker@sample.com";
-    private final String SUBJECT = "貸出状況を確認しました";
+    private static final String FROM_ADDR = "StatusOfBookChecker@sample.com";
+    private static final String SUBJECT = "貸出状況を確認しました";
 
     @Autowired
     private FreeMarkerUtils freeMarkerUtils;
@@ -25,6 +25,12 @@ public class Mail001Helper {
     @Autowired
     private JavaMailSender mailSender;
 
+    /**
+     * @param toAddr       ???
+     * @param lendingAppId ???
+     * @return ???
+     * @throws MessagingException
+     */
     public MimeMessage createMessage(String toAddr, Long lendingAppId) throws MessagingException {
         MimeMessage mimeMessage = this.mailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage, false, "UTF-8");
@@ -38,7 +44,7 @@ public class Mail001Helper {
     private String generateTextUsingVelocity(Long lendingAppId) {
         Map<String, Object> model = new HashMap<>();
         model.put("lendingAppId", lendingAppId);
-        return freeMarkerUtils.merge(this.TEMPLATE_LOCATION_TEXTMAIL, model);
+        return freeMarkerUtils.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
 }

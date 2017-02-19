@@ -47,7 +47,12 @@ public class LoginController {
 
     @Autowired
     private UserDetailsService userDetailsService;
-    
+
+    /**
+     * @param request  ???
+     * @param response ???
+     * @return ???
+     */
     @RequestMapping
     public String index(HttpServletRequest request, HttpServletResponse response) {
         // 有効な remember-me Cookie が存在する場合にはログイン画面を表示させず自動ログインさせる
@@ -63,17 +68,29 @@ public class LoginController {
         return "login";
     }
 
+    /**
+     * @param password ???
+     * @return ???
+     */
     @RequestMapping("/encode")
     @ResponseBody
     public String encode(@RequestParam String password) {
         return new BCryptPasswordEncoder().encode(password);
     }
 
+    /**
+     * @return ???
+     */
     @RequestMapping("/loginsuccess")
     public String loginsuccess() {
         return "loginsuccess";
     }
 
+    /**
+     * @param user    ???
+     * @param request ???
+     * @return ???
+     */
     @RequestMapping("/urllogin")
     public String urllogin(@RequestParam String user
             , HttpServletRequest request) {
@@ -101,7 +118,8 @@ public class LoginController {
                 = new UsernamePasswordAuthenticationToken(lendingUserDetails, null, authorities);
         // 下の２行は org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter の
         // setDetails メソッドを見て実装しています
-        AuthenticationDetailsSource<HttpServletRequest,?> authenticationDetailsSource = new WebAuthenticationDetailsSource();
+        AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource
+                = new WebAuthenticationDetailsSource();
         token.setDetails(authenticationDetailsSource.buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(token);
 

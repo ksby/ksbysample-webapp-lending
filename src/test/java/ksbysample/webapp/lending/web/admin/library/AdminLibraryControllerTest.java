@@ -75,7 +75,8 @@ public class AdminLibraryControllerTest {
 
         // テストデータ
         private SetSelectedLibraryForm setSelectedLibraryForm_001
-                = (SetSelectedLibraryForm) new Yaml().load(getClass().getResourceAsStream("SetSelectedLibraryForm_001.yaml"));
+                = (SetSelectedLibraryForm) new Yaml().load(
+                        getClass().getResourceAsStream("SetSelectedLibraryForm_001.yaml"));
 
         @Rule
         @Autowired
@@ -91,12 +92,14 @@ public class AdminLibraryControllerTest {
         @Test
         @TestData("web/admin/library/testdata/001")
         public void 管理権限を持つユーザが検索ボタンをクリックすると図書館を登録できる() throws Exception {
-            mvc.authTanakaTaro.perform(TestHelper.postForm("/admin/library/addSearchLibrary", this.setSelectedLibraryForm_001).with(csrf()))
+            mvc.authTanakaTaro.perform(TestHelper.postForm("/admin/library/addSearchLibrary"
+                    , this.setSelectedLibraryForm_001).with(csrf()))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/admin/library"))
                     .andExpect(model().hasNoErrors());
 
-            IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/admin/library/assertdata/001"));
+            IDataSet dataSet = new CsvDataSet(
+                    new File("src/test/resources/ksbysample/webapp/lending/web/admin/library/assertdata/001"));
             TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
             tableDataAssert.assertEquals("library_forsearch", null);
         }

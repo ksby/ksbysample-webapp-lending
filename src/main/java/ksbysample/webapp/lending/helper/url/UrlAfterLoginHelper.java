@@ -12,11 +12,16 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import javax.servlet.http.HttpServletRequest;
 
 public class UrlAfterLoginHelper {
-    
+
     public static String getUrlAfterLogin(Authentication authentication) {
         return getUrlAfterLogin(authentication, null);
     }
 
+    /**
+     * @param authentication ???
+     * @param request        ???
+     * @return ???
+     */
     public static String getUrlAfterLogin(Authentication authentication, HttpServletRequest request) {
         String targetUrl = WebSecurityConfig.DEFAULT_SUCCESS_URL;
 
@@ -32,7 +37,7 @@ public class UrlAfterLoginHelper {
         if (StringUtils.isNotBlank(cookieLastLendingAppId)) {
             targetUrl = String.format("%s?lendingAppId=%s", Constant.URL_LENDINGAPP, cookieLastLendingAppId);
         }
-            
+
         return targetUrl;
     }
 

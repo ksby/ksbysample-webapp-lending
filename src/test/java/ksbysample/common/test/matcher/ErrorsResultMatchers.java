@@ -23,6 +23,11 @@ public class ErrorsResultMatchers extends ModelResultMatchers {
         return new ErrorsResultMatchers();
     }
 
+    /**
+     * @param name  ???
+     * @param error ???
+     * @return ???
+     */
     public ResultMatcher hasGlobalError(String name, String error) {
         return mvcResult -> {
             BindingResult bindingResult = getBindingResult(mvcResult.getModelAndView(), name);
@@ -33,6 +38,12 @@ public class ErrorsResultMatchers extends ModelResultMatchers {
         };
     }
 
+    /**
+     * @param name      ???
+     * @param fieldName ???
+     * @param error     ???
+     * @return ???
+     */
     public ResultMatcher hasFieldError(String name, String fieldName, String error) {
         return mvcResult -> {
             BindingResult bindingResult = getBindingResult(mvcResult.getModelAndView(), name);

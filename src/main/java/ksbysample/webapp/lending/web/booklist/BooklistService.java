@@ -5,8 +5,8 @@ import ksbysample.webapp.lending.dao.LendingBookDao;
 import ksbysample.webapp.lending.entity.LendingApp;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
-import ksbysample.webapp.lending.service.file.BooklistCSVRecord;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileService;
+import ksbysample.webapp.lending.service.file.BooklistCsvRecord;
 import ksbysample.webapp.lending.service.queue.InquiringStatusOfBookQueueService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +31,13 @@ public class BooklistService {
     @Autowired
     private InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService;
 
+    /**
+     * @param uploadBooklistForm ???
+     * @return ???
+     */
     public Long temporarySaveBookListCsvFile(UploadBooklistForm uploadBooklistForm) {
         // アップロードされたCSVファイルのデータを List に変換する
-        List<BooklistCSVRecord> booklistCSVRecordList
+        List<BooklistCsvRecord> booklistCsvRecordList
                 = booklistCsvFileService.convertFileToList(uploadBooklistForm.getFileupload());
 
         // lending_app テーブルにデータを保存する
@@ -44,9 +48,9 @@ public class BooklistService {
 
         // lending_book テーブルにデータを保存する
         LendingBook lendingBook;
-        for (BooklistCSVRecord booklistCSVRecord : booklistCSVRecordList) {
+        for (BooklistCsvRecord booklistCsvRecord : booklistCsvRecordList) {
             lendingBook = new LendingBook();
-            BeanUtils.copyProperties(booklistCSVRecord, lendingBook);
+            BeanUtils.copyProperties(booklistCsvRecord, lendingBook);
             lendingBook.setLendingAppId(lendingApp.getLendingAppId());
             lendingBookDao.insert(lendingBook);
         }

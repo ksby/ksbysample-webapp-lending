@@ -12,24 +12,43 @@ import java.util.Optional;
 
 public class CookieUtils {
 
-    public static <T extends CookieGenerator> void addCookie(Class<T> clazz, HttpServletResponse response, String cookieValue) {
+    /**
+     * @param clazz       ???
+     * @param response    ???
+     * @param cookieValue ???
+     * @param <T>         ???
+     */
+    public static <T extends CookieGenerator> void addCookie(Class<T> clazz, HttpServletResponse response
+            , String cookieValue) {
         try {
             T cookieGenerator = clazz.getConstructor().newInstance();
             cookieGenerator.addCookie(response, cookieValue);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * @param clazz    ???
+     * @param response ???
+     * @param <T>      ???
+     */
     public static <T extends CookieGenerator> void removeCookie(Class<T> clazz, HttpServletResponse response) {
         try {
             T cookieGenerator = clazz.getConstructor().newInstance();
             cookieGenerator.removeCookie(response);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException
+                | InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * @param cookieName ???
+     * @param request    ???
+     * @return ???
+     */
     public static String getCookieValue(String cookieName, HttpServletRequest request) {
         Optional<String> result = Optional.empty();
         if (request != null) {

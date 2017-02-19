@@ -12,10 +12,13 @@ public class InquiringStatusOfBookQueueService {
 
     @Autowired
     private MessageConverter converter;
-    
+
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
+    /**
+     * @param lendingAppId ???
+     */
     public void sendMessage(Long lendingAppId) {
         InquiringStatusOfBookQueueMessage message = new InquiringStatusOfBookQueueMessage();
         message.setLendingAppId(lendingAppId);
@@ -25,5 +28,5 @@ public class InquiringStatusOfBookQueueService {
     public InquiringStatusOfBookQueueMessage convertMessageToObject(Message message) {
         return (InquiringStatusOfBookQueueMessage) converter.fromMessage(message);
     }
-    
+
 }

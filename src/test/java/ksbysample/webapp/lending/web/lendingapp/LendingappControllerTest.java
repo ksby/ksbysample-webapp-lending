@@ -50,7 +50,7 @@ public class LendingappControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Autowired
-        private MessagesPropertiesHelper messagesPropertiesHelper;
+        private MessagesPropertiesHelper mph;
 
         @Test
         public void ログインしていなければ貸出申請画面は表示できない() throws Exception {
@@ -67,7 +67,7 @@ public class LendingappControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+            assertThat(content).contains(mph.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
         @Test
@@ -78,7 +78,7 @@ public class LendingappControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+            assertThat(content).contains(mph.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
         @Test
@@ -89,7 +89,7 @@ public class LendingappControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingappForm.lendingApp.nodataerr", null));
+            assertThat(content).contains(mph.getMessage("LendingappForm.lendingApp.nodataerr", null));
         }
 
     }
@@ -148,7 +148,7 @@ public class LendingappControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Autowired
-        private MessagesPropertiesHelper messagesPropertiesHelper;
+        private MessagesPropertiesHelper mph;
 
         @Test
         public void 申請するが１つも選択されていない場合は入力チェックエラー() throws Exception {
@@ -163,7 +163,7 @@ public class LendingappControllerTest {
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[1].lendingAppFlg", ""))
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", ""))
                     .andExpect(xpath("//*[@class=\"alert alert-danger\"]/p")
-                            .string(messagesPropertiesHelper.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
+                            .string(mph.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
         }
 
         @Test

@@ -42,6 +42,10 @@ public class LendingapprovalService {
     @Autowired
     private EmailHelper emailHelper;
 
+    /**
+     * @param lendingAppId        ???
+     * @param lendingapprovalForm ???
+     */
     public void setDispData(Long lendingAppId, LendingapprovalForm lendingapprovalForm) {
         LendingApp lendingApp = lendingAppDao.selectByIdAndStatus(lendingAppId
                 , Arrays.asList(PENDING.getValue(), APPLOVED.getValue()));
@@ -58,6 +62,10 @@ public class LendingapprovalService {
         lendingapprovalForm.setApplyingBookFormListFromLendingBookList(lendingBookList);
     }
 
+    /**
+     * @param lendingapprovalForm ???
+     * @throws MessagingException
+     */
     public void complete(LendingapprovalForm lendingapprovalForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
         Long lendingAppId = lendingapprovalForm.getLendingApp().getLendingAppId();

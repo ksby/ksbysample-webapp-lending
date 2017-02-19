@@ -33,7 +33,7 @@ public class OpenWeatherMapApiServiceTest {
     @Test
     public void testGetFiveDayThreeHourForecastByJSONP() throws Exception {
         FiveDayThreeHourForecastData fiveDayThreeHourForecastData
-                = openWeatherMapApiService.getFiveDayThreeHourForecastByJSONP("Tokyo", "func");
+                = openWeatherMapApiService.getFiveDayThreeHourForecastByJsonp("Tokyo", "func");
         assertThat(fiveDayThreeHourForecastData.getCity().getName()).isEqualTo("Tokyo");
         assertThat(fiveDayThreeHourForecastData.getCity().getCountry()).isEqualTo("JP");
         assertThat(fiveDayThreeHourForecastData.getList().size()).isGreaterThan(0);

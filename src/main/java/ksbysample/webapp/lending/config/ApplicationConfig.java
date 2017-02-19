@@ -29,6 +29,10 @@ public class ApplicationConfig {
         return converter;
     }
 
+    /**
+     *
+     * @return ???
+     */
     @Bean
     public RabbitTemplate rabbitTemplate() {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(this.connectionFactory);

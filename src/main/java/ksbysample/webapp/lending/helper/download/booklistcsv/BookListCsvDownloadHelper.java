@@ -1,6 +1,5 @@
 package ksbysample.webapp.lending.helper.download.booklistcsv;
 
-import com.google.common.base.Charsets;
 import com.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;

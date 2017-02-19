@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @AnnotateWith(annotations = {
-        @Annotation(target = AnnotationTarget.CLASS, type = Component.class),
-        @Annotation(target = AnnotationTarget.CONSTRUCTOR, type = Autowired.class)
+        @Annotation(target = AnnotationTarget.CLASS, type = Component.class)
+        , @Annotation(target = AnnotationTarget.CONSTRUCTOR, type = Autowired.class)
 })
 public @interface ComponentAndAutowiredDomaConfig {
 }

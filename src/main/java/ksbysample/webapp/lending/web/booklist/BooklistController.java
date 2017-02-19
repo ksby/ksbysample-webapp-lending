@@ -22,17 +22,23 @@ public class BooklistController {
 
     @Autowired
     private BooklistService booklistService;
-    
+
     @InitBinder("uploadBooklistForm")
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(uploadBooklistFormValidator);
-    }    
+    }
 
     @RequestMapping
     public String index(UploadBooklistForm uploadBooklistForm) {
         return "booklist/booklist";
     }
-    
+
+    /**
+     * @param uploadBooklistForm ???
+     * @param bindingResult      ???
+     * @param model              ???
+     * @return ???
+     */
     @RequestMapping("/fileupload")
     public String fileupload(@Validated UploadBooklistForm uploadBooklistForm
             , BindingResult bindingResult
@@ -48,10 +54,15 @@ public class BooklistController {
         List<LendingBook> lendingBookList = booklistService.getLendingBookList(lendingAppId);
         RegisterBooklistForm registerBooklistForm = new RegisterBooklistForm(lendingBookList, lendingAppId);
         model.addAttribute("registerBooklistForm", registerBooklistForm);
-        
+
         return "booklist/fileupload";
     }
 
+    /**
+     * @param registerBooklistForm ???
+     * @param redirectAttributes   ???
+     * @return ???
+     */
     @RequestMapping("/register")
     public String register(RegisterBooklistForm registerBooklistForm
             , RedirectAttributes redirectAttributes) {

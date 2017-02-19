@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.beans.BeanUtils;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Data
@@ -17,7 +16,11 @@ public class RegisterBooklistForm {
 
     public RegisterBooklistForm() {
     }
-    
+
+    /**
+     * @param lendingBookList ???
+     * @param lendingAppId    ???
+     */
     public RegisterBooklistForm(List<LendingBook> lendingBookList, Long lendingAppId) {
         this.registerBooklistRowList = lendingBookList.stream()
                 .map(RegisterBooklistRow::new)

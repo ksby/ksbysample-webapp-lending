@@ -19,15 +19,20 @@ import java.util.List;
 public class LibraryController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+
     @Autowired
     private CalilApiService calilApiService;
-    
+
+    /**
+     * @param pref ???
+     * @return ???
+     * @throws Exception
+     */
     @RequestMapping("/getLibraryList")
     public CommonWebApiResponse<List<Library>> getLibraryList(String pref) throws Exception {
         CommonWebApiResponse<List<Library>> response = new CommonWebApiResponse<>();
         response.setContent(Collections.emptyList());
-        
+
         try {
             Libraries libraries = calilApiService.getLibraryList(pref);
             response.setContent(libraries.getLibraryList());
@@ -42,5 +47,5 @@ public class LibraryController {
 
         return response;
     }
-    
+
 }

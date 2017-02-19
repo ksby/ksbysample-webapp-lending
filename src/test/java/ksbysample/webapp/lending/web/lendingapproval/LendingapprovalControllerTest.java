@@ -50,7 +50,7 @@ public class LendingapprovalControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Autowired
-        private MessagesPropertiesHelper messagesPropertiesHelper;
+        private MessagesPropertiesHelper mph;
 
         @Test
         public void ログインしていなければ貸出承認画面は表示できない() throws Exception {
@@ -73,7 +73,7 @@ public class LendingapprovalControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingapprovalParamForm.lendingAppId.emptyerr", null));
+            assertThat(content).contains(mph.getMessage("LendingapprovalParamForm.lendingAppId.emptyerr", null));
         }
 
         @Test
@@ -84,7 +84,7 @@ public class LendingapprovalControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingapprovalParamForm.lendingAppId.emptyerr", null));
+            assertThat(content).contains(mph.getMessage("LendingapprovalParamForm.lendingAppId.emptyerr", null));
         }
 
     }
@@ -103,7 +103,7 @@ public class LendingapprovalControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Autowired
-        private MessagesPropertiesHelper messagesPropertiesHelper;
+        private MessagesPropertiesHelper mph;
 
         @Test
         public void lendingAppIdパラメータで指定されたデータが登録されていなければエラーになる() throws Exception {
@@ -167,7 +167,7 @@ public class LendingapprovalControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Autowired
-        private MessagesPropertiesHelper messagesPropertiesHelper;
+        private MessagesPropertiesHelper mph;
 
         // FormValidator の入力チェックを呼び出せているかチェックできればよいので、１パターンだけテストする
         @Test
@@ -181,7 +181,7 @@ public class LendingapprovalControllerTest {
                     .andExpect(errors().hasGlobalError("lendingapprovalForm", "LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr"))
                     .andExpect(errors().hasFieldError("lendingapprovalForm", "applyingBookFormList[2].approvalReason", ""))
                     .andExpect(xpath("//*[@class=\"alert alert-danger\"]/p")
-                            .string(messagesPropertiesHelper.getMessage("LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr", null)));
+                            .string(mph.getMessage("LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr", null)));
         }
 
         @Test

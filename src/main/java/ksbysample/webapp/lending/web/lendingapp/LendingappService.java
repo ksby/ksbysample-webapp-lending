@@ -32,7 +32,7 @@ public class LendingappService {
     private LendingBookDao lendingBookDao;
 
     @Autowired
-    private MessagesPropertiesHelper messagesPropertiesHelper;
+    private MessagesPropertiesHelper mph;
 
     @Autowired
     private EmailHelper emailHelper;
@@ -43,11 +43,15 @@ public class LendingappService {
     @Autowired
     private UserHelper userHelper;
 
+    /**
+     * @param lendingAppId   ???
+     * @param lendingappForm ???
+     */
     public void setDispData(Long lendingAppId, LendingappForm lendingappForm) {
         LendingApp lendingApp = lendingAppDao.selectById(lendingAppId);
         if (lendingApp == null) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("LendingappForm.lendingApp.nodataerr", null));
+                    mph.getMessage("LendingappForm.lendingApp.nodataerr", null));
         }
         List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingAppId);
 
@@ -55,12 +59,16 @@ public class LendingappService {
         lendingappForm.setLendingBookList(lendingBookList);
     }
 
+    /**
+     * @param lendingappForm ???
+     * @throws MessagingException
+     */
     public void apply(LendingappForm lendingappForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
         LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
-        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingappForm.getLendingApp().getLendingAppId()
-                , SelectOptions.get().forUpdate());
+        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(
+                lendingappForm.getLendingApp().getLendingAppId(), SelectOptions.get().forUpdate());
 
         // lending_app.status を 3(申請中) にする
         lendingApp.setStatus(PENDING.getValue());
@@ -82,12 +90,15 @@ public class LendingappService {
         emailHelper.sendMail(mimeMessage);
     }
 
+    /**
+     * @param lendingappForm ???
+     */
     public void temporarySave(LendingappForm lendingappForm) {
         // 更新対象のデータを取得する(ロックする)
         LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
-        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingappForm.getLendingApp().getLendingAppId()
-                , SelectOptions.get().forUpdate());
+        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(
+                lendingappForm.getLendingApp().getLendingAppId(), SelectOptions.get().forUpdate());
 
         // lending_book.lending_app_flg, lending_app_reason に画面に入力された内容をセットする
         lendingappForm.getLendingBookDtoList().stream()

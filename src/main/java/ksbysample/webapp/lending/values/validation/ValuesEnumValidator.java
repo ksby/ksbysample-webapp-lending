@@ -45,8 +45,7 @@ public class ValuesEnumValidator implements ConstraintValidator<ValuesEnum, Stri
             if (this.allowEmpty) {
                 result = true;
             }
-        }
-        else {
+        } else {
             Values[] valuesList = (Values[]) this.enumClass.getEnumConstants();
             for (Values values : valuesList) {
                 if (StringUtils.equals(value, values.getValue())) {

@@ -25,7 +25,8 @@ public class AdminLibraryServiceTest {
 
     // テストデータ
     private SetSelectedLibraryForm setSelectedLibraryForm_001
-            = (SetSelectedLibraryForm) new Yaml().load(getClass().getResourceAsStream("SetSelectedLibraryForm_001.yaml"));
+            = (SetSelectedLibraryForm) new Yaml().load(
+                    getClass().getResourceAsStream("SetSelectedLibraryForm_001.yaml"));
 
     @Rule
     @Autowired
@@ -42,7 +43,8 @@ public class AdminLibraryServiceTest {
     public void testDeleteAndInsertLibraryForSearch() throws Exception {
         adminLibraryService.deleteAndInsertLibraryForSearch(setSelectedLibraryForm_001);
 
-        IDataSet dataSet = new CsvDataSet(new File("src/test/resources/ksbysample/webapp/lending/web/admin/library/assertdata/001"));
+        IDataSet dataSet = new CsvDataSet(
+                new File("src/test/resources/ksbysample/webapp/lending/web/admin/library/assertdata/001"));
         TableDataAssert tableDataAssert = new TableDataAssert(dataSet, dataSource);
         tableDataAssert.assertEquals("library_forsearch", null);
     }

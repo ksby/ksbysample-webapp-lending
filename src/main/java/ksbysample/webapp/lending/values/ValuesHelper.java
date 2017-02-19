@@ -27,6 +27,13 @@ public class ValuesHelper {
                 .collect(Collectors.toMap(ClassPath.ClassInfo::getSimpleName, ClassPath.ClassInfo::getName));
     }
 
+    /**
+     * @param classSimpleName ???
+     * @param valueName       ???
+     * @param <T>             ???
+     * @return ???
+     * @throws ClassNotFoundException
+     */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T> & Values> String getValue(String classSimpleName, String valueName)
             throws ClassNotFoundException {
@@ -35,11 +42,24 @@ public class ValuesHelper {
         return val.getValue();
     }
 
+    /**
+     * @param enumType  ???
+     * @param valueName ???
+     * @param <T>       ???
+     * @return ???
+     */
     public <T extends Enum<T> & Values> String getValue(Class<T> enumType, String valueName) {
         T val = Enum.valueOf(enumType, valueName);
         return val.getValue();
     }
 
+    /**
+     * @param classSimpleName ???
+     * @param value           ???
+     * @param <T>             ???
+     * @return ???
+     * @throws ClassNotFoundException
+     */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T> & Values> String getText(String classSimpleName, String value)
             throws ClassNotFoundException {
@@ -54,6 +74,12 @@ public class ValuesHelper {
         return result;
     }
 
+    /**
+     * @param enumType ???
+     * @param value    ???
+     * @param <T>      ???
+     * @return ???
+     */
     public <T extends Enum<T> & Values> String getText(Class<T> enumType, String value) {
         String result = "";
         for (T val : enumType.getEnumConstants()) {
@@ -65,6 +91,12 @@ public class ValuesHelper {
         return result;
     }
 
+    /**
+     * @param classSimpleName ???
+     * @param <T>             ???
+     * @return ???
+     * @throws ClassNotFoundException
+     */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T> & Values> T[] values(String classSimpleName)
             throws ClassNotFoundException {

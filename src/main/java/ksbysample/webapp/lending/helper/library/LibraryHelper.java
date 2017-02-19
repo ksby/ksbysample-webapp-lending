@@ -7,17 +7,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class LibraryHelper {
-       
+
     @Autowired
     private LibraryForsearchDao libraryForsearchDao;
-    
+
+    /**
+     * @return ???
+     */
     public String getSelectedLibrary() {
         String result;
         LibraryForsearch libraryForsearch = libraryForsearchDao.selectSelectedLibrary();
         if (libraryForsearch == null) {
             result = "※図書館が選択されていません";
-        }
-        else {
+        } else {
             result = "選択中：" + libraryForsearch.getFormal();
         }
 

@@ -16,12 +16,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MessagesPropertiesHelperTest {
 
     @Autowired
-    private MessagesPropertiesHelper messagesPropertiesHelper;
+    private MessagesPropertiesHelper mph;
 
     @Test
     public void testGetMessage_NoArgs() throws Exception {
         String message
-                = messagesPropertiesHelper.getMessage("AbstractUserDetailsAuthenticationProvider.locked"
+                = mph.getMessage("AbstractUserDetailsAuthenticationProvider.locked"
                 , null);
         assertThat(message).isEqualTo("入力された ID はロックされています");
     }
@@ -31,7 +31,7 @@ public class MessagesPropertiesHelperTest {
         int line = 1;
         int length = 3;
         String message
-                = messagesPropertiesHelper.getMessage("UploadBooklistForm.fileupload.lengtherr"
+                = mph.getMessage("UploadBooklistForm.fileupload.lengtherr"
                 , new Object[]{line, length});
         assertThat(message).isEqualTo("1行目のレコードの項目数が 2個ではありません ( 3個 )。");
     }

@@ -12,7 +12,11 @@ public class WeatherController {
 
     @Autowired
     private OpenWeatherMapApiService openWeatherMapApiService;
-    
+
+    /**
+     * @param cityname ???
+     * @return ???
+     */
     @RequestMapping("/getFiveDayThreeHourForecast")
     public FiveDayThreeHourForecastResponse getFiveDayThreeHourForecast(String cityname) {
         FiveDayThreeHourForecastData fiveDayThreeHourForecastData

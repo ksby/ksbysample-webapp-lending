@@ -32,6 +32,10 @@ public class ConfirmresultService {
     @Autowired
     private BookListCsvDataConverter bookListCsvDataConverter;
 
+    /**
+     * @param lendingAppId      ???
+     * @param confirmresultForm ???
+     */
     public void setDispData(Long lendingAppId, ConfirmresultForm confirmresultForm) {
         LendingApp lendingApp = lendingAppDao.selectByIdAndStatus(lendingAppId, Arrays.asList(APPLOVED.getValue()));
         UserInfo lendingUserInfo = null;
@@ -54,6 +58,10 @@ public class ConfirmresultService {
         confirmresultForm.setApprovedBookFormListFromLendingBookList(lendingBookList);
     }
 
+    /**
+     * @param lendingAppId ???
+     * @return ???
+     */
     public List<BookListCsvData> getDownloadData(Long lendingAppId) {
         List<LendingBook> lendingBookList
                 = lendingBookDao.selectByLendingAppIdAndLendingAppFlg(lendingAppId, APPLY.getValue());

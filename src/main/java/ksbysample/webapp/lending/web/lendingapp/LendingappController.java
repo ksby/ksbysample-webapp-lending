@@ -30,7 +30,7 @@ public class LendingappController {
     private LendingappService lendingappService;
 
     @Autowired
-    private MessagesPropertiesHelper messagesPropertiesHelper;
+    private MessagesPropertiesHelper mph;
 
     @Autowired
     private LendingappFormValidator lendingappFormValidator;
@@ -40,6 +40,13 @@ public class LendingappController {
         binder.addValidators(lendingappFormValidator);
     }
 
+    /**
+     * @param lendingappParamForm ???
+     * @param bindingResult       ???
+     * @param lendingappForm      ???
+     * @param response            ???
+     * @return ???
+     */
     @RequestMapping
     public String index(@Validated LendingappParamForm lendingappParamForm
             , BindingResult bindingResult
@@ -47,7 +54,7 @@ public class LendingappController {
             , HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+                    mph.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
         // 画面に表示するデータを取得する
@@ -62,6 +69,13 @@ public class LendingappController {
         return "lendingapp/lendingapp";
     }
 
+    /**
+     * @param lendingappForm ???
+     * @param bindingResult  ???
+     * @param response       ???
+     * @return ???
+     * @throws MessagingException
+     */
     @RequestMapping(value = "/apply", method = RequestMethod.POST)
     public String apply(@Validated LendingappForm lendingappForm
             , BindingResult bindingResult
@@ -86,6 +100,12 @@ public class LendingappController {
         return "lendingapp/lendingapp";
     }
 
+    /**
+     * @param lendingappForm ???
+     * @param bindingResult  ???
+     * @param model          ???
+     * @return ???
+     */
     @RequestMapping(value = "/temporarySave", method = RequestMethod.POST)
     public String temporarySave(@Validated LendingappForm lendingappForm
             , BindingResult bindingResult

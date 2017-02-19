@@ -91,12 +91,18 @@ public class BooklistControllerTest {
                     .andExpect(view().name("booklist/booklist"))
                     .andExpect(model().hasErrors())
                     .andExpect(model().errorCount(6))
-                    .andExpect(errors().hasGlobalError("uploadBooklistForm", "UploadBooklistForm.fileupload.lengtherr"))
-                    .andExpect(errors().hasGlobalError("uploadBooklistForm", "UploadBooklistForm.fileupload.isbn.patternerr"))
-                    .andExpect(errors().hasGlobalError("uploadBooklistForm", "UploadBooklistForm.fileupload.isbn.lengtherr"))
-                    .andExpect(errors().hasGlobalError("uploadBooklistForm", "UploadBooklistForm.fileupload.isbn.numlengtherr"))
-                    .andExpect(errors().hasGlobalError("uploadBooklistForm", "UploadBooklistForm.fileupload.isbn.numlengtherr"))
-                    .andExpect(errors().hasGlobalError("uploadBooklistForm", "UploadBooklistForm.fileupload.bookname.lengtherr"));
+                    .andExpect(errors().hasGlobalError("uploadBooklistForm"
+                            , "UploadBooklistForm.fileupload.lengtherr"))
+                    .andExpect(errors().hasGlobalError("uploadBooklistForm"
+                            , "UploadBooklistForm.fileupload.isbn.patternerr"))
+                    .andExpect(errors().hasGlobalError("uploadBooklistForm"
+                            , "UploadBooklistForm.fileupload.isbn.lengtherr"))
+                    .andExpect(errors().hasGlobalError("uploadBooklistForm"
+                            , "UploadBooklistForm.fileupload.isbn.numlengtherr"))
+                    .andExpect(errors().hasGlobalError("uploadBooklistForm"
+                            , "UploadBooklistForm.fileupload.isbn.numlengtherr"))
+                    .andExpect(errors().hasGlobalError("uploadBooklistForm"
+                            , "UploadBooklistForm.fileupload.bookname.lengtherr"));
         }
 
     }
