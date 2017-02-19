@@ -28,6 +28,7 @@ apply plugin: 'de.undercouch.download'
 apply plugin: 'groovy'
 apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -70,6 +71,21 @@ checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
     toolVersion = '7.5.1'
     sourceSets = [project.sourceSets.main]
+}
+
+findbugs {
+    toolVersion = '3.0.1'
+    sourceSets = [project.sourceSets.main]
+    ignoreFailures = true
+    effort = "max"
+    excludeFilter = file("${rootProject.projectDir}/config/findbugs/findbugs-exclude.xml")
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
 
 repositories {

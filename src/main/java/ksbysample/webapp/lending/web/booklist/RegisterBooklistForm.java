@@ -29,7 +29,7 @@ public class RegisterBooklistForm {
     }
 
     @Data
-    public class RegisterBooklistRow {
+    public static class RegisterBooklistRow {
         private String isbn;
         private String bookName;
 
