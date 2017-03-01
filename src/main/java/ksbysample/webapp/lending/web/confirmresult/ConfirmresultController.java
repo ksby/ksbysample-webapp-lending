@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -78,7 +79,7 @@ public class ConfirmresultController {
      * @param response          ???
      * @throws IOException
      */
-    @RequestMapping(value = "/filedownloadByResponse", method = RequestMethod.POST)
+    @PostMapping("/filedownloadByResponse")
     public void filedownloadByResponse(ConfirmresultForm confirmresultForm
             , BindingResult bindingResult
             , HttpServletResponse response) throws IOException {
@@ -104,7 +105,7 @@ public class ConfirmresultController {
      * @param bindingResult     ???
      * @return ???
      */
-    @RequestMapping(value = "/filedownloadByView", method = RequestMethod.POST)
+    @PostMapping("/filedownloadByView")
     public ModelAndView filedownloadByView(ConfirmresultForm confirmresultForm
             , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

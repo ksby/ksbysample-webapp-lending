@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -76,7 +77,7 @@ public class LendingappController {
      * @return ???
      * @throws MessagingException
      */
-    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    @PostMapping("/apply")
     public String apply(@Validated LendingappForm lendingappForm
             , BindingResult bindingResult
             , HttpServletResponse response) throws MessagingException {
@@ -106,7 +107,7 @@ public class LendingappController {
      * @param model          ???
      * @return ???
      */
-    @RequestMapping(value = "/temporarySave", method = RequestMethod.POST)
+    @PostMapping("/temporarySave")
     public String temporarySave(@Validated LendingappForm lendingappForm
             , BindingResult bindingResult
             , Model model) {

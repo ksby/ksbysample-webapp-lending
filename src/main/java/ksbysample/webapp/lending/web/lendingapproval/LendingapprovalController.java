@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -71,7 +72,7 @@ public class LendingapprovalController {
      * @return ???
      * @throws MessagingException
      */
-    @RequestMapping(value = "/complete", method = RequestMethod.POST)
+    @PostMapping("/complete")
     public String complete(@Validated LendingapprovalForm lendingapprovalForm
             , BindingResult bindingResult
             , Model model) throws MessagingException {

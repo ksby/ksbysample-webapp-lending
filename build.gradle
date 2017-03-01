@@ -117,7 +117,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-freemarker")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.session:spring-session")
