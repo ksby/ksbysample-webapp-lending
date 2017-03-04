@@ -9,7 +9,6 @@ import ksbysample.webapp.lending.service.file.BooklistCsvFileService;
 import ksbysample.webapp.lending.service.file.BooklistCsvRecord;
 import ksbysample.webapp.lending.service.queue.InquiringStatusOfBookQueueService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,17 +18,29 @@ import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues
 @Service
 public class BooklistService {
 
-    @Autowired
-    private BooklistCsvFileService booklistCsvFileService;
+    private final BooklistCsvFileService booklistCsvFileService;
 
-    @Autowired
-    private LendingAppDao lendingAppDao;
+    private final LendingAppDao lendingAppDao;
 
-    @Autowired
-    private LendingBookDao lendingBookDao;
+    private final LendingBookDao lendingBookDao;
 
-    @Autowired
-    private InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService;
+    private final InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService;
+
+    /**
+     * @param booklistCsvFileService            ???
+     * @param lendingAppDao                     ???
+     * @param lendingBookDao                    ???
+     * @param inquiringStatusOfBookQueueService ???
+     */
+    public BooklistService(BooklistCsvFileService booklistCsvFileService
+            , LendingAppDao lendingAppDao
+            , LendingBookDao lendingBookDao
+            , InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService) {
+        this.booklistCsvFileService = booklistCsvFileService;
+        this.lendingAppDao = lendingAppDao;
+        this.lendingBookDao = lendingBookDao;
+        this.inquiringStatusOfBookQueueService = inquiringStatusOfBookQueueService;
+    }
 
     /**
      * @param uploadBooklistForm ???
@@ -58,11 +69,18 @@ public class BooklistService {
         return lendingApp.getLendingAppId();
     }
 
+    /**
+     * @param lendingAppId ???
+     * @return ???
+     */
     public List<LendingBook> getLendingBookList(Long lendingAppId) {
         List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingAppId);
         return lendingBookList;
     }
 
+    /**
+     * @param registerBooklistForm ???
+     */
     public void sendMessageToInquiringStatusOfBookQueue(RegisterBooklistForm registerBooklistForm) {
         inquiringStatusOfBookQueueService.sendMessage(registerBooklistForm.getLendingAppId());
     }

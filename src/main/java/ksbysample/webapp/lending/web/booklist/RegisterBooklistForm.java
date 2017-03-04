@@ -14,6 +14,9 @@ public class RegisterBooklistForm {
 
     private Long lendingAppId;
 
+    /**
+     *
+     */
     public RegisterBooklistForm() {
     }
 
@@ -28,11 +31,17 @@ public class RegisterBooklistForm {
         this.lendingAppId = lendingAppId;
     }
 
+    /**
+     *
+     */
     @Data
     public static class RegisterBooklistRow {
         private String isbn;
         private String bookName;
 
+        /**
+         * @param lendingBook ???
+         */
         public RegisterBooklistRow(LendingBook lendingBook) {
             BeanUtils.copyProperties(lendingBook, this);
         }

@@ -44,36 +44,58 @@ public class LendingUserDetails implements UserDetails {
         return lendingUser.getPassword();
     }
 
+    /**
+     * @return ???
+     */
     public Long getUserId() {
         return lendingUser.getUserId();
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public String getUsername() {
         return lendingUser.getMailAddress();
     }
 
+    /**
+     * @return ???
+     */
     public String getName() {
         return lendingUser.getUsername();
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isAccountNonExpired() {
         return accountNonExpired;
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isEnabled() {
         return enabled;
     }
+
 }

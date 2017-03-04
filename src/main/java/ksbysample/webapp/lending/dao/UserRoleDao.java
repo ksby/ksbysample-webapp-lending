@@ -19,6 +19,10 @@ public interface UserRoleDao {
     @Select
     UserRole selectById(Long roleId);
 
+    /**
+     * @param userId ???
+     * @return ???
+     */
     @Select
     List<UserRole> selectByUserId(Long userId);
 

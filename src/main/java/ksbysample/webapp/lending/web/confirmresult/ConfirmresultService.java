@@ -8,7 +8,6 @@ import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvData;
 import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvDataConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -20,17 +19,29 @@ import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingApp
 @Service
 public class ConfirmresultService {
 
-    @Autowired
-    private LendingAppDao lendingAppDao;
+    private final LendingAppDao lendingAppDao;
 
-    @Autowired
-    private UserInfoDao userInfoDao;
+    private final UserInfoDao userInfoDao;
 
-    @Autowired
-    private LendingBookDao lendingBookDao;
+    private final LendingBookDao lendingBookDao;
 
-    @Autowired
-    private BookListCsvDataConverter bookListCsvDataConverter;
+    private final BookListCsvDataConverter bookListCsvDataConverter;
+
+    /**
+     * @param lendingAppDao            ???
+     * @param userInfoDao              ???
+     * @param lendingBookDao           ???
+     * @param bookListCsvDataConverter ???
+     */
+    public ConfirmresultService(LendingAppDao lendingAppDao
+            , UserInfoDao userInfoDao
+            , LendingBookDao lendingBookDao
+            , BookListCsvDataConverter bookListCsvDataConverter) {
+        this.lendingAppDao = lendingAppDao;
+        this.userInfoDao = userInfoDao;
+        this.lendingBookDao = lendingBookDao;
+        this.bookListCsvDataConverter = bookListCsvDataConverter;
+    }
 
     /**
      * @param lendingAppId      ???

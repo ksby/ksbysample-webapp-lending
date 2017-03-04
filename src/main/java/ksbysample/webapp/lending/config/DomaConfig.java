@@ -23,15 +23,29 @@ public class DomaConfig implements Config {
 
     private SqlFileRepository sqlFileRepository;
 
+    /**
+     *
+     */
     public DomaConfig() {
     }
 
+    /**
+     * @param dataSource ???
+     */
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.dataSource = new TransactionAwareDataSourceProxy(dataSource);
     }
 
+    /**
+     * @param domaDialect ???
+     * @throws ClassNotFoundException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws NoSuchMethodException
+     * @throws InvocationTargetException
+     */
     @Autowired
     public void setDialect(@Value("${doma.dialect}") String domaDialect)
             throws ClassNotFoundException, IllegalAccessException, InstantiationException

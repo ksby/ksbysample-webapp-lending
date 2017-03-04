@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 
 public class UrlAfterLoginHelper {
 
+    /**
+     * @param authentication ???
+     * @return ???
+     */
     public static String getUrlAfterLogin(Authentication authentication) {
         return getUrlAfterLogin(authentication, null);
     }

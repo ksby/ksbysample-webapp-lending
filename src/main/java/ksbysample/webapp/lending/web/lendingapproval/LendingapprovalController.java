@@ -4,7 +4,6 @@ import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.helper.thymeleaf.SuccessMessagesHelper;
 import org.seasar.doma.jdbc.OptimisticLockException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.mail.MessagingException;
 
@@ -23,15 +21,28 @@ import javax.mail.MessagingException;
 @RequestMapping("/lendingapproval")
 public class LendingapprovalController {
 
-    @Autowired
-    private LendingapprovalService lendingapprovalService;
+    private final LendingapprovalService lendingapprovalService;
 
-    @Autowired
-    private MessagesPropertiesHelper mph;
+    private final MessagesPropertiesHelper mph;
 
-    @Autowired
-    private LendingapprovalFormValidator lendingapprovalFormValidator;
+    private final LendingapprovalFormValidator lendingapprovalFormValidator;
 
+    /**
+     * @param lendingapprovalService       ???
+     * @param mph                          ???
+     * @param lendingapprovalFormValidator ???
+     */
+    public LendingapprovalController(LendingapprovalService lendingapprovalService
+            , MessagesPropertiesHelper mph
+            , LendingapprovalFormValidator lendingapprovalFormValidator) {
+        this.lendingapprovalService = lendingapprovalService;
+        this.mph = mph;
+        this.lendingapprovalFormValidator = lendingapprovalFormValidator;
+    }
+
+    /**
+     * @param binder ???
+     */
     @InitBinder(value = "lendingapprovalForm")
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(lendingapprovalFormValidator);

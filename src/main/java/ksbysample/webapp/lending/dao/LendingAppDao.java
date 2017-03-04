@@ -20,18 +20,45 @@ public interface LendingAppDao {
     @Select
     LendingApp selectById(Long lendingAppId);
 
+    /**
+     * @param lendingAppId ???
+     * @param version      ???
+     * @return ???
+     */
     @Select(ensureResult = true)
     LendingApp selectByIdAndVersion(Long lendingAppId, Long version);
 
+    /**
+     * @param lendingAppId ???
+     * @param options      ???
+     * @return ???
+     */
     @Select
     LendingApp selectById(Long lendingAppId, SelectOptions options);
 
+    /**
+     * @param lendingAppId ???
+     * @param version      ???
+     * @param options      ???
+     * @return ???
+     */
     @Select(ensureResult = true)
     LendingApp selectByIdAndVersion(Long lendingAppId, Long version, SelectOptions options);
 
+    /**
+     * @param lendingAppId ???
+     * @param statusList   ???
+     * @return ???
+     */
     @Select
     LendingApp selectByIdAndStatus(Long lendingAppId, List<String> statusList);
 
+    /**
+     * @param lendingAppId ???
+     * @param statusList   ???
+     * @param options      ???
+     * @return ???
+     */
     @Select
     LendingApp selectByIdAndStatus(Long lendingAppId, List<String> statusList, SelectOptions options);
 

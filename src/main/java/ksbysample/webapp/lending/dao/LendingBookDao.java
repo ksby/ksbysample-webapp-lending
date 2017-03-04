@@ -20,18 +20,43 @@ public interface LendingBookDao {
     @Select
     LendingBook selectById(Long lendingBookId);
 
+    /**
+     * @param lendingBookId ???
+     * @param version       ???
+     * @return ???
+     */
     @Select(ensureResult = true)
     LendingBook selectByIdAndVersion(Long lendingBookId, Long version);
 
+    /**
+     * @param lendingAppId ???
+     * @return ???
+     */
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId);
 
+    /**
+     * @param lendingAppId ???
+     * @param options      ???
+     * @return ???
+     */
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId, SelectOptions options);
 
+    /**
+     * @param lendingAppId  ???
+     * @param lendingAppFlg ???
+     * @return ???
+     */
     @Select
     List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg);
 
+    /**
+     * @param lendingAppId  ???
+     * @param lendingAppFlg ???
+     * @param options       ???
+     * @return ???
+     */
     @Select
     List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg
             , SelectOptions options);
@@ -50,12 +75,24 @@ public interface LendingBookDao {
     @Update
     int update(LendingBook entity);
 
+    /**
+     * @param entity ???
+     * @return ???
+     */
     @Update(include = {"lendingState"})
     int updateLendingState(LendingBook entity);
 
+    /**
+     * @param entity ???
+     * @return ???
+     */
     @Update(include = {"lendingAppFlg", "lendingAppReason"})
     int updateLendingAppFlgAndReason(LendingBook entity);
 
+    /**
+     * @param entity ???
+     * @return ???
+     */
     @Update(include = {"approvalResult", "approvalReason"})
     int updateApprovalResultAndReason(LendingBook entity);
 

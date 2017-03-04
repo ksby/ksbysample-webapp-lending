@@ -22,8 +22,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String DEFAULT_SUCCESS_URL = "/booklist";
     public static final String REMEMBERME_KEY = "ksbysample-webapp-lending";
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+
+    /**
+     * @param userDetailsService ???
+     */
+    public WebSecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

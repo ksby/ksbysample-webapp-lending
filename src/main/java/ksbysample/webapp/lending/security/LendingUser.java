@@ -28,8 +28,11 @@ public class LendingUser implements Serializable {
 
     LocalDateTime expiredPassword;
 
+    /**
+     * @param userInfo ???
+     */
     public LendingUser(UserInfo userInfo) {
         BeanUtils.copyProperties(userInfo, this);
     }
-    
+
 }

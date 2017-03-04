@@ -7,7 +7,6 @@ import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,10 +20,16 @@ import java.util.regex.Pattern;
 @Service
 public class BooklistCsvFileService {
 
-    private static Pattern ISBN_FORMAT_PATTERN = Pattern.compile("^[0-9\\-]+$");
+    private static final Pattern ISBN_FORMAT_PATTERN = Pattern.compile("^[0-9\\-]+$");
 
-    @Autowired
-    private MessagesPropertiesHelper mph;
+    private final MessagesPropertiesHelper mph;
+
+    /**
+     * @param mph ???
+     */
+    public BooklistCsvFileService(MessagesPropertiesHelper mph) {
+        this.mph = mph;
+    }
 
     /**
      * @param multipartFile ???

@@ -7,7 +7,6 @@ import ksbysample.webapp.lending.helper.thymeleaf.SuccessMessagesHelper;
 import ksbysample.webapp.lending.util.cookie.CookieUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.seasar.doma.jdbc.OptimisticLockException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
@@ -27,15 +25,28 @@ import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues
 @RequestMapping("/lendingapp")
 public class LendingappController {
 
-    @Autowired
-    private LendingappService lendingappService;
+    private final LendingappService lendingappService;
 
-    @Autowired
-    private MessagesPropertiesHelper mph;
+    private final MessagesPropertiesHelper mph;
 
-    @Autowired
-    private LendingappFormValidator lendingappFormValidator;
+    private final LendingappFormValidator lendingappFormValidator;
 
+    /**
+     * @param lendingappService       ???
+     * @param mph                     ???
+     * @param lendingappFormValidator ???
+     */
+    public LendingappController(LendingappService lendingappService
+            , MessagesPropertiesHelper mph
+            , LendingappFormValidator lendingappFormValidator) {
+        this.lendingappService = lendingappService;
+        this.mph = mph;
+        this.lendingappFormValidator = lendingappFormValidator;
+    }
+
+    /**
+     * @param binder ???
+     */
     @InitBinder(value = "lendingappForm")
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(lendingappFormValidator);

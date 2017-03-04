@@ -8,14 +8,12 @@ import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvData;
 import ksbysample.webapp.lending.helper.download.booklistcsv.BookListCsvDownloadHelper;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,11 +26,19 @@ import java.util.Objects;
 @LoggingControllerName("貸出申請結果確認画面")
 public class ConfirmresultController {
 
-    @Autowired
-    private MessagesPropertiesHelper mph;
+    private final MessagesPropertiesHelper mph;
 
-    @Autowired
-    private ConfirmresultService confirmresultService;
+    private final ConfirmresultService confirmresultService;
+
+    /**
+     * @param mph                  ???
+     * @param confirmresultService ???
+     */
+    public ConfirmresultController(MessagesPropertiesHelper mph
+            , ConfirmresultService confirmresultService) {
+        this.mph = mph;
+        this.confirmresultService = confirmresultService;
+    }
 
     /**
      * @param confirmresultParamForm           ???

@@ -6,26 +6,29 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 import javax.sql.DataSource;
-import java.util.Arrays;
 
 @Configuration
 public class ApplicationConfig {
 
-    @Autowired
-    private ConnectionFactory connectionFactory;
+    private final ConnectionFactory connectionFactory;
+
+    /**
+     * @param connectionFactory ???
+     */
+    public ApplicationConfig(ConnectionFactory connectionFactory) {
+        this.connectionFactory = connectionFactory;
+    }
 
     /**
      * @return ???

@@ -7,7 +7,6 @@ import ksbysample.webapp.lending.webapi.common.CommonWebApiResponse;
 import org.simpleframework.xml.core.ValueRequiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +19,14 @@ public class LibraryController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Autowired
-    private CalilApiService calilApiService;
+    private final CalilApiService calilApiService;
+
+    /**
+     * @param calilApiService ???
+     */
+    public LibraryController(CalilApiService calilApiService) {
+        this.calilApiService = calilApiService;
+    }
 
     /**
      * @param pref ???

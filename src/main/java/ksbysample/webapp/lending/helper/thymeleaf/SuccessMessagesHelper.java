@@ -9,18 +9,31 @@ public class SuccessMessagesHelper {
 
     private List<String> successMessages = new ArrayList<>();
 
-    public SuccessMessagesHelper() {}
-    
+    /**
+     *
+     */
+    public SuccessMessagesHelper() {
+    }
+
+    /**
+     * @param msg ???
+     */
     public SuccessMessagesHelper(String msg) {
         this.successMessages.add(msg);
     }
 
+    /**
+     * @param msg ???
+     */
     public void addMsg(String msg) {
         this.successMessages.add(msg);
     }
 
+    /**
+     * @param model ???
+     */
     public void setToModel(Model model) {
         model.addAttribute("successMessages", this.successMessages);
     }
-    
+
 }

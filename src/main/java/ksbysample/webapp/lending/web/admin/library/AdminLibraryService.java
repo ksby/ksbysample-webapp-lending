@@ -3,14 +3,19 @@ package ksbysample.webapp.lending.web.admin.library;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AdminLibraryService {
 
-    @Autowired
-    private LibraryForsearchDao libraryForsearchDao;
+    private final LibraryForsearchDao libraryForsearchDao;
+
+    /**
+     * @param libraryForsearchDao ???
+     */
+    public AdminLibraryService(LibraryForsearchDao libraryForsearchDao) {
+        this.libraryForsearchDao = libraryForsearchDao;
+    }
 
     /**
      * library_forsearch テーブルのデータを全て削除してから、指定されたデータを１件登録する

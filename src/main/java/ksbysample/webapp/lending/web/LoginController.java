@@ -7,7 +7,6 @@ import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.entity.UserRole;
 import ksbysample.webapp.lending.helper.url.UrlAfterLoginHelper;
 import ksbysample.webapp.lending.security.LendingUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
@@ -36,17 +35,29 @@ import java.util.stream.Collectors;
 @RequestMapping("/")
 public class LoginController {
 
-    @Autowired
-    private UserInfoDao userInfoDao;
+    private final UserInfoDao userInfoDao;
 
-    @Autowired
-    private UserRoleDao userRoleDao;
+    private final UserRoleDao userRoleDao;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+
+    /**
+     * @param userInfoDao        ???
+     * @param userRoleDao        ???
+     * @param messageSource      ???
+     * @param userDetailsService ???
+     */
+    public LoginController(UserInfoDao userInfoDao
+            , UserRoleDao userRoleDao
+            , MessageSource messageSource
+            , UserDetailsService userDetailsService) {
+        this.userInfoDao = userInfoDao;
+        this.userRoleDao = userRoleDao;
+        this.messageSource = messageSource;
+        this.userDetailsService = userDetailsService;
+    }
 
     /**
      * @param request  ???

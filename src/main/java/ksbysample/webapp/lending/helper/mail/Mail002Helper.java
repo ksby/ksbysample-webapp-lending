@@ -1,7 +1,6 @@
 package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.webapp.lending.util.freemarker.FreeMarkerUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -19,11 +18,19 @@ public class Mail002Helper {
     private static final String FROM_ADDR = "lendingapp@sample.com";
     private static final String SUBJECT = "貸出申請がありました";
 
-    @Autowired
-    private FreeMarkerUtils freeMarkerUtils;
+    private final FreeMarkerUtils freeMarkerUtils;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
+
+    /**
+     * @param freeMarkerUtils ???
+     * @param mailSender      ???
+     */
+    public Mail002Helper(FreeMarkerUtils freeMarkerUtils
+            , JavaMailSender mailSender) {
+        this.freeMarkerUtils = freeMarkerUtils;
+        this.mailSender = mailSender;
+    }
 
     /**
      * @param toAddrList   ???

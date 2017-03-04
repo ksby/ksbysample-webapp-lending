@@ -1,6 +1,5 @@
 package ksbysample.webapp.lending.web.springmvcmemo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -11,9 +10,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/springMvcMemo/beanValidationGroup")
 public class BeanValidationGroupController {
 
-    @Autowired
-    private Validator validator;
+    private final Validator validator;
 
+    /**
+     * @param validator ???
+     */
+    public BeanValidationGroupController(Validator validator) {
+        this.validator = validator;
+    }
+
+    /**
+     * @param beanValidationGroupForm ???
+     * @return ???
+     */
     @RequestMapping
     public String beanValidationGroup(BeanValidationGroupForm beanValidationGroupForm) {
         return "springmvcmemo/beanValidationGroup";

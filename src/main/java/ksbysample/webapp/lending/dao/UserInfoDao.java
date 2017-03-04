@@ -19,9 +19,16 @@ public interface UserInfoDao {
     @Select
     UserInfo selectById(Long userId);
 
+    /**
+     * @param mailAddress ???
+     * @return ???
+     */
     @Select
     UserInfo selectByMailAddress(String mailAddress);
 
+    /**
+     * @return ???
+     */
     @Select
     List<String> selectApproverMailAddrList();
 
@@ -39,9 +46,17 @@ public interface UserInfoDao {
     @Update
     int update(UserInfo entity);
 
+    /**
+     * @param mailAddress ???
+     * @return ???
+     */
     @Update(sqlFile = true)
     int incCntBadcredentialsByMailAddress(String mailAddress);
 
+    /**
+     * @param mailAddress ???
+     * @return ???
+     */
     @Update(sqlFile = true)
     int initCntBadcredentialsByMailAddress(String mailAddress);
 

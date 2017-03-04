@@ -5,7 +5,6 @@ import ksbysample.webapp.lending.util.freemarker.FreeMarkerUtils;
 import ksbysample.webapp.lending.values.ValuesHelper;
 import ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -25,14 +24,24 @@ public class Mail003Helper {
     private static final String FROM_ADDR = "lendingapp@sample.com";
     private static final String SUBJECT = "貸出申請が承認・却下されました";
 
-    @Autowired
-    private FreeMarkerUtils freeMarkerUtils;
+    private final FreeMarkerUtils freeMarkerUtils;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    @Autowired
-    private ValuesHelper vh;
+    private final ValuesHelper vh;
+
+    /**
+     * @param freeMarkerUtils ???
+     * @param mailSender      ???
+     * @param vh              ???
+     */
+    public Mail003Helper(FreeMarkerUtils freeMarkerUtils
+            , JavaMailSender mailSender
+            , ValuesHelper vh) {
+        this.freeMarkerUtils = freeMarkerUtils;
+        this.mailSender = mailSender;
+        this.vh = vh;
+    }
 
     /**
      * @param toAddr          ???
@@ -68,6 +77,9 @@ public class Mail003Helper {
         private String approvalResultStr;
         private String bookName;
 
+        /**
+         * @param lendingBook ???
+         */
         public Mail003BookData(LendingBook lendingBook) {
             this.approvalResultStr = vh.getText(LendingBookApprovalResultValues.class, lendingBook.getApprovalResult());
             this.bookName = lendingBook.getBookName();

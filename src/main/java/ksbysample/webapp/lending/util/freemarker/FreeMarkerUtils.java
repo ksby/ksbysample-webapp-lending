@@ -14,10 +14,20 @@ public class FreeMarkerUtils {
 
     private final Configuration freeMarkerConfiguration;
 
+    /**
+     *
+     * @param freeMarkerConfiguration ???
+     */
     public FreeMarkerUtils(Configuration freeMarkerConfiguration) {
         this.freeMarkerConfiguration = freeMarkerConfiguration;
     }
 
+    /**
+     *
+     * @param templateLocation ???
+     * @param model ???
+     * @return ???
+     */
     public String merge(String templateLocation, Map<String, Object> model) {
         Template template = getTemplate(templateLocation);
         return process(template, model);

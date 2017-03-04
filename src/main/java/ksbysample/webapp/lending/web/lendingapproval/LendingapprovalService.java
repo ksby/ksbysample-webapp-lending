@@ -11,7 +11,6 @@ import ksbysample.webapp.lending.helper.mail.Mail003Helper;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -27,20 +26,34 @@ import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingApp
 @Service
 public class LendingapprovalService {
 
-    @Autowired
-    private LendingAppDao lendingAppDao;
+    private final LendingAppDao lendingAppDao;
 
-    @Autowired
-    private UserInfoDao userInfoDao;
+    private final UserInfoDao userInfoDao;
 
-    @Autowired
-    private LendingBookDao lendingBookDao;
+    private final LendingBookDao lendingBookDao;
 
-    @Autowired
-    private Mail003Helper mail003Helper;
+    private final Mail003Helper mail003Helper;
 
-    @Autowired
-    private EmailHelper emailHelper;
+    private final EmailHelper emailHelper;
+
+    /**
+     * @param lendingAppDao  ???
+     * @param userInfoDao    ???
+     * @param lendingBookDao ???
+     * @param mail003Helper  ???
+     * @param emailHelper    ???
+     */
+    public LendingapprovalService(LendingAppDao lendingAppDao
+            , UserInfoDao userInfoDao
+            , LendingBookDao lendingBookDao
+            , Mail003Helper mail003Helper
+            , EmailHelper emailHelper) {
+        this.lendingAppDao = lendingAppDao;
+        this.userInfoDao = userInfoDao;
+        this.lendingBookDao = lendingBookDao;
+        this.mail003Helper = mail003Helper;
+        this.emailHelper = emailHelper;
+    }
 
     /**
      * @param lendingAppId        ???

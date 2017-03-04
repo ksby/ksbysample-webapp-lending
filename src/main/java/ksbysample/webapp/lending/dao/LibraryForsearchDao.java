@@ -17,6 +17,9 @@ public interface LibraryForsearchDao {
     @Select
     LibraryForsearch selectById(String systemid);
 
+    /**
+     * @return ???
+     */
     @Select
     LibraryForsearch selectSelectedLibrary();
 
@@ -41,6 +44,9 @@ public interface LibraryForsearchDao {
     @Delete
     int delete(LibraryForsearch entity);
 
+    /**
+     * @return ???
+     */
     @Delete(sqlFile = true)
     int deleteAll();
 }

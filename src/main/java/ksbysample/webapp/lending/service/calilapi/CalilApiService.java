@@ -48,6 +48,10 @@ public class CalilApiService {
 
     private final RestTemplate restTemplateForCalilApiByXml;
 
+    /**
+     * @param restTemplateForCalilApi      ???
+     * @param restTemplateForCalilApiByXml ???
+     */
     public CalilApiService(@Qualifier("restTemplateForCalilApi") RestTemplate restTemplateForCalilApi
             , @Qualifier("restTemplateForCalilApiByXml") RestTemplate restTemplateForCalilApiByXml) {
         this.restTemplateForCalilApi = restTemplateForCalilApi;
