@@ -11,7 +11,7 @@ buildscript {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         classpath("io.spring.gradle:dependency-management-plugin:0.6.1.RELEASE")
         // for Error Prone ( http://errorprone.info/ )
-        classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.8")
+        classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.9")
         // for Grgit
         classpath("org.ajoberstar:grgit:1.8.0")
         // Gradle Download Task
@@ -60,11 +60,6 @@ idea {
 configurations {
     // for Doma 2
     domaGenRuntime
-
-    // for Error Prone ( http://errorprone.info/ )
-    errorprone {
-        resolutionStrategy.force 'com.google.errorprone:error_prone_core:2.0.15'
-    }
 }
 
 checkstyle {
@@ -94,7 +89,10 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Athens-SR3'
+        mavenBom("io.spring.platform:platform-bom:Athens-SR3") {
+            bomProperty 'commons-lang3.version', '3.5'
+            bomProperty 'guava.version', '21.0'
+        }
     }
 }
 
@@ -106,6 +104,9 @@ bootRepackage {
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:9.4.1212"
     def spockVersion = "1.1-groovy-2.4-rc-3"
+    def domaVersion = "2.15.0"
+    def lombokVersion = "1.16.12"
+    def errorproneVersion = '2.0.15'
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
@@ -121,20 +122,19 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.session:spring-session")
-    compile("org.codehaus.janino:janino")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
+    compile("com.google.guava:guava")
+    compile("org.apache.commons:commons-lang3")
+    compile("org.codehaus.janino:janino")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.security:spring-security-test")
     testCompile("org.yaml:snakeyaml")
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtime("${jdbcDriver}")
-    compile("org.seasar.doma:doma:2.15.0")
+    compile("org.seasar.doma:doma:${domaVersion}")
     compile("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
-    compile("org.apache.commons:commons-lang3:3.5")
-    compile("com.google.guava:guava:21.0")
-    compileOnly("com.google.errorprone:error_prone_annotations:2.0.15")
     compile("org.simpleframework:simple-xml:2.7.1")
     compile("com.univocity:univocity-parsers:2.3.1")
     testCompile("org.dbunit:dbunit:2.5.3")
@@ -151,12 +151,16 @@ dependencies {
     testCompile("com.google.code.findbugs:jsr305:3.0.1")
 
     // for lombok
-    compileOnly("org.projectlombok:lombok:1.16.12")
-    testCompileOnly("org.projectlombok:lombok:1.16.12")
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
 
     // for Doma-Gen
-    domaGenRuntime("org.seasar.doma:doma-gen:2.15.0")
+    domaGenRuntime("org.seasar.doma:doma-gen:${domaVersion}")
     domaGenRuntime("${jdbcDriver}")
+
+    // for Error Prone ( http://errorprone.info/ )
+    errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
+    compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
 }
 
 bootRun {
