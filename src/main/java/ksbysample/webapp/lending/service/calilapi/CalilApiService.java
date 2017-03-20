@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -48,14 +49,19 @@ public class CalilApiService {
 
     private final RestTemplate restTemplateForCalilApiByXml;
 
+    private final RetryTemplate simpleRetryTemplate;
+
     /**
      * @param restTemplateForCalilApi      ???
      * @param restTemplateForCalilApiByXml ???
+     * @param simpleRetryTemplate          ???
      */
     public CalilApiService(@Qualifier("restTemplateForCalilApi") RestTemplate restTemplateForCalilApi
-            , @Qualifier("restTemplateForCalilApiByXml") RestTemplate restTemplateForCalilApiByXml) {
+            , @Qualifier("restTemplateForCalilApiByXml") RestTemplate restTemplateForCalilApiByXml
+            , @Qualifier("simpleRetryTemplate") RetryTemplate simpleRetryTemplate) {
         this.restTemplateForCalilApi = restTemplateForCalilApi;
         this.restTemplateForCalilApiByXml = restTemplateForCalilApiByXml;
+        this.simpleRetryTemplate = simpleRetryTemplate;
     }
 
     /**
@@ -65,9 +71,8 @@ public class CalilApiService {
      */
     public Libraries getLibraryList(String pref) throws Exception {
         // 図書館データベースAPIを呼び出して XMLレスポンスを受信する
-        ResponseEntity<String> response
-                = this.restTemplateForCalilApi.getForEntity(URL_CALILAPI_LIBRALY
-                , String.class, this.calilApiKey, pref);
+        ResponseEntity<String> response = getForEntityWithRetry(this.restTemplateForCalilApi
+                , URL_CALILAPI_LIBRALY, String.class, this.calilApiKey, pref);
 
         // 受信した XMLレスポンスを Javaオブジェクトに変換する
         Serializer serializer = new Persister();
@@ -83,9 +88,8 @@ public class CalilApiService {
      */
     public LibrariesForJackson2Xml getLibraryListByJackson2Xml(String pref) throws Exception {
         // 図書館データベースAPIを呼び出して XMLレスポンスを受信する
-        ResponseEntity<LibrariesForJackson2Xml> response
-                = this.restTemplateForCalilApiByXml.getForEntity(URL_CALILAPI_LIBRALY
-                , LibrariesForJackson2Xml.class, this.calilApiKey, pref);
+        ResponseEntity<LibrariesForJackson2Xml> response = getForEntityWithRetry(this.restTemplateForCalilApiByXml
+                , URL_CALILAPI_LIBRALY, LibrariesForJackson2Xml.class, this.calilApiKey, pref);
         return response.getBody();
     }
 
@@ -104,7 +108,7 @@ public class CalilApiService {
         String url = URL_CALILAPI_CHECK;
         for (int retry = 0; retry < RETRY_MAX_CNT; retry++) {
             // 蔵書検索APIを呼び出して蔵書の有無と貸出状況を取得する
-            response = this.restTemplateForCalilApiByXml.getForEntity(url, CheckApiResponse.class, vars);
+            response = getForEntityWithRetry(this.restTemplateForCalilApiByXml, url, CheckApiResponse.class, vars);
             logger.info("カーリルの蔵書検索API を呼び出し、レスポンスを取得しました。{}", response.getBody().toString());
             if (response.getBody().getContinueValue() == 0) {
                 break;
@@ -122,6 +126,19 @@ public class CalilApiService {
         }
 
         return response.getBody().getBookList();
+    }
+
+    private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url
+            , Class<T> responseType, Object... uriVariables) {
+        ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
+            if (context.getRetryCount() > 0) {
+                logger.info("★★★ リトライ回数 = " + context.getRetryCount());
+            }
+            ResponseEntity<T> innerResponse = restTemplate.getForEntity(url, responseType, uriVariables);
+            return innerResponse;
+        });
+
+        return response;
     }
 
     @Configuration

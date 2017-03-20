@@ -122,6 +122,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.session:spring-session")
+    compile("org.springframework.retry:spring-retry")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     compile("com.google.guava:guava")

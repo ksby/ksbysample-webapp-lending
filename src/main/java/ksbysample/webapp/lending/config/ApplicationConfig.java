@@ -12,11 +12,16 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.retry.backoff.FixedBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
 import javax.sql.DataSource;
+
+import static java.util.Collections.singletonMap;
 
 @Configuration
 public class ApplicationConfig {
@@ -96,6 +101,26 @@ public class ApplicationConfig {
     public MappingJackson2XmlHttpMessageConverter mappingJackson2XmlHttpMessageConverter() {
         // findAndRegisterModules メソッドを呼び出して jackson-dataformat-xml が機能するようにする
         return new MappingJackson2XmlHttpMessageConverter(new XmlMapper().findAndRegisterModules());
+    }
+
+    /**
+     * 以下の条件でリトライするための RetryTemplate
+     * Exception 及びその継承クラスの例外が throw された時にリトライする
+     * 最大５回リトライする
+     * リトライ間隔は５秒固定
+     *
+     * @return new {@link RetryTemplate}
+     */
+    @Bean
+    public RetryTemplate simpleRetryTemplate() {
+        RetryTemplate retryTemplate = new RetryTemplate();
+        retryTemplate.setRetryPolicy(
+                new SimpleRetryPolicy(5, singletonMap(Exception.class, true)));
+        FixedBackOffPolicy fixedBackOffPolicy = new FixedBackOffPolicy();
+        fixedBackOffPolicy.setBackOffPeriod(5000);
+        retryTemplate.setBackOffPolicy(fixedBackOffPolicy);
+
+        return retryTemplate;
     }
 
 }
