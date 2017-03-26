@@ -1,6 +1,5 @@
 package ksbysample.webapp.lending.values.validation;
 
-import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.values.Values;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -20,9 +18,8 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ValuesEnumValidatorTest {
 
     // テスト用 Value 列挙型
@@ -30,9 +27,7 @@ public class ValuesEnumValidatorTest {
     @Getter
     @AllArgsConstructor
     private enum TestValues implements Values {
-        FIRST("1", "１番目")
-        , SECOND("2", "２番目")
-        , THIRD("3", "３番目");
+        FIRST("1", "１番目"), SECOND("2", "２番目"), THIRD("3", "３番目");
 
         private final String value;
         private final String text;

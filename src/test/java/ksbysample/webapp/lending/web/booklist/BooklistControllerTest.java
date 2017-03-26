@@ -2,7 +2,6 @@ package ksbysample.webapp.lending.web.booklist;
 
 import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
-import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
 import org.junit.Rule;
 import org.junit.Test;
@@ -11,8 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
@@ -23,9 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(Enclosed.class)
 public class BooklistControllerTest {
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class ユーザ権限とURLの呼び出し可否のテスト {
 
         @Rule
@@ -64,9 +61,8 @@ public class BooklistControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class ファイルアップロードのテスト_エラーになる場合 {
 
         @Rule
@@ -107,9 +103,8 @@ public class BooklistControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class ファイルアップロードのテスト_正常な場合 {
 
         @Rule

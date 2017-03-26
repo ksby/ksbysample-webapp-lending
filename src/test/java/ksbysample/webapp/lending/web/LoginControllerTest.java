@@ -3,7 +3,6 @@ package ksbysample.webapp.lending.web;
 import ksbysample.common.test.helper.SimpleRequestBuilder;
 import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
-import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.config.Constant;
 import ksbysample.webapp.lending.config.WebSecurityConfig;
 import ksbysample.webapp.lending.dao.UserInfoDao;
@@ -18,8 +17,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.servlet.http.Cookie;
@@ -36,9 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(Enclosed.class)
 public class LoginControllerTest {
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class ログイン画面の初期表示のテスト {
 
         @Rule
@@ -61,9 +58,8 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class ログイン成功のテスト {
 
         @Rule
@@ -77,8 +73,8 @@ public class LoginControllerTest {
         @Test
         public void 有効なユーザ名とパスワードを入力すればログインに成功する() throws Exception {
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
@@ -87,9 +83,8 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class ログインエラーのテスト {
 
         @Rule
@@ -106,8 +101,8 @@ public class LoginControllerTest {
         @Test
         public void 存在しないユーザ名とパスワードを入力すればログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
-                            .user("id", "user.notexists@sample.com")
-                            .password("password", "notexists")
+                    .user("id", "user.notexists@sample.com")
+                    .password("password", "notexists")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -118,8 +113,8 @@ public class LoginControllerTest {
         @Test
         public void 存在するユーザ名でもパスワードが正しくなければログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "tanaka")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "tanaka")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -130,8 +125,8 @@ public class LoginControllerTest {
         @Test
         public void enabledが0のユーザならばログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_KIMURA_MASAO)
-                            .password("password", "masao")
+                    .user("id", mvc.MAILADDR_KIMURA_MASAO)
+                    .password("password", "masao")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -142,8 +137,8 @@ public class LoginControllerTest {
         @Test
         public void アカウントの有効期限が切れているユーザならばログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_ENDO_YOKO)
-                            .password("password", "yoko")
+                    .user("id", mvc.MAILADDR_ENDO_YOKO)
+                    .password("password", "yoko")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -154,8 +149,8 @@ public class LoginControllerTest {
         @Test
         public void パスワードの有効期限が切れているユーザならばログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_SATO_MASAHIKO)
-                            .password("password", "masahiko")
+                    .user("id", mvc.MAILADDR_SATO_MASAHIKO)
+                    .password("password", "masahiko")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -167,8 +162,8 @@ public class LoginControllerTest {
         public void ログインを5回失敗すればアカウントはロックされる() throws Exception {
             // 1回目
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro1")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro1")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -179,8 +174,8 @@ public class LoginControllerTest {
 
             // 2回目
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro2")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro2")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -191,8 +186,8 @@ public class LoginControllerTest {
 
             // 3回目
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro3")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro3")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -203,8 +198,8 @@ public class LoginControllerTest {
 
             // 4回目
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro4")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro4")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -215,8 +210,8 @@ public class LoginControllerTest {
 
             // 5回目 ( ここまでは BadCredentialsException.class )
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro5")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro5")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -227,8 +222,8 @@ public class LoginControllerTest {
 
             // 6回目 ( アカウントがロックされているので LockedException.class に変わる )
             mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro6")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro6")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("/"))
@@ -240,9 +235,8 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class 次回から自動的にログインするのテスト {
 
         @Rule
@@ -294,9 +288,8 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class ログアウトのテスト {
 
         @Rule
@@ -317,8 +310,8 @@ public class LoginControllerTest {
 
             // ログインする
             MvcResult result = mvc.noauth.perform(formLogin()
-                            .user("id", mvc.MAILADDR_TANAKA_TARO)
-                            .password("password", "taro")
+                    .user("id", mvc.MAILADDR_TANAKA_TARO)
+                    .password("password", "taro")
             )
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
@@ -349,9 +342,8 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringBootTest(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class urlloginのテスト {
 
         @Rule
@@ -362,9 +354,8 @@ public class LoginControllerTest {
         @Autowired
         public SecurityMockMvcResource mvc;
 
-        @RunWith(SpringJUnit4ClassRunner.class)
-        @SpringBootTest(classes = Application.class)
-        @WebAppConfiguration
+        @RunWith(SpringRunner.class)
+        @SpringBootTest
         public static class encodeのテスト {
 
             @Rule

@@ -2,7 +2,6 @@ package ksbysample.webapp.lending.web.booklist;
 
 import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
@@ -14,8 +13,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -23,9 +21,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class BooklistServiceTest {
 
     private static final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";

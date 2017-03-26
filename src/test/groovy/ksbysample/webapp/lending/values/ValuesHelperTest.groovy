@@ -1,17 +1,13 @@
 package ksbysample.webapp.lending.values
 
-import ksbysample.webapp.lending.Application
 import ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues
 import ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.web.WebAppConfiguration
+import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
 import spock.lang.Unroll
 
-@ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
-@WebAppConfiguration
+@SpringBootTest
 class ValuesHelperTest extends Specification {
 
     @Autowired
@@ -23,10 +19,10 @@ class ValuesHelperTest extends Specification {
         vh.getValue(classSimpleName, valueName) == result
 
         where:
-        classSimpleName                       | valueName           || result
-        "LendingAppStatusValues"          | "TENPORARY_SAVE" || "1"
-        "LendingAppStatusValues"          | "PENDING"         || "3"
-        "LendingBookLendingAppFlgValues" | "NOT_APPLY"       || ""
+        classSimpleName                  | valueName        || result
+        "LendingAppStatusValues"         | "TENPORARY_SAVE" || "1"
+        "LendingAppStatusValues"         | "PENDING"        || "3"
+        "LendingBookLendingAppFlgValues" | "NOT_APPLY"      || ""
     }
 
     @Unroll
@@ -35,9 +31,9 @@ class ValuesHelperTest extends Specification {
         vh.getText(classSimpleName, value) == result
 
         where:
-        classSimpleName                       | value || result
-        "LendingAppStatusValues"          | "1"   || "一時保存"
-        "LendingAppStatusValues"          | "3"   || "申請中"
+        classSimpleName                  | value || result
+        "LendingAppStatusValues"         | "1"   || "一時保存"
+        "LendingAppStatusValues"         | "3"   || "申請中"
         "LendingBookLendingAppFlgValues" | ""    || "しない"
     }
 
@@ -47,8 +43,8 @@ class ValuesHelperTest extends Specification {
         vh.values(classSimpleName) == result
 
         where:
-        classSimpleName                       || result
-        "LendingAppStatusValues"          || LendingAppStatusValues.values()
+        classSimpleName                  || result
+        "LendingAppStatusValues"         || LendingAppStatusValues.values()
         "LendingBookLendingAppFlgValues" || LendingBookLendingAppFlgValues.values()
     }
 }

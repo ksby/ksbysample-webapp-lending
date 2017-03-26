@@ -1,6 +1,5 @@
 package ksbysample.webapp.lending.helper.library;
 
-import ksbysample.webapp.lending.Application;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
 import mockit.Delegate;
@@ -10,14 +9,12 @@ import mockit.Tested;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class LibraryHelperTest {
 
     @Tested
@@ -29,7 +26,8 @@ public class LibraryHelperTest {
     @Test
     public void testGetSelectedLibrary_図書館が選択されていない場合() throws Exception {
         new Expectations() {{
-            libraryForsearchDao.selectSelectedLibrary(); result = null;
+            libraryForsearchDao.selectSelectedLibrary();
+            result = null;
         }};
 
         String result = libraryHelper.getSelectedLibrary();
