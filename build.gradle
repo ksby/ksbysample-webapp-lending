@@ -104,7 +104,7 @@ dependencies {
     def spockVersion = "1.1-groovy-2.4-rc-3"
     def domaVersion = "2.15.0"
     def lombokVersion = "1.16.12"
-    def errorproneVersion = '2.0.15'
+    def errorproneVersion = "2.0.15"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
@@ -129,6 +129,7 @@ dependencies {
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.security:spring-security-test")
     testCompile("org.yaml:snakeyaml")
+    testCompile("org.mockito:mockito-core")
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtime("${jdbcDriver}")
