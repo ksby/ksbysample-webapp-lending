@@ -5,7 +5,6 @@ import ksbysample.common.test.rule.db.TestDataResource;
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
-import mockit.Expectations;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;
 import org.junit.Rule;
@@ -13,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
@@ -20,6 +20,7 @@ import java.io.File;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,12 +38,12 @@ public class BooklistServiceTest {
     @Autowired
     private BooklistService booklistService;
 
+    @MockBean
+    private LendingUserDetailsHelper lendingUserDetailsHelper;
+
     @Test
     public void testTemporarySaveBookListCsvFile() throws Exception {
-        new Expectations(LendingUserDetailsHelper.class) {{
-            LendingUserDetailsHelper.getLoginUserId();
-            result = Long.valueOf(1L);
-        }};
+        given(lendingUserDetailsHelper.getLoginUserId()).willReturn(1L);
 
         UploadBooklistForm uploadBooklistForm = new UploadBooklistForm();
         // テスト用のユーティリティクラスを作るべきですが、今回は他のテストクラスのメソッドをそのまま使います

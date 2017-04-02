@@ -36,23 +36,28 @@ public class LendingapprovalService {
 
     private final EmailHelper emailHelper;
 
+    private final LendingUserDetailsHelper lendingUserDetailsHelper;
+
     /**
-     * @param lendingAppDao  ???
-     * @param userInfoDao    ???
-     * @param lendingBookDao ???
-     * @param mail003Helper  ???
-     * @param emailHelper    ???
+     * @param lendingAppDao            ???
+     * @param userInfoDao              ???
+     * @param lendingBookDao           ???
+     * @param mail003Helper            ???
+     * @param emailHelper              ???
+     * @param lendingUserDetailsHelper ???
      */
     public LendingapprovalService(LendingAppDao lendingAppDao
             , UserInfoDao userInfoDao
             , LendingBookDao lendingBookDao
             , Mail003Helper mail003Helper
-            , EmailHelper emailHelper) {
+            , EmailHelper emailHelper
+            , LendingUserDetailsHelper lendingUserDetailsHelper) {
         this.lendingAppDao = lendingAppDao;
         this.userInfoDao = userInfoDao;
         this.lendingBookDao = lendingBookDao;
         this.mail003Helper = mail003Helper;
         this.emailHelper = emailHelper;
+        this.lendingUserDetailsHelper = lendingUserDetailsHelper;
     }
 
     /**
@@ -88,7 +93,7 @@ public class LendingapprovalService {
 
         // lending_app.status を 4(承認済) にする
         lendingApp.setStatus(APPLOVED.getValue());
-        lendingApp.setApprovalUserId(LendingUserDetailsHelper.getLoginUserId());
+        lendingApp.setApprovalUserId(lendingUserDetailsHelper.getLoginUserId());
         lendingAppDao.update(lendingApp);
 
         // lending_book の approval_result, approval_reason を更新する

@@ -30,14 +30,19 @@ public class ConfirmresultController {
 
     private final ConfirmresultService confirmresultService;
 
+    private final LendingUserDetailsHelper lendingUserDetailsHelper;
+
     /**
-     * @param mph                  ???
-     * @param confirmresultService ???
+     * @param mph                      ???
+     * @param confirmresultService     ???
+     * @param lendingUserDetailsHelper ???
      */
     public ConfirmresultController(MessagesPropertiesHelper mph
-            , ConfirmresultService confirmresultService) {
+            , ConfirmresultService confirmresultService
+            , LendingUserDetailsHelper lendingUserDetailsHelper) {
         this.mph = mph;
         this.confirmresultService = confirmresultService;
+        this.lendingUserDetailsHelper = lendingUserDetailsHelper;
     }
 
     /**
@@ -69,7 +74,7 @@ public class ConfirmresultController {
         } else {
             // 指定された貸出申請IDの申請者とログインしているユーザが一致しない場合にはエラーメッセージを表示し、
             // HTTP ステータスコードも 403 を返す
-            if (!Objects.equals(confirmresultForm.getLendingUserId(), LendingUserDetailsHelper.getLoginUserId())) {
+            if (!Objects.equals(confirmresultForm.getLendingUserId(), lendingUserDetailsHelper.getLoginUserId())) {
                 response.setStatus(HttpStatus.FORBIDDEN.value());
                 throw new WebApplicationRuntimeException(
                         mph.getMessage("Confirmresult.lendingUserId.notequalerr", null));

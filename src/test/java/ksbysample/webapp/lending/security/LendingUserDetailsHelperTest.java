@@ -26,6 +26,9 @@ public class LendingUserDetailsHelperTest {
     @Autowired
     private UserInfoDao userInfoDao;
 
+    @Autowired
+    private LendingUserDetailsHelper lendingUserDetailsHelper;
+
     @Test
     public void testGetLoginUserId() throws Exception {
         UserInfo userInfo = userInfoDao.selectById(1L);
@@ -33,6 +36,6 @@ public class LendingUserDetailsHelperTest {
         Authentication auth = new TestingAuthenticationToken(lendingUserDetails, null);
         SecurityContextHolder.getContext().setAuthentication(auth);
 
-        assertThat(LendingUserDetailsHelper.getLoginUserId()).isEqualTo(1L);
+        assertThat(lendingUserDetailsHelper.getLoginUserId()).isEqualTo(1L);
     }
 }
