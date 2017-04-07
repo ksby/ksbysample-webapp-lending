@@ -37,10 +37,10 @@ public class UrlAfterLoginHelper {
         }
 
         // LastLendingAppId Cookie に貸出申請ID をセットされている場合には貸出申請画面へリダイレクトさせる
-        String cookieLastLendingAppId = CookieUtils.getCookieValue(CookieLastLendingAppId.COOKIE_NAME, request);
-        if (StringUtils.isNotBlank(cookieLastLendingAppId)) {
-            targetUrl = String.format("%s?lendingAppId=%s", Constant.URL_LENDINGAPP, cookieLastLendingAppId);
-        }
+        targetUrl = CookieUtils.getCookieValue(CookieLastLendingAppId.COOKIE_NAME, request)
+                .map(cookieLastLendingAppId ->
+                        String.format("%s?lendingAppId=%s", Constant.URL_LENDINGAPP, cookieLastLendingAppId))
+                .orElse(targetUrl);
 
         return targetUrl;
     }
