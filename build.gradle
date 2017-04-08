@@ -271,7 +271,7 @@ task downloadCssFontsJs << {
 }
 
 task printClassWhatNotMakeTest << {
-    def srcDir = new File("src/main/java");
+    def srcDir = new File("src/main/java")
     def excludePaths = [
             "src/main/java/ksbysample/webapp/lending/Application.java"
             , "src/main/java/ksbysample/webapp/lending/config"
@@ -295,15 +295,15 @@ task printClassWhatNotMakeTest << {
             , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/weather"
-    ];
+    ]
     def excludeFileNamePatterns = [
             ".*EventListener.java"
             , ".*Dto.java"
             , ".*Form.java"
             , ".*Values.java"
-    ];
+    ]
 
-    compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns);
+    compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns)
 }
 
 /* -----------------------------------------------------------------------------
@@ -473,7 +473,8 @@ def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
                 def testDir = testDirAndTestClassName[0]
                 def testClassName = testDirAndTestClassName[1]
 
-                String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, testDir).replaceFirst(/\.java$/, testClassName)
+                String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, testDir)
+                        .replaceFirst(/\.java$/, testClassName)
                 def testFile = new File(testFilePath)
                 if (testFile.exists()) {
                     nextFlg = true
@@ -482,7 +483,7 @@ def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
             }
             if (nextFlg) continue
 
-            println(srcFilePath);
+            println(srcFilePath)
         }
     }
 }
