@@ -9,6 +9,9 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     private final Validator validator;
 
+    /**
+     * @param validator {@link Validator} bean
+     */
     public WebMvcConfig(Validator validator) {
         this.validator = validator;
     }
