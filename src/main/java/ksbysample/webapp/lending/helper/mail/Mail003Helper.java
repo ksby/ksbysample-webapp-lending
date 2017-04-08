@@ -1,7 +1,7 @@
 package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.webapp.lending.entity.LendingBook;
-import ksbysample.webapp.lending.util.freemarker.FreeMarkerUtils;
+import ksbysample.webapp.lending.helper.freemarker.FreeMarkerHelper;
 import ksbysample.webapp.lending.values.ValuesHelper;
 import ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues;
 import lombok.Data;
@@ -24,21 +24,21 @@ public class Mail003Helper {
     private static final String FROM_ADDR = "lendingapp@sample.com";
     private static final String SUBJECT = "貸出申請が承認・却下されました";
 
-    private final FreeMarkerUtils freeMarkerUtils;
+    private final FreeMarkerHelper freeMarkerHelper;
 
     private final JavaMailSender mailSender;
 
     private final ValuesHelper vh;
 
     /**
-     * @param freeMarkerUtils ???
-     * @param mailSender      ???
-     * @param vh              ???
+     * @param freeMarkerHelper ???
+     * @param mailSender       ???
+     * @param vh               ???
      */
-    public Mail003Helper(FreeMarkerUtils freeMarkerUtils
+    public Mail003Helper(FreeMarkerHelper freeMarkerHelper
             , JavaMailSender mailSender
             , ValuesHelper vh) {
-        this.freeMarkerUtils = freeMarkerUtils;
+        this.freeMarkerHelper = freeMarkerHelper;
         this.mailSender = mailSender;
         this.vh = vh;
     }
@@ -69,7 +69,7 @@ public class Mail003Helper {
         Map<String, Object> model = new HashMap<>();
         model.put("lendingAppId", lendingAppId);
         model.put("mail003BookDataList", mail003BookDataList);
-        return freeMarkerUtils.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
+        return freeMarkerHelper.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
     @Data

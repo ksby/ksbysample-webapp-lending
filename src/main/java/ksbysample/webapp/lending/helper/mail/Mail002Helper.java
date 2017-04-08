@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.helper.mail;
 
-import ksbysample.webapp.lending.util.freemarker.FreeMarkerUtils;
+import ksbysample.webapp.lending.helper.freemarker.FreeMarkerHelper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -18,17 +18,17 @@ public class Mail002Helper {
     private static final String FROM_ADDR = "lendingapp@sample.com";
     private static final String SUBJECT = "貸出申請がありました";
 
-    private final FreeMarkerUtils freeMarkerUtils;
+    private final FreeMarkerHelper freeMarkerHelper;
 
     private final JavaMailSender mailSender;
 
     /**
-     * @param freeMarkerUtils ???
-     * @param mailSender      ???
+     * @param freeMarkerHelper ???
+     * @param mailSender       ???
      */
-    public Mail002Helper(FreeMarkerUtils freeMarkerUtils
+    public Mail002Helper(FreeMarkerHelper freeMarkerHelper
             , JavaMailSender mailSender) {
-        this.freeMarkerUtils = freeMarkerUtils;
+        this.freeMarkerHelper = freeMarkerHelper;
         this.mailSender = mailSender;
     }
 
@@ -51,7 +51,7 @@ public class Mail002Helper {
     private String generateTextUsingVelocity(Long lendingAppId) {
         Map<String, Object> model = new HashMap<>();
         model.put("lendingAppId", lendingAppId);
-        return freeMarkerUtils.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
+        return freeMarkerHelper.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
 }
