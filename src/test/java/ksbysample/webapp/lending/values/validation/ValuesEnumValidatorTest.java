@@ -35,14 +35,14 @@ public class ValuesEnumValidatorTest {
 
     // テスト用 POJO クラス
     @Data
-    private class NotAllowEmptyTestClass {
+    private static class NotAllowEmptyTestClass {
         @ValuesEnum(enumClass = TestValues.class)
         private String testStr;
     }
 
     // テスト用 POJO クラス
     @Data
-    private class AllowEmptyTestClass {
+    private static class AllowEmptyTestClass {
         @ValuesEnum(enumClass = TestValues.class, allowEmpty = true)
         private String testStr;
     }
