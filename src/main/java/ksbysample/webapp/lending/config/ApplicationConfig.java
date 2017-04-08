@@ -9,6 +9,7 @@ import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
@@ -28,11 +29,16 @@ public class ApplicationConfig {
 
     private final ConnectionFactory connectionFactory;
 
+    private final MessageSource messageSource;
+
     /**
-     * @param connectionFactory ???
+     * @param connectionFactory {@link ConnectionFactory} bean
+     * @param messageSource     {@link MessageSource} bean
      */
-    public ApplicationConfig(ConnectionFactory connectionFactory) {
+    public ApplicationConfig(ConnectionFactory connectionFactory
+            , MessageSource messageSource) {
         this.connectionFactory = connectionFactory;
+        this.messageSource = messageSource;
     }
 
     /**
@@ -71,11 +77,17 @@ public class ApplicationConfig {
     }
 
     /**
-     * @return ???
+     * Controller クラスで直接 {@link Validator} を呼び出すために Bean として定義している
+     * また Hibernate Validator のメッセージを ValidationMessages.properties ではなく
+     * messages.properties に記述できるようにするためにも使用している
+     *
+     * @return new {@link LocalValidatorFactoryBean}
      */
     @Bean
     public Validator validator() {
-        return new LocalValidatorFactoryBean();
+        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+        localValidatorFactoryBean.setValidationMessageSource(this.messageSource);
+        return localValidatorFactoryBean;
     }
 
     /**
