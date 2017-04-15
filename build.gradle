@@ -132,7 +132,7 @@ dependencies {
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtime("${jdbcDriver}")
-    compile("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
+    compile("com.integralblue:log4jdbc-spring-boot-starter:1.0.0")
     compile("org.simpleframework:simple-xml:2.7.1")
     compile("com.univocity:univocity-parsers:2.3.1")
     testCompile("org.dbunit:dbunit:2.5.3")
