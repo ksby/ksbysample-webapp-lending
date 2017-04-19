@@ -1,10 +1,10 @@
 @echo on
 
 setlocal
-set JAVA_HOME=C:\Java\jdk1.8.0_92
+set JAVA_HOME=C:\Java\jdk1.8.0_121
 set PATH=%JAVA_HOME%\bin;%PATH%
 set WEBAPP_HOME=C:\webapps\ksbysample-webapp-lending
-set WEBAPP_JAR=ksbysample-webapp-lending-1.1.0-RELEASE.jar
+set WEBAPP_JAR=ksbysample-webapp-lending-1.4.5-RELEASE.jar
 
 cd /d %WEBAPP_HOME%
 java -server ^
