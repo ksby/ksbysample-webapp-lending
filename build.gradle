@@ -1,9 +1,9 @@
 group 'ksbysample'
-version '1.4.5-RELEASE'
+version '1.4.6-RELEASE'
 
 buildscript {
     ext {
-        springBootVersion = '1.4.5.RELEASE'
+        springBootVersion = '1.4.6.RELEASE'
     }
     repositories {
         jcenter()
@@ -13,9 +13,9 @@ buildscript {
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
         // for Error Prone ( http://errorprone.info/ )
-        classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.9")
+        classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.10")
         // for Grgit
-        classpath("org.ajoberstar:grgit:1.9.0")
+        classpath("org.ajoberstar:grgit:1.9.2")
         // Gradle Download Task
         classpath("de.undercouch:gradle-download-task:3.2.0")
     }
@@ -61,7 +61,7 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = '7.6.1'
+    toolVersion = '7.7'
     sourceSets = [project.sourceSets.main]
 }
 
@@ -86,8 +86,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom("io.spring.platform:platform-bom:Athens-SR4") {
-            bomProperty 'commons-lang3.version', '3.5'
+        mavenBom("io.spring.platform:platform-bom:Athens-SR5") {
             bomProperty 'guava.version', '21.0'
         }
     }
@@ -99,7 +98,7 @@ bootRepackage {
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:9.4.1212"
+    def jdbcDriver = "org.postgresql:postgresql:42.0.0"
     def spockVersion = "1.1-groovy-2.4-rc-4"
     def domaVersion = "2.16.0"
     def lombokVersion = "1.16.16"
@@ -132,11 +131,11 @@ dependencies {
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtime("${jdbcDriver}")
-    compile("com.integralblue:log4jdbc-spring-boot-starter:1.0.0")
+    compile("com.integralblue:log4jdbc-spring-boot-starter:1.0.1")
     compile("org.simpleframework:simple-xml:2.7.1")
-    compile("com.univocity:univocity-parsers:2.3.1")
+    compile("com.univocity:univocity-parsers:2.4.1")
     testCompile("org.dbunit:dbunit:2.5.3")
-    testCompile("com.icegreen:greenmail:1.5.3")
+    testCompile("com.icegreen:greenmail:1.5.4")
     testCompile("org.assertj:assertj-core:3.6.2")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
     testCompile("org.spockframework:spock-core:${spockVersion}") {
