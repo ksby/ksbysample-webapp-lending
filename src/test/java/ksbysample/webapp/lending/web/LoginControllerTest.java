@@ -104,10 +104,9 @@ public class LoginControllerTest {
                     .user("id", "user.notexists@sample.com")
                     .password("password", "notexists")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
         }
 
         @Test
@@ -116,10 +115,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "tanaka")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
         }
 
         @Test
@@ -128,10 +126,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_KIMURA_MASAO)
                     .password("password", "masao")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(DisabledException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(DisabledException.class)));
         }
 
         @Test
@@ -140,10 +137,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_ENDO_YOKO)
                     .password("password", "yoko")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(AccountExpiredException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(AccountExpiredException.class)));
         }
 
         @Test
@@ -152,10 +148,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_SATO_MASAHIKO)
                     .password("password", "masahiko")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(CredentialsExpiredException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(CredentialsExpiredException.class)));
         }
 
         @Test
@@ -165,10 +160,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "taro1")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
             UserInfo userInfo = userInfoDao.selectByMailAddress(mvc.MAILADDR_TANAKA_TARO);
             assertThat(userInfo.getCntBadcredentials()).isEqualTo((short) 1);
 
@@ -177,10 +171,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "taro2")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
             userInfo = userInfoDao.selectByMailAddress(mvc.MAILADDR_TANAKA_TARO);
             assertThat(userInfo.getCntBadcredentials()).isEqualTo((short) 2);
 
@@ -189,10 +182,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "taro3")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
             userInfo = userInfoDao.selectByMailAddress(mvc.MAILADDR_TANAKA_TARO);
             assertThat(userInfo.getCntBadcredentials()).isEqualTo((short) 3);
 
@@ -201,10 +193,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "taro4")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
             userInfo = userInfoDao.selectByMailAddress(mvc.MAILADDR_TANAKA_TARO);
             assertThat(userInfo.getCntBadcredentials()).isEqualTo((short) 4);
 
@@ -213,10 +204,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "taro5")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(BadCredentialsException.class)));
             userInfo = userInfoDao.selectByMailAddress(mvc.MAILADDR_TANAKA_TARO);
             assertThat(userInfo.getCntBadcredentials()).isEqualTo((short) 5);
 
@@ -225,10 +215,9 @@ public class LoginControllerTest {
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "taro6")
             )
-                    .andExpect(status().isFound())
-                    .andExpect(redirectedUrl("/"))
+                    .andExpect(status().isOk())
                     .andExpect(unauthenticated())
-                    .andExpect(request().sessionAttribute("SPRING_SECURITY_LAST_EXCEPTION", isA(LockedException.class)));
+                    .andExpect(request().attribute("SPRING_SECURITY_LAST_EXCEPTION", isA(LockedException.class)));
             userInfo = userInfoDao.selectByMailAddress(mvc.MAILADDR_TANAKA_TARO);
             assertThat(userInfo.getCntBadcredentials()).isEqualTo((short) 5);
         }
