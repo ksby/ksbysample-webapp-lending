@@ -141,6 +141,19 @@ public class CalilApiService {
         return response;
     }
 
+    private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url
+            , Class<T> responseType, Map<String, ?> uriVariables) {
+        ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
+            if (context.getRetryCount() > 0) {
+                logger.info("★★★ リトライ回数 = " + context.getRetryCount());
+            }
+            ResponseEntity<T> innerResponse = restTemplate.getForEntity(url, responseType, uriVariables);
+            return innerResponse;
+        });
+
+        return response;
+    }
+
     @Configuration
     public static class CalilApiConfig {
 
