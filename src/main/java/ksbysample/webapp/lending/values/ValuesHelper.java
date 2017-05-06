@@ -1,6 +1,7 @@
 package ksbysample.webapp.lending.values;
 
 import com.google.common.reflect.ClassPath;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -12,19 +13,21 @@ public class ValuesHelper {
 
     private final Map<String, String> valuesObjList;
 
-    private ValuesHelper() throws IOException {
+    private ValuesHelper(@Value("${valueshelper.classpath.prefix:}") String classpathPrefix) throws IOException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        valuesObjList = ClassPath.from(loader).getTopLevelClassesRecursive(this.getClass().getPackage().getName())
+        valuesObjList = ClassPath.from(loader)
+                .getTopLevelClassesRecursive(classpathPrefix + this.getClass().getPackage().getName())
                 .stream()
                 .filter(classInfo -> {
                     try {
-                        Class<?> clazz = Class.forName(classInfo.getName());
+                        Class<?> clazz = Class.forName(classInfo.getName().replace(classpathPrefix, ""));
                         return !clazz.equals(Values.class) && Values.class.isAssignableFrom(clazz);
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toMap(ClassPath.ClassInfo::getSimpleName, ClassPath.ClassInfo::getName));
+                .collect(Collectors.toMap(classInfo -> classInfo.getSimpleName()
+                        , classInfo -> classInfo.getName().replace(classpathPrefix, "")));
     }
 
     /**
