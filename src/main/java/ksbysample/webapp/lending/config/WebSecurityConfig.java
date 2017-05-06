@@ -13,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -22,8 +23,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String DEFAULT_SUCCESS_URL = "/booklist";
     public static final String REMEMBERME_KEY = "ksbysample-webapp-lending";
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
+
+    /**
+     * @param userDetailsService ???
+     */
+    public WebSecurityConfig(UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -44,10 +51,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/")
                 .loginProcessingUrl("/login")
                 .defaultSuccessUrl(WebSecurityConfig.DEFAULT_SUCCESS_URL)
-                .failureUrl("/")
                 .usernameParameter("id")
                 .passwordParameter("password")
                 .successHandler(new RoleAwareAuthenticationSuccessHandler())
+                .failureHandler(new ForwardAuthenticationFailureHandler("/"))
                 .permitAll()
                 .and()
                 .logout()
@@ -63,6 +70,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(60 * 60 * 24 * 30);
     }
 
+    /**
+     * @return ???
+     */
     @Bean
     public AuthenticationProvider daoAuhthenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -72,6 +82,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return daoAuthenticationProvider;
     }
 
+    /**
+     * @param auth ???
+     * @throws Exception
+     */
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuhthenticationProvider())

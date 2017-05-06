@@ -54,13 +54,13 @@
                             <div class="text-center"><h1>ksbysample-lending</h1></div>
                             <br/>
                             <form role="form" action="#" th:action="@{/login}" method="post" id="login-form" autocomplete="off">
-                                <div class="form-group" th:if="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null">
-                                    <p class="form-control-static text-danger" th:text="${session['SPRING_SECURITY_LAST_EXCEPTION'].message}"></p>
+                                <div class="form-group" th:if="${#httpServletRequest.getAttribute('SPRING_SECURITY_LAST_EXCEPTION')} != null">
+                                    <p class="form-control-static text-danger" th:text="${#httpServletRequest.getAttribute('SPRING_SECURITY_LAST_EXCEPTION').message}"></p>
                                 </div>
                                 <div class="form-group">
                                     <label for="id" class="sr-only">ID</label>
                                     <input type="text" name="id" id="id" class="form-control" placeholder="ID を入力して下さい"
-                                           th:value="${session['SPRING_SECURITY_LAST_EXCEPTION']} != null ? ${session['SPRING_SECURITY_LAST_EXCEPTION'].authentication.principal} : ''"/>
+                                           th:value="${#httpServletRequest.getParameter('id')} != null ? ${#httpServletRequest.getParameter('id')} : ''"/>
                                 </div>
                                 <div class="form-group">
                                     <label for="password" class="sr-only">Password</label>

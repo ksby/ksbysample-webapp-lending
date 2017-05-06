@@ -2,7 +2,6 @@ package ksbysample.webapp.lending.webapi.weather;
 
 import ksbysample.webapp.lending.service.openweathermapapi.FiveDayThreeHourForecastData;
 import ksbysample.webapp.lending.service.openweathermapapi.OpenWeatherMapApiService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,9 +9,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/webapi/weather")
 public class WeatherController {
 
-    @Autowired
-    private OpenWeatherMapApiService openWeatherMapApiService;
-    
+    private final OpenWeatherMapApiService openWeatherMapApiService;
+
+    /**
+     * @param openWeatherMapApiService ???
+     */
+    public WeatherController(OpenWeatherMapApiService openWeatherMapApiService) {
+        this.openWeatherMapApiService = openWeatherMapApiService;
+    }
+
+    /**
+     * @param cityname ???
+     * @return ???
+     */
     @RequestMapping("/getFiveDayThreeHourForecast")
     public FiveDayThreeHourForecastResponse getFiveDayThreeHourForecast(String cityname) {
         FiveDayThreeHourForecastData fiveDayThreeHourForecastData

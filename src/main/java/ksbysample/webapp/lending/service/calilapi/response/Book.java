@@ -26,9 +26,12 @@ public class Book {
     @XmlElement(name = "system")
     private SystemData system;
 
+    /**
+     * @return ???
+     */
     public String getFirstLibkeyValue() {
         Optional<Libkey> libkey = getSystem().getLibkeyList().stream().findFirst();
         return libkey.map(Libkey::getValue).orElse(null);
     }
-    
+
 }

@@ -5,6 +5,11 @@ import org.springframework.data.domain.Pageable;
 
 public class SelectOptionsUtils {
 
+    /**
+     * @param pageable ???
+     * @param countFlg ???
+     * @return ???
+     */
     public static SelectOptions get(Pageable pageable, boolean countFlg) {
         int offset = pageable.getPageNumber() * pageable.getPageSize();
         int limit = pageable.getPageSize();
@@ -12,12 +17,11 @@ public class SelectOptionsUtils {
         SelectOptions selectOptions = null;
         if (countFlg) {
             selectOptions = SelectOptions.get().offset(offset).limit(limit).count();
-        }
-        else {
+        } else {
             selectOptions = SelectOptions.get().offset(offset).limit(limit);
         }
 
         return selectOptions;
     }
-    
+
 }

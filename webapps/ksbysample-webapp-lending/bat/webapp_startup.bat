@@ -1,10 +1,10 @@
 @echo on
 
 setlocal
-set JAVA_HOME=C:\Java\jdk1.8.0_92
+set JAVA_HOME=C:\Java\jdk1.8.0_131
 set PATH=%JAVA_HOME%\bin;%PATH%
 set WEBAPP_HOME=C:\webapps\ksbysample-webapp-lending
-set WEBAPP_JAR=ksbysample-webapp-lending-1.1.0-RELEASE.jar
+set WEBAPP_JAR=ksbysample-webapp-lending-1.4.6-RELEASE.jar
 
 cd /d %WEBAPP_HOME%
 java -server ^
@@ -16,7 +16,7 @@ java -server ^
      -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps ^
      -Xloggc:%WEBAPP_HOME%/logs/gc.log ^
      -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=10M ^
-     -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=%WEBAPP_HOME%/logs/`date`.hprof ^
+     -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=%WEBAPP_HOME%/logs/%date:~0,4%%date:~5,2%%date:~8,2%.hprof ^
      -XX:ErrorFile=%WEBAPP_HOME%/logs/hs_err_pid_%p.log ^
      -Dsun.net.inetaddr.ttl=100 ^
      -Dcom.sun.management.jmxremote ^

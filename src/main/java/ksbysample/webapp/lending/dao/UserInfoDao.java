@@ -2,11 +2,7 @@ package ksbysample.webapp.lending.dao;
 
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.util.doma.ComponentAndAutowiredDomaConfig;
-import org.seasar.doma.Dao;
-import org.seasar.doma.Delete;
-import org.seasar.doma.Insert;
-import org.seasar.doma.Select;
-import org.seasar.doma.Update;
+import org.seasar.doma.*;
 
 import java.util.List;
 
@@ -17,36 +13,55 @@ import java.util.List;
 public interface UserInfoDao {
 
     /**
-     * @param userId
+     * @param userId ???
      * @return the UserInfo entity
      */
     @Select
     UserInfo selectById(Long userId);
+
+    /**
+     * @param mailAddress ???
+     * @return ???
+     */
     @Select
     UserInfo selectByMailAddress(String mailAddress);
+
+    /**
+     * @return ???
+     */
     @Select
     List<String> selectApproverMailAddrList();
-    
+
     /**
-     * @param entity
+     * @param entity ???
      * @return affected rows
      */
     @Insert
     int insert(UserInfo entity);
 
     /**
-     * @param entity
+     * @param entity ???
      * @return affected rows
      */
     @Update
     int update(UserInfo entity);
+
+    /**
+     * @param mailAddress ???
+     * @return ???
+     */
     @Update(sqlFile = true)
     int incCntBadcredentialsByMailAddress(String mailAddress);
+
+    /**
+     * @param mailAddress ???
+     * @return ???
+     */
     @Update(sqlFile = true)
     int initCntBadcredentialsByMailAddress(String mailAddress);
-    
+
     /**
-     * @param entity
+     * @param entity ???
      * @return affected rows
      */
     @Delete

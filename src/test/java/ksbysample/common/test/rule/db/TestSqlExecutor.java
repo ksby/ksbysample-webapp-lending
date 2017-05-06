@@ -75,7 +75,7 @@ public class TestSqlExecutor<L extends Annotation, I extends Annotation> {
     @SuppressWarnings("unchecked")
     private I[] value(L testSqlList) {
         try {
-            Method method = testSqlList.getClass().getMethod("value");
+            Method method = testSqlList.annotationType().getMethod("value");
             return (I[]) method.invoke(testSqlList);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -84,7 +84,7 @@ public class TestSqlExecutor<L extends Annotation, I extends Annotation> {
 
     private long order(I testSql) {
         try {
-            Method method = testSql.getClass().getMethod("order");
+            Method method = testSql.annotationType().getMethod("order");
             return (long) method.invoke(testSql);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -93,7 +93,7 @@ public class TestSqlExecutor<L extends Annotation, I extends Annotation> {
 
     private String sql(I testSql) {
         try {
-            Method method = testSql.getClass().getMethod("sql");
+            Method method = testSql.annotationType().getMethod("sql");
             return (String) method.invoke(testSql);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);

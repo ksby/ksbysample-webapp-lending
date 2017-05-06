@@ -6,4 +6,13 @@
 
     <!-- Doma 2 -->
     <logger name="org.seasar.doma" level="ERROR"/>
+
+    <!-- Tomcat JDBC Connection Pool SlowQueryReport interceptor -->
+    <if condition='"${slowquery.logging.file}" != ""'>
+        <then>
+            <logger name="org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReport" level="INFO">
+                <appender-ref ref="SLOWQUERY_LOG_FILE"/>
+            </logger>
+        </then>
+    </if>
 </included>

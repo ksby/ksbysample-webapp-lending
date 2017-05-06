@@ -2,6 +2,7 @@ package ksbysample.common.test.rule.mockmvc;
 
 import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @Component
+@ConditionalOnWebApplication
 public class SecurityMockMvcResource extends ExternalResource {
 
     public final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";

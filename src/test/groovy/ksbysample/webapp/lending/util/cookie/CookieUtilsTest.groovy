@@ -10,23 +10,23 @@ import javax.servlet.http.Cookie
 class CookieUtilsTest extends Specification {
 
     static class CookieTest extends CookieGenerator {
-        public static final String COOKIE_NAME = "TestCookie";
+        public static final String COOKIE_NAME = "TestCookie"
         public CookieTest() {
-            setCookieName(COOKIE_NAME);
+            setCookieName(COOKIE_NAME)
         }
     }
 
     static class CookieSample extends CookieGenerator {
-        public static final String COOKIE_NAME = "SampleCookie";
+        public static final String COOKIE_NAME = "SampleCookie"
         public CookieSample() {
-            setCookieName(COOKIE_NAME);
+            setCookieName(COOKIE_NAME)
         }
     }
 
     def "AddCookie_and_RemoveCookie_Cookieが1個の場合"() {
         setup:
         def response = new MockHttpServletResponse()
-        
+
         expect:
         CookieUtils.addCookie(CookieTest.class, response, "テスト")
         Cookie[] cookies = response.getCookies()
@@ -70,13 +70,15 @@ class CookieUtilsTest extends Specification {
     def "GetCookieValueのテスト"() {
         setup:
         def request = new MockHttpServletRequest()
-        
+
         expect:
         Cookie cookieTest = new Cookie(CookieTest.COOKIE_NAME, "テスト")
         Cookie cookieSample = new Cookie(CookieSample.COOKIE_NAME, "サンプル")
         request.setCookies(cookieTest, cookieSample)
-        CookieUtils.getCookieValue(CookieTest.COOKIE_NAME, request) == "テスト"
-        CookieUtils.getCookieValue(CookieSample.COOKIE_NAME, request) == "サンプル"
+        CookieUtils.getCookieValue(CookieTest.COOKIE_NAME, request).get() == "テスト"
+        CookieUtils.getCookieValue(CookieSample.COOKIE_NAME, request).get() == "サンプル"
+        CookieUtils.getCookieValue(CookieTest.COOKIE_NAME, null) == Optional.empty()
+        CookieUtils.getCookieValue("NotExistsCookie", request) == Optional.empty()
     }
 
 }

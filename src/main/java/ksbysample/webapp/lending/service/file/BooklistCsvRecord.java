@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BooklistCSVRecord {
+public class BooklistCsvRecord {
 
     @Parsed
     private String isbn;

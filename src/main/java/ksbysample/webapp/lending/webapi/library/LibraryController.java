@@ -7,7 +7,6 @@ import ksbysample.webapp.lending.webapi.common.CommonWebApiResponse;
 import org.simpleframework.xml.core.ValueRequiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,15 +18,26 @@ import java.util.List;
 public class LibraryController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    
-    @Autowired
-    private CalilApiService calilApiService;
-    
+
+    private final CalilApiService calilApiService;
+
+    /**
+     * @param calilApiService ???
+     */
+    public LibraryController(CalilApiService calilApiService) {
+        this.calilApiService = calilApiService;
+    }
+
+    /**
+     * @param pref ???
+     * @return ???
+     * @throws Exception
+     */
     @RequestMapping("/getLibraryList")
     public CommonWebApiResponse<List<Library>> getLibraryList(String pref) throws Exception {
         CommonWebApiResponse<List<Library>> response = new CommonWebApiResponse<>();
         response.setContent(Collections.emptyList());
-        
+
         try {
             Libraries libraries = calilApiService.getLibraryList(pref);
             response.setContent(libraries.getLibraryList());
@@ -42,5 +52,5 @@ public class LibraryController {
 
         return response;
     }
-    
+
 }

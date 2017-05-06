@@ -2,8 +2,14 @@ package ksbysample.webapp.lending.values;
 
 public interface Values {
 
-    public String getValue();
+    /**
+     * @return ???
+     */
+    String getValue();
 
-    public String getText();
+    /**
+     * @return ???
+     */
+    String getText();
 
 }

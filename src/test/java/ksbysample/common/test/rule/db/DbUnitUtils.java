@@ -12,6 +12,12 @@ public class DbUnitUtils {
 
     public static final String NULL_STRING = "[null]";
 
+    /**
+     * @param connection ???
+     * @return ???
+     * @throws SQLException
+     * @throws DatabaseUnitException
+     */
     public static IDatabaseConnection createDatabaseConnection(Connection connection)
             throws SQLException, DatabaseUnitException {
         IDatabaseConnection conn = new DatabaseConnection(connection);

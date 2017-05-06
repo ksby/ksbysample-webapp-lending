@@ -1,17 +1,15 @@
 package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.common.test.rule.mail.MailServerResource;
-import ksbysample.webapp.lending.Application;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -19,9 +17,8 @@ import javax.mail.internet.MimeMessage;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class EmailHelperTest {
 
     @Rule
@@ -30,7 +27,7 @@ public class EmailHelperTest {
 
     @Autowired
     private JavaMailSender mailSender;
-    
+
     @Autowired
     private EmailHelper emailHelper;
 
@@ -60,7 +57,7 @@ public class EmailHelperTest {
         message.setSubject("テスト");
         message.setText("これはテストです");
         emailHelper.sendMail(message.getMimeMessage());
-        
+
         assertThat(mailServer.getMessagesCount(), is(1));
         MimeMessage receiveMessage = mailServer.getFirstMessage();
         assertThat(receiveMessage.getFrom()[0], is(new InternetAddress("test@sample.com")));

@@ -12,7 +12,10 @@ import java.util.List;
 public class LibrariesForJackson2Xml {
 
     private List<LibraryForJackson2Xml> libraryList = new ArrayList<>();
-    
+
+    /**
+     * @param library ???
+     */
     @XmlElement(name = "Library")
     public void addLibraryList(LibraryForJackson2Xml library) {
         libraryList.add(library);

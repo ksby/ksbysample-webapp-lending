@@ -1,6 +1,5 @@
 package ksbysample.webapp.lending.helper.download.booklistcsv;
 
-import com.google.common.base.Charsets;
 import com.univocity.parsers.common.processor.BeanWriterProcessor;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
@@ -19,11 +18,18 @@ public class BookListCsvDownloadHelper implements DataDownloadHelper {
 
     private List<BookListCsvData> bookListCsvDataList;
 
+    /**
+     * @param lendingAppId        ???
+     * @param bookListCsvDataList ???
+     */
     public BookListCsvDownloadHelper(Long lendingAppId, List<BookListCsvData> bookListCsvDataList) {
         this.lendingAppId = lendingAppId;
         this.bookListCsvDataList = bookListCsvDataList;
     }
 
+    /**
+     * @return ???
+     */
     public String getCsvFileName() {
         return String.format(CSV_FILE_NAME_FORMAT, this.lendingAppId);
     }

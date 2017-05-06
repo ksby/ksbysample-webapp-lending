@@ -18,6 +18,9 @@ public class LendingappForm {
     @Valid
     private List<LendingBookDto> lendingBookDtoList;
 
+    /**
+     * @param lendingBookList ???
+     */
     public void setLendingBookList(List<LendingBook> lendingBookList) {
         this.lendingBookDtoList = lendingBookList.stream()
                 .map(LendingBookDto::new)

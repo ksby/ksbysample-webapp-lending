@@ -4,26 +4,40 @@ import ksbysample.webapp.lending.config.Constant;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class InquiringStatusOfBookQueueService {
 
-    @Autowired
-    private MessageConverter converter;
-    
-    @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private final MessageConverter converter;
 
+    private final RabbitTemplate rabbitTemplate;
+
+    /**
+     * @param converter      ???
+     * @param rabbitTemplate ???
+     */
+    public InquiringStatusOfBookQueueService(MessageConverter converter
+            , RabbitTemplate rabbitTemplate) {
+        this.converter = converter;
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
+    /**
+     * @param lendingAppId ???
+     */
     public void sendMessage(Long lendingAppId) {
         InquiringStatusOfBookQueueMessage message = new InquiringStatusOfBookQueueMessage();
         message.setLendingAppId(lendingAppId);
         rabbitTemplate.convertAndSend(Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK, message);
     }
 
+    /**
+     * @param message ???
+     * @return ???
+     */
     public InquiringStatusOfBookQueueMessage convertMessageToObject(Message message) {
         return (InquiringStatusOfBookQueueMessage) converter.fromMessage(message);
     }
-    
+
 }

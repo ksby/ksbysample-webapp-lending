@@ -16,14 +16,21 @@ public class MethodLogger {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    @Pointcut("execution(* ksbysample.webapp.lending.web..*.*(..)) && @within(org.springframework.stereotype.Controller)")
+    @Pointcut("execution(* ksbysample.webapp.lending.web..*.*(..))"
+            + "&& @within(org.springframework.stereotype.Controller)")
     private void pointcutControllerMethod() {
     }
 
-    @Pointcut("execution(* ksbysample.webapp.lending.service..*.*(..)) && @within(org.springframework.stereotype.Service)")
+    @Pointcut("execution(* ksbysample.webapp.lending.service..*.*(..))"
+            + "&& @within(org.springframework.stereotype.Service)")
     private void pointcutServiceMethod() {
     }
 
+    /**
+     * @param pjp ???
+     * @return ???
+     * @throws Throwable
+     */
     @Around(value = "pointcutControllerMethod() || pointcutServiceMethod()")
     public Object logginMethod(ProceedingJoinPoint pjp)
             throws Throwable {

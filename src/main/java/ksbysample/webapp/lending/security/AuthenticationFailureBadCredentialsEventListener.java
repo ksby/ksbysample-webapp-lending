@@ -1,7 +1,6 @@
 package ksbysample.webapp.lending.security;
 
 import ksbysample.webapp.lending.service.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -11,9 +10,15 @@ import org.springframework.stereotype.Component;
 public class AuthenticationFailureBadCredentialsEventListener
         implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
 
-    @Autowired
-    private UserInfoService userInfoService;
-    
+    private final UserInfoService userInfoService;
+
+    /**
+     * @param userInfoService ???
+     */
+    public AuthenticationFailureBadCredentialsEventListener(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
+
     @Override
     public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
         // UsernameNotFoundException は何もしない

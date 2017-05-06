@@ -1,53 +1,51 @@
+group 'ksbysample'
+version '1.4.6-RELEASE'
+
 buildscript {
     ext {
-        springBootVersion = '1.3.5.RELEASE'
+        springBootVersion = '1.4.6.RELEASE'
     }
     repositories {
         jcenter()
         maven { url "http://repo.spring.io/repo/" }
+        maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath("io.spring.gradle:dependency-management-plugin:0.5.6.RELEASE")
+        // for Error Prone ( http://errorprone.info/ )
+        classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.10")
         // for Grgit
-        classpath("org.ajoberstar:grgit:1.7.0")
+        classpath("org.ajoberstar:grgit:1.9.2")
         // Gradle Download Task
-        classpath("de.undercouch:gradle-download-task:3.0.0")
+        classpath("de.undercouch:gradle-download-task:3.2.0")
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
-apply plugin: 'spring-boot'
-apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'de.undercouch.download'
 apply plugin: 'groovy'
+apply plugin: 'net.ltgt.errorprone'
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-compileJava.options.compilerArgs = ['-Xlint:all']
-compileTestGroovy.options.compilerArgs = ['-Xlint:all']
-compileTestJava.options.compilerArgs = ['-Xlint:all']
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.13'
+}
+
+[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing,-path']
+compileJava.options.compilerArgs += ['-Xep:RemoveUnusedImports:WARN']
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
 processResources.destinationDir = compileJava.destinationDir
 // コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
 compileJava.dependsOn processResources
-
-jar {
-    baseName = 'ksbysample-webapp-lending'
-    version = '1.1.0-RELEASE'
-}
-
-eclipse {
-    classpath {
-        containers.remove('org.eclipse.jdt.launching.JRE_CONTAINER')
-        containers 'org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8'
-    }
-}
 
 idea {
     module {
@@ -57,7 +55,29 @@ idea {
 }
 
 configurations {
+    // for Doma 2
     domaGenRuntime
+}
+
+checkstyle {
+    configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
+    toolVersion = '7.7'
+    sourceSets = [project.sourceSets.main]
+}
+
+findbugs {
+    toolVersion = '3.0.1'
+    sourceSets = [project.sourceSets.main]
+    ignoreFailures = true
+    effort = "max"
+    excludeFilter = file("${rootProject.projectDir}/config/findbugs/findbugs-exclude.xml")
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
 
 repositories {
@@ -66,7 +86,9 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:2.0.5.RELEASE'
+        mavenBom("io.spring.platform:platform-bom:Athens-SR5") {
+            bomProperty 'guava.version', '21.0'
+        }
     }
 }
 
@@ -76,53 +98,66 @@ bootRepackage {
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:9.4.1208"
+    def jdbcDriver = "org.postgresql:postgresql:42.0.0"
+    def spockVersion = "1.1-groovy-2.4-rc-4"
+    def domaVersion = "2.16.0"
+    def lombokVersion = "1.16.16"
+    def errorproneVersion = "2.0.15"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
     compile("org.springframework.boot:spring-boot-starter-web")
     compile("org.springframework.boot:spring-boot-starter-thymeleaf")
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
+    compile("org.thymeleaf.extras:thymeleaf-extras-java8time")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-velocity")
+    compile("org.springframework.boot:spring-boot-starter-freemarker")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.boot:spring-boot-starter-redis")
+    compile("org.springframework.boot:spring-boot-starter-data-redis")
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.springframework.boot:spring-boot-devtools")
     compile("org.springframework.session:spring-session")
-    compile("org.codehaus.janino:janino")
+    compile("org.springframework.retry:spring-retry")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
+    compile("com.google.guava:guava")
+    compile("org.apache.commons:commons-lang3")
+    compile("org.codehaus.janino:janino")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework.security:spring-security-test")
     testCompile("org.yaml:snakeyaml")
-    testCompile("org.spockframework:spock-core") {
-        exclude module: "groovy-all"
-    }
-    testCompile("org.spockframework:spock-spring") {
-        exclude module: "groovy-all"
-    }
+    testCompile("org.mockito:mockito-core")
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtime("${jdbcDriver}")
-    compile("org.seasar.doma:doma:2.8.0")
-    compile("org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16")
-    compile("org.apache.commons:commons-lang3:3.4")
-    compile("org.projectlombok:lombok:1.16.8")
-    compile("com.google.guava:guava:19.0")
+    compile("com.integralblue:log4jdbc-spring-boot-starter:1.0.1")
     compile("org.simpleframework:simple-xml:2.7.1")
-    compile("com.univocity:univocity-parsers:2.1.1")
-    compile("org.thymeleaf.extras:thymeleaf-extras-java8time:2.1.0.RELEASE")
-    testCompile("org.dbunit:dbunit:2.5.1")
-    testCompile("com.icegreen:greenmail:1.5.0")
-    testCompile("org.assertj:assertj-core:3.4.1")
+    compile("com.univocity:univocity-parsers:2.4.1")
+    testCompile("org.dbunit:dbunit:2.5.3")
+    testCompile("com.icegreen:greenmail:1.5.4")
+    testCompile("org.assertj:assertj-core:3.6.2")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
-    testCompile("org.jmockit:jmockit:1.23")
+    testCompile("org.spockframework:spock-core:${spockVersion}") {
+        exclude module: "groovy-all"
+    }
+    testCompile("org.spockframework:spock-spring:${spockVersion}") {
+        exclude module: "groovy-all"
+    }
+    testCompile("com.google.code.findbugs:jsr305:3.0.2")
 
-    // for Doma-Gen
-    domaGenRuntime("org.seasar.doma:doma-gen:2.8.0")
+    // for lombok
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+
+    // for Doma
+    compile("org.seasar.doma:doma:${domaVersion}")
+    domaGenRuntime("org.seasar.doma:doma-gen:${domaVersion}")
     domaGenRuntime("${jdbcDriver}")
+
+    // for Error Prone ( http://errorprone.info/ )
+    errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
+    compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
 }
 
 bootRun {
@@ -235,7 +270,7 @@ task downloadCssFontsJs << {
 }
 
 task printClassWhatNotMakeTest << {
-    def srcDir = new File("src/main/java");
+    def srcDir = new File("src/main/java")
     def excludePaths = [
             "src/main/java/ksbysample/webapp/lending/Application.java"
             , "src/main/java/ksbysample/webapp/lending/config"
@@ -259,15 +294,15 @@ task printClassWhatNotMakeTest << {
             , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
             , "src/main/java/ksbysample/webapp/lending/webapi/weather"
-    ];
+    ]
     def excludeFileNamePatterns = [
             ".*EventListener.java"
             , ".*Dto.java"
             , ".*Form.java"
             , ".*Values.java"
-    ];
+    ]
 
-    compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns);
+    compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns)
 }
 
 /* -----------------------------------------------------------------------------
@@ -437,7 +472,8 @@ def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
                 def testDir = testDirAndTestClassName[0]
                 def testClassName = testDirAndTestClassName[1]
 
-                String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, testDir).replaceFirst(/\.java$/, testClassName)
+                String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, testDir)
+                        .replaceFirst(/\.java$/, testClassName)
                 def testFile = new File(testFilePath)
                 if (testFile.exists()) {
                     nextFlg = true
@@ -446,7 +482,7 @@ def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
             }
             if (nextFlg) continue
 
-            println(srcFilePath);
+            println(srcFilePath)
         }
     }
 }

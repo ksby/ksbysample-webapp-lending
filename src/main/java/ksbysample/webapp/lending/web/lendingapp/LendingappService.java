@@ -12,7 +12,6 @@ import ksbysample.webapp.lending.helper.user.UserHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -25,29 +24,49 @@ import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingApp
 @Service
 public class LendingappService {
 
-    @Autowired
-    private LendingAppDao lendingAppDao;
+    private final LendingAppDao lendingAppDao;
 
-    @Autowired
-    private LendingBookDao lendingBookDao;
+    private final LendingBookDao lendingBookDao;
 
-    @Autowired
-    private MessagesPropertiesHelper messagesPropertiesHelper;
+    private final MessagesPropertiesHelper mph;
 
-    @Autowired
-    private EmailHelper emailHelper;
+    private final EmailHelper emailHelper;
 
-    @Autowired
-    private Mail002Helper mail002Helper;
+    private final Mail002Helper mail002Helper;
 
-    @Autowired
-    private UserHelper userHelper;
+    private final UserHelper userHelper;
 
+    /**
+     * @param lendingAppDao  ???
+     * @param lendingBookDao ???
+     * @param mph            ???
+     * @param emailHelper    ???
+     * @param mail002Helper  ???
+     * @param userHelper     ???
+     */
+    public LendingappService(LendingAppDao lendingAppDao
+            , LendingBookDao lendingBookDao
+            , MessagesPropertiesHelper mph
+            , EmailHelper emailHelper
+            , Mail002Helper mail002Helper
+            , UserHelper userHelper) {
+        this.lendingAppDao = lendingAppDao;
+        this.lendingBookDao = lendingBookDao;
+        this.mph = mph;
+        this.emailHelper = emailHelper;
+        this.mail002Helper = mail002Helper;
+        this.userHelper = userHelper;
+    }
+
+    /**
+     * @param lendingAppId   ???
+     * @param lendingappForm ???
+     */
     public void setDispData(Long lendingAppId, LendingappForm lendingappForm) {
         LendingApp lendingApp = lendingAppDao.selectById(lendingAppId);
         if (lendingApp == null) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("LendingappForm.lendingApp.nodataerr", null));
+                    mph.getMessage("LendingappForm.lendingApp.nodataerr", null));
         }
         List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingAppId);
 
@@ -55,12 +74,16 @@ public class LendingappService {
         lendingappForm.setLendingBookList(lendingBookList);
     }
 
+    /**
+     * @param lendingappForm ???
+     * @throws MessagingException
+     */
     public void apply(LendingappForm lendingappForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
         LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
-        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingappForm.getLendingApp().getLendingAppId()
-                , SelectOptions.get().forUpdate());
+        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(
+                lendingappForm.getLendingApp().getLendingAppId(), SelectOptions.get().forUpdate());
 
         // lending_app.status を 3(申請中) にする
         lendingApp.setStatus(PENDING.getValue());
@@ -82,12 +105,15 @@ public class LendingappService {
         emailHelper.sendMail(mimeMessage);
     }
 
+    /**
+     * @param lendingappForm ???
+     */
     public void temporarySave(LendingappForm lendingappForm) {
         // 更新対象のデータを取得する(ロックする)
         LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
-        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingappForm.getLendingApp().getLendingAppId()
-                , SelectOptions.get().forUpdate());
+        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(
+                lendingappForm.getLendingApp().getLendingAppId(), SelectOptions.get().forUpdate());
 
         // lending_book.lending_app_flg, lending_app_reason に画面に入力された内容をセットする
         lendingappForm.getLendingBookDtoList().stream()

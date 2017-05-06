@@ -1,7 +1,6 @@
 package ksbysample.webapp.lending.web.booklist;
 
 import ksbysample.webapp.lending.entity.LendingBook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,22 +16,43 @@ import java.util.List;
 @RequestMapping("/booklist")
 public class BooklistController {
 
-    @Autowired
-    private UploadBooklistFormValidator uploadBooklistFormValidator;
+    private final UploadBooklistFormValidator uploadBooklistFormValidator;
 
-    @Autowired
-    private BooklistService booklistService;
-    
+    private final BooklistService booklistService;
+
+    /**
+     * @param uploadBooklistFormValidator ???
+     * @param booklistService             ???
+     */
+    public BooklistController(UploadBooklistFormValidator uploadBooklistFormValidator
+            , BooklistService booklistService) {
+        this.uploadBooklistFormValidator = uploadBooklistFormValidator;
+        this.booklistService = booklistService;
+    }
+
+    /**
+     * @param binder ???
+     */
     @InitBinder("uploadBooklistForm")
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(uploadBooklistFormValidator);
-    }    
+    }
 
+    /**
+     * @param uploadBooklistForm ???
+     * @return ???
+     */
     @RequestMapping
     public String index(UploadBooklistForm uploadBooklistForm) {
         return "booklist/booklist";
     }
-    
+
+    /**
+     * @param uploadBooklistForm ???
+     * @param bindingResult      ???
+     * @param model              ???
+     * @return ???
+     */
     @RequestMapping("/fileupload")
     public String fileupload(@Validated UploadBooklistForm uploadBooklistForm
             , BindingResult bindingResult
@@ -48,10 +68,15 @@ public class BooklistController {
         List<LendingBook> lendingBookList = booklistService.getLendingBookList(lendingAppId);
         RegisterBooklistForm registerBooklistForm = new RegisterBooklistForm(lendingBookList, lendingAppId);
         model.addAttribute("registerBooklistForm", registerBooklistForm);
-        
+
         return "booklist/fileupload";
     }
 
+    /**
+     * @param registerBooklistForm ???
+     * @param redirectAttributes   ???
+     * @return ???
+     */
     @RequestMapping("/register")
     public String register(RegisterBooklistForm registerBooklistForm
             , RedirectAttributes redirectAttributes) {
@@ -60,6 +85,9 @@ public class BooklistController {
         return "redirect:/booklist/complete";
     }
 
+    /**
+     * @return ???
+     */
     @RequestMapping("/complete")
     public String complete() {
         return "booklist/complete";

@@ -3,14 +3,12 @@ package ksbysample.webapp.lending.service.file;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
 import ksbysample.common.test.helper.TestHelper;
-import ksbysample.webapp.lending.Application;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 
@@ -23,9 +21,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class BooklistCsvFileServiceTest {
 
     @Autowired
@@ -47,20 +44,34 @@ public class BooklistCsvFileServiceTest {
         assertThat(errors.hasErrors()).isTrue();
         assertThat(errors.getErrorCount()).isEqualTo(6);
         assertThat(errors.getAllErrors())
-                .contains(new ObjectError("", new String[]{"UploadBooklistForm.fileupload.lengtherr"}, new Object[]{2, 3}, null))
-                .contains(new ObjectError("", new String[]{"UploadBooklistForm.fileupload.isbn.patternerr"}, new Object[]{3, "978-4-7741-5x77-3"}, null))
-                .contains(new ObjectError("", new String[]{"UploadBooklistForm.fileupload.isbn.lengtherr"}, new Object[]{4, "978-4-79173-8014-9"}, null))
-                .contains(new ObjectError("", new String[]{"UploadBooklistForm.fileupload.isbn.numlengtherr"}, new Object[]{4, "97847917380149"}, null))
-                .contains(new ObjectError("", new String[]{"UploadBooklistForm.fileupload.isbn.numlengtherr"}, new Object[]{5, "97847197347784"}, null))
-                .contains(new ObjectError("", new String[]{"UploadBooklistForm.fileupload.bookname.lengtherr"}, new Object[]{6, "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"}, null));
+                .contains(new ObjectError(""
+                        , new String[]{"UploadBooklistForm.fileupload.lengtherr"}
+                        , new Object[]{2, 3}, null))
+                .contains(new ObjectError(""
+                        , new String[]{"UploadBooklistForm.fileupload.isbn.patternerr"}
+                        , new Object[]{3, "978-4-7741-5x77-3"}, null))
+                .contains(new ObjectError(""
+                        , new String[]{"UploadBooklistForm.fileupload.isbn.lengtherr"}
+                        , new Object[]{4, "978-4-79173-8014-9"}, null))
+                .contains(new ObjectError(""
+                        , new String[]{"UploadBooklistForm.fileupload.isbn.numlengtherr"}
+                        , new Object[]{4, "97847917380149"}, null))
+                .contains(new ObjectError(""
+                        , new String[]{"UploadBooklistForm.fileupload.isbn.numlengtherr"}
+                        , new Object[]{5, "97847197347784"}, null))
+                .contains(new ObjectError(""
+                        , new String[]{"UploadBooklistForm.fileupload.bookname.lengtherr"}
+                        , new Object[]{6, "123456789012345678901234567890123456789012345678901234567890123456789"
+                        + "012345678901234567890123456789012345678901234567890123456789"}
+                        , null));
     }
 
     @Test
     public void testConvertFileToList() throws Exception {
         MockMultipartFile multipartFile = createNoErrorCsvFile();
-        List<BooklistCSVRecord> booklistCSVRecordList = booklistCsvFileService.convertFileToList(multipartFile);
-        assertThat(booklistCSVRecordList).hasSize(5);
-        assertThat(booklistCSVRecordList).contains(new BooklistCSVRecord("978-4-7741-5377-3", "JUnit実践入門"));
+        List<BooklistCsvRecord> booklistCsvRecordList = booklistCsvFileService.convertFileToList(multipartFile);
+        assertThat(booklistCsvRecordList).hasSize(5);
+        assertThat(booklistCsvRecordList).contains(new BooklistCsvRecord("978-4-7741-5377-3", "JUnit実践入門"));
     }
 
     public MockMultipartFile createNoErrorCsvFile() throws Exception {
@@ -97,7 +108,8 @@ public class BooklistCsvFileServiceTest {
             writer.writeRow("978-4-7741-5x77-3", "JUnit実践入門");
             writer.writeRow("978-4-79173-8014-9", "Java最強リファレンス");
             writer.writeRow("978-4-719734778-4", "アジャイルソフトウェア開発の奥義");
-            writer.writeRow("978-4-87311-704-1", "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789");
+            writer.writeRow("978-4-87311-704-1", "12345678901234567890123456789012345678901234567890123456789"
+                    + "0123456789012345678901234567890123456789012345678901234567890123456789");
             writer.close();
         }
 

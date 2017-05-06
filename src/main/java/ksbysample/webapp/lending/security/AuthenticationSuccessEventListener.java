@@ -1,7 +1,6 @@
 package ksbysample.webapp.lending.security;
 
 import ksbysample.webapp.lending.service.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.stereotype.Component;
@@ -10,8 +9,14 @@ import org.springframework.stereotype.Component;
 public class AuthenticationSuccessEventListener
         implements ApplicationListener<AuthenticationSuccessEvent> {
 
-    @Autowired
-    private UserInfoService userInfoService;
+    private final UserInfoService userInfoService;
+
+    /**
+     * @param userInfoService ???
+     */
+    public AuthenticationSuccessEventListener(UserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
 
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
