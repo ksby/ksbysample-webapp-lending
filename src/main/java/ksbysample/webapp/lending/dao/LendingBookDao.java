@@ -2,11 +2,7 @@ package ksbysample.webapp.lending.dao;
 
 import ksbysample.webapp.lending.entity.LendingBook;
 import ksbysample.webapp.lending.util.doma.ComponentAndAutowiredDomaConfig;
-import org.seasar.doma.Dao;
-import org.seasar.doma.Delete;
-import org.seasar.doma.Insert;
-import org.seasar.doma.Select;
-import org.seasar.doma.Update;
+import org.seasar.doma.*;
 import org.seasar.doma.jdbc.SelectOptions;
 
 import java.util.List;
@@ -18,44 +14,90 @@ import java.util.List;
 public interface LendingBookDao {
 
     /**
-     * @param lendingBookId
+     * @param lendingBookId ???
      * @return the LendingBook entity
      */
     @Select
     LendingBook selectById(Long lendingBookId);
+
+    /**
+     * @param lendingBookId ???
+     * @param version       ???
+     * @return ???
+     */
     @Select(ensureResult = true)
     LendingBook selectByIdAndVersion(Long lendingBookId, Long version);
+
+    /**
+     * @param lendingAppId ???
+     * @return ???
+     */
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId);
+
+    /**
+     * @param lendingAppId ???
+     * @param options      ???
+     * @return ???
+     */
     @Select
     List<LendingBook> selectByLendingAppId(Long lendingAppId, SelectOptions options);
+
+    /**
+     * @param lendingAppId  ???
+     * @param lendingAppFlg ???
+     * @return ???
+     */
     @Select
     List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg);
-    @Select
-    List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg, SelectOptions options);
-    
+
     /**
-     * @param entity
+     * @param lendingAppId  ???
+     * @param lendingAppFlg ???
+     * @param options       ???
+     * @return ???
+     */
+    @Select
+    List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg
+            , SelectOptions options);
+
+    /**
+     * @param entity ???
      * @return affected rows
      */
     @Insert
     int insert(LendingBook entity);
 
     /**
-     * @param entity
+     * @param entity ???
      * @return affected rows
      */
     @Update
     int update(LendingBook entity);
+
+    /**
+     * @param entity ???
+     * @return ???
+     */
     @Update(include = {"lendingState"})
     int updateLendingState(LendingBook entity);
+
+    /**
+     * @param entity ???
+     * @return ???
+     */
     @Update(include = {"lendingAppFlg", "lendingAppReason"})
     int updateLendingAppFlgAndReason(LendingBook entity);
+
+    /**
+     * @param entity ???
+     * @return ???
+     */
     @Update(include = {"approvalResult", "approvalReason"})
     int updateApprovalResultAndReason(LendingBook entity);
-    
+
     /**
-     * @param entity
+     * @param entity ???
      * @return affected rows
      */
     @Delete

@@ -1,7 +1,6 @@
 package ksbysample.webapp.lending.service.calilapi.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import ksbysample.webapp.lending.service.calilapi.response.Book;
 import lombok.Data;
 import lombok.ToString;
 
@@ -18,11 +17,11 @@ public class CheckApiResponse {
 
     @XmlElement(name = "session")
     private String session;
-    
+
     @XmlElement(name = "continue")
     private Integer continueValue;
 
     @XmlElement(name = "books")
     private List<Book> bookList  = new ArrayList<>();
-    
+
 }

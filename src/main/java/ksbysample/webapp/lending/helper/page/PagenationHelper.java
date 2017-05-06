@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 @Getter
 public class PagenationHelper {
 
-    private final int MAX_DISP_PAGE = 5;
+    private static final int MAX_DISP_PAGE = 5;
 
     private boolean hiddenPrev;
     private boolean hiddenNext;
@@ -24,6 +24,9 @@ public class PagenationHelper {
 
     private int page1PageValue;
 
+    /**
+     * @param page ???
+     */
     public PagenationHelper(Page<?> page) {
         int number = page.getNumber();
         int totalPages = page.getTotalPages();
@@ -39,7 +42,9 @@ public class PagenationHelper {
         this.activePage1 = (number == 0);
         this.activePage2 = ((MAX_DISP_PAGE - 3 <= totalPages) && (number + 1 == MAX_DISP_PAGE - 3));
         this.activePage3 = (((totalPages == MAX_DISP_PAGE - 2) && (number + 1 == MAX_DISP_PAGE - 2))
-                || ((MAX_DISP_PAGE - 2 < totalPages) && (MAX_DISP_PAGE - 2 <= number + 1) && (number + 1 < totalPages - 1)));
+                || ((MAX_DISP_PAGE - 2 < totalPages)
+                && (MAX_DISP_PAGE - 2 <= number + 1)
+                && (number + 1 < totalPages - 1)));
         this.activePage4 = ((0 < number) && (((totalPages == MAX_DISP_PAGE - 1) && (number + 1 == MAX_DISP_PAGE - 1))
                 || ((MAX_DISP_PAGE - 1 < totalPages) && (number + 1 == totalPages - 1))));
         this.activePage5 = ((0 < number) && (MAX_DISP_PAGE <= totalPages) && (number + 1 == totalPages));

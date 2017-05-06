@@ -13,6 +13,12 @@ public class ControllerAndEventNameLogger {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * @param pjp              ???
+     * @param loggingEventName ???
+     * @return ???
+     * @throws Throwable
+     */
     @Around(value = "execution(* ksbysample.webapp.lending.web..*.*(..)) && @annotation(loggingEventName)"
             , argNames = "pjp, loggingEventName")
     public Object logginControllerAndEventName(ProceedingJoinPoint pjp, LoggingEventName loggingEventName)

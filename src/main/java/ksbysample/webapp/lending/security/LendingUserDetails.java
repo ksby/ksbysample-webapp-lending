@@ -1,7 +1,6 @@
 package ksbysample.webapp.lending.security;
 
 import ksbysample.webapp.lending.entity.UserInfo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,6 +19,10 @@ public class LendingUserDetails implements UserDetails {
     private final boolean credentialsNonExpired;
     private final boolean enabled;
 
+    /**
+     * @param userInfo    ???
+     * @param authorities ???
+     */
     public LendingUserDetails(UserInfo userInfo
             , Set<? extends GrantedAuthority> authorities) {
         LocalDateTime now = LocalDateTime.now();
@@ -41,36 +44,58 @@ public class LendingUserDetails implements UserDetails {
         return lendingUser.getPassword();
     }
 
+    /**
+     * @return ???
+     */
     public Long getUserId() {
         return lendingUser.getUserId();
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public String getUsername() {
         return lendingUser.getMailAddress();
     }
 
+    /**
+     * @return ???
+     */
     public String getName() {
         return lendingUser.getUsername();
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isAccountNonExpired() {
         return accountNonExpired;
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isAccountNonLocked() {
         return accountNonLocked;
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isCredentialsNonExpired() {
         return credentialsNonExpired;
     }
 
+    /**
+     * @return ???
+     */
     @Override
     public boolean isEnabled() {
         return enabled;
     }
+
 }

@@ -31,13 +31,21 @@ public class RequestAndResponseLogger {
     private static final String LOG_RESPONSE_INFO = "[res][info  ] ";
     private static final String LOG_RESPONSE_HEADER = "[res][header] ";
 
-    @Around(value = "execution(* ksbysample.webapp.lending.web..*.*(..)) && @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    /**
+     * @param pjp ???
+     * @return ???
+     * @throws Throwable
+     */
+    @Around(value = "execution(* ksbysample.webapp.lending.web..*.*(..))"
+            + "&& @annotation(org.springframework.web.bind.annotation.RequestMapping)")
     public Object logginRequestAndResponse(ProceedingJoinPoint pjp)
             throws Throwable {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+        HttpServletRequest request
+                = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         loggingRequest(request);
         Object ret = pjp.proceed();
-        HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        HttpServletResponse response
+                = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
         loggingResponse(response);
 
         return ret;

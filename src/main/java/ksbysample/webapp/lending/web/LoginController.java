@@ -7,7 +7,6 @@ import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.entity.UserRole;
 import ksbysample.webapp.lending.helper.url.UrlAfterLoginHelper;
 import ksbysample.webapp.lending.security.LendingUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
@@ -36,18 +35,35 @@ import java.util.stream.Collectors;
 @RequestMapping("/")
 public class LoginController {
 
-    @Autowired
-    private UserInfoDao userInfoDao;
+    private final UserInfoDao userInfoDao;
 
-    @Autowired
-    private UserRoleDao userRoleDao;
+    private final UserRoleDao userRoleDao;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
-    
+    private final UserDetailsService userDetailsService;
+
+    /**
+     * @param userInfoDao        ???
+     * @param userRoleDao        ???
+     * @param messageSource      ???
+     * @param userDetailsService ???
+     */
+    public LoginController(UserInfoDao userInfoDao
+            , UserRoleDao userRoleDao
+            , MessageSource messageSource
+            , UserDetailsService userDetailsService) {
+        this.userInfoDao = userInfoDao;
+        this.userRoleDao = userRoleDao;
+        this.messageSource = messageSource;
+        this.userDetailsService = userDetailsService;
+    }
+
+    /**
+     * @param request  ???
+     * @param response ???
+     * @return ???
+     */
     @RequestMapping
     public String index(HttpServletRequest request, HttpServletResponse response) {
         // 有効な remember-me Cookie が存在する場合にはログイン画面を表示させず自動ログインさせる
@@ -63,17 +79,29 @@ public class LoginController {
         return "login";
     }
 
+    /**
+     * @param password ???
+     * @return ???
+     */
     @RequestMapping("/encode")
     @ResponseBody
     public String encode(@RequestParam String password) {
         return new BCryptPasswordEncoder().encode(password);
     }
 
+    /**
+     * @return ???
+     */
     @RequestMapping("/loginsuccess")
     public String loginsuccess() {
         return "loginsuccess";
     }
 
+    /**
+     * @param user    ???
+     * @param request ???
+     * @return ???
+     */
     @RequestMapping("/urllogin")
     public String urllogin(@RequestParam String user
             , HttpServletRequest request) {
@@ -101,7 +129,8 @@ public class LoginController {
                 = new UsernamePasswordAuthenticationToken(lendingUserDetails, null, authorities);
         // 下の２行は org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter の
         // setDetails メソッドを見て実装しています
-        AuthenticationDetailsSource<HttpServletRequest,?> authenticationDetailsSource = new WebAuthenticationDetailsSource();
+        AuthenticationDetailsSource<HttpServletRequest, ?> authenticationDetailsSource
+                = new WebAuthenticationDetailsSource();
         token.setDetails(authenticationDetailsSource.buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(token);
 

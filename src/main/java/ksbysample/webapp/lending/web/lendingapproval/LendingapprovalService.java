@@ -11,7 +11,6 @@ import ksbysample.webapp.lending.helper.mail.Mail003Helper;
 import ksbysample.webapp.lending.security.LendingUserDetailsHelper;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
@@ -27,21 +26,44 @@ import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingApp
 @Service
 public class LendingapprovalService {
 
-    @Autowired
-    private LendingAppDao lendingAppDao;
+    private final LendingAppDao lendingAppDao;
 
-    @Autowired
-    private UserInfoDao userInfoDao;
+    private final UserInfoDao userInfoDao;
 
-    @Autowired
-    private LendingBookDao lendingBookDao;
+    private final LendingBookDao lendingBookDao;
 
-    @Autowired
-    private Mail003Helper mail003Helper;
+    private final Mail003Helper mail003Helper;
 
-    @Autowired
-    private EmailHelper emailHelper;
+    private final EmailHelper emailHelper;
 
+    private final LendingUserDetailsHelper lendingUserDetailsHelper;
+
+    /**
+     * @param lendingAppDao            ???
+     * @param userInfoDao              ???
+     * @param lendingBookDao           ???
+     * @param mail003Helper            ???
+     * @param emailHelper              ???
+     * @param lendingUserDetailsHelper ???
+     */
+    public LendingapprovalService(LendingAppDao lendingAppDao
+            , UserInfoDao userInfoDao
+            , LendingBookDao lendingBookDao
+            , Mail003Helper mail003Helper
+            , EmailHelper emailHelper
+            , LendingUserDetailsHelper lendingUserDetailsHelper) {
+        this.lendingAppDao = lendingAppDao;
+        this.userInfoDao = userInfoDao;
+        this.lendingBookDao = lendingBookDao;
+        this.mail003Helper = mail003Helper;
+        this.emailHelper = emailHelper;
+        this.lendingUserDetailsHelper = lendingUserDetailsHelper;
+    }
+
+    /**
+     * @param lendingAppId        ???
+     * @param lendingapprovalForm ???
+     */
     public void setDispData(Long lendingAppId, LendingapprovalForm lendingapprovalForm) {
         LendingApp lendingApp = lendingAppDao.selectByIdAndStatus(lendingAppId
                 , Arrays.asList(PENDING.getValue(), APPLOVED.getValue()));
@@ -58,6 +80,10 @@ public class LendingapprovalService {
         lendingapprovalForm.setApplyingBookFormListFromLendingBookList(lendingBookList);
     }
 
+    /**
+     * @param lendingapprovalForm ???
+     * @throws MessagingException
+     */
     public void complete(LendingapprovalForm lendingapprovalForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
         Long lendingAppId = lendingapprovalForm.getLendingApp().getLendingAppId();
@@ -67,7 +93,7 @@ public class LendingapprovalService {
 
         // lending_app.status を 4(承認済) にする
         lendingApp.setStatus(APPLOVED.getValue());
-        lendingApp.setApprovalUserId(LendingUserDetailsHelper.getLoginUserId());
+        lendingApp.setApprovalUserId(lendingUserDetailsHelper.getLoginUserId());
         lendingAppDao.update(lendingApp);
 
         // lending_book の approval_result, approval_reason を更新する

@@ -12,6 +12,9 @@ public class SampleController {
     @Value("${spring.thymeleaf.cache:}")
     private String springThymeleafCache;
 
+    /**
+     * @return ???
+     */
     @RequestMapping
     @ResponseBody
     public String index() {

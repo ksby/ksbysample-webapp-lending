@@ -1,13 +1,12 @@
 package ksbysample.webapp.lending.web.lendingapp;
 
 import com.google.common.base.Charsets;
-import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.helper.TestHelper;
-import ksbysample.common.test.rule.mail.MailServerResource;
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
+import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.rule.db.TestData;
 import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.webapp.lending.Application;
+import ksbysample.common.test.rule.mail.MailServerResource;
+import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;
@@ -16,9 +15,8 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 import org.yaml.snakeyaml.Yaml;
 
@@ -36,9 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(Enclosed.class)
 public class LendingappControllerTest {
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class 貸出申請画面の初期表示のテスト_エラー処理 {
 
         @Rule
@@ -50,7 +47,7 @@ public class LendingappControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Autowired
-        private MessagesPropertiesHelper messagesPropertiesHelper;
+        private MessagesPropertiesHelper mph;
 
         @Test
         public void ログインしていなければ貸出申請画面は表示できない() throws Exception {
@@ -67,7 +64,7 @@ public class LendingappControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+            assertThat(content).contains(mph.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
         @Test
@@ -78,7 +75,7 @@ public class LendingappControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+            assertThat(content).contains(mph.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
         @Test
@@ -89,14 +86,13 @@ public class LendingappControllerTest {
                     .andExpect(view().name("error"))
                     .andReturn();
             String content = result.getResponse().getContentAsString();
-            assertThat(content).contains(messagesPropertiesHelper.getMessage("LendingappForm.lendingApp.nodataerr", null));
+            assertThat(content).contains(mph.getMessage("LendingappForm.lendingApp.nodataerr", null));
         }
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class 貸出申請画面の初期表示のテスト_正常処理 {
 
         @Rule
@@ -127,9 +123,8 @@ public class LendingappControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class 貸出申請画面の入力チェックエラーのテスト {
 
         // テストデータ
@@ -148,7 +143,7 @@ public class LendingappControllerTest {
         public SecurityMockMvcResource mvc;
 
         @Autowired
-        private MessagesPropertiesHelper messagesPropertiesHelper;
+        private MessagesPropertiesHelper mph;
 
         @Test
         public void 申請するが１つも選択されていない場合は入力チェックエラー() throws Exception {
@@ -163,7 +158,7 @@ public class LendingappControllerTest {
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[1].lendingAppFlg", ""))
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", ""))
                     .andExpect(xpath("//*[@class=\"alert alert-danger\"]/p")
-                            .string(messagesPropertiesHelper.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
+                            .string(mph.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
         }
 
         @Test
@@ -193,9 +188,8 @@ public class LendingappControllerTest {
 
     }
 
-    @RunWith(SpringJUnit4ClassRunner.class)
-    @SpringApplicationConfiguration(classes = Application.class)
-    @WebAppConfiguration
+    @RunWith(SpringRunner.class)
+    @SpringBootTest
     public static class 貸出申請画面の正常処理時のテスト {
 
         // テストデータ

@@ -5,17 +5,16 @@ import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.helper.thymeleaf.SuccessMessagesHelper;
 import ksbysample.webapp.lending.util.cookie.CookieUtils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.seasar.doma.jdbc.OptimisticLockException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
@@ -26,20 +25,40 @@ import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues
 @RequestMapping("/lendingapp")
 public class LendingappController {
 
-    @Autowired
-    private LendingappService lendingappService;
+    private final LendingappService lendingappService;
 
-    @Autowired
-    private MessagesPropertiesHelper messagesPropertiesHelper;
+    private final MessagesPropertiesHelper mph;
 
-    @Autowired
-    private LendingappFormValidator lendingappFormValidator;
+    private final LendingappFormValidator lendingappFormValidator;
 
+    /**
+     * @param lendingappService       ???
+     * @param mph                     ???
+     * @param lendingappFormValidator ???
+     */
+    public LendingappController(LendingappService lendingappService
+            , MessagesPropertiesHelper mph
+            , LendingappFormValidator lendingappFormValidator) {
+        this.lendingappService = lendingappService;
+        this.mph = mph;
+        this.lendingappFormValidator = lendingappFormValidator;
+    }
+
+    /**
+     * @param binder ???
+     */
     @InitBinder(value = "lendingappForm")
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(lendingappFormValidator);
     }
 
+    /**
+     * @param lendingappParamForm ???
+     * @param bindingResult       ???
+     * @param lendingappForm      ???
+     * @param response            ???
+     * @return ???
+     */
     @RequestMapping
     public String index(@Validated LendingappParamForm lendingappParamForm
             , BindingResult bindingResult
@@ -47,7 +66,7 @@ public class LendingappController {
             , HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("LendingappForm.lendingAppId.emptyerr", null));
+                    mph.getMessage("LendingappForm.lendingAppId.emptyerr", null));
         }
 
         // 画面に表示するデータを取得する
@@ -62,7 +81,14 @@ public class LendingappController {
         return "lendingapp/lendingapp";
     }
 
-    @RequestMapping(value = "/apply", method = RequestMethod.POST)
+    /**
+     * @param lendingappForm ???
+     * @param bindingResult  ???
+     * @param response       ???
+     * @return ???
+     * @throws MessagingException
+     */
+    @PostMapping("/apply")
     public String apply(@Validated LendingappForm lendingappForm
             , BindingResult bindingResult
             , HttpServletResponse response) throws MessagingException {
@@ -86,7 +112,13 @@ public class LendingappController {
         return "lendingapp/lendingapp";
     }
 
-    @RequestMapping(value = "/temporarySave", method = RequestMethod.POST)
+    /**
+     * @param lendingappForm ???
+     * @param bindingResult  ???
+     * @param model          ???
+     * @return ???
+     */
+    @PostMapping("/temporarySave")
     public String temporarySave(@Validated LendingappForm lendingappForm
             , BindingResult bindingResult
             , Model model) {

@@ -4,7 +4,6 @@ import ksbysample.webapp.lending.config.Constant;
 import ksbysample.webapp.lending.config.WebSecurityConfig;
 import ksbysample.webapp.lending.cookie.CookieLastLendingAppId;
 import ksbysample.webapp.lending.util.cookie.CookieUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,11 +11,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import javax.servlet.http.HttpServletRequest;
 
 public class UrlAfterLoginHelper {
-    
+
+    /**
+     * @param authentication ???
+     * @return ???
+     */
     public static String getUrlAfterLogin(Authentication authentication) {
         return getUrlAfterLogin(authentication, null);
     }
 
+    /**
+     * @param authentication ???
+     * @param request        ???
+     * @return ???
+     */
     public static String getUrlAfterLogin(Authentication authentication, HttpServletRequest request) {
         String targetUrl = WebSecurityConfig.DEFAULT_SUCCESS_URL;
 
@@ -28,11 +36,11 @@ public class UrlAfterLoginHelper {
         }
 
         // LastLendingAppId Cookie に貸出申請ID をセットされている場合には貸出申請画面へリダイレクトさせる
-        String cookieLastLendingAppId = CookieUtils.getCookieValue(CookieLastLendingAppId.COOKIE_NAME, request);
-        if (StringUtils.isNotBlank(cookieLastLendingAppId)) {
-            targetUrl = String.format("%s?lendingAppId=%s", Constant.URL_LENDINGAPP, cookieLastLendingAppId);
-        }
-            
+        targetUrl = CookieUtils.getCookieValue(CookieLastLendingAppId.COOKIE_NAME, request)
+                .map(cookieLastLendingAppId ->
+                        String.format("%s?lendingAppId=%s", Constant.URL_LENDINGAPP, cookieLastLendingAppId))
+                .orElse(targetUrl);
+
         return targetUrl;
     }
 

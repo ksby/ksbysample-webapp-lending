@@ -4,6 +4,7 @@ import ksbysample.webapp.lending.values.Values;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+@SuppressWarnings("MissingOverride")
 @Getter
 @AllArgsConstructor
 public enum LendingBookApprovalResultValues implements Values {

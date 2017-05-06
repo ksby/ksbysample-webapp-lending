@@ -20,6 +20,9 @@ public class LendingapprovalForm {
     @Valid
     private List<ApplyingBookForm> applyingBookFormList;
 
+    /**
+     * @param lendingBookList ???
+     */
     public void setApplyingBookFormListFromLendingBookList(List<LendingBook> lendingBookList) {
         this.applyingBookFormList = null;
         if (lendingBookList != null) {
@@ -28,5 +31,5 @@ public class LendingapprovalForm {
                     .collect(Collectors.toList());
         }
     }
-    
+
 }

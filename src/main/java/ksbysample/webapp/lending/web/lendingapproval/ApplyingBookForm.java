@@ -29,6 +29,9 @@ public class ApplyingBookForm {
 
     private Long version;
 
+    /**
+     * @param lendingBook ???
+     */
     public ApplyingBookForm(LendingBook lendingBook) {
         BeanUtils.copyProperties(lendingBook, this);
     }

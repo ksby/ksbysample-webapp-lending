@@ -4,7 +4,6 @@ import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.helper.thymeleaf.SuccessMessagesHelper;
 import org.seasar.doma.jdbc.OptimisticLockException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.mail.MessagingException;
 
@@ -22,20 +21,40 @@ import javax.mail.MessagingException;
 @RequestMapping("/lendingapproval")
 public class LendingapprovalController {
 
-    @Autowired
-    private LendingapprovalService lendingapprovalService;
+    private final LendingapprovalService lendingapprovalService;
 
-    @Autowired
-    private MessagesPropertiesHelper messagesPropertiesHelper;
+    private final MessagesPropertiesHelper mph;
 
-    @Autowired
-    private LendingapprovalFormValidator lendingapprovalFormValidator;
+    private final LendingapprovalFormValidator lendingapprovalFormValidator;
 
+    /**
+     * @param lendingapprovalService       ???
+     * @param mph                          ???
+     * @param lendingapprovalFormValidator ???
+     */
+    public LendingapprovalController(LendingapprovalService lendingapprovalService
+            , MessagesPropertiesHelper mph
+            , LendingapprovalFormValidator lendingapprovalFormValidator) {
+        this.lendingapprovalService = lendingapprovalService;
+        this.mph = mph;
+        this.lendingapprovalFormValidator = lendingapprovalFormValidator;
+    }
+
+    /**
+     * @param binder ???
+     */
     @InitBinder(value = "lendingapprovalForm")
     public void initBinder(WebDataBinder binder) {
         binder.addValidators(lendingapprovalFormValidator);
     }
 
+    /**
+     * @param lendingapprovalParamForm           ???
+     * @param bindingResult                      ???
+     * @param lendingapprovalForm                ???
+     * @param bindingResultOfLendingapprovalForm ???
+     * @return ???
+     */
     @RequestMapping
     public String index(@Validated LendingapprovalParamForm lendingapprovalParamForm
             , BindingResult bindingResult
@@ -43,7 +62,7 @@ public class LendingapprovalController {
             , BindingResult bindingResultOfLendingapprovalForm) {
         if (bindingResult.hasErrors()) {
             throw new WebApplicationRuntimeException(
-                    messagesPropertiesHelper.getMessage("LendingapprovalParamForm.lendingAppId.emptyerr", null));
+                    mph.getMessage("LendingapprovalParamForm.lendingAppId.emptyerr", null));
         }
 
         // 画面に表示するデータを取得する
@@ -53,11 +72,18 @@ public class LendingapprovalController {
         if (lendingapprovalForm.getLendingApp() == null) {
             bindingResultOfLendingapprovalForm.reject("LendingapprovalForm.lendingApp.nodataerr");
         }
-        
+
         return "lendingapproval/lendingapproval";
     }
 
-    @RequestMapping(value = "/complete", method = RequestMethod.POST)
+    /**
+     * @param lendingapprovalForm ???
+     * @param bindingResult       ???
+     * @param model               ???
+     * @return ???
+     * @throws MessagingException
+     */
+    @PostMapping("/complete")
     public String complete(@Validated LendingapprovalForm lendingapprovalForm
             , BindingResult bindingResult
             , Model model) throws MessagingException {
@@ -68,16 +94,17 @@ public class LendingapprovalController {
         try {
             // データを更新し、承認完了メールを送信する
             lendingapprovalService.complete(lendingapprovalForm);
-    
+
             // 画面に表示するデータを取得する
-            lendingapprovalService.setDispData(lendingapprovalForm.getLendingApp().getLendingAppId(), lendingapprovalForm);
-    
+            lendingapprovalService.setDispData(lendingapprovalForm.getLendingApp().getLendingAppId()
+                    , lendingapprovalForm);
+
             // 画面に表示する通常メッセージをセットする
             SuccessMessagesHelper successMessagesHelper = new SuccessMessagesHelper("確定しました");
             successMessagesHelper.setToModel(model);
         } catch (OptimisticLockException e) {
             bindingResult.reject("Global.optimisticLockException");
-        }        
+        }
 
         return "lendingapproval/lendingapproval";
     }

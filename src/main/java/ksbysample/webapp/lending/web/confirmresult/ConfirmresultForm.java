@@ -22,6 +22,9 @@ public class ConfirmresultForm {
 
     private List<ApprovedBookForm> approvedBookFormList;
 
+    /**
+     * @param lendingBookList ???
+     */
     public void setApprovedBookFormListFromLendingBookList(List<LendingBook> lendingBookList) {
         this.approvedBookFormList = null;
         if (lendingBookList != null) {

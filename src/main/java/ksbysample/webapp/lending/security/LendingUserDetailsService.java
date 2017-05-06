@@ -4,7 +4,6 @@ import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.dao.UserRoleDao;
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.entity.UserRole;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,14 +20,24 @@ import java.util.stream.Collectors;
 @Component
 public class LendingUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserInfoDao userInfoDao;
+    private final UserInfoDao userInfoDao;
 
-    @Autowired
-    private UserRoleDao userRoleDao;
+    private final UserRoleDao userRoleDao;
 
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
+
+    /**
+     * @param userInfoDao   ???
+     * @param userRoleDao   ???
+     * @param messageSource ???
+     */
+    public LendingUserDetailsService(UserInfoDao userInfoDao
+            , UserRoleDao userRoleDao
+            , MessageSource messageSource) {
+        this.userInfoDao = userInfoDao;
+        this.userRoleDao = userRoleDao;
+        this.messageSource = messageSource;
+    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

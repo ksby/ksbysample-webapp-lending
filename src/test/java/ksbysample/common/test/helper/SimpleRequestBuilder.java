@@ -13,6 +13,7 @@ public class SimpleRequestBuilder implements RequestBuilder {
         this.request = request;
     }
 
+    @Override
     public MockHttpServletRequest buildRequest(ServletContext servletContext) {
         return request;
     }

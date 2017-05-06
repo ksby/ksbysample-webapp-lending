@@ -1,11 +1,10 @@
 package ksbysample.webapp.lending.helper.mail;
 
 import ksbysample.webapp.lending.entity.LendingBook;
-import ksbysample.webapp.lending.util.velocity.VelocityUtils;
-import ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues;
+import ksbysample.webapp.lending.helper.freemarker.FreeMarkerHelper;
 import ksbysample.webapp.lending.values.ValuesHelper;
+import ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -20,20 +19,37 @@ import java.util.stream.Collectors;
 @Component
 public class Mail003Helper {
 
-    private final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail003-body.vm";
+    private static final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail003-body.ftl";
 
-    private final String FROM_ADDR = "lendingapp@sample.com";
-    private final String SUBJECT = "貸出申請が承認・却下されました";
+    private static final String FROM_ADDR = "lendingapp@sample.com";
+    private static final String SUBJECT = "貸出申請が承認・却下されました";
 
-    @Autowired
-    private VelocityUtils velocityUtils;
+    private final FreeMarkerHelper freeMarkerHelper;
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private final JavaMailSender mailSender;
 
-    @Autowired
-    private ValuesHelper vh;
+    private final ValuesHelper vh;
 
+    /**
+     * @param freeMarkerHelper ???
+     * @param mailSender       ???
+     * @param vh               ???
+     */
+    public Mail003Helper(FreeMarkerHelper freeMarkerHelper
+            , JavaMailSender mailSender
+            , ValuesHelper vh) {
+        this.freeMarkerHelper = freeMarkerHelper;
+        this.mailSender = mailSender;
+        this.vh = vh;
+    }
+
+    /**
+     * @param toAddr          ???
+     * @param lendingAppId    ???
+     * @param lendingBookList ???
+     * @return ???
+     * @throws MessagingException
+     */
     public MimeMessage createMessage(String toAddr, Long lendingAppId, List<LendingBook> lendingBookList)
             throws MessagingException {
         List<Mail003BookData> mail003BookDataList = lendingBookList.stream()
@@ -53,7 +69,7 @@ public class Mail003Helper {
         Map<String, Object> model = new HashMap<>();
         model.put("lendingAppId", lendingAppId);
         model.put("mail003BookDataList", mail003BookDataList);
-        return velocityUtils.merge(this.TEMPLATE_LOCATION_TEXTMAIL, model);
+        return freeMarkerHelper.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
     @Data
@@ -61,6 +77,9 @@ public class Mail003Helper {
         private String approvalResultStr;
         private String bookName;
 
+        /**
+         * @param lendingBook ???
+         */
         public Mail003BookData(LendingBook lendingBook) {
             this.approvalResultStr = vh.getText(LendingBookApprovalResultValues.class, lendingBook.getApprovalResult());
             this.bookName = lendingBook.getBookName();

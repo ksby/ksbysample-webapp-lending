@@ -12,6 +12,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 public @interface LoggingControllerName {
 
+    /**
+     * @return ???
+     */
     String value();
 
 }

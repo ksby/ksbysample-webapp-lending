@@ -1,6 +1,5 @@
 package ksbysample.webapp.lending.web.springmvcmemo;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
@@ -11,14 +10,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/springMvcMemo/beanValidationGroup")
 public class BeanValidationGroupController {
 
-    @Autowired
-    private Validator validator;
+    private final Validator validator;
 
+    /**
+     * @param validator ???
+     */
+    public BeanValidationGroupController(Validator validator) {
+        this.validator = validator;
+    }
+
+    /**
+     * @param beanValidationGroupForm ???
+     * @return ???
+     */
     @RequestMapping
     public String beanValidationGroup(BeanValidationGroupForm beanValidationGroupForm) {
         return "springmvcmemo/beanValidationGroup";
     }
 
+    /**
+     * @param beanValidationGroupForm ???
+     * @param bindingResult           ???
+     * @return ???
+     */
     @RequestMapping("/fileupload")
     public String fileupload(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult) {
@@ -29,6 +43,12 @@ public class BeanValidationGroupController {
         return "springmvcmemo/beanValidationGroup";
     }
 
+    /**
+     * @param beanValidationGroupForm ???
+     * @param bindingResult           ???
+     * @param editFormChecker         ???
+     * @return ???
+     */
     @RequestMapping("/edit")
     public String edit(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
@@ -41,6 +61,12 @@ public class BeanValidationGroupController {
         return "springmvcmemo/beanValidationGroup";
     }
 
+    /**
+     * @param beanValidationGroupForm ???
+     * @param bindingResult           ???
+     * @param sendmailFormChecker     ???
+     * @return ???
+     */
     @RequestMapping("/sendmail")
     public String sendmail(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult

@@ -15,20 +15,32 @@ import java.util.Map;
 @Service
 public class OpenWeatherMapApiService {
 
-    private int CONNECT_TIMEOUT = 5000;
-    private int READ_TIMEOUT = 5000;
+    private static int CONNECT_TIMEOUT = 5000;
+    private static int READ_TIMEOUT = 5000;
 
-    private final String URL_WEATHERAPI_5DAY3HOURFORECAST = "http://api.openweathermap.org/data/2.5/forecast?q={cityname}";
+    private static final String URL_WEATHERAPI_5DAY3HOURFORECAST = "http://api.openweathermap.org/data/2.5/forecast?q={cityname}";
 
+    /**
+     * @param cityname ???
+     * @return ???
+     */
     public FiveDayThreeHourForecastData getFiveDayThreeHourForecast(String cityname) {
         RestTemplate restTemplate = new RestTemplate(getClientHttpRequestFactory());
         ResponseEntity<FiveDayThreeHourForecastData> response
-                = restTemplate.getForEntity(URL_WEATHERAPI_5DAY3HOURFORECAST, FiveDayThreeHourForecastData.class, cityname);
+                = restTemplate.getForEntity(URL_WEATHERAPI_5DAY3HOURFORECAST
+                , FiveDayThreeHourForecastData.class, cityname);
         return response.getBody();
     }
 
-    public FiveDayThreeHourForecastData getFiveDayThreeHourForecastByJSONP(String cityname, String callback) throws IOException {
-        assert(StringUtils.isNotBlank(callback));
+    /**
+     * @param cityname ???
+     * @param callback ???
+     * @return ???
+     * @throws IOException
+     */
+    public FiveDayThreeHourForecastData getFiveDayThreeHourForecastByJsonp(String cityname, String callback)
+            throws IOException {
+        assert (StringUtils.isNotBlank(callback));
 
         // callback パラメータを付加して WebAPI を呼び出し、レスポンスを String で受け取る
         // ※今回は RestTemplate に Map でパラメータを渡す
@@ -43,15 +55,15 @@ public class OpenWeatherMapApiService {
         String body = response.getBody();
         StringBuilder json = new StringBuilder(body.length() - callback.length() - 3);
         json.append(body.substring(callback.length() + 1, body.length() - 3));
-        
+
         // JSON 文字列から Java オブジェクトへ変換する
         // ※自分で ObjectMapper オブジェクトを生成した時には findAndRegisterModules メソッドを呼び出さないと
         //   jackson-datatype-jsr310 による LocalDateTime 変換が行われない
         ObjectMapper mapper = new ObjectMapper();
         mapper.findAndRegisterModules();
         FiveDayThreeHourForecastData fiveDayThreeHourForecastData
-                = mapper.readValue(json.toString(), FiveDayThreeHourForecastData.class); 
-        
+                = mapper.readValue(json.toString(), FiveDayThreeHourForecastData.class);
+
         return fiveDayThreeHourForecastData;
     }
 
