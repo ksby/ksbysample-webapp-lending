@@ -1,9 +1,9 @@
-group 'ksbysample'
-version '1.4.6-RELEASE'
+ group 'ksbysample'
+version '1.5.3-RELEASE'
 
 buildscript {
     ext {
-        springBootVersion = '1.4.6.RELEASE'
+        springBootVersion = '1.5.3.RELEASE'
     }
     repositories {
         jcenter()
@@ -86,7 +86,7 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom("io.spring.platform:platform-bom:Athens-SR5") {
+        mavenBom("io.spring.platform:platform-bom:Brussels-SR2") {
             bomProperty 'guava.version', '21.0'
         }
     }
@@ -99,7 +99,7 @@ bootRepackage {
 
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:42.0.0"
-    def spockVersion = "1.1-groovy-2.4-rc-4"
+    def spockVersion = "1.1-groovy-2.4"
     def domaVersion = "2.16.0"
     def lombokVersion = "1.16.16"
     def errorproneVersion = "2.0.15"
@@ -136,7 +136,7 @@ dependencies {
     compile("com.univocity:univocity-parsers:2.4.1")
     testCompile("org.dbunit:dbunit:2.5.3")
     testCompile("com.icegreen:greenmail:1.5.4")
-    testCompile("org.assertj:assertj-core:3.6.2")
+    testCompile("org.assertj:assertj-core:3.7.0")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
     testCompile("org.spockframework:spock-core:${spockVersion}") {
         exclude module: "groovy-all"
