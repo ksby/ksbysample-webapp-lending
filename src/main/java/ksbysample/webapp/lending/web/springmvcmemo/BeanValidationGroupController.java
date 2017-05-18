@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/springMvcMemo/beanValidationGroup")
 public class BeanValidationGroupController {
 
-    private final Validator validator;
+    private final Validator mvcValidator;
 
     /**
-     * @param validator ???
+     * @param mvcValidator ???
      */
-    public BeanValidationGroupController(Validator validator) {
-        this.validator = validator;
+    public BeanValidationGroupController(Validator mvcValidator) {
+        this.mvcValidator = mvcValidator;
     }
 
     /**
@@ -53,7 +53,7 @@ public class BeanValidationGroupController {
     public String edit(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , EditFormChecker editFormChecker) {
-        validator.validate(editFormChecker, bindingResult);
+        mvcValidator.validate(editFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
             return "springmvcmemo/beanValidationGroup";
         }
@@ -71,7 +71,7 @@ public class BeanValidationGroupController {
     public String sendmail(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , SendmailFormChecker sendmailFormChecker) {
-        validator.validate(sendmailFormChecker, bindingResult);
+        mvcValidator.validate(sendmailFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
             return "springmvcmemo/beanValidationGroup";
         }
