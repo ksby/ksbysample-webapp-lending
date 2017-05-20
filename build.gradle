@@ -94,7 +94,6 @@ dependencyManagement {
 
 bootRepackage {
     mainClass = 'ksbysample.webapp.lending.Application'
-    excludeDevtools = true
 }
 
 dependencies {
