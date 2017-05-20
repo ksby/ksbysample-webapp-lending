@@ -1,4 +1,4 @@
- group 'ksbysample'
+group 'ksbysample'
 version '1.5.3-RELEASE'
 
 buildscript {
