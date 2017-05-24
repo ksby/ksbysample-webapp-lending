@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 import java.io.File;
 
 import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
+import static ksbysample.common.test.matcher.HtmlResultMatchers.html;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -134,11 +135,15 @@ public class LendingapprovalControllerTest {
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapproval/lendingapproval"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr").nodeCount(3))
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr[1]/td[2]").string("978-4-7741-5377-3"))
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr[1]/td[3]").string("JUnit実践入門"))
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr[1]/td[4]").string("開発で使用する為"))
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr[1]/td[6]/input[@type=\"text\"]").exists());
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr").count(3))
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr:eq(0) > td:eq(1)")
+                            .text("978-4-7741-5377-3"))
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr:eq(0) > td:eq(2)")
+                            .text("JUnit実践入門"))
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr:eq(0) > td:eq(3)")
+                            .text("開発で使用する為"))
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr:eq(0) > td:eq(5) > input[type=text]")
+                            .exists());
         }
 
     }
@@ -174,8 +179,8 @@ public class LendingapprovalControllerTest {
                     .andExpect(model().errorCount(2))
                     .andExpect(errors().hasGlobalError("lendingapprovalForm", "LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr"))
                     .andExpect(errors().hasFieldError("lendingapprovalForm", "applyingBookFormList[2].approvalReason", ""))
-                    .andExpect(xpath("//*[@class=\"alert alert-danger\"]/p")
-                            .string(mph.getMessage("LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr", null)));
+                    .andExpect(html(".alert.alert-danger > p")
+                            .text(mph.getMessage("LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr", null)));
         }
 
         @Test
@@ -226,8 +231,9 @@ public class LendingapprovalControllerTest {
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapproval/lendingapproval"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(xpath("//*[@class=\"alert alert-success\"]/p").string("確定しました"))
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr[1]/td[6]/input[@type=\"text\"]").doesNotExist());
+                    .andExpect(html(".alert.alert-success > p").text("確定しました"))
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr:eq(0) > td:eq(5) > input[type=text]")
+                            .notExists());
 
             // then ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
             // DB
@@ -256,8 +262,10 @@ public class LendingapprovalControllerTest {
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapproval/lendingapproval"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div/div/table/tbody/tr[1]/td[6]/input[@type=\"text\"]").doesNotExist())
-                    .andExpect(xpath("//*[@id=\"lendingapprovalForm\"]/div[2]/div/table/tbody/tr[1]/td[6]/span").string("購入済です"));
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr:eq(0) > td:eq(5) > input[type=text]")
+                            .notExists())
+                    .andExpect(html("#lendingapprovalForm > div > div > table > tbody > tr:eq(0) > td:eq(5) > span")
+                            .text("購入済です"));
 
             // then ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
             // DB

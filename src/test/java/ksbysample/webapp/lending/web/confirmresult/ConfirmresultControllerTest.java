@@ -19,6 +19,7 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.nio.charset.Charset;
 
+import static ksbysample.common.test.matcher.HtmlResultMatchers.html;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -77,8 +78,8 @@ public class ConfirmresultControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("confirmresult/confirmresult"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/p")
-                            .string(mph.getMessage("ConfirmresultForm.lendingApp.nodataerr", null)));
+                    .andExpect(html("#confirmresultForm > div > p")
+                            .text(mph.getMessage("ConfirmresultForm.lendingApp.nodataerr", null)));
         }
 
         @Test
@@ -114,26 +115,26 @@ public class ConfirmresultControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("confirmresult/confirmresult"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/div[1]/table/tr[2]/td")
-                            .string("承認済"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/div[1]/table/tr[3]/td")
-                            .string("tanaka taro"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/div[1]/table/tr[4]/td")
-                            .string("suzuki hanako"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/table/tbody/tr")
-                            .nodeCount(3))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/table/tbody/tr[1]/td[2]")
-                            .string("978-4-7741-5377-3"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/table/tbody/tr[1]/td[3]")
-                            .string("JUnit実践入門"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/table/tbody/tr[1]/td[4]")
-                            .string("開発で使用する為"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/table/tbody/tr[1]/td[5]")
-                            .string("却下"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/table/tbody/tr[1]/td[6]")
-                            .string("購入済です"))
-                    .andExpect(xpath("//*[@id=\"confirmresultForm\"]/div/div/table/tbody/tr[2]/td[5]")
-                            .string("承認"));
+                    .andExpect(html("#confirmresultForm > div > div > div:eq(0) > table > tbody > tr:eq(1) > td")
+                            .text("承認済"))
+                    .andExpect(html("#confirmresultForm > div > div > div:eq(0) > table > tbody > tr:eq(2) > td")
+                            .text("tanaka taro"))
+                    .andExpect(html("#confirmresultForm > div > div > div:eq(0) > table > tbody > tr:eq(3) > td")
+                            .text("suzuki hanako"))
+                    .andExpect(html("#confirmresultForm > div > div > table > tbody > tr")
+                            .count(3))
+                    .andExpect(html("#confirmresultForm > div > div > table > tbody > tr:eq(0) > td:eq(1)")
+                            .text("978-4-7741-5377-3"))
+                    .andExpect(html("#confirmresultForm > div > div > table > tbody > tr:eq(0) > td:eq(2)")
+                            .text("JUnit実践入門"))
+                    .andExpect(html("#confirmresultForm > div > div > table > tbody > tr:eq(0) > td:eq(3)")
+                            .text("開発で使用する為"))
+                    .andExpect(html("#confirmresultForm > div > div > table > tbody > tr:eq(0) > td:eq(4)")
+                            .text("却下"))
+                    .andExpect(html("#confirmresultForm > div > div > table > tbody > tr:eq(0) > td:eq(5)")
+                            .text("購入済です"))
+                    .andExpect(html("#confirmresultForm > div > div > table > tbody > tr:eq(1) > td:eq(4)")
+                            .text("承認"));
         }
 
     }

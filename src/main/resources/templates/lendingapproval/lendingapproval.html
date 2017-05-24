@@ -1,46 +1,15 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<head th:replace="~{common/mainparts :: head(~{::title}, ~{::link}, ~{::style})}">
     <title>貸出承認</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
-    <link th:replace="common/head-cssjs"/>
 
     <style>
-        .content-wrapper {
-            background-color: #fffafa;
-        }
-        .selected-library {
-            color: #ffffff !important;
-            font-size: 100%;
-            font-weight: 700;
-        }
-        .box-body.no-padding {
-            padding-bottom: 10px !important;
-        }
-        .table>tbody>tr>td
-        , .table>tbody>tr>th
-        , .table>tfoot>tr>td
-        , .table>tfoot>tr>th
-        , .table>thead>tr>td
-        , .table>thead>tr>th {
-            padding: 5px;
-            font-size: 90%;
-        }
-        .jp-gothic {
-            font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-        }
         .btn-approval.active {
             background-color: #00a65a;
         }
         .btn-reject.active {
             background-color: #dd4b39;
-        }
-        .has-error {
-            background-color: #ffcccc;
         }
     </style>
 </head>
@@ -94,7 +63,7 @@
                                         </table>
                                     </div>
                                     <br/>
-    
+
                                     <table class="table">
                                         <colgroup>
                                             <col width="5%"/>
@@ -143,7 +112,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control input-sm"                                                       
+                                                <input type="text" class="form-control input-sm"
                                                        th:classappend="${#fields.hasErrors('*{applyingBookFormList[__${iterStat.index}__].approvalReason}')} ? 'has-error' : ''"
                                                        th:field="*{applyingBookFormList[__${iterStat.index}__].approvalReason}"
                                                        th:if="*{lendingApp.status} == ${@vh.getValue('LendingAppStatusValues', 'PENDING')}"/>

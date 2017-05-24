@@ -1,13 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<head th:replace="~{common/mainparts :: head(~{::title}, ~{::link}, ~{::style})}">
     <title>Thymeleaf で textarea に入力された改行があるデータをテキスト表示する</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
-    <link th:replace="common/head-cssjs"/>
 
     <style type="text/css">
         <!--

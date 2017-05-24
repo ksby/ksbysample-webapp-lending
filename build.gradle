@@ -88,6 +88,11 @@ dependencyManagement {
     imports {
         mavenBom("io.spring.platform:platform-bom:Brussels-SR2") {
             bomProperty 'guava.version', '21.0'
+            bomProperty 'thymeleaf.version', '3.0.6.RELEASE'
+            bomProperty 'thymeleaf-extras-springsecurity4.version', '3.0.2.RELEASE'
+            bomProperty 'thymeleaf-layout-dialect.version', '2.2.2'
+            bomProperty 'thymeleaf-extras-data-attribute.version', '2.0.1'
+            bomProperty 'thymeleaf-extras-java8time.version', '3.0.0.RELEASE'
         }
     }
 }
@@ -137,6 +142,8 @@ dependencies {
     testCompile("com.icegreen:greenmail:1.5.4")
     testCompile("org.assertj:assertj-core:3.7.0")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
+    testCompile("org.jsoup:jsoup:1.10.2")
+    testCompile("cglib:cglib-nodep:3.2.5")
     testCompile("org.spockframework:spock-core:${spockVersion}") {
         exclude module: "groovy-all"
     }

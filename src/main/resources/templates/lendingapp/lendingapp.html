@@ -1,42 +1,8 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<head th:replace="~{common/mainparts :: head(~{::title}, ~{::link}, ~{::style})}">
     <title>貸出申請</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
-    <link th:replace="common/head-cssjs"/>
-
-    <style>
-        .content-wrapper {
-            background-color: #fffafa;
-        }
-        .selected-library {
-            color: #ffffff !important;
-            font-size: 100%;
-            font-weight: 700;
-        }
-        .box-body.no-padding {
-            padding-bottom: 10px !important;
-        }
-        .table>tbody>tr>td
-        , .table>tbody>tr>th
-        , .table>tfoot>tr>td
-        , .table>tfoot>tr>th
-        , .table>thead>tr>td
-        , .table>thead>tr>th {
-            padding: 5px;
-            font-size: 90%;
-        }
-        .jp-gothic {
-            font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-        }
-        .has-error {
-            background-color: #ffcccc;
-        }
-    </style>
 </head>
 
 <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
@@ -83,7 +49,7 @@
                                         <input type="hidden" th:field="*{lendingApp.version}"/>
                                     </div>
                                     <br/>
-    
+
                                     <table class="table table-hover">
                                         <colgroup>
                                             <col width="5%"/>
