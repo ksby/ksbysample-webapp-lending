@@ -30,8 +30,10 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
+                        <!--/*@thymesVar id="confirmresultForm" type="ksbysample.webapp.lending.web.confirmresult.ConfirmresultForm"*/-->
                         <form id="confirmresultForm" method="post" action="/confirmresult/filedownload"
-                              th:action="@{/confirmresult/filedownload}" th:object="${confirmresultForm}">
+                              th:action="@{/confirmresult/filedownload}"
+                              th:object="${confirmresultForm}">
                             <div th:replace="common/mainparts :: alert-danger"></div>
                             <div th:replace="common/mainparts :: alert-success"></div>
                             <div class="box" th:if="*{lendingApp != null}">

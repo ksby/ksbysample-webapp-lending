@@ -24,7 +24,10 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <form id="lendingappForm" method="post" action="/lendingapp/apply" th:action="@{/lendingapp/apply}" th:object="${lendingappForm}">
+                        <!--/*@thymesVar id="lendingappForm" type="ksbysample.webapp.lending.web.lendingapp.LendingappForm"*/-->
+                        <form id="lendingappForm" method="post" action="/lendingapp/apply"
+                              th:action="@{/lendingapp/apply}"
+                              th:object="${lendingappForm}">
                             <div th:replace="common/mainparts :: alert-danger"></div>
                             <div th:replace="common/mainparts :: alert-success"></div>
                             <div class="box">

@@ -26,7 +26,10 @@
                     <div class="col-xs-12">
                         <div class="box">
                             <div class="box-body no-padding">
-                                <form id="registerBooklistForm" method="post" action="/booklist/register" th:action="@{/booklist/register}" th:object="${registerBooklistForm}">
+                                <!--/*@thymesVar id="registerBooklistForm" type="ksbysample.webapp.lending.web.booklist.RegisterBooklistForm"*/-->
+                                <form id="registerBooklistForm" method="post" action="/booklist/register"
+                                      th:action="@{/booklist/register}"
+                                      th:object="${registerBooklistForm}">
                                     <table class="table table-hover">
                                         <colgroup>
                                             <col width="5%"/>

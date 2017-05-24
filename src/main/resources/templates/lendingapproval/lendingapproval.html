@@ -33,8 +33,10 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
+                        <!--/*@thymesVar id="lendingapprovalForm" type="ksbysample.webapp.lending.web.lendingapproval.LendingapprovalForm"*/-->
                         <form id="lendingapprovalForm" method="post" action="/lendingapproval/complete"
-                              th:action="@{/lendingapproval/complete}" th:object="${lendingapprovalForm}">
+                              th:action="@{/lendingapproval/complete}"
+                              th:object="${lendingapprovalForm}">
                             <div th:replace="common/mainparts :: alert-danger"></div>
                             <div th:replace="common/mainparts :: alert-success"></div>
                             <div class="box" th:if="*{lendingApp != null}">

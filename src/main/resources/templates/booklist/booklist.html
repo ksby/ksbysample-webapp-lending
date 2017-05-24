@@ -35,7 +35,10 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <form id="uploadBooklistForm" enctype="multipart/form-data" method="post" action="/booklist/fileupload" th:action="@{/booklist/fileupload}" th:object="${uploadBooklistForm}">
+                        <!--/*@thymesVar id="uploadBooklistForm" type="ksbysample.webapp.lending.web.booklist.UploadBooklistForm"*/-->
+                        <form id="uploadBooklistForm" enctype="multipart/form-data" method="post" action="/booklist/fileupload"
+                              th:action="@{/booklist/fileupload}"
+                              th:object="${uploadBooklistForm}">
                             <div class="form-group">
                                 <input type="file" name="fileupload" class="js-fileupload"/>
                             </div>

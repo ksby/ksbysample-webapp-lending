@@ -62,7 +62,10 @@
                                         <!-- ここにカーリル図書館APIで取得した図書館データを表示する -->
                                     </tbody>
                                 </table>
-                                <form id="setSelectedLibraryForm" method="post" action="/admin/library/addSearchLibrary" th:action="@{/admin/library/addSearchLibrary}">
+                                <!--/*@thymesVar id="setSelectedLibraryForm" type="ksbysample.webapp.lending.web.admin.library.SetSelectedLibraryForm"*/-->
+                                <form id="setSelectedLibraryForm" method="post" action="/admin/library/addSearchLibrary"
+                                      th:action="@{/admin/library/addSearchLibrary}"
+                                      th:object="${setSelectedLibraryForm}">
                                     <input type="hidden" name="systemid" value=""/>
                                     <input type="hidden" name="formal" value=""/>
                                 </form>
