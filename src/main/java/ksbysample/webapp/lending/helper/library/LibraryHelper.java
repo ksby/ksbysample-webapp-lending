@@ -20,14 +20,11 @@ public class LibraryHelper {
      * @return ???
      */
     public String getSelectedLibrary() {
-        String result;
+        String result = null;
         LibraryForsearch libraryForsearch = libraryForsearchDao.selectSelectedLibrary();
-        if (libraryForsearch == null) {
-            result = "※図書館が選択されていません";
-        } else {
+        if (libraryForsearch != null) {
             result = "選択中：" + libraryForsearch.getFormal();
         }
-
         return result;
     }
 

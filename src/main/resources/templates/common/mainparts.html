@@ -102,7 +102,10 @@
 
                 <!-- Navbar Right Menu -->
                 <div class="navbar-custom-menu">
-                    <p class="navbar-text" th:classappend="${#strings.startsWith(@libraryHelper.getSelectedLibrary(), '※')} ? 'noselected-library' : 'selected-library'" th:text="${@libraryHelper.getSelectedLibrary()}">※図書館が選択されていません</p>
+                    <p class="navbar-text"
+                       th:with="selectedLibrary=${@libraryHelper.getSelectedLibrary()}"
+                       th:classappend="${selectedLibrary} ? 'selected-library' : 'noselected-library'"
+                       th:text="${selectedLibrary} ?: _">※図書館が選択されていません</p>
                     <ul class="nav navbar-nav">
                         <li><a href="/logout">ログアウト</a></li>
                     </ul>
