@@ -35,7 +35,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.13'
+    gradleVersion = '3.5'
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing,-path']
@@ -74,6 +74,21 @@ findbugs {
 }
 
 tasks.withType(FindBugs) {
+    // Gradle 3.3以降 + FindBugs Gradle Plugin を組み合わせると、"The following errors occurred during analysis:"
+    // の後に "Cannot open codebase filesystem:..." というメッセージが大量に出力されるので、以下の doFirst { ... }
+    // のコードを入れることで出力されないようにする
+    doFirst {
+        def fc = classes
+        if (fc == null) {
+            return
+        }
+        fc.exclude '**/*.properties'
+        fc.exclude '**/*.xml'
+        fc.exclude '**/META-INF/**'
+        fc.exclude '**/static/**'
+        fc.exclude '**/templates/**'
+        classes = files(fc.files)
+    }
     reports {
         xml.enabled = false
         html.enabled = true
@@ -175,140 +190,147 @@ test {
 }
 
 // for Doma-Gen
-task domaGen << {
-    // まず変更が必要なもの
-    def rootPackageName  = 'ksbysample.webapp.lending'
-    def daoPackagePath   = 'src/main/java/ksbysample/webapp/lending/dao'
-    def dbUrl            = 'jdbc:postgresql://localhost/ksbylending'
-    def dbUser           = 'ksbylending_user'
-    def dbPassword       = 'xxxxxxxx'
-    def tableNamePattern = '.*'
-    // おそらく変更不要なもの
-    def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
-    def workDirPath      = 'work'
-    def workDaoDirPath   = "${workDirPath}/dao"
+task domaGen {
+    doLast {
+        // まず変更が必要なもの
+        def rootPackageName = 'ksbysample.webapp.lending'
+        def daoPackagePath = 'src/main/java/ksbysample/webapp/lending/dao'
+        def dbUrl = 'jdbc:postgresql://localhost/ksbylending'
+        def dbUser = 'ksbylending_user'
+        def dbPassword = 'xxxxxxxx'
+        def tableNamePattern = '.*'
+        // おそらく変更不要なもの
+        def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
+        def workDirPath = 'work'
+        def workDaoDirPath = "${workDirPath}/dao"
 
-    // 作業用ディレクトリを削除する
-    clearDir("${workDirPath}")
+        // 作業用ディレクトリを削除する
+        clearDir("${workDirPath}")
 
-    // 現在の Dao インターフェースのバックアップを取得する
-    copy() {
-        from "${daoPackagePath}"
-        into "${workDaoDirPath}/org"
-    }
-
-    // Dao インターフェース、Entity クラスを生成する
-    ant.taskdef(resource: 'domagentask.properties',
-            classpath: configurations.domaGenRuntime.asPath)
-    ant.gen(url: "${dbUrl}", user: "${dbUser}", password: "${dbPassword}", tableNamePattern: "${tableNamePattern}") {
-        entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
-        daoConfig(packageName: "${rootPackageName}.dao")
-        sqlConfig()
-    }
-
-    // 生成された Dao インターフェースを作業用ディレクトリにコピーし、
-    // @ComponentAndAutowiredDomaConfig アノテーションを付加する
-    copy() {
-        from "${daoPackagePath}"
-        into "${workDaoDirPath}/replace"
-        filter {
-            line -> line.replaceAll('import org.seasar.doma.Dao;', "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
-                    .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+        // 現在の Dao インターフェースのバックアップを取得する
+        copy() {
+            from "${daoPackagePath}"
+            into "${workDaoDirPath}/org"
         }
+
+        // Dao インターフェース、Entity クラスを生成する
+        ant.taskdef(resource: 'domagentask.properties',
+                classpath: configurations.domaGenRuntime.asPath)
+        ant.gen(url: "${dbUrl}", user: "${dbUser}", password: "${dbPassword}", tableNamePattern: "${tableNamePattern}") {
+            entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
+            daoConfig(packageName: "${rootPackageName}.dao")
+            sqlConfig()
+        }
+
+        // 生成された Dao インターフェースを作業用ディレクトリにコピーし、
+        // @ComponentAndAutowiredDomaConfig アノテーションを付加する
+        copy() {
+            from "${daoPackagePath}"
+            into "${workDaoDirPath}/replace"
+            filter {
+                line ->
+                    line.replaceAll('import org.seasar.doma.Dao;', "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
+                            .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+            }
+        }
+
+        // @ComponentAndAutowiredDomaConfig アノテーションを付加した Dao インターフェースを
+        // dao パッケージへ戻す
+        copy() {
+            from "${workDaoDirPath}/replace"
+            into "${daoPackagePath}"
+        }
+
+        // 元々 dao パッケージ内にあったファイルを元に戻す
+        copy() {
+            from "${workDaoDirPath}/org"
+            into "${daoPackagePath}"
+        }
+
+        // 作業用ディレクトリを削除する
+        clearDir("${workDirPath}")
+
+        // 自動生成したファイルを git add する
+        addGit()
     }
-
-    // @ComponentAndAutowiredDomaConfig アノテーションを付加した Dao インターフェースを
-    // dao パッケージへ戻す
-    copy() {
-        from "${workDaoDirPath}/replace"
-        into "${daoPackagePath}"
-    }
-
-    // 元々 dao パッケージ内にあったファイルを元に戻す
-    copy() {
-        from "${workDaoDirPath}/org"
-        into "${daoPackagePath}"
-    }
-
-    // 作業用ディレクトリを削除する
-    clearDir("${workDirPath}")
-
-    // 自動生成したファイルを git add する
-    addGit()
 }
 
-task downloadCssFontsJs << {
-    def staticDirPath   = 'src/main/resources/static'
-    def workDirPath     = 'work'
-    def adminLTEVersion     = '2.2.0'
-    def jQueryVersion       = '2.1.4'
-    def fontAwesomeVersion  = '4.3.0'
-    def ioniconsVersion     = '2.0.1'
-    def html5shivJsVersion  = '3.7.2'
-    def respondMinJsVersion = '1.4.2'
+task downloadCssFontsJs {
+    doLast {
+        def staticDirPath = 'src/main/resources/static'
+        def workDirPath = 'work'
+        def adminLTEVersion = '2.2.0'
+        def jQueryVersion = '2.1.4'
+        def fontAwesomeVersion = '4.3.0'
+        def ioniconsVersion = '2.0.1'
+        def html5shivJsVersion = '3.7.2'
+        def respondMinJsVersion = '1.4.2'
 
-    // 作業用ディレクトリを削除する
-    clearDir("${workDirPath}")
+        // 作業用ディレクトリを削除する
+        clearDir("${workDirPath}")
 
-    // Bootstrap & AdminLTE Dashboard & Control Panel Template
-    downloadAdminLTE("${adminLTEVersion}", "${jQueryVersion}", "${workDirPath}", "${staticDirPath}")
+        // Bootstrap & AdminLTE Dashboard & Control Panel Template
+        downloadAdminLTE("${adminLTEVersion}", "${jQueryVersion}", "${workDirPath}", "${staticDirPath}")
 
-    // Font Awesome Icons
-    downloadFontAwesome("${fontAwesomeVersion}", "${workDirPath}", "${staticDirPath}")
+        // Font Awesome Icons
+        downloadFontAwesome("${fontAwesomeVersion}", "${workDirPath}", "${staticDirPath}")
 
-    // Ionicons
-    downloadIonicons("${ioniconsVersion}", "${workDirPath}", "${staticDirPath}")
+        // Ionicons
+        downloadIonicons("${ioniconsVersion}", "${workDirPath}", "${staticDirPath}")
 
-    // html5shiv.js
-    downloadHtml5shivJs("${html5shivJsVersion}", "${workDirPath}", "${staticDirPath}")
+        // html5shiv.js
+        downloadHtml5shivJs("${html5shivJsVersion}", "${workDirPath}", "${staticDirPath}")
 
-    // respond.min.js
-    downloadRespondMinJs("${respondMinJsVersion}", "${workDirPath}", "${staticDirPath}")
+        // respond.min.js
+        downloadRespondMinJs("${respondMinJsVersion}", "${workDirPath}", "${staticDirPath}")
 
-    // fileinput.min.js ( v4.2.7 )
-    downloadBootstrapFileInputMinJs("${workDirPath}", "${staticDirPath}")
+        // fileinput.min.js ( v4.2.7 )
+        downloadBootstrapFileInputMinJs("${workDirPath}", "${staticDirPath}")
 
-    // 作業用ディレクトリを削除する
-    clearDir("${workDirPath}")
+        // 作業用ディレクトリを削除する
+        clearDir("${workDirPath}")
 
-    // 追加したファイルを git add する
-    addGit()
+        // 追加したファイルを git add する
+        addGit()
+    }
 }
 
-task printClassWhatNotMakeTest << {
-    def srcDir = new File("src/main/java")
-    def excludePaths = [
-            "src/main/java/ksbysample/webapp/lending/Application.java"
-            , "src/main/java/ksbysample/webapp/lending/config"
-            , "src/main/java/ksbysample/webapp/lending/cookie"
-            , "src/main/java/ksbysample/webapp/lending/dao"
-            , "src/main/java/ksbysample/webapp/lending/entity"
-            , "src/main/java/ksbysample/webapp/lending/exception"
-            , "src/main/java/ksbysample/webapp/lending/helper/download/booklistcsv"
-            , "src/main/java/ksbysample/webapp/lending/helper/download/DataDownloadHelper.java"
-            , "src/main/java/ksbysample/webapp/lending/helper/page/PagenationHelper.java"
-            , "src/main/java/ksbysample/webapp/lending/security/LendingUser.java"
-            , "src/main/java/ksbysample/webapp/lending/security/RoleAwareAuthenticationSuccessHandler.java"
-            , "src/main/java/ksbysample/webapp/lending/service/calilapi/response"
-            , "src/main/java/ksbysample/webapp/lending/service/file/BooklistCSVRecord.java"
-            , "src/main/java/ksbysample/webapp/lending/service/openweathermapapi"
-            , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"
-            , "src/main/java/ksbysample/webapp/lending/util/doma"
-            , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
-            , "src/main/java/ksbysample/webapp/lending/values/validation/ValuesEnum.java"
-            , "src/main/java/ksbysample/webapp/lending/view/BookListCsvView.java"
-            , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
-            , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
-            , "src/main/java/ksbysample/webapp/lending/webapi/weather"
-    ]
-    def excludeFileNamePatterns = [
-            ".*EventListener.java"
-            , ".*Dto.java"
-            , ".*Form.java"
-            , ".*Values.java"
-    ]
+task printClassWhatNotMakeTest {
+    doLast {
+        def srcDir = new File("src/main/java")
+        def excludePaths = [
+                "src/main/java/ksbysample/webapp/lending/Application.java"
+                , "src/main/java/ksbysample/webapp/lending/config"
+                , "src/main/java/ksbysample/webapp/lending/cookie"
+                , "src/main/java/ksbysample/webapp/lending/dao"
+                , "src/main/java/ksbysample/webapp/lending/entity"
+                , "src/main/java/ksbysample/webapp/lending/exception"
+                , "src/main/java/ksbysample/webapp/lending/helper/download/booklistcsv"
+                , "src/main/java/ksbysample/webapp/lending/helper/download/DataDownloadHelper.java"
+                , "src/main/java/ksbysample/webapp/lending/helper/page/PagenationHelper.java"
+                , "src/main/java/ksbysample/webapp/lending/security/LendingUser.java"
+                , "src/main/java/ksbysample/webapp/lending/security/RoleAwareAuthenticationSuccessHandler.java"
+                , "src/main/java/ksbysample/webapp/lending/service/calilapi/response"
+                , "src/main/java/ksbysample/webapp/lending/service/file/BooklistCSVRecord.java"
+                , "src/main/java/ksbysample/webapp/lending/service/openweathermapapi"
+                , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"
+                , "src/main/java/ksbysample/webapp/lending/util/doma"
+                , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
+                , "src/main/java/ksbysample/webapp/lending/values/validation/ValuesEnum.java"
+                , "src/main/java/ksbysample/webapp/lending/view/BookListCsvView.java"
+                , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
+                , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
+                , "src/main/java/ksbysample/webapp/lending/webapi/weather"
+        ]
+        def excludeFileNamePatterns = [
+                ".*EventListener.java"
+                , ".*Dto.java"
+                , ".*Form.java"
+                , ".*Values.java"
+        ]
 
-    compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns)
+        compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns)
+    }
 }
 
 /* -----------------------------------------------------------------------------
