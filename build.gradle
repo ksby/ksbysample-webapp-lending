@@ -1,13 +1,13 @@
 group 'ksbysample'
-version '1.5.3-RELEASE'
+version '1.5.4-RELEASE'
 
 buildscript {
     ext {
-        springBootVersion = '1.5.3.RELEASE'
+        springBootVersion = '1.5.4.RELEASE'
     }
     repositories {
         jcenter()
-        maven { url "http://repo.spring.io/repo/" }
+        maven { url "https://repo.spring.io/release/" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
@@ -15,7 +15,7 @@ buildscript {
         // for Error Prone ( http://errorprone.info/ )
         classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.10")
         // for Grgit
-        classpath("org.ajoberstar:grgit:1.9.2")
+        classpath("org.ajoberstar:grgit:1.9.3")
         // Gradle Download Task
         classpath("de.undercouch:gradle-download-task:3.2.0")
     }
@@ -61,7 +61,7 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = '7.7'
+    toolVersion = '7.8.1'
     sourceSets = [project.sourceSets.main]
 }
 
@@ -101,7 +101,9 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom("io.spring.platform:platform-bom:Brussels-SR2") {
+        // BOM は https://repo.spring.io/release/io/spring/platform/platform-bom/Brussels-SR3/
+        // の下を見ること
+        mavenBom("io.spring.platform:platform-bom:Brussels-SR3") {
             bomProperty 'guava.version', '21.0'
             bomProperty 'thymeleaf.version', '3.0.6.RELEASE'
             bomProperty 'thymeleaf-extras-springsecurity4.version', '3.0.2.RELEASE'
@@ -117,9 +119,9 @@ bootRepackage {
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:42.0.0"
+    def jdbcDriver = "org.postgresql:postgresql:42.1.1"
     def spockVersion = "1.1-groovy-2.4"
-    def domaVersion = "2.16.0"
+    def domaVersion = "2.16.1"
     def lombokVersion = "1.16.16"
     def errorproneVersion = "2.0.15"
 
@@ -154,10 +156,10 @@ dependencies {
     compile("org.simpleframework:simple-xml:2.7.1")
     compile("com.univocity:univocity-parsers:2.4.1")
     testCompile("org.dbunit:dbunit:2.5.3")
-    testCompile("com.icegreen:greenmail:1.5.4")
-    testCompile("org.assertj:assertj-core:3.7.0")
+    testCompile("com.icegreen:greenmail:1.5.5")
+    testCompile("org.assertj:assertj-core:3.8.0")
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
-    testCompile("org.jsoup:jsoup:1.10.2")
+    testCompile("org.jsoup:jsoup:1.10.3")
     testCompile("cglib:cglib-nodep:3.2.5")
     testCompile("org.spockframework:spock-core:${spockVersion}") {
         exclude module: "groovy-all"
@@ -336,6 +338,7 @@ task printClassWhatNotMakeTest {
 /* -----------------------------------------------------------------------------
  * メソッド定義部
  ---------------------------------------------------------------------------- */
+
 void clearDir(String dirPath) {
     delete dirPath
 }
