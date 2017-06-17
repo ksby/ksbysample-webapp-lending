@@ -70,11 +70,11 @@ class SampleTest {
                 it.addBatch([102, 7, TestConst.TEST_ROLE_02])
             }
 
-            expect: "追加されたデータをチェックする(rolw カラムだけチェックする)"
+            expect: "追加されたデータをチェックする(カラムは全て取得するが role カラムだけチェックする)"
             def rows = sql.rows("SELECT * FROM user_role WHERE user_id IN (6, 7) ORDER BY role_id")
             assert rows.role == ["ROLE_USER", "ROLE_USER", "ROLE_ADMIN"]
 
-            and: "追加されたデータをチェックする(role_id, role の２カラムをチェックする)"
+            and: "追加されたデータをチェックする(role_id, role の２カラムのみ取得してチェックする)"
             rows = sql.rows("""\
                 SELECT
                   role_id,
