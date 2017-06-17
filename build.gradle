@@ -128,7 +128,9 @@ dependencies {
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
     compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf")
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf") {
+        exclude group: "org.codehaus.groovy", module: "groovy"
+    }
     compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
     compile("org.thymeleaf.extras:thymeleaf-extras-java8time")
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -161,12 +163,8 @@ dependencies {
     testCompile("com.jayway.jsonpath:json-path:2.2.0")
     testCompile("org.jsoup:jsoup:1.10.3")
     testCompile("cglib:cglib-nodep:3.2.5")
-    testCompile("org.spockframework:spock-core:${spockVersion}") {
-        exclude module: "groovy-all"
-    }
-    testCompile("org.spockframework:spock-spring:${spockVersion}") {
-        exclude module: "groovy-all"
-    }
+    testCompile("org.spockframework:spock-core:${spockVersion}")
+    testCompile("org.spockframework:spock-spring:${spockVersion}")
     testCompile("com.google.code.findbugs:jsr305:3.0.2")
 
     // for lombok
