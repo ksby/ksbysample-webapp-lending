@@ -1,6 +1,5 @@
 package ksbysample.webapp.lending;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
@@ -11,6 +10,10 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 @ImportResource("classpath:applicationContext-${spring.profiles.active}.xml")
 @SpringBootApplication(exclude = {JpaRepositoriesAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
@@ -19,6 +22,9 @@ import java.text.MessageFormat;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Application {
 
+    private static final Set<String> springProfiles = Collections
+            .unmodifiableSet(new HashSet<>(Arrays.asList("product", "develop", "unittest")));
+
     /**
      * Spring Boot メインメソッド
      *
@@ -26,9 +32,7 @@ public class Application {
      */
     public static void main(String[] args) {
         String springProfilesActive = System.getProperty("spring.profiles.active");
-        if (!StringUtils.equals(springProfilesActive, "product")
-                && !StringUtils.equals(springProfilesActive, "develop")
-                && !StringUtils.equals(springProfilesActive, "unittest")) {
+        if (!springProfiles.contains(springProfilesActive)) {
             throw new UnsupportedOperationException(
                     MessageFormat.format("JVMの起動時引数 -Dspring.profiles.active で "
                                     + "develop か unittest か product を指定して下さい ( -Dspring.profiles.active={0} )。"
