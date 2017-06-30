@@ -8,8 +8,8 @@
     <!--
         rulesets の種類・説明は 以下の URL 参照
         https://github.com/pmd/pmd/tree/master/pmd-java/src/main/resources/rulesets/java
-        https://pmd.github.io/pmd-5.7.0/pmd-java/rules/index.html
-        ※"pmd-5.7.0" の部分は適用しているバージョンに変更すること。
+        https://pmd.github.io/pmd-5.8.0/pmd-java/rules/index.html
+        ※"pmd-5.8.0" の部分は適用しているバージョンに変更すること。
     -->
     <rule ref="rulesets/java/basic.xml"/>
     <rule ref="rulesets/java/braces.xml"/>
