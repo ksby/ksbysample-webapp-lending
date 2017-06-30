@@ -16,6 +16,9 @@ import java.util.List;
 import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.APPLOVED;
 import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues.APPLY;
 
+/**
+ * ???
+ */
 @Service
 public class ConfirmresultService {
 

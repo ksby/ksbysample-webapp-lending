@@ -7,6 +7,9 @@ import org.springframework.validation.Validator;
 
 import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues.APPLY;
 
+/**
+ * ???
+ */
 @Component
 public class LendingappFormValidator implements Validator {
 

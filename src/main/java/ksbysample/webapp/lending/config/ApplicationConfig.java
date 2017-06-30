@@ -24,6 +24,9 @@ import javax.sql.DataSource;
 
 import static java.util.Collections.singletonMap;
 
+/**
+ * ???
+ */
 @Configuration
 public class ApplicationConfig {
 

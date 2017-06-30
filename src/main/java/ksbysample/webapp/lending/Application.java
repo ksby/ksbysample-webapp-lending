@@ -15,6 +15,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * ???
+ */
 @ImportResource("classpath:applicationContext-${spring.profiles.active}.xml")
 @SpringBootApplication(exclude = {JpaRepositoriesAutoConfiguration.class, HibernateJpaAutoConfiguration.class})
 @ComponentScan("ksbysample")

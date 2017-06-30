@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * ???
+ */
 @Component
 public class Mail003Helper {
 
@@ -72,6 +75,9 @@ public class Mail003Helper {
         return freeMarkerHelper.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
+    /**
+     * ???
+     */
     @Data
     public class Mail003BookData {
         private String approvalResultStr;

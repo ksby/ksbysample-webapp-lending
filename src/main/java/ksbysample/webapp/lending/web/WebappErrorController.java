@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * ???
+ */
 @Controller
 @RequestMapping("/error")
 public class WebappErrorController implements ErrorController {

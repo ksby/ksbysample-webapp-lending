@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.UNAPPLIED;
 
+/**
+ * ???
+ */
 @Controller
 @RequestMapping("/lendingapp")
 public class LendingappController {

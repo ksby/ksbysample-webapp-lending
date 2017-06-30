@@ -4,6 +4,9 @@ import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
 import org.springframework.stereotype.Component;
 
+/**
+ * ???
+ */
 @Component
 public class LibraryHelper {
 

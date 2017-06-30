@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * ???
+ */
 public class BookListCsvDownloadHelper implements DataDownloadHelper {
 
     private static final String[] CSV_HEADER = new String[]{"ISBN", "書名", "申請理由", "承認／却下", "却下理由"};

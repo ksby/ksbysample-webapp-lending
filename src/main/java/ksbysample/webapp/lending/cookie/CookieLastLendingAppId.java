@@ -2,6 +2,9 @@ package ksbysample.webapp.lending.cookie;
 
 import org.springframework.web.util.CookieGenerator;
 
+/**
+ * ???
+ */
 public class CookieLastLendingAppId extends CookieGenerator {
 
     public static final String COOKIE_NAME = "LastLendingAppId";

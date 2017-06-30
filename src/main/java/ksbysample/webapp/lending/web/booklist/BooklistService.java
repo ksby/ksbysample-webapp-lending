@@ -15,6 +15,9 @@ import java.util.List;
 
 import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.TENPORARY_SAVE;
 
+/**
+ * ???
+ */
 @Service
 public class BooklistService {
 

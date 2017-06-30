@@ -3,6 +3,9 @@ package ksbysample.webapp.lending.helper.download.booklistcsv;
 import com.univocity.parsers.annotations.Parsed;
 import lombok.Data;
 
+/**
+ * ???
+ */
 @Data
 public class BookListCsvData {
 

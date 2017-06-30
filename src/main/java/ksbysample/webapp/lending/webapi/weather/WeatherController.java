@@ -5,6 +5,9 @@ import ksbysample.webapp.lending.service.openweathermapapi.OpenWeatherMapApiServ
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * ???
+ */
 @RestController
 @RequestMapping("/webapi/weather")
 public class WeatherController {

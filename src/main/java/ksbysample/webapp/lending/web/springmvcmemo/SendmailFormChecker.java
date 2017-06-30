@@ -4,6 +4,9 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * ???
+ */
 @Data
 public class SendmailFormChecker {
 

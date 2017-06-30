@@ -11,6 +11,9 @@ import javax.xml.bind.annotation.XmlElement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ???
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @ToString
@@ -29,5 +32,5 @@ public class SystemData {
 
     @XmlElement(name = "libkeys")
     private List<Libkey> libkeyList = new ArrayList<>();
-    
+
 }

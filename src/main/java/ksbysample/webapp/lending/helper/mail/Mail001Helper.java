@@ -10,6 +10,9 @@ import javax.mail.internet.MimeMessage;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ???
+ */
 @Component
 public class Mail001Helper {
 

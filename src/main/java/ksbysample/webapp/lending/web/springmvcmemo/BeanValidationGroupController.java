@@ -6,6 +6,9 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * ???
+ */
 @Controller
 @RequestMapping("/springMvcMemo/beanValidationGroup")
 public class BeanValidationGroupController {

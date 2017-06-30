@@ -5,6 +5,9 @@ import ksbysample.webapp.lending.entity.LibraryForsearch;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+/**
+ * ???
+ */
 @Service
 public class AdminLibraryService {
 

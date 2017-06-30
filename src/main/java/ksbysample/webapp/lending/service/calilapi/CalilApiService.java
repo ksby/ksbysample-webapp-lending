@@ -25,6 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ???
+ */
 @Service
 @PropertySource("classpath:calilapi.properties")
 public class CalilApiService {
@@ -154,6 +157,9 @@ public class CalilApiService {
         return response;
     }
 
+    /**
+     * ???
+     */
     @Configuration
     public static class CalilApiConfig {
 

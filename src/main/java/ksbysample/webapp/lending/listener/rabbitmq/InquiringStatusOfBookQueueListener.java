@@ -29,6 +29,9 @@ import javax.mail.internet.MimeMessage;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * ???
+ */
 @Component
 public class InquiringStatusOfBookQueueListener {
 

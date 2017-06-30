@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 
+/**
+ * ???
+ */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
