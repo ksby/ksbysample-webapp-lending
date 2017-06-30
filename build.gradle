@@ -30,6 +30,7 @@ apply plugin: 'groovy'
 apply plugin: 'net.ltgt.errorprone'
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
+apply plugin: 'pmd'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -93,6 +94,15 @@ tasks.withType(FindBugs) {
         xml.enabled = false
         html.enabled = true
     }
+}
+
+pmd {
+    toolVersion = "5.7.0"
+    sourceSets = [project.sourceSets.main]
+    ignoreFailures = true
+    consoleOutput = true
+    ruleSetFiles = rootProject.files("/config/pmd/pmd-project-rulesets.xml")
+    ruleSets = []
 }
 
 repositories {
