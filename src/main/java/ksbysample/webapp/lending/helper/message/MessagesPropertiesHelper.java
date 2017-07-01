@@ -24,6 +24,7 @@ public class MessagesPropertiesHelper {
      * @param args ???
      * @return ???
      */
+    @SuppressWarnings({"PMD.UseVarargs"})
     public String getMessage(String code, Object[] args) {
         return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
     }

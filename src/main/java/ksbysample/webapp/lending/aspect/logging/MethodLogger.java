@@ -47,6 +47,7 @@ public class MethodLogger {
         return ret;
     }
 
+    @SuppressWarnings({"PMD.UseVarargs"})
     private void logginBeginMethod(String className, String methodName, Object[] args) {
         StringBuilder sb = new StringBuilder();
         sb.append("call : ");
