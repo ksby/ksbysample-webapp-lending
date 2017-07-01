@@ -37,7 +37,7 @@ public class CalilApiService {
     private static final int RETRY_MAX_CNT = 5;
     private static final long RETRY_SLEEP_MILLS = 3000;
 
-    private static final String URL_CALILAPI_ROOT = "http://api.calil.jp";
+    public static final String URL_CALILAPI_ROOT = "http://api.calil.jp";
     private static final String URL_CALILAPI_LIBRALY
             = URL_CALILAPI_ROOT + "/library?appkey={appkey}&pref={pref}";
     private static final String URL_CALILAPI_CHECK
@@ -193,7 +193,7 @@ public class CalilApiService {
             return this.restTemplateBuilder
                     .setConnectTimeout(CONNECT_TIMEOUT)
                     .setReadTimeout(READ_TIMEOUT)
-                    .rootUri(URL_CALILAPI_ROOT)
+                    .rootUri(CalilApiService.URL_CALILAPI_ROOT)
                     .build();
         }
 
@@ -208,7 +208,7 @@ public class CalilApiService {
             return this.restTemplateBuilder
                     .setConnectTimeout(CONNECT_TIMEOUT)
                     .setReadTimeout(READ_TIMEOUT)
-                    .rootUri(URL_CALILAPI_ROOT)
+                    .rootUri(CalilApiService.URL_CALILAPI_ROOT)
                     .messageConverters(this.mappingJackson2XmlHttpMessageConverter)
                     .build();
         }

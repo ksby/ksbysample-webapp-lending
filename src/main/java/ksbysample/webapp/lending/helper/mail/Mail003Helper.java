@@ -31,7 +31,7 @@ public class Mail003Helper {
 
     private final JavaMailSender mailSender;
 
-    private final ValuesHelper vh;
+    public final ValuesHelper vh;
 
     /**
      * @param freeMarkerHelper ???
@@ -87,7 +87,8 @@ public class Mail003Helper {
          * @param lendingBook ???
          */
         public Mail003BookData(LendingBook lendingBook) {
-            this.approvalResultStr = vh.getText(LendingBookApprovalResultValues.class, lendingBook.getApprovalResult());
+            this.approvalResultStr = vh.getText(LendingBookApprovalResultValues.class
+                    , lendingBook.getApprovalResult());
             this.bookName = lendingBook.getBookName();
         }
     }
