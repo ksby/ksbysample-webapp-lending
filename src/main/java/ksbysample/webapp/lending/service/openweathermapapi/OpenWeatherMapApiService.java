@@ -64,10 +64,7 @@ public class OpenWeatherMapApiService {
         //   jackson-datatype-jsr310 による LocalDateTime 変換が行われない
         ObjectMapper mapper = new ObjectMapper();
         mapper.findAndRegisterModules();
-        FiveDayThreeHourForecastData fiveDayThreeHourForecastData
-                = mapper.readValue(json.toString(), FiveDayThreeHourForecastData.class);
-
-        return fiveDayThreeHourForecastData;
+        return mapper.readValue(json.toString(), FiveDayThreeHourForecastData.class);
     }
 
     private ClientHttpRequestFactory getClientHttpRequestFactory() {

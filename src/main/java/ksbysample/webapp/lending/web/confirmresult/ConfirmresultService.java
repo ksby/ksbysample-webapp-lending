@@ -79,8 +79,7 @@ public class ConfirmresultService {
     public List<BookListCsvData> getDownloadData(Long lendingAppId) {
         List<LendingBook> lendingBookList
                 = lendingBookDao.selectByLendingAppIdAndLendingAppFlg(lendingAppId, APPLY.getValue());
-        List<BookListCsvData> bookListCsvDataList = bookListCsvDataConverter.convertFrom(lendingBookList);
-        return bookListCsvDataList;
+        return bookListCsvDataConverter.convertFrom(lendingBookList);
     }
 
 }

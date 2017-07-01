@@ -82,8 +82,7 @@ public class BooklistService {
      * @return ???
      */
     public List<LendingBook> getLendingBookList(Long lendingAppId) {
-        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(lendingAppId);
-        return lendingBookList;
+        return lendingBookDao.selectByLendingAppId(lendingAppId);
     }
 
     /**

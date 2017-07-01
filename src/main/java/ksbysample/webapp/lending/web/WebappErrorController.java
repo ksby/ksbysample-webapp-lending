@@ -43,8 +43,7 @@ public class WebappErrorController implements ErrorController {
     @RequestMapping
     public ModelAndView index(Exception e, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        ModelAndView model = exceptionHandlerAdvice.handleException(e, request, response);
-        return model;
+        return exceptionHandlerAdvice.handleException(e, request, response);
     }
 
 }

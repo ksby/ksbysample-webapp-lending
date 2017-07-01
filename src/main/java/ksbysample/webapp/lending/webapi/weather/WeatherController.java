@@ -29,9 +29,7 @@ public class WeatherController {
     public FiveDayThreeHourForecastResponse getFiveDayThreeHourForecast(String cityname) {
         FiveDayThreeHourForecastData fiveDayThreeHourForecastData
                 = openWeatherMapApiService.getFiveDayThreeHourForecast(cityname);
-        FiveDayThreeHourForecastResponse fiveDayThreeHourForecastResponse
-                = new FiveDayThreeHourForecastResponse(fiveDayThreeHourForecastData);
-        return fiveDayThreeHourForecastResponse;
+        return new FiveDayThreeHourForecastResponse(fiveDayThreeHourForecastData);
     }
 
 }

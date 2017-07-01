@@ -79,9 +79,7 @@ public class CalilApiService {
 
         // 受信した XMLレスポンスを Javaオブジェクトに変換する
         Serializer serializer = new Persister();
-        Libraries libraries = serializer.read(Libraries.class, response.getBody());
-
-        return libraries;
+        return serializer.read(Libraries.class, response.getBody());
     }
 
     /**
@@ -133,6 +131,7 @@ public class CalilApiService {
 
     private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url
             , Class<T> responseType, Object... uriVariables) {
+        @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
                 logger.info("★★★ リトライ回数 = " + context.getRetryCount());
@@ -146,6 +145,7 @@ public class CalilApiService {
 
     private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url
             , Class<T> responseType, Map<String, ?> uriVariables) {
+        @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
                 logger.info("★★★ リトライ回数 = " + context.getRetryCount());

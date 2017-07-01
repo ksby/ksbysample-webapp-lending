@@ -57,8 +57,7 @@ public class ApplicationConfig {
      */
     @Bean
     public MessageConverter messageConverter() {
-        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
-        return converter;
+        return new Jackson2JsonMessageConverter();
     }
 
     /**
