@@ -36,14 +36,8 @@ public class LendingappFormValidator implements Validator {
         for (LendingBookDto lendingBookDto : lendingappForm.getLendingBookDtoList()) {
             if (StringUtils.equals(lendingBookDto.getLendingAppFlg(), APPLY.getValue())) {
                 existApply = true;
-
-                if (StringUtils.isBlank(lendingBookDto.getLendingAppReason())) {
-                    errors.rejectValue(String.format("lendingBookDtoList[%d].lendingAppReason", i), null);
-                    if (!rejectEmptyReason) {
-                        errors.reject("LendingappForm.lendingBookDtoList.emptyReason", null);
-                        rejectEmptyReason = true;
-                    }
-                }
+                rejectEmptyReason = errorsRejectWhenLendingAppReasonIsBlank(errors, lendingBookDto, i
+                        , rejectEmptyReason);
             }
             i++;
         }
@@ -56,6 +50,19 @@ public class LendingappFormValidator implements Validator {
             }
             errors.reject("LendingappForm.lendingBookDtoList.notExistApply", null);
         }
+    }
+
+    private boolean errorsRejectWhenLendingAppReasonIsBlank(Errors errors, LendingBookDto lendingBookDto
+            , int index, boolean rejectEmptyReason) {
+        boolean calledReject = false;
+        if (StringUtils.isBlank(lendingBookDto.getLendingAppReason())) {
+            errors.rejectValue(String.format("lendingBookDtoList[%d].lendingAppReason", index), null);
+            if (!rejectEmptyReason) {
+                errors.reject("LendingappForm.lendingBookDtoList.emptyReason", null);
+                calledReject = true;
+            }
+        }
+        return calledReject;
     }
 
 }
