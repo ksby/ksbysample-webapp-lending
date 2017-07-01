@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class SuccessMessagesHelper {
 
-    private List<String> successMessages = new ArrayList<>();
+    private final List<String> successMessages = new ArrayList<>();
 
     /**
      *
