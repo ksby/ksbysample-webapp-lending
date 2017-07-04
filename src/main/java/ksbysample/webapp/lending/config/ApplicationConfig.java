@@ -110,6 +110,7 @@ public class ApplicationConfig {
      *
      * @return MappingJackson2XmlHttpMessageConverter オブジェクト
      */
+    @SuppressWarnings({"PMD.UnnecessaryFullyQualifiedName"})
     @Bean
     @ConditionalOnClass(com.fasterxml.jackson.dataformat.xml.XmlMapper.class)
     public MappingJackson2XmlHttpMessageConverter mappingJackson2XmlHttpMessageConverter() {
