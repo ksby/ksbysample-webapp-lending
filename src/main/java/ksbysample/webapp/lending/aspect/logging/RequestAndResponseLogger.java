@@ -24,7 +24,7 @@ import java.util.stream.StreamSupport;
 @Component
 public class RequestAndResponseLogger {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(RequestAndResponseLogger.class);
 
     private static final String LOG_REQUEST_INFO = "[req][info  ] ";
     private static final String LOG_REQUEST_HEADER = "[req][header] ";

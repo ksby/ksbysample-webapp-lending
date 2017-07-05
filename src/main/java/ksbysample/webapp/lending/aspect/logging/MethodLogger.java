@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MethodLogger {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(MethodLogger.class);
 
     @Pointcut("execution(* ksbysample.webapp.lending.web..*.*(..))"
             + "&& @within(org.springframework.stereotype.Controller)")

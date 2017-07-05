@@ -32,7 +32,7 @@ import java.util.Map;
 @PropertySource("classpath:calilapi.properties")
 public class CalilApiService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(CalilApiService.class);
 
     private static final int RETRY_MAX_CNT = 5;
     private static final long RETRY_SLEEP_MILLS = 3000;

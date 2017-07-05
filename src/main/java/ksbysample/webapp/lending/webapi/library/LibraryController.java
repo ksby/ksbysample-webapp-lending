@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/webapi/library")
 public class LibraryController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(LibraryController.class);
 
     private final CalilApiService calilApiService;
 

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ControllerAndEventNameLogger {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(ControllerAndEventNameLogger.class);
 
     /**
      * @param pjp              ???
