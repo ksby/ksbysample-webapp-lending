@@ -18,8 +18,8 @@ import java.util.Map;
 @Service
 public class OpenWeatherMapApiService {
 
-    private static int CONNECT_TIMEOUT = 5000;
-    private static int READ_TIMEOUT = 5000;
+    private static final int CONNECT_TIMEOUT = 5000;
+    private static final int READ_TIMEOUT = 5000;
 
     private static final String URL_WEATHERAPI_5DAY3HOURFORECAST = "http://api.openweathermap.org/data/2.5/forecast?q={cityname}";
 

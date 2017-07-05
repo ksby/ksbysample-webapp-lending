@@ -163,8 +163,8 @@ public class CalilApiService {
     @Configuration
     public static class CalilApiConfig {
 
-        private static int CONNECT_TIMEOUT = 5000;
-        private static int READ_TIMEOUT = 5000;
+        private static final int CONNECT_TIMEOUT = 5000;
+        private static final int READ_TIMEOUT = 5000;
 
         private final RestTemplateBuilder restTemplateBuilder;
 
