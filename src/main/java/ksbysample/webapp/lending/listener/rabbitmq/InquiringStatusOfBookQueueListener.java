@@ -91,9 +91,6 @@ public class InquiringStatusOfBookQueueListener {
         InquiringStatusOfBookQueueMessage convertedMessage
                 = inquiringStatusOfBookQueueService.convertMessageToObject(message);
 
-        // 選択中の図書館を取得する
-        LibraryForsearch libraryForsearch = libraryForsearchDao.selectSelectedLibrary();
-
         // 更新対象の lending_app テーブルのデータを取得する
         LendingApp lendingApp = lendingAppDao.selectById(convertedMessage.getLendingAppId()
                 , SelectOptions.get().forUpdate());
@@ -115,6 +112,9 @@ public class InquiringStatusOfBookQueueListener {
         List<String> isbnList = lendingBookList.stream()
                 .map(LendingBook::getIsbn)
                 .collect(Collectors.toList());
+
+        // 選択中の図書館を取得する
+        LibraryForsearch libraryForsearch = libraryForsearchDao.selectSelectedLibrary();
 
         // カーリルの蔵書検索 WebAPI を呼び出して貸出状況を取得する
         List<Book> bookList = calilApiService.check(libraryForsearch.getSystemid(), isbnList);
