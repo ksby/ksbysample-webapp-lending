@@ -11,12 +11,12 @@ public interface DataDownloadHelper {
     /**
      * @param response ???
      */
-    public void setFileNameToResponse(HttpServletResponse response);
+    void setFileNameToResponse(HttpServletResponse response);
 
     /**
      * @param response ???
      * @throws IOException
      */
-    public void writeDataToResponse(HttpServletResponse response) throws IOException;
+    void writeDataToResponse(HttpServletResponse response) throws IOException;
 
 }
