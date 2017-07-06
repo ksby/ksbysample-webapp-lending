@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/springMvcMemo/beanValidationGroup")
 public class BeanValidationGroupController {
 
+    private static final String THYMELEAF_TEMPLATE = "springmvcmemo/beanValidationGroup";
+
     private final Validator mvcValidator;
 
     /**
@@ -28,7 +30,7 @@ public class BeanValidationGroupController {
      */
     @RequestMapping
     public String beanValidationGroup(BeanValidationGroupForm beanValidationGroupForm) {
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -40,10 +42,10 @@ public class BeanValidationGroupController {
     public String fileupload(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "springmvcmemo/beanValidationGroup";
+            return THYMELEAF_TEMPLATE;
         }
 
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -58,10 +60,10 @@ public class BeanValidationGroupController {
             , EditFormChecker editFormChecker) {
         mvcValidator.validate(editFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "springmvcmemo/beanValidationGroup";
+            return THYMELEAF_TEMPLATE;
         }
 
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -76,10 +78,10 @@ public class BeanValidationGroupController {
             , SendmailFormChecker sendmailFormChecker) {
         mvcValidator.validate(sendmailFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "springmvcmemo/beanValidationGroup";
+            return THYMELEAF_TEMPLATE;
         }
 
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
 }

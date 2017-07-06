@@ -28,6 +28,8 @@ import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues
 @RequestMapping("/lendingapp")
 public class LendingappController {
 
+    private static final String THYMELEAF_TEMPLATE = "lendingapp/lendingapp";
+
     private final LendingappService lendingappService;
 
     private final MessagesPropertiesHelper mph;
@@ -81,7 +83,7 @@ public class LendingappController {
                     , response, String.valueOf(lendingappParamForm.getLendingAppId()));
         }
 
-        return "lendingapp/lendingapp";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -96,7 +98,7 @@ public class LendingappController {
             , BindingResult bindingResult
             , HttpServletResponse response) throws MessagingException {
         if (bindingResult.hasErrors()) {
-            return "lendingapp/lendingapp";
+            return THYMELEAF_TEMPLATE;
         }
 
         try {
@@ -112,7 +114,7 @@ public class LendingappController {
             bindingResult.reject("Global.optimisticLockException");
         }
 
-        return "lendingapp/lendingapp";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -126,7 +128,7 @@ public class LendingappController {
             , BindingResult bindingResult
             , Model model) {
         if (bindingResult.hasErrors()) {
-            return "lendingapp/lendingapp";
+            return THYMELEAF_TEMPLATE;
         }
 
         try {
@@ -140,7 +142,7 @@ public class LendingappController {
             bindingResult.reject("Global.optimisticLockException");
         }
 
-        return "lendingapp/lendingapp";
+        return THYMELEAF_TEMPLATE;
     }
 
 }
