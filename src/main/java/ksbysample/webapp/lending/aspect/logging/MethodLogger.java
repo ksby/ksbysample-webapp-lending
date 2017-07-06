@@ -52,11 +52,11 @@ public class MethodLogger {
         StringBuilder sb = new StringBuilder();
         sb.append("call : ")
                 .append(className)
-                .append("#")
+                .append('#')
                 .append(methodName)
-                .append("(")
+                .append('(')
                 .append(ToStringBuilder.reflectionToString(args, ToStringStyle.SIMPLE_STYLE))
-                .append(")");
+                .append(')');
         logger.info(sb.toString());
     }
 
@@ -66,7 +66,7 @@ public class MethodLogger {
                 .append(ret)
                 .append(" : ")
                 .append(className)
-                .append("#")
+                .append('#')
                 .append(methodName);
         logger.info(sb.toString());
     }
