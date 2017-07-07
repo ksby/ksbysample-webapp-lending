@@ -19,11 +19,14 @@ public class MethodLogger {
 
     private static final Logger logger = LoggerFactory.getLogger(MethodLogger.class);
 
+
+    @SuppressWarnings({"PMD.UnusedPrivateMethod"})
     @Pointcut("execution(* ksbysample.webapp.lending.web..*.*(..))"
             + "&& @within(org.springframework.stereotype.Controller)")
     private void pointcutControllerMethod() {
     }
 
+    @SuppressWarnings({"PMD.UnusedPrivateMethod"})
     @Pointcut("execution(* ksbysample.webapp.lending.service..*.*(..))"
             + "&& @within(org.springframework.stereotype.Service)")
     private void pointcutServiceMethod() {
