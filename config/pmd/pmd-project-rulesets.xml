@@ -28,6 +28,7 @@
     <rule ref="rulesets/java/design.xml">
         <exclude name="UseUtilityClass"/>
         <exclude name="UncommentedEmptyMethodBody"/>
+        <exclude name="UncommentedEmptyConstructor"/>
         <exclude name="MissingStaticMethodInNonInstantiatableClass"/>
     </rule>
     <rule ref="rulesets/java/empty.xml"/>
@@ -38,10 +39,12 @@
         <exclude name="ShortVariable"/>
         <exclude name="LongVariable"/>
         <exclude name="ShortMethodName"/>
+        <exclude name="VariableNamingConventions"/>
         <exclude name="ShortClassName"/>
     </rule>
     <rule ref="rulesets/java/optimizations.xml">
         <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="AvoidInstantiatingObjectsInLoops"/>
         <exclude name="MethodArgumentCouldBeFinal"/>
         <exclude name="UseStringBufferForStringAppends"/>
         <exclude name="RedundantFieldInitializer"/>
