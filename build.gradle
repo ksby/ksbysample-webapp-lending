@@ -97,7 +97,7 @@ tasks.withType(FindBugs) {
 }
 
 pmd {
-    toolVersion = "5.8.0"
+    toolVersion = "5.8.1"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
