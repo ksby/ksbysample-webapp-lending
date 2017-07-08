@@ -85,7 +85,7 @@ public class LendingappService {
         // 更新対象のデータを取得する(ロックする)
         LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
-        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(
+        lendingBookDao.selectByLendingAppId(
                 lendingappForm.getLendingApp().getLendingAppId(), SelectOptions.get().forUpdate());
 
         // lending_app.status を 3(申請中) にする
@@ -113,9 +113,9 @@ public class LendingappService {
      */
     public void temporarySave(LendingappForm lendingappForm) {
         // 更新対象のデータを取得する(ロックする)
-        LendingApp lendingApp = lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
+        lendingAppDao.selectById(lendingappForm.getLendingApp().getLendingAppId()
                 , SelectOptions.get().forUpdate());
-        List<LendingBook> lendingBookList = lendingBookDao.selectByLendingAppId(
+        lendingBookDao.selectByLendingAppId(
                 lendingappForm.getLendingApp().getLendingAppId(), SelectOptions.get().forUpdate());
 
         // lending_book.lending_app_flg, lending_app_reason に画面に入力された内容をセットする

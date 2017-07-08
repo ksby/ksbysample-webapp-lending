@@ -43,10 +43,8 @@ public class LendingappFormValidator implements Validator {
         }
 
         if (!existApply) {
-            i = 0;
-            for (LendingBookDto lendingBookDto : lendingappForm.getLendingBookDtoList()) {
+            for (i = 0; i < lendingappForm.getLendingBookDtoList().size(); i++) {
                 errors.rejectValue(String.format("lendingBookDtoList[%d].lendingAppFlg", i), null);
-                i++;
             }
             errors.reject("LendingappForm.lendingBookDtoList.notExistApply", null);
         }
