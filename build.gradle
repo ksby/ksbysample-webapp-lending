@@ -134,6 +134,7 @@ dependencies {
     def domaVersion = "2.16.1"
     def lombokVersion = "1.16.16"
     def errorproneVersion = "2.0.15"
+    def powermockVersion = "1.6.6"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
@@ -189,6 +190,10 @@ dependencies {
     // for Error Prone ( http://errorprone.info/ )
     errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
     compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
+
+    // PowerMock
+    testCompile("org.powermock:powermock-module-junit4:${powermockVersion}")
+    testCompile("org.powermock:powermock-api-mockito:${powermockVersion}")
 }
 
 bootRun {
