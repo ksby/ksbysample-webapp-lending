@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * ???
+ */
 @Component
 public class Mail003Helper {
 
@@ -28,7 +31,7 @@ public class Mail003Helper {
 
     private final JavaMailSender mailSender;
 
-    private final ValuesHelper vh;
+    public final ValuesHelper vh;
 
     /**
      * @param freeMarkerHelper ???
@@ -72,6 +75,9 @@ public class Mail003Helper {
         return freeMarkerHelper.merge(TEMPLATE_LOCATION_TEXTMAIL, model);
     }
 
+    /**
+     * ???
+     */
     @Data
     public class Mail003BookData {
         private String approvalResultStr;
@@ -81,7 +87,8 @@ public class Mail003Helper {
          * @param lendingBook ???
          */
         public Mail003BookData(LendingBook lendingBook) {
-            this.approvalResultStr = vh.getText(LendingBookApprovalResultValues.class, lendingBook.getApprovalResult());
+            this.approvalResultStr = vh.getText(LendingBookApprovalResultValues.class
+                    , lendingBook.getApprovalResult());
             this.bookName = lendingBook.getBookName();
         }
     }

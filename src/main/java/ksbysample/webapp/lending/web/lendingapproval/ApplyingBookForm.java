@@ -9,6 +9,9 @@ import org.springframework.beans.BeanUtils;
 
 import javax.validation.constraints.Size;
 
+/**
+ * ???
+ */
 @Data
 @NoArgsConstructor
 public class ApplyingBookForm {

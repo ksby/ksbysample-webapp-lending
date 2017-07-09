@@ -6,6 +6,9 @@ import lombok.ToString;
 
 import javax.xml.bind.annotation.XmlElement;
 
+/**
+ * ???
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @ToString
@@ -19,5 +22,5 @@ public class LibraryForJackson2Xml {
     private String formalName;
 
     private String address;
-    
+
 }

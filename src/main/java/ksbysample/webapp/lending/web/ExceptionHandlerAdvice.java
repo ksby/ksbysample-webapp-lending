@@ -21,10 +21,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ???
+ */
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
 
     /**
      * @param e        ???

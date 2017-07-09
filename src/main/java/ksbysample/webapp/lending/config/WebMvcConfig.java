@@ -1,30 +1,24 @@
 package ksbysample.webapp.lending.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.validation.Validator;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
+/**
+ * ???
+ */
 @Configuration
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
-    private final Validator validator;
-
     /**
-     * @param validator {@link Validator} bean
-     */
-    public WebMvcConfig(Validator validator) {
-        this.validator = validator;
-    }
-
-    /**
-     * Hibernate Validator のメッセージを ValidationMessages.properties ではなく
-     * messages.properties に記述するために Override して {@link Validator} bean を返している
+     * Thymeleaf 3 のパフォーマンスを向上させるために SpEL コンパイラを有効にする
      *
-     * @return {@link Validator} bean
+     * @param templateEngine {@link SpringTemplateEngine} オブジェクト
      */
-    @Override
-    public Validator getValidator() {
-        return validator;
+    @Autowired
+    public void configureThymeleafSpringTemplateEngine(SpringTemplateEngine templateEngine) {
+        templateEngine.setEnableSpringELCompiler(true);
     }
 
 }

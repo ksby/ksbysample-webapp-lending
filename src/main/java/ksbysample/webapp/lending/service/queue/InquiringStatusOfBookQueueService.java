@@ -6,6 +6,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.stereotype.Service;
 
+/**
+ * ???
+ */
 @Service
 public class InquiringStatusOfBookQueueService {
 

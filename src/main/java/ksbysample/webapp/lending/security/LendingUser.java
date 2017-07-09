@@ -7,6 +7,9 @@ import org.springframework.beans.BeanUtils;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * ???
+ */
 @Data
 public class LendingUser implements Serializable {
 

@@ -5,9 +5,12 @@ import org.springframework.ui.Model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ???
+ */
 public class SuccessMessagesHelper {
 
-    private List<String> successMessages = new ArrayList<>();
+    private final List<String> successMessages = new ArrayList<>();
 
     /**
      *

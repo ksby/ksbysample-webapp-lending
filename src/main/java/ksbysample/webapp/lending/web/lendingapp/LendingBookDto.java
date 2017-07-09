@@ -8,6 +8,9 @@ import org.springframework.beans.BeanUtils;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+/**
+ * ???
+ */
 @Data
 @NoArgsConstructor
 public class LendingBookDto {
@@ -27,7 +30,7 @@ public class LendingBookDto {
     private String lendingAppReason;
 
     private Long version;
-    
+
     LendingBookDto(LendingBook lendingBook) {
         BeanUtils.copyProperties(lendingBook, this);
     }

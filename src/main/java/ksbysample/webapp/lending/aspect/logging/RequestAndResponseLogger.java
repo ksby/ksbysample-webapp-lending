@@ -17,11 +17,14 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.StreamSupport;
 
+/**
+ * ???
+ */
 @Aspect
 @Component
 public class RequestAndResponseLogger {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(RequestAndResponseLogger.class);
 
     private static final String LOG_REQUEST_INFO = "[req][info  ] ";
     private static final String LOG_REQUEST_HEADER = "[req][header] ";
@@ -107,20 +110,20 @@ public class RequestAndResponseLogger {
         if (request.getCookies() != null) {
             Arrays.asList(request.getCookies()).forEach(cookie -> {
                 StringBuilder sb = new StringBuilder();
-                sb.append("name = ");
-                sb.append(cookie.getName());
-                sb.append(", value = ");
-                sb.append(cookie.getValue());
-                sb.append(", domain = ");
-                sb.append(cookie.getDomain());
-                sb.append(", path = ");
-                sb.append(cookie.getPath());
-                sb.append(", maxage = ");
-                sb.append(cookie.getMaxAge());
-                sb.append(", secure = ");
-                sb.append(cookie.getSecure());
-                sb.append(", httponly = ");
-                sb.append(cookie.isHttpOnly());
+                sb.append("name = ")
+                        .append(cookie.getName())
+                        .append(", value = ")
+                        .append(cookie.getValue())
+                        .append(", domain = ")
+                        .append(cookie.getDomain())
+                        .append(", path = ")
+                        .append(cookie.getPath())
+                        .append(", maxage = ")
+                        .append(cookie.getMaxAge())
+                        .append(", secure = ")
+                        .append(cookie.getSecure())
+                        .append(", httponly = ")
+                        .append(cookie.isHttpOnly());
                 logging(LOG_REQUEST_COOKIE, null, sb.toString());
             });
         }

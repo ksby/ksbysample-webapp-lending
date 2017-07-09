@@ -6,6 +6,9 @@ import org.springframework.security.authentication.event.AuthenticationFailureBa
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+/**
+ * ???
+ */
 @Component
 public class AuthenticationFailureBadCredentialsEventListener
         implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {

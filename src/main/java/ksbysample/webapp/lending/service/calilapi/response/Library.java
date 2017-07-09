@@ -5,6 +5,9 @@ import lombok.Data;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
+/**
+ * ???
+ */
 @Data
 @Root(name = "Library", strict = false)
 public class Library {

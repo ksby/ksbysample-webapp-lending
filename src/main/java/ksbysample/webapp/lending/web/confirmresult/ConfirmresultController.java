@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * ???
+ */
 @Controller
 @RequestMapping("/confirmresult")
 @LoggingControllerName("貸出申請結果確認画面")

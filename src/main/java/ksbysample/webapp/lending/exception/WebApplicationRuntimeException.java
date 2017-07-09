@@ -1,5 +1,8 @@
 package ksbysample.webapp.lending.exception;
 
+/**
+ * ???
+ */
 public class WebApplicationRuntimeException extends RuntimeException {
 
     private static final long serialVersionUID = 3845674924872653036L;

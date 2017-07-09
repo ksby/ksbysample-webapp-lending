@@ -3,6 +3,9 @@ package ksbysample.webapp.lending.helper.page;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
 
+/**
+ * ???
+ */
 @Getter
 public class PagenationHelper {
 

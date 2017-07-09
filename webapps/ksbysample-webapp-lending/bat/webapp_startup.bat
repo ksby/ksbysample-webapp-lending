@@ -4,7 +4,7 @@ setlocal
 set JAVA_HOME=C:\Java\jdk1.8.0_131
 set PATH=%JAVA_HOME%\bin;%PATH%
 set WEBAPP_HOME=C:\webapps\ksbysample-webapp-lending
-set WEBAPP_JAR=ksbysample-webapp-lending-1.4.6-RELEASE.jar
+set WEBAPP_JAR=ksbysample-webapp-lending-1.5.4-RELEASE.jar
 
 cd /d %WEBAPP_HOME%
 java -server ^

@@ -26,6 +26,7 @@ import java.io.File;
 import java.util.List;
 
 import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
+import static ksbysample.common.test.matcher.HtmlResultMatchers.html;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -157,8 +158,8 @@ public class LendingappControllerTest {
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[0].lendingAppFlg", ""))
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[1].lendingAppFlg", ""))
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", ""))
-                    .andExpect(xpath("//*[@class=\"alert alert-danger\"]/p")
-                            .string(mph.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
+                    .andExpect(html(".alert.alert-danger > p")
+                        .text(mph.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
         }
 
         @Test
@@ -251,7 +252,7 @@ public class LendingappControllerTest {
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(view().name("lendingapp/lendingapp"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(xpath("//*[@class=\"alert alert-success\"]/p").string("一時保存しました"));
+                    .andExpect(html(".alert.alert-success > p").text("一時保存しました"));
 
             // then ( Spock Framework のブロックの区分けが分かりやすかったので、同じ部分にコメントで付けてみました )
             // DB

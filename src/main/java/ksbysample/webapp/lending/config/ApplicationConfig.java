@@ -24,6 +24,9 @@ import javax.sql.DataSource;
 
 import static java.util.Collections.singletonMap;
 
+/**
+ * ???
+ */
 @Configuration
 public class ApplicationConfig {
 
@@ -54,8 +57,7 @@ public class ApplicationConfig {
      */
     @Bean
     public MessageConverter messageConverter() {
-        Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter();
-        return converter;
+        return new Jackson2JsonMessageConverter();
     }
 
     /**
@@ -84,7 +86,7 @@ public class ApplicationConfig {
      * @return new {@link LocalValidatorFactoryBean}
      */
     @Bean
-    public Validator validator() {
+    public Validator mvcValidator() {
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         localValidatorFactoryBean.setValidationMessageSource(this.messageSource);
         return localValidatorFactoryBean;
@@ -108,6 +110,7 @@ public class ApplicationConfig {
      *
      * @return MappingJackson2XmlHttpMessageConverter オブジェクト
      */
+    @SuppressWarnings({"PMD.UnnecessaryFullyQualifiedName"})
     @Bean
     @ConditionalOnClass(com.fasterxml.jackson.dataformat.xml.XmlMapper.class)
     public MappingJackson2XmlHttpMessageConverter mappingJackson2XmlHttpMessageConverter() {

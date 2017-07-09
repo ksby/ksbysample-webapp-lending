@@ -3,6 +3,9 @@ package ksbysample.webapp.lending.service;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import org.springframework.stereotype.Service;
 
+/**
+ * ???
+ */
 @Service
 public class UserInfoService {
 
