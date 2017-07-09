@@ -40,7 +40,7 @@ task wrapper(type: Wrapper) {
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing,-path']
-compileJava.options.compilerArgs += ['-Xep:RemoveUnusedImports:WARN']
+compileJava.options.compilerArgs += ['-Xep:RemoveUnusedImports:WARN', '-Xep:InsecureCryptoUsage:OFF']
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする

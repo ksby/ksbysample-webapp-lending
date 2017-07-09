@@ -10,12 +10,26 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
+/**
+ * ???
+ */
 public class BrowfishUtils {
 
     private static final String KEY = "sample";
     private static final String ALGORITHM = "Blowfish";
     private static final String TRANSFORMATION = "Blowfish/ECB/PKCS5Padding";
 
+    /**
+     * 渡された文字列を Blowfish で暗号化する
+     *
+     * @param str 暗号化する文字列
+     * @return 暗号化された文字列
+     * @throws NoSuchPaddingException
+     * @throws NoSuchAlgorithmException
+     * @throws InvalidKeyException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     */
     public static String encrypt(String str)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException
             , BadPaddingException, IllegalBlockSizeException {
