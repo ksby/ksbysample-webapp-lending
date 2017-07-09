@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * ???
+ */
 @Component
 public class DomaConfig implements Config {
 

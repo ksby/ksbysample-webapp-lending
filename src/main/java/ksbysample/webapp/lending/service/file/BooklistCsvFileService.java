@@ -17,6 +17,9 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * ???
+ */
 @Service
 public class BooklistCsvFileService {
 
@@ -94,7 +97,7 @@ public class BooklistCsvFileService {
                             , new Object[]{str, isbnList.count(str)}, null));
         } catch (IOException e) {
             throw new WebApplicationRuntimeException(
-                    mph.getMessage("UploadBooklistForm.fileupload.openerr", null));
+                    mph.getMessage("UploadBooklistForm.fileupload.openerr", null), e);
         }
     }
 
@@ -123,7 +126,7 @@ public class BooklistCsvFileService {
             booklistCsvRecordList = rowProcessor.getBeans();
         } catch (IOException e) {
             throw new WebApplicationRuntimeException(
-                    mph.getMessage("UploadBooklistForm.fileupload.openerr", null));
+                    mph.getMessage("UploadBooklistForm.fileupload.openerr", null), e);
         }
 
         return booklistCsvRecordList;

@@ -27,7 +27,7 @@ public class LibraryHelperTest {
         given(libraryForsearchDao.selectSelectedLibrary()).willReturn(null);
 
         String result = libraryHelper.getSelectedLibrary();
-        assertThat(result).isEqualTo("※図書館が選択されていません");
+        assertThat(result).isNull();
     }
 
     @Test

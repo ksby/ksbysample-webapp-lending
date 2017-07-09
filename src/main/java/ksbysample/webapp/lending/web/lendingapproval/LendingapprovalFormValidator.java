@@ -7,6 +7,9 @@ import org.springframework.validation.Validator;
 
 import static ksbysample.webapp.lending.values.lendingbook.LendingBookApprovalResultValues.REJECT;
 
+/**
+ * ???
+ */
 @Component
 public class LendingapprovalFormValidator implements Validator {
 

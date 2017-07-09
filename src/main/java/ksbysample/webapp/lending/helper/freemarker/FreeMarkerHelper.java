@@ -9,6 +9,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 
+/**
+ * ???
+ */
 @Component
 public class FreeMarkerHelper {
 

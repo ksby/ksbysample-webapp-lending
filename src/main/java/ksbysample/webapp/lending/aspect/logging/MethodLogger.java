@@ -10,17 +10,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * ???
+ */
 @Aspect
 @Component
 public class MethodLogger {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(MethodLogger.class);
 
+
+    @SuppressWarnings({"PMD.UnusedPrivateMethod"})
     @Pointcut("execution(* ksbysample.webapp.lending.web..*.*(..))"
             + "&& @within(org.springframework.stereotype.Controller)")
     private void pointcutControllerMethod() {
     }
 
+    @SuppressWarnings({"PMD.UnusedPrivateMethod"})
     @Pointcut("execution(* ksbysample.webapp.lending.service..*.*(..))"
             + "&& @within(org.springframework.stereotype.Service)")
     private void pointcutServiceMethod() {
@@ -44,26 +50,27 @@ public class MethodLogger {
         return ret;
     }
 
+    @SuppressWarnings({"PMD.UseVarargs"})
     private void logginBeginMethod(String className, String methodName, Object[] args) {
         StringBuilder sb = new StringBuilder();
-        sb.append("call : ");
-        sb.append(className);
-        sb.append("#");
-        sb.append(methodName);
-        sb.append("(");
-        sb.append(ToStringBuilder.reflectionToString(args, ToStringStyle.SIMPLE_STYLE));
-        sb.append(")");
+        sb.append("call : ")
+                .append(className)
+                .append('#')
+                .append(methodName)
+                .append('(')
+                .append(ToStringBuilder.reflectionToString(args, ToStringStyle.SIMPLE_STYLE))
+                .append(')');
         logger.info(sb.toString());
     }
 
     private void logginEndMethod(String className, String methodName, Object ret) {
         StringBuilder sb = new StringBuilder();
-        sb.append("ret = ");
-        sb.append(ret);
-        sb.append(" : ");
-        sb.append(className);
-        sb.append("#");
-        sb.append(methodName);
+        sb.append("ret = ")
+                .append(ret)
+                .append(" : ")
+                .append(className)
+                .append('#')
+                .append(methodName);
         logger.info(sb.toString());
     }
 

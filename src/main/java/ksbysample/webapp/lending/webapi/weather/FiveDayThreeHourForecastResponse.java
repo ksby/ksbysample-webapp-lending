@@ -8,6 +8,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * ???
+ */
 @XmlRootElement(name = "FiveDayThreeHourForecastData")
 @Data
 public class FiveDayThreeHourForecastResponse {

@@ -23,6 +23,9 @@ import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues
 import static ksbysample.webapp.lending.values.lendingapp.LendingAppStatusValues.PENDING;
 import static ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValues.APPLY;
 
+/**
+ * ???
+ */
 @Service
 public class LendingapprovalService {
 

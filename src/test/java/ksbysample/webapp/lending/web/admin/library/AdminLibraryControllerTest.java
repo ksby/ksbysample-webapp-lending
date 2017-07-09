@@ -19,6 +19,7 @@ import org.yaml.snakeyaml.Yaml;
 import javax.sql.DataSource;
 import java.io.File;
 
+import static ksbysample.common.test.matcher.HtmlResultMatchers.html;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -44,7 +45,7 @@ public class AdminLibraryControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(xpath("//p[@class='navbar-text noselected-library']").string("※図書館が選択されていません"));
+                    .andExpect(html("p.navbar-text.noselected-library").text("※図書館が選択されていません"));
         }
 
         @Test
@@ -54,7 +55,7 @@ public class AdminLibraryControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
                     .andExpect(model().hasNoErrors())
-                    .andExpect(xpath("//p[@class='navbar-text selected-library']").string("選択中：図書館サンプル"));
+                    .andExpect(html("p.navbar-text.selected-library").text("選択中：図書館サンプル"));
         }
 
         @Test

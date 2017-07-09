@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<head th:replace="~{common/mainparts :: head(~{::title}, ~{::link}, ~{::style})}">
     <title>Spring MVC メモ書き</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
-    <link th:replace="common/head-cssjs"/>
+
     <!-- Bootstrap File Input -->
-    <link href="/css/fileinput.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/fileinput.min.css" rel="stylesheet" type="text/css">
 
     <style type="text/css">
         <!--
@@ -46,7 +42,7 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <!--/* @thymesVar id="beanValidationGroupForm" type="ksbysample.webapp.lending.web.springmvcmemo.BeanValidationGroupForm" */-->
+                        <!--/*@thymesVar id="beanValidationGroupForm" type="ksbysample.webapp.lending.web.springmvcmemo.BeanValidationGroupForm"*/-->
                         <form id="beanValidationGroupForm" enctype="multipart/form-data" method="post"
                               action="/springMvcMemo/beanValidationGroup/fileupload" th:action="@{/springMvcMemo/beanValidationGroup/fileupload}"
                               th:object="${beanValidationGroupForm}">

@@ -7,6 +7,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * ???
+ */
 @XmlRootElement(name = "Libraries")
 @Data
 public class LibrariesForJackson2Xml {

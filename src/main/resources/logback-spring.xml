@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
     <if condition='"${spring.profiles.active}" == "product"'>
         <then>
@@ -25,7 +19,7 @@
         </then>
     </if>
 
-    <!-- SlowQueryReport用ログファイル -->
+    <!-- Tomcat JDBC Connection Pool SlowQueryReport interceptor 用ログファイル -->
     <if condition='"${spring.profiles.active}" == "product" &amp;&amp; "${slowquery.logging.file}" != ""'>
         <then>
             <springProperty scope="context" name="slowQueryLogFile" source="slowquery.logging.file"/>
@@ -39,22 +33,25 @@
                     <maxHistory>30</maxHistory>
                 </rollingPolicy>
             </appender>
+
+            <logger name="org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReport" level="INFO">
+                <appender-ref ref="SLOWQUERY_LOG_FILE"/>
+            </logger>
         </then>
     </if>
 
     <if condition='"${spring.profiles.active}" == "develop"'>
         <then>
-            <include resource="logback-develop.xml"/>
-        </then>
-    </if>
-    <if condition='"${spring.profiles.active}" == "unittest"'>
-        <then>
-            <include resource="logback-unittest.xml"/>
+            <root>
+                <appender-ref ref="CONSOLE"/>
+            </root>
         </then>
     </if>
     <if condition='"${spring.profiles.active}" == "product"'>
         <then>
-            <include resource="logback-product.xml"/>
+            <root>
+                <appender-ref ref="FILE"/>
+            </root>
         </then>
     </if>
 </configuration>

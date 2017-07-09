@@ -7,6 +7,9 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.text.MessageFormat;
 
+/**
+ * ???
+ */
 public class ValuesEnumValidator implements ConstraintValidator<ValuesEnum, String> {
 
     private Class<? extends Enum<?>> enumClass;

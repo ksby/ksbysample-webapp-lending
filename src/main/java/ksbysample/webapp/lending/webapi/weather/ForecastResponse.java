@@ -11,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ???
+ */
 @Data
 public class ForecastResponse {
 
@@ -23,9 +26,9 @@ public class ForecastResponse {
     @XmlElement(name = "dt_txt")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dtTxt;
-    
+
     ForecastResponse(ForecastData forecastData) {
         BeanUtils.copyProperties(forecastData, this);
     }
-    
+
 }

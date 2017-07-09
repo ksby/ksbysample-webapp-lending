@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * ???
+ */
 @Component("vh")
-public class ValuesHelper {
+public final class ValuesHelper {
 
     private final Map<String, String> valuesObjList;
 

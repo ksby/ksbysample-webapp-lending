@@ -1,40 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<head th:replace="~{common/mainparts :: head(~{::title}, ~{::link}, ~{::style})}">
     <title>貸出申請結果確認</title>
-    <!-- Tell the browser to be responsive to screen width -->
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
-    <link th:replace="common/head-cssjs"/>
 
     <style>
-        .content-wrapper {
-            background-color: #fffafa;
-        }
-        .selected-library {
-            color: #ffffff !important;
-            font-size: 100%;
-            font-weight: 700;
-        }
         .buttom-btn-area {
             padding-top: 10px;
-        }
-        .box-body.no-padding {
-            padding-bottom: 10px !important;
-        }
-        .table>tbody>tr>td
-        , .table>tbody>tr>th
-        , .table>tfoot>tr>td
-        , .table>tfoot>tr>th
-        , .table>thead>tr>td
-        , .table>thead>tr>th {
-            padding: 5px;
-            font-size: 90%;
-        }
-        .jp-gothic {
-            font-family: Verdana, "游ゴシック", YuGothic, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
         }
     </style>
 </head>
@@ -58,8 +30,10 @@
             <section class="content">
                 <div class="row">
                     <div class="col-xs-12">
-                        <form id="confirmresultForm" method="post" action="/confirmresult/filedownload" 
-                              th:action="@{/confirmresult/filedownload}" th:object="${confirmresultForm}">
+                        <!--/*@thymesVar id="confirmresultForm" type="ksbysample.webapp.lending.web.confirmresult.ConfirmresultForm"*/-->
+                        <form id="confirmresultForm" method="post" action="/confirmresult/filedownload"
+                              th:action="@{/confirmresult/filedownload}"
+                              th:object="${confirmresultForm}">
                             <div th:replace="common/mainparts :: alert-danger"></div>
                             <div th:replace="common/mainparts :: alert-success"></div>
                             <div class="box" th:if="*{lendingApp != null}">

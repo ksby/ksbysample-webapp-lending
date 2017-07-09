@@ -7,11 +7,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * ???
+ */
 @Aspect
 @Component
 public class ControllerAndEventNameLogger {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(ControllerAndEventNameLogger.class);
 
     /**
      * @param pjp              ???

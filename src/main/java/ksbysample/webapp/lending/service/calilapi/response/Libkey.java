@@ -9,6 +9,9 @@ import lombok.ToString;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlValue;
 
+/**
+ * ???
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @ToString

@@ -9,14 +9,17 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * ???
+ */
 public class BookListCsvDownloadHelper implements DataDownloadHelper {
 
     private static final String[] CSV_HEADER = new String[]{"ISBN", "書名", "申請理由", "承認／却下", "却下理由"};
     private static final String CSV_FILE_NAME_FORMAT = "booklist-%s.csv";
 
-    private Long lendingAppId;
+    private final Long lendingAppId;
 
-    private List<BookListCsvData> bookListCsvDataList;
+    private final List<BookListCsvData> bookListCsvDataList;
 
     /**
      * @param lendingAppId        ???

@@ -8,11 +8,14 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
+/**
+ * ???
+ */
 public class LendingUserDetails implements UserDetails {
 
     private static final long serialVersionUID = 4775912062739295150L;
 
-    private LendingUser lendingUser;
+    private final LendingUser lendingUser;
     private final Set<? extends GrantedAuthority> authorities;
     private final boolean accountNonExpired;
     private final boolean accountNonLocked;

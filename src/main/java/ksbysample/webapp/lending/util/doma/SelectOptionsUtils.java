@@ -3,6 +3,9 @@ package ksbysample.webapp.lending.util.doma;
 import org.seasar.doma.jdbc.SelectOptions;
 import org.springframework.data.domain.Pageable;
 
+/**
+ * ???
+ */
 public class SelectOptionsUtils {
 
     /**

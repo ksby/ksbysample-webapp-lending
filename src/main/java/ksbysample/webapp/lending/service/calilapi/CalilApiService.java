@@ -25,16 +25,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * ???
+ */
 @Service
 @PropertySource("classpath:calilapi.properties")
 public class CalilApiService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger logger = LoggerFactory.getLogger(CalilApiService.class);
 
     private static final int RETRY_MAX_CNT = 5;
     private static final long RETRY_SLEEP_MILLS = 3000;
 
-    private static final String URL_CALILAPI_ROOT = "http://api.calil.jp";
+    public static final String URL_CALILAPI_ROOT = "http://api.calil.jp";
     private static final String URL_CALILAPI_LIBRALY
             = URL_CALILAPI_ROOT + "/library?appkey={appkey}&pref={pref}";
     private static final String URL_CALILAPI_CHECK
@@ -76,9 +79,7 @@ public class CalilApiService {
 
         // 受信した XMLレスポンスを Javaオブジェクトに変換する
         Serializer serializer = new Persister();
-        Libraries libraries = serializer.read(Libraries.class, response.getBody());
-
-        return libraries;
+        return serializer.read(Libraries.class, response.getBody());
     }
 
     /**
@@ -130,6 +131,7 @@ public class CalilApiService {
 
     private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url
             , Class<T> responseType, Object... uriVariables) {
+        @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
                 logger.info("★★★ リトライ回数 = " + context.getRetryCount());
@@ -143,6 +145,7 @@ public class CalilApiService {
 
     private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url
             , Class<T> responseType, Map<String, ?> uriVariables) {
+        @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
                 logger.info("★★★ リトライ回数 = " + context.getRetryCount());
@@ -154,11 +157,14 @@ public class CalilApiService {
         return response;
     }
 
+    /**
+     * ???
+     */
     @Configuration
     public static class CalilApiConfig {
 
-        private static int CONNECT_TIMEOUT = 5000;
-        private static int READ_TIMEOUT = 5000;
+        private static final int CONNECT_TIMEOUT = 5000;
+        private static final int READ_TIMEOUT = 5000;
 
         private final RestTemplateBuilder restTemplateBuilder;
 
@@ -187,7 +193,7 @@ public class CalilApiService {
             return this.restTemplateBuilder
                     .setConnectTimeout(CONNECT_TIMEOUT)
                     .setReadTimeout(READ_TIMEOUT)
-                    .rootUri(URL_CALILAPI_ROOT)
+                    .rootUri(CalilApiService.URL_CALILAPI_ROOT)
                     .build();
         }
 
@@ -202,7 +208,7 @@ public class CalilApiService {
             return this.restTemplateBuilder
                     .setConnectTimeout(CONNECT_TIMEOUT)
                     .setReadTimeout(READ_TIMEOUT)
-                    .rootUri(URL_CALILAPI_ROOT)
+                    .rootUri(CalilApiService.URL_CALILAPI_ROOT)
                     .messageConverters(this.mappingJackson2XmlHttpMessageConverter)
                     .build();
         }

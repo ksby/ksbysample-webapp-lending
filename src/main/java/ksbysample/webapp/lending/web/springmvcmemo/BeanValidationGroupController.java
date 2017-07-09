@@ -6,17 +6,22 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+/**
+ * ???
+ */
 @Controller
 @RequestMapping("/springMvcMemo/beanValidationGroup")
 public class BeanValidationGroupController {
 
-    private final Validator validator;
+    private static final String THYMELEAF_TEMPLATE = "springmvcmemo/beanValidationGroup";
+
+    private final Validator mvcValidator;
 
     /**
-     * @param validator ???
+     * @param mvcValidator ???
      */
-    public BeanValidationGroupController(Validator validator) {
-        this.validator = validator;
+    public BeanValidationGroupController(Validator mvcValidator) {
+        this.mvcValidator = mvcValidator;
     }
 
     /**
@@ -25,7 +30,7 @@ public class BeanValidationGroupController {
      */
     @RequestMapping
     public String beanValidationGroup(BeanValidationGroupForm beanValidationGroupForm) {
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -37,10 +42,10 @@ public class BeanValidationGroupController {
     public String fileupload(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "springmvcmemo/beanValidationGroup";
+            return THYMELEAF_TEMPLATE;
         }
 
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -53,12 +58,12 @@ public class BeanValidationGroupController {
     public String edit(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , EditFormChecker editFormChecker) {
-        validator.validate(editFormChecker, bindingResult);
+        mvcValidator.validate(editFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "springmvcmemo/beanValidationGroup";
+            return THYMELEAF_TEMPLATE;
         }
 
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
     /**
@@ -71,12 +76,12 @@ public class BeanValidationGroupController {
     public String sendmail(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , SendmailFormChecker sendmailFormChecker) {
-        validator.validate(sendmailFormChecker, bindingResult);
+        mvcValidator.validate(sendmailFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "springmvcmemo/beanValidationGroup";
+            return THYMELEAF_TEMPLATE;
         }
 
-        return "springmvcmemo/beanValidationGroup";
+        return THYMELEAF_TEMPLATE;
     }
 
 }

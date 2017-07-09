@@ -10,6 +10,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * ???
+ */
 public class UrlAfterLoginHelper {
 
     /**
