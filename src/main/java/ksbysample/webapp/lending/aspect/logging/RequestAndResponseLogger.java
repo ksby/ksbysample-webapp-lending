@@ -3,11 +3,16 @@ package ksbysample.webapp.lending.aspect.logging;
 import com.google.common.collect.Iterators;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -26,6 +31,9 @@ public class RequestAndResponseLogger {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestAndResponseLogger.class);
 
+    private static final String POINTCUT_ALL_CLASS_AND_METHOD_UNDER_APPLICATION_PACKAGE
+            = "execution(* ksbysample.webapp.lending..*.*(..))";
+
     private static final String LOG_REQUEST_INFO = "[req][info  ] ";
     private static final String LOG_REQUEST_HEADER = "[req][header] ";
     private static final String LOG_REQUEST_COOKIE = "[req][cookie] ";
@@ -35,12 +43,34 @@ public class RequestAndResponseLogger {
     private static final String LOG_RESPONSE_HEADER = "[res][header] ";
 
     /**
+     * Web アプリケーションの package 配下の全てのクラスのメソッドを Join Point にする Pointcut
+     */
+    @Pointcut(POINTCUT_ALL_CLASS_AND_METHOD_UNDER_APPLICATION_PACKAGE)
+    public void allClassAndMethodUnderApplicationPackage() {
+    }
+
+    /**
+     * {@link RequestMapping} アノテーションが付加されたメソッドを Join Point にする Pointcut
+     */
+    @Pointcut("@annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    public void requestMappingAnnotation() {
+    }
+
+    /**
+     * {@link GetMapping}, {@link PostMapping} 等 {@link RequestMapping} アノテーションを使用した
+     * composed annotation が付加されたメソッドを Join Point にする Pointcut
+     */
+    @Pointcut("execution(@(@org.springframework.web.bind.annotation.RequestMapping *) * *(..))")
+    public void requestMappingComposedAnnotations() {
+    }
+
+    /**
      * @param pjp ???
      * @return ???
      * @throws Throwable
      */
-    @Around(value = "execution(* ksbysample.webapp.lending.web..*.*(..))"
-            + "&& @annotation(org.springframework.web.bind.annotation.RequestMapping)")
+    @Around(value = "allClassAndMethodUnderApplicationPackage()"
+            + " && (requestMappingAnnotation() || requestMappingComposedAnnotations())")
     public Object logginRequestAndResponse(ProceedingJoinPoint pjp)
             throws Throwable {
         HttpServletRequest request
@@ -52,6 +82,17 @@ public class RequestAndResponseLogger {
         loggingResponse(response);
 
         return ret;
+    }
+
+    /**
+     * ???
+     */
+    @After(value = "allClassAndMethodUnderApplicationPackage()"
+            + " && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
+    public void logginResponseAfterExceptionHandler() {
+        HttpServletResponse response
+                = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+        loggingResponse(response);
     }
 
     private void loggingRequest(HttpServletRequest request) {

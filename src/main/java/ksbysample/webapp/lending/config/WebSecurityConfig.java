@@ -49,6 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/springMvcMemo/**").permitAll()
                 .antMatchers("/sessionsample/**").permitAll()
                 .antMatchers("/textareamemo/**").permitAll()
+                .antMatchers("/sample/**").permitAll()
                 .anyRequest().authenticated();
         http.formLogin()
                 .loginPage("/")
