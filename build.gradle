@@ -39,6 +39,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.5'
 }
 
+[compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
 [compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing,-path']
 compileJava.options.compilerArgs += ['-Xep:RemoveUnusedImports:WARN', '-Xep:InsecureCryptoUsage:OFF']
 
@@ -197,11 +198,21 @@ dependencies {
 }
 
 bootRun {
-    jvmArgs = ['-Dspring.profiles.active=develop']
+    jvmArgs = [
+            "-ea",
+            "-Dspring.profiles.active=develop",
+            "-Dfile.encoding=UTF-8",
+            "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
+    ]
 }
 
 test {
-    jvmArgs = ['-Dspring.profiles.active=unittest']
+    jvmArgs = [
+            "-ea",
+            "-Dspring.profiles.active=unittest",
+            "-Dfile.encoding=UTF-8",
+            "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
+    ]
 }
 
 // for Doma-Gen
