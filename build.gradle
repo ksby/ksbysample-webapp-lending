@@ -35,8 +35,9 @@ apply plugin: 'pmd'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+wrapper {
+    gradleVersion = "4.10"
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
@@ -76,21 +77,6 @@ findbugs {
 }
 
 tasks.withType(FindBugs) {
-    // Gradle 3.3以降 + FindBugs Gradle Plugin を組み合わせると、"The following errors occurred during analysis:"
-    // の後に "Cannot open codebase filesystem:..." というメッセージが大量に出力されるので、以下の doFirst { ... }
-    // のコードを入れることで出力されないようにする
-    doFirst {
-        def fc = classes
-        if (fc == null) {
-            return
-        }
-        fc.exclude '**/*.properties'
-        fc.exclude '**/*.xml'
-        fc.exclude '**/META-INF/**'
-        fc.exclude '**/static/**'
-        fc.exclude '**/templates/**'
-        classes = files(fc.files)
-    }
     reports {
         xml.enabled = false
         html.enabled = true
