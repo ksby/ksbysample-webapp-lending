@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.web.lendingapproval;
 
-import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import ksbysample.common.test.helper.TestHelper;
 import ksbysample.common.test.rule.db.AssertOptions;
 import ksbysample.common.test.rule.db.TableDataAssert;
@@ -16,14 +16,18 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.FileCopyUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.mail.internet.MimeMessage;
 import javax.sql.DataSource;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
 import static ksbysample.common.test.matcher.HtmlResultMatchers.html;
@@ -222,6 +226,12 @@ public class LendingapprovalControllerTest {
         @Autowired
         public SecurityMockMvcResource mvc;
 
+        @Value("ksbysample/webapp/lending/web/lendingapproval/assertdata/001/message.txt")
+        ClassPathResource messageTxt001Resource;
+
+        @Value("ksbysample/webapp/lending/web/lendingapproval/assertdata/002/message.txt")
+        ClassPathResource messageTxt002Resource;
+
         @Test
         @TestData("web/lendingapproval/testdata/001")
         public void 確定ボタンをクリックした場合_承認() throws Exception {
@@ -248,9 +258,8 @@ public class LendingapprovalControllerTest {
                     .extracting(Object::toString)
                     .containsOnly("tanaka.taro@sample.com");
             assertThat(mimeMessage.getContent())
-                    .isEqualTo(com.google.common.io.Files.toString(
-                            new File("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/assertdata/001/message.txt")
-                            , Charsets.UTF_8));
+                    .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                            messageTxt001Resource.getFile(), StandardCharsets.UTF_8)));
         }
 
         @Test
@@ -281,9 +290,8 @@ public class LendingapprovalControllerTest {
                     .extracting(Object::toString)
                     .containsOnly("tanaka.taro@sample.com");
             assertThat(mimeMessage.getContent())
-                    .isEqualTo(com.google.common.io.Files.toString(
-                            new File("src/test/resources/ksbysample/webapp/lending/web/lendingapproval/assertdata/002/message.txt")
-                            , Charsets.UTF_8));
+                    .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                            messageTxt001Resource.getFile(), StandardCharsets.UTF_8)));
         }
 
     }

@@ -2,10 +2,9 @@ package ksbysample.webapp.lending.config;
 
 import ksbysample.webapp.lending.security.RoleAwareAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,7 +19,6 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  * ???
  */
 @Configuration
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static final String DEFAULT_SUCCESS_URL = "/booklist";
@@ -31,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * @param userDetailsService ???
      */
-    public WebSecurityConfig(UserDetailsService userDetailsService) {
+    public WebSecurityConfig(@Qualifier("lendingUserDetailsService") UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 

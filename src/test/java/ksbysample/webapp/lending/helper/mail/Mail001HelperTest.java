@@ -1,16 +1,18 @@
 package ksbysample.webapp.lending.helper.mail;
 
-import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.FileCopyUtils;
 
 import javax.mail.Message;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
+import java.nio.charset.StandardCharsets;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -21,6 +23,9 @@ public class Mail001HelperTest {
     @Autowired
     private Mail001Helper mail001Helper;
 
+    @Value("ksbysample/webapp/lending/helper/mail/assertdata/001/message.txt")
+    ClassPathResource messageTxtResource;
+
     @Test
     public void testCreateMessage() throws Exception {
         MimeMessage message = mail001Helper.createMessage("test@sample.com", 1L);
@@ -28,8 +33,7 @@ public class Mail001HelperTest {
                 .extracting(Object::toString)
                 .containsOnly("test@sample.com");
         assertThat(message.getContent())
-                .isEqualTo(Files.toString(
-                        new File("src/test/resources/ksbysample/webapp/lending/helper/mail/assertdata/001/message.txt")
-                        , Charsets.UTF_8));
+                .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                        messageTxtResource.getFile(), StandardCharsets.UTF_8)));
     }
 }

@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.web.lendingapp;
 
-import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import ksbysample.common.test.helper.TestHelper;
 import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.rule.db.TestData;
@@ -15,14 +15,18 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.FileCopyUtils;
 import org.yaml.snakeyaml.Yaml;
 
 import javax.mail.internet.MimeMessage;
 import javax.sql.DataSource;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
@@ -159,7 +163,7 @@ public class LendingappControllerTest {
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[1].lendingAppFlg", ""))
                     .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", ""))
                     .andExpect(html(".alert.alert-danger > p")
-                        .text(mph.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
+                            .text(mph.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
         }
 
         @Test
@@ -214,6 +218,9 @@ public class LendingappControllerTest {
         @Autowired
         public SecurityMockMvcResource mvc;
 
+        @Value("ksbysample/webapp/lending/web/lendingapp/assertdata/001/message.txt")
+        ClassPathResource messageTxtResource;
+
         @Test
         @TestData("web/lendingapp/testdata/001")
         public void 申請ボタンをクリックした場合() throws Exception {
@@ -238,9 +245,8 @@ public class LendingappControllerTest {
                         .extracting(Object::toString)
                         .containsOnly("tanaka.taro@sample.com", "suzuki.hanako@test.co.jp");
                 assertThat(mimeMessage.getContent())
-                        .isEqualTo(com.google.common.io.Files.toString(
-                                new File("src/test/resources/ksbysample/webapp/lending/web/lendingapp/assertdata/001/message.txt")
-                                , Charsets.UTF_8));
+                        .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                                messageTxtResource.getFile(), StandardCharsets.UTF_8)));
             }
         }
 

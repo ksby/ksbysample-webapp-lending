@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.listener.rabbitmq;
 
-import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import ksbysample.common.test.rule.db.TableDataAssert;
 import ksbysample.common.test.rule.db.TestData;
 import ksbysample.common.test.rule.db.TestDataResource;
@@ -21,20 +21,24 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.FileCopyUtils;
 
 import javax.mail.internet.MimeMessage;
 import javax.sql.DataSource;
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Matchers.any;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -62,6 +66,9 @@ public class InquiringStatusOfBookQueueListenerTest {
 
     @MockBean
     private CalilApiService calilApiService;
+
+    @Value("ksbysample/webapp/lending/helper/mail/assertdata/001/message.txt")
+    ClassPathResource messageTxtResource;
 
     @Test
     @TestData("listener/rabbitmq/testdata/001")
@@ -108,9 +115,8 @@ public class InquiringStatusOfBookQueueListenerTest {
                 .extracting(Object::toString)
                 .containsOnly("tanaka.taro@sample.com");
         assertThat(mimeMessage.getContent())
-                .isEqualTo(com.google.common.io.Files.toString(
-                        new File("src/test/resources/ksbysample/webapp/lending/helper/mail/assertdata/001/message.txt")
-                        , Charsets.UTF_8));
+                .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                        messageTxtResource.getFile(), StandardCharsets.UTF_8)));
     }
 
 }
