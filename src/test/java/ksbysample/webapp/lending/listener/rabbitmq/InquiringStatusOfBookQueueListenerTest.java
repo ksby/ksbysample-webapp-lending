@@ -18,7 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.core.MessagePropertiesBuilder;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,7 +94,8 @@ public class InquiringStatusOfBookQueueListenerTest {
          */
         InquiringStatusOfBookQueueMessage queueMessage = new InquiringStatusOfBookQueueMessage();
         queueMessage.setLendingAppId(1L);
-        Message message = messageConverter.toMessage(queueMessage, new MessageProperties());
+        Message message = messageConverter.toMessage(queueMessage
+                , MessagePropertiesBuilder.newInstance().setCorrelationId("test").build());
         listener.receiveMessage(message);
 
         /**

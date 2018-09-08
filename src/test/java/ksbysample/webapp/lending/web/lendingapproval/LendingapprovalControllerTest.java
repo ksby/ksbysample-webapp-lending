@@ -291,7 +291,7 @@ public class LendingapprovalControllerTest {
                     .containsOnly("tanaka.taro@sample.com");
             assertThat(mimeMessage.getContent())
                     .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
-                            messageTxt001Resource.getFile(), StandardCharsets.UTF_8)));
+                            messageTxt002Resource.getFile(), StandardCharsets.UTF_8)));
         }
 
     }
