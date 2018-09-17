@@ -64,7 +64,7 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = "7.8.1"
+    toolVersion = "8.12"
     sourceSets = [project.sourceSets.main]
 }
 
