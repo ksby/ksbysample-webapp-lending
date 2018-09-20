@@ -32,7 +32,7 @@ import java.util.Map;
 @PropertySource("classpath:calilapi.properties")
 public class CalilApiService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CalilApiService.class);
+    private final Logger logger = LoggerFactory.getLogger(CalilApiService.class);
 
     private static final int RETRY_MAX_CNT = 5;
     private static final long RETRY_SLEEP_MILLS = 3000;
@@ -72,6 +72,7 @@ public class CalilApiService {
      * @return ???
      * @throws Exception
      */
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     public Libraries getLibraryList(String pref) throws Exception {
         // 図書館データベースAPIを呼び出して XMLレスポンスを受信する
         ResponseEntity<String> response = getForEntityWithRetry(this.restTemplateForCalilApi
@@ -87,7 +88,7 @@ public class CalilApiService {
      * @return ???
      * @throws Exception
      */
-    public LibrariesForJackson2Xml getLibraryListByJackson2Xml(String pref) throws Exception {
+    public LibrariesForJackson2Xml getLibraryListByJackson2Xml(String pref) {
         // 図書館データベースAPIを呼び出して XMLレスポンスを受信する
         ResponseEntity<LibrariesForJackson2Xml> response = getForEntityWithRetry(this.restTemplateForCalilApiByXml
                 , URL_CALILAPI_LIBRALY, LibrariesForJackson2Xml.class, this.calilApiKey, pref);
@@ -134,7 +135,7 @@ public class CalilApiService {
         @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
-                logger.info("★★★ リトライ回数 = " + context.getRetryCount());
+                logger.info("★★★ リトライ回数 = {}", context.getRetryCount());
             }
             ResponseEntity<T> innerResponse = restTemplate.getForEntity(url, responseType, uriVariables);
             return innerResponse;
@@ -148,7 +149,7 @@ public class CalilApiService {
         @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
-                logger.info("★★★ リトライ回数 = " + context.getRetryCount());
+                logger.info("★★★ リトライ回数 = {}", context.getRetryCount());
             }
             ResponseEntity<T> innerResponse = restTemplate.getForEntity(url, responseType, uriVariables);
             return innerResponse;

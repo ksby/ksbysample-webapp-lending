@@ -25,6 +25,10 @@ public class BooklistCsvFileService {
 
     private static final Pattern ISBN_FORMAT_PATTERN = Pattern.compile("^[0-9\\-]+$");
 
+    private static final int NUMBER_OF_COLUMNS = 2;
+    private static final int MAX_LENGTH_OF_ISBN = 17;
+    private static final int MAX_LENGTH_OF_BOOKNAME = 128;
+
     private final MessagesPropertiesHelper mph;
 
     /**
@@ -38,6 +42,7 @@ public class BooklistCsvFileService {
      * @param multipartFile ???
      * @param errors        ???
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void validateUploadFile(MultipartFile multipartFile, Errors errors) {
         try (
                 InputStream is = multipartFile.getInputStream();
@@ -54,7 +59,7 @@ public class BooklistCsvFileService {
                 line++;
 
                 // 項目数が 2 でない
-                if (csvdata.length != 2) {
+                if (csvdata.length != NUMBER_OF_COLUMNS) {
                     errors.reject("UploadBooklistForm.fileupload.lengtherr"
                             , new Object[]{line, csvdata.length}, null);
                     continue;
@@ -67,7 +72,7 @@ public class BooklistCsvFileService {
                 }
 
                 // ISBN のデータの文字数が 17 文字以内でない
-                if (csvdata[0].length() > 17) {
+                if (csvdata[0].length() > MAX_LENGTH_OF_ISBN) {
                     errors.reject("UploadBooklistForm.fileupload.isbn.lengtherr"
                             , new Object[]{line, csvdata[0]}, null);
                 }
@@ -80,7 +85,7 @@ public class BooklistCsvFileService {
                 }
 
                 // 書名のデータの文字数が 128 文字以内でない
-                if (csvdata[1].length() > 128) {
+                if (csvdata[1].length() > MAX_LENGTH_OF_BOOKNAME) {
                     errors.reject("UploadBooklistForm.fileupload.bookname.lengtherr"
                             , new Object[]{line, csvdata[1]}, null);
                 }

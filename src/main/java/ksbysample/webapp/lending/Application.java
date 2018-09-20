@@ -25,7 +25,7 @@ import java.util.Set;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Application {
 
-    private static final Set<String> springProfiles = Collections
+    private static final Set<String> SPRING_PROFILES = Collections
             .unmodifiableSet(new HashSet<>(Arrays.asList("product", "develop", "unittest")));
 
     /**
@@ -35,7 +35,7 @@ public class Application {
      */
     public static void main(String[] args) {
         String springProfilesActive = System.getProperty("spring.profiles.active");
-        if (!springProfiles.contains(springProfilesActive)) {
+        if (!SPRING_PROFILES.contains(springProfilesActive)) {
             throw new UnsupportedOperationException(
                     MessageFormat.format("JVMの起動時引数 -Dspring.profiles.active で "
                                     + "develop か unittest か product を指定して下さい ( -Dspring.profiles.active={0} )。"

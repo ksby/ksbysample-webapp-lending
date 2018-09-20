@@ -30,6 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param userDetailsService ???
      */
     public WebSecurityConfig(@Qualifier("lendingUserDetailsService") UserDetailsService userDetailsService) {
+        super();
         this.userDetailsService = userDetailsService;
     }
 
@@ -88,6 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @param auth ???
      * @throws Exception
      */
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuhthenticationProvider())

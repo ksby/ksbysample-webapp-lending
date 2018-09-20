@@ -87,6 +87,7 @@ public class LendingapprovalService {
      * @param lendingapprovalForm ???
      * @throws MessagingException
      */
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public void complete(LendingapprovalForm lendingapprovalForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
         Long lendingAppId = lendingapprovalForm.getLendingApp().getLendingAppId();

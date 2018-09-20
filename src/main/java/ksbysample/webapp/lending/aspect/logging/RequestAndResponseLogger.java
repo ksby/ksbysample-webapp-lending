@@ -29,7 +29,7 @@ import java.util.stream.StreamSupport;
 @Component
 public class RequestAndResponseLogger {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestAndResponseLogger.class);
+    private final Logger logger = LoggerFactory.getLogger(RequestAndResponseLogger.class);
 
     private static final String POINTCUT_ALL_CLASS_AND_METHOD_UNDER_APPLICATION_PACKAGE
             = "execution(* ksbysample.webapp.lending..*.*(..))";
@@ -195,17 +195,17 @@ public class RequestAndResponseLogger {
     private void logging(String title, String name, String value) {
         StringBuilder sb = new StringBuilder(title);
         if (name != null) {
-            sb.append(name);
-            sb.append(" = ");
+            sb.append(name)
+                    .append(" = ");
         }
         sb.append(value);
         logger.info(sb.toString());
     }
 
     private void append(StringBuilder sb, String name, String value) {
-        sb.append(name);
-        sb.append(" = ");
-        sb.append(value);
+        sb.append(name)
+                .append(" = ")
+                .append(value);
     }
 
 }

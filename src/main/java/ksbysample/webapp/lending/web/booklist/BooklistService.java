@@ -66,9 +66,8 @@ public class BooklistService {
         lendingAppDao.insert(lendingApp);
 
         // lending_book テーブルにデータを保存する
-        LendingBook lendingBook;
+        LendingBook lendingBook = new LendingBook();
         for (BooklistCsvRecord booklistCsvRecord : booklistCsvRecordList) {
-            lendingBook = new LendingBook();
             BeanUtils.copyProperties(booklistCsvRecord, lendingBook);
             lendingBook.setLendingAppId(lendingApp.getLendingAppId());
             lendingBookDao.insert(lendingBook);

@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class CommonWebApiResponse<T> {
 
-    private int errcode = 0;
+    private int errcode;
 
     private String errmsg = "";
 
