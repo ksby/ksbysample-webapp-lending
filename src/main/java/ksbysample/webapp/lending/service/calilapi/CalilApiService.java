@@ -1,6 +1,8 @@
 package ksbysample.webapp.lending.service.calilapi;
 
 import com.google.common.base.Joiner;
+import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
+import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.service.calilapi.response.Book;
 import ksbysample.webapp.lending.service.calilapi.response.CheckApiResponse;
 import ksbysample.webapp.lending.service.calilapi.response.Libraries;
@@ -54,17 +56,22 @@ public class CalilApiService {
 
     private final RetryTemplate simpleRetryTemplate;
 
+    private final MessagesPropertiesHelper mph;
+
     /**
      * @param restTemplateForCalilApi      ???
      * @param restTemplateForCalilApiByXml ???
      * @param simpleRetryTemplate          ???
+     * @param mph                          ???
      */
     public CalilApiService(@Qualifier("restTemplateForCalilApi") RestTemplate restTemplateForCalilApi
             , @Qualifier("restTemplateForCalilApiByXml") RestTemplate restTemplateForCalilApiByXml
-            , @Qualifier("simpleRetryTemplate") RetryTemplate simpleRetryTemplate) {
+            , @Qualifier("simpleRetryTemplate") RetryTemplate simpleRetryTemplate
+            , MessagesPropertiesHelper mph) {
         this.restTemplateForCalilApi = restTemplateForCalilApi;
         this.restTemplateForCalilApiByXml = restTemplateForCalilApiByXml;
         this.simpleRetryTemplate = simpleRetryTemplate;
+        this.mph = mph;
     }
 
     /**
@@ -107,12 +114,19 @@ public class CalilApiService {
         vars.put("isbn", Joiner.on(",").join(isbnList));
 
         ResponseEntity<CheckApiResponse> response = null;
+        CheckApiResponse checkApiResponse = null;
         String url = URL_CALILAPI_CHECK;
         for (int retry = 0; retry < RETRY_MAX_CNT; retry++) {
             // 蔵書検索APIを呼び出して蔵書の有無と貸出状況を取得する
             response = getForEntityWithRetry(this.restTemplateForCalilApiByXml, url, CheckApiResponse.class, vars);
-            logger.info("カーリルの蔵書検索API を呼び出し、レスポンスを取得しました。{}", response.getBody().toString());
-            if (response.getBody().getContinueValue() == 0) {
+            checkApiResponse = response.getBody();
+            if (checkApiResponse == null) {
+                throw new WebApplicationRuntimeException(
+                        mph.getMessage("CalilApiService.checkapi.response.emptybody", null));
+            }
+
+            logger.info("カーリルの蔵書検索API を呼び出し、レスポンスを取得しました。{}", checkApiResponse.toString());
+            if (checkApiResponse.getContinueValue() == 0) {
                 break;
             }
 
@@ -124,10 +138,10 @@ public class CalilApiService {
             }
             url = URL_CALILAPI_CHECK_FOR_RETRY;
             vars.clear();
-            vars.put("session", response.getBody().getSession());
+            vars.put("session", checkApiResponse.getSession());
         }
 
-        return response.getBody().getBookList();
+        return checkApiResponse.getBookList();
     }
 
     private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url

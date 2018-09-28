@@ -159,9 +159,9 @@ public class LendingappControllerTest {
                     .andExpect(model().hasErrors())
                     .andExpect(model().errorCount(4))
                     .andExpect(errors().hasGlobalError("lendingappForm", "LendingappForm.lendingBookDtoList.notExistApply"))
-                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[0].lendingAppFlg", ""))
-                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[1].lendingAppFlg", ""))
-                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", ""))
+                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[0].lendingAppFlg", "LendingappForm.lendingBookDtoList.notExistApply"))
+                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[1].lendingAppFlg", "LendingappForm.lendingBookDtoList.notExistApply"))
+                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppFlg", "LendingappForm.lendingBookDtoList.notExistApply"))
                     .andExpect(html(".alert.alert-danger > p")
                             .text(mph.getMessage("LendingappForm.lendingBookDtoList.notExistApply", null)));
         }
@@ -175,8 +175,8 @@ public class LendingappControllerTest {
                     .andExpect(model().hasErrors())
                     .andExpect(model().errorCount(3))
                     .andExpect(errors().hasGlobalError("lendingappForm", "LendingappForm.lendingBookDtoList.emptyReason"))
-                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[0].lendingAppReason", ""))
-                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppReason", ""));
+                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[0].lendingAppReason", "LendingappForm.lendingBookDtoList.emptyReason"))
+                    .andExpect(errors().hasFieldError("lendingappForm", "lendingBookDtoList[2].lendingAppReason", "LendingappForm.lendingBookDtoList.emptyReason"));
         }
 
         @Test

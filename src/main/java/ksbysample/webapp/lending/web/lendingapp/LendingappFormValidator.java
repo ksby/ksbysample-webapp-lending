@@ -2,6 +2,7 @@ package ksbysample.webapp.lending.web.lendingapp;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -20,6 +21,7 @@ public class LendingappFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        Assert.notNull(target, "target must not be null");
         LendingappForm lendingappForm = (LendingappForm) target;
 
         // 「一時保存」ボタンが押された時は validate メソッドの入力チェックは実行しない
@@ -44,9 +46,10 @@ public class LendingappFormValidator implements Validator {
 
         if (!existApply) {
             for (i = 0; i < lendingappForm.getLendingBookDtoList().size(); i++) {
-                errors.rejectValue(String.format("lendingBookDtoList[%d].lendingAppFlg", i), null);
+                errors.rejectValue(String.format("lendingBookDtoList[%d].lendingAppFlg", i)
+                        , "LendingappForm.lendingBookDtoList.notExistApply");
             }
-            errors.reject("LendingappForm.lendingBookDtoList.notExistApply", null);
+            errors.reject("LendingappForm.lendingBookDtoList.notExistApply");
         }
     }
 
@@ -54,9 +57,10 @@ public class LendingappFormValidator implements Validator {
             , int index, boolean rejectEmptyReason) {
         boolean calledReject = false;
         if (StringUtils.isBlank(lendingBookDto.getLendingAppReason())) {
-            errors.rejectValue(String.format("lendingBookDtoList[%d].lendingAppReason", index), null);
+            errors.rejectValue(String.format("lendingBookDtoList[%d].lendingAppReason", index)
+                    , "LendingappForm.lendingBookDtoList.emptyReason");
             if (!rejectEmptyReason) {
-                errors.reject("LendingappForm.lendingBookDtoList.emptyReason", null);
+                errors.reject("LendingappForm.lendingBookDtoList.emptyReason");
                 calledReject = true;
             }
         }
@@ -64,3 +68,23 @@ public class LendingappFormValidator implements Validator {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -18,7 +18,7 @@ plugins {
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "findbugs"
+    id "com.github.spotbugs" version "1.6.4"
     id "pmd"
     id "net.ltgt.errorprone" version "0.0.16"
     id "de.undercouch.download" version "3.4.3"
@@ -68,15 +68,13 @@ checkstyle {
     sourceSets = [project.sourceSets.main]
 }
 
-findbugs {
-    toolVersion = "3.0.1"
-    sourceSets = [project.sourceSets.main]
+spotbugs {
+    toolVersion = "3.1.7"
     ignoreFailures = true
     effort = "max"
-    excludeFilter = file("${rootProject.projectDir}/config/findbugs/findbugs-exclude.xml")
+    spotbugsTest.enabled = false
 }
-
-tasks.withType(FindBugs) {
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
     reports {
         xml.enabled = false
         html.enabled = true
@@ -116,6 +114,7 @@ dependencies {
     def lombokVersion = "1.18.2"
     def errorproneVersion = "2.3.1"
     def powermockVersion = "2.0.0-beta.5"
+    def spotbugsVersion = "3.1.7"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -160,8 +159,7 @@ dependencies {
     testImplementation("cglib:cglib-nodep:3.2.7")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
     testImplementation("org.spockframework:spock-spring:${spockVersion}")
-    testImplementation("com.google.code.findbugs:jsr305:3.0.2")
-
+    
     // for lombok
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
@@ -180,6 +178,12 @@ dependencies {
     // PowerMock
     testImplementation("org.powermock:powermock-module-junit4:${powermockVersion}")
     testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
+
+    // for SpotBugs
+    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}")
+    compileOnly("net.jcip:jcip-annotations:1.0")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
+    testImplementation("com.google.code.findbugs:jsr305:3.0.2")
 }
 
 bootRun {

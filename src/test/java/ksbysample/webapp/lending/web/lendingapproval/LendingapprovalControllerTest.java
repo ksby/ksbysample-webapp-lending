@@ -182,7 +182,8 @@ public class LendingapprovalControllerTest {
                     .andExpect(model().hasErrors())
                     .andExpect(model().errorCount(2))
                     .andExpect(errors().hasGlobalError("lendingapprovalForm", "LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr"))
-                    .andExpect(errors().hasFieldError("lendingapprovalForm", "applyingBookFormList[2].approvalReason", ""))
+                    .andExpect(errors().hasFieldError("lendingapprovalForm", "applyingBookFormList[2].approvalReason"
+                            , "LendingapprovalForm.applyingBookFormList.approvalReason.empty"))
                     .andExpect(html(".alert.alert-danger > p")
                             .text(mph.getMessage("LendingapprovalForm.applyingBookFormList.approvalResult.notAllCheckedErr", null)));
         }

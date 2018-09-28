@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 /**
@@ -77,9 +78,12 @@ public class RequestAndResponseLogger {
                 = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         loggingRequest(request);
         Object ret = pjp.proceed();
-        HttpServletResponse response
-                = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        loggingResponse(response);
+        Optional.ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .flatMap(requestAttributes -> Optional.ofNullable(requestAttributes.getResponse()))
+                .flatMap(response -> {
+                    loggingResponse(response);
+                    return Optional.empty();
+                });
 
         return ret;
     }
@@ -90,9 +94,12 @@ public class RequestAndResponseLogger {
     @After(value = "allClassAndMethodUnderApplicationPackage()"
             + " && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
     public void logginResponseAfterExceptionHandler() {
-        HttpServletResponse response
-                = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        loggingResponse(response);
+        Optional.ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .flatMap(requestAttributes -> Optional.ofNullable(requestAttributes.getResponse()))
+                .flatMap(response -> {
+                    loggingResponse(response);
+                    return Optional.empty();
+                });
     }
 
     private void loggingRequest(HttpServletRequest request) {
