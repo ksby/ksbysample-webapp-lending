@@ -3,6 +3,7 @@ package ksbysample.webapp.lending.config;
 import ksbysample.webapp.lending.security.RoleAwareAuthenticationSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -40,6 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 認証の対象外にしたいURLがある場合には、以下のような記述を追加します
                 // 複数URLがある場合はantMatchersメソッドにカンマ区切りで対象URLを複数列挙します
                 // .antMatchers("/country/**").permitAll()
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .antMatchers("/fonts/**").permitAll()
                 .antMatchers("/html/**").permitAll()
                 .antMatchers("/encode").permitAll()
