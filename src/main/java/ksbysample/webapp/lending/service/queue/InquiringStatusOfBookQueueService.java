@@ -2,9 +2,12 @@ package ksbysample.webapp.lending.service.queue;
 
 import ksbysample.webapp.lending.config.Constant;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePropertiesBuilder;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 /**
  * ???
@@ -30,9 +33,11 @@ public class InquiringStatusOfBookQueueService {
      * @param lendingAppId ???
      */
     public void sendMessage(Long lendingAppId) {
-        InquiringStatusOfBookQueueMessage message = new InquiringStatusOfBookQueueMessage();
-        message.setLendingAppId(lendingAppId);
-        rabbitTemplate.convertAndSend(Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK, message);
+        InquiringStatusOfBookQueueMessage body = new InquiringStatusOfBookQueueMessage();
+        body.setLendingAppId(lendingAppId);
+        Message message = converter.toMessage(body
+                , MessagePropertiesBuilder.newInstance().setCorrelationId(UUID.randomUUID().toString()).build());
+        rabbitTemplate.send(Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK, message);
     }
 
     /**
