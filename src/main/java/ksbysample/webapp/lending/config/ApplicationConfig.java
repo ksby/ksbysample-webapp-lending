@@ -13,9 +13,7 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
-import org.springframework.jmx.support.RegistrationPolicy;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
@@ -31,7 +29,6 @@ import static java.util.Collections.singletonMap;
  * ???
  */
 @Configuration
-@EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
 public class ApplicationConfig {
 
     private final ConnectionFactory connectionFactory;
