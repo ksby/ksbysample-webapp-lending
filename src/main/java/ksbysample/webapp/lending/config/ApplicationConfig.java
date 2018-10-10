@@ -1,6 +1,7 @@
 package ksbysample.webapp.lending.config;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -12,7 +13,9 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableMBeanExport;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.jmx.support.RegistrationPolicy;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
@@ -28,6 +31,7 @@ import static java.util.Collections.singletonMap;
  * ???
  */
 @Configuration
+@EnableMBeanExport(registration = RegistrationPolicy.IGNORE_EXISTING)
 public class ApplicationConfig {
 
     private final ConnectionFactory connectionFactory;
@@ -93,13 +97,13 @@ public class ApplicationConfig {
     }
 
     /**
-     * @return Tomcat JDBC Connection Pool の DataSource オブジェクト
+     * @return HikariCP の DataSource オブジェクト
      */
     @Bean
-    @ConfigurationProperties("spring.datasource.tomcat")
+    @ConfigurationProperties("spring.datasource.hikari")
     public DataSource dataSource() {
         return DataSourceBuilder.create()
-                .type(org.apache.tomcat.jdbc.pool.DataSource.class)
+                .type(HikariDataSource.class)
                 .build();
     }
 

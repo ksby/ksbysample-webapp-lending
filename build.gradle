@@ -138,7 +138,6 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("org.apache.commons:commons-lang3")
     implementation("org.codehaus.janino:janino")
-    implementation("org.apache.tomcat:tomcat-jdbc")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.yaml:snakeyaml")
