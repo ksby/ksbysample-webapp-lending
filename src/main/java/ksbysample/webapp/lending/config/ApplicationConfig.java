@@ -14,6 +14,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
@@ -35,14 +36,19 @@ public class ApplicationConfig {
 
     private final MessageSource messageSource;
 
+    private final MBeanExporter mBeanExporter;
+
     /**
      * @param connectionFactory {@link ConnectionFactory} bean
      * @param messageSource     {@link MessageSource} bean
+     * @param mBeanExporter     {@link MBeanExporter} bean
      */
     public ApplicationConfig(ConnectionFactory connectionFactory
-            , MessageSource messageSource) {
+            , MessageSource messageSource
+            , MBeanExporter mBeanExporter) {
         this.connectionFactory = connectionFactory;
         this.messageSource = messageSource;
+        this.mBeanExporter = mBeanExporter;
     }
 
     /**
@@ -99,6 +105,7 @@ public class ApplicationConfig {
     @Bean
     @ConfigurationProperties("spring.datasource.hikari")
     public DataSource dataSource() {
+        mBeanExporter.addExcludedBean("dataSource");
         return DataSourceBuilder.create()
                 .type(HikariDataSource.class)
                 .build();
