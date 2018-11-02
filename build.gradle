@@ -22,6 +22,7 @@ plugins {
     id "pmd"
     id "net.ltgt.errorprone" version "0.0.16"
     id "de.undercouch.download" version "3.4.3"
+    id "com.gorylenko.gradle-git-properties" version "1.5.2"
 }
 
 sourceCompatibility = 1.8
@@ -130,7 +131,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-redis")
     implementation("org.springframework.boot:spring-boot-starter-amqp")
-    implementation("org.springframework.boot:spring-boot-devtools")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
     implementation("org.springframework.session:spring-session-core")
     implementation("org.springframework.session:spring-session-data-redis")
     implementation("org.springframework.retry:spring-retry")
@@ -138,6 +140,7 @@ dependencies {
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("org.apache.commons:commons-lang3")
     implementation("org.codehaus.janino:janino")
+    implementation("io.micrometer:micrometer-registry-prometheus")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.yaml:snakeyaml")
