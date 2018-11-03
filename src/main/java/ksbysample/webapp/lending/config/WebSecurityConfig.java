@@ -125,12 +125,18 @@ public class WebSecurityConfig {
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuhthenticationProvider())
-                .userDetailsService(userDetailsService);
+        // AuthenticationManagerBuilder#userDetailsService の後に auth.inMemoryAuthentication() を呼び出すと
+        // AuthenticationManagerBuilder の defaultUserDetailsService に
+        // org.springframework.security.provisioning.InMemoryUserDetailsManager がセットされて
+        // Remember Me 認証で InMemoryUserDetailsManager が使用されて DB のユーザが参照されなくなるので、
+        // Remember Me 認証で使用する UserDetailsService を一番最後に呼び出す
+        // ※今回の場合には auth.userDetailsService(userDetailsService) が一番最後に呼び出されるようにする
         auth.inMemoryAuthentication()
                 .withUser("actuator")
                 .password("{noop}xxxxxxxx")
                 .roles("ENDPOINT_ADMIN");
+        auth.authenticationProvider(daoAuhthenticationProvider())
+                .userDetailsService(userDetailsService);
     }
 
 }
