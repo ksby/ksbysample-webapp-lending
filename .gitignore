@@ -37,3 +37,7 @@ bin/
 
 #カーリル図書館API用設定ファイル
 calilapi.properties
+
+# Prometheus, Grafana の storage
+docker/grafana/storage
+docker/prometheus/storage
