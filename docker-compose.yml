@@ -8,9 +8,12 @@ services:
     - "9090:9090"
     volumes:
     - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    - ./docker/prometheus/storage:/prometheus
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
     - "3000:3000"
+    volumes:
+    - ./docker/grafana/storage:/var/lib/grafana
