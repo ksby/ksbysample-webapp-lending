@@ -17,3 +17,14 @@ services:
     - "3000:3000"
     volumes:
     - ./docker/grafana/storage:/var/lib/grafana
+
+  # 起動したコンテナに /bin/sh でアクセスする場合には以下のコマンドを実行する
+  # docker exec -it redis /bin/sh
+  #
+  # 起動したコンテナの redis に redis-cli でアクセスするには以下のコマンドを実行する
+  # docker exec -it redis redis-cli
+  redis:
+    image: redis:5.0.1
+    container_name: redis
+    ports:
+    - "6379:6379"
