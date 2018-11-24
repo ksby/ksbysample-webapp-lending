@@ -13,6 +13,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
@@ -54,6 +55,12 @@ public class WebSecurityConfig {
                     .anyRequest().hasRole("ENDPOINT_ADMIN")
                     .and()
                     .httpBasic();
+            http
+                    // Spring Actuator の Endpoint の Basic認証の時は認証するだけでサーバ側にセッションを作成しない
+                    // これにより Spring Session のセッション情報保存先である Redis 上にデータが作成されなくなる
+                    .requestMatcher(EndpointRequest.toAnyEndpoint())
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         }
 
     }
