@@ -28,3 +28,11 @@ services:
     container_name: redis
     ports:
     - "6379:6379"
+
+  redis_exporter:
+    image: oliver006/redis_exporter:latest
+    container_name: redis_exporter
+    ports:
+    - "9121:9121"
+    environment:
+    - REDIS_ADDR=redis://172.23.136.33:6379
