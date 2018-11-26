@@ -54,11 +54,10 @@ public class WebSecurityConfig {
                     .authorizeRequests()
                     .anyRequest().hasRole("ENDPOINT_ADMIN")
                     .and()
-                    .httpBasic();
-            http
+                    .httpBasic()
                     // Spring Actuator の Endpoint の Basic認証の時は認証するだけでサーバ側にセッションを作成しない
                     // これにより Spring Session のセッション情報保存先である Redis 上にデータが作成されなくなる
-                    .requestMatcher(EndpointRequest.toAnyEndpoint())
+                    .and()
                     .sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         }
