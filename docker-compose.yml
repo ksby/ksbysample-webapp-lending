@@ -23,11 +23,139 @@ services:
   #
   # 起動したコンテナの redis に redis-cli でアクセスするには以下のコマンドを実行する
   # docker exec -it redis redis-cli
-  redis:
-    image: redis:5.0.1
-    container_name: redis
+  #
+  #############################################################################
+  # 単体 Redis サーバ
+  # redis:
+  #   image: redis:5.0.1
+  #   container_name: redis
+  #   ports:
+  #   - "6379:6379"
+  #
+  #############################################################################
+  # Redis Cluster
+  redis-cluster-6379:
+    build: ./docker/redis
+    image: redis:5.0.1-custom
+    container_name: redis-cluster-6379
     ports:
     - "6379:6379"
+    - "16379:16379"
+    command:
+    - /bin/sh
+    - -c
+    - |
+      redis-server /etc/redis/redis.conf \
+                  --cluster-announce-ip ${HOST_IP_ADDRESS} \
+                  --cluster-announce-port 6379 \
+                  --cluster-announce-bus-port 16379
+  redis-cluster-6380:
+    image: redis:5.0.1-custom
+    container_name: redis-cluster-6380
+    ports:
+    - "6380:6379"
+    - "16380:16379"
+    command:
+    - /bin/sh
+    - -c
+    - |
+      redis-server /etc/redis/redis.conf \
+                  --cluster-announce-ip ${HOST_IP_ADDRESS} \
+                  --cluster-announce-port 6380 \
+                  --cluster-announce-bus-port 16380
+    depends_on:
+    - redis-cluster-6379
+  redis-cluster-6381:
+    image: redis:5.0.1-custom
+    container_name: redis-cluster-6381
+    ports:
+    - "6381:6379"
+    - "16381:16379"
+    command:
+    - /bin/sh
+    - -c
+    - |
+      redis-server /etc/redis/redis.conf \
+                  --cluster-announce-ip ${HOST_IP_ADDRESS} \
+                  --cluster-announce-port 6381 \
+                  --cluster-announce-bus-port 16381
+    depends_on:
+    - redis-cluster-6379
+  redis-cluster-6382:
+    image: redis:5.0.1-custom
+    container_name: redis-cluster-6382
+    ports:
+    - "6382:6379"
+    - "16382:16379"
+    command:
+    - /bin/sh
+    - -c
+    - |
+      redis-server /etc/redis/redis.conf \
+                  --cluster-announce-ip ${HOST_IP_ADDRESS} \
+                  --cluster-announce-port 6382 \
+                  --cluster-announce-bus-port 16382
+    depends_on:
+    - redis-cluster-6379
+  redis-cluster-6383:
+    image: redis:5.0.1-custom
+    container_name: redis-cluster-6383
+    ports:
+    - "6383:6379"
+    - "16383:16379"
+    command:
+    - /bin/sh
+    - -c
+    - |
+      redis-server /etc/redis/redis.conf \
+                  --cluster-announce-ip ${HOST_IP_ADDRESS} \
+                  --cluster-announce-port 6383 \
+                  --cluster-announce-bus-port 16383
+    depends_on:
+    - redis-cluster-6379
+  redis-cluster-6384:
+    image: redis:5.0.1-custom
+    container_name: redis-cluster-6384
+    ports:
+    - "6384:6379"
+    - "16384:16379"
+    command:
+    - /bin/sh
+    - -c
+    - |
+      redis-server /etc/redis/redis.conf \
+                  --cluster-announce-ip ${HOST_IP_ADDRESS} \
+                  --cluster-announce-port 6384 \
+                  --cluster-announce-bus-port 16384
+    depends_on:
+    - redis-cluster-6379
+  redis-cluster-make:
+    image: redis:5.0.1-custom
+    container_name: redis-cluster-make
+    command:
+    - /bin/sh
+    - -c
+    - |
+      expect -c "
+      spawn redis-cli --cluster create \
+                        ${HOST_IP_ADDRESS}:6379 \
+                        ${HOST_IP_ADDRESS}:6380 \
+                        ${HOST_IP_ADDRESS}:6381 \
+                        ${HOST_IP_ADDRESS}:6382 \
+                        ${HOST_IP_ADDRESS}:6383 \
+                        ${HOST_IP_ADDRESS}:6384 \
+                      --cluster-replicas 1
+      expect \"Can I set the above configuration? (type 'yes' to accept): \"
+      send \"yes\n\"
+      expect eof
+      "
+    depends_on:
+    - redis-cluster-6379
+    - redis-cluster-6380
+    - redis-cluster-6381
+    - redis-cluster-6382
+    - redis-cluster-6383
+    - redis-cluster-6384
 
   redis_exporter:
     image: oliver006/redis_exporter:latest
@@ -35,4 +163,4 @@ services:
     ports:
     - "9121:9121"
     environment:
-    - REDIS_ADDR=redis://172.23.136.33:6379
+    - REDIS_ADDR=redis://${HOST_IP_ADDRESS}:6379,redis://${HOST_IP_ADDRESS}:6380,redis://${HOST_IP_ADDRESS}:6381,redis://${HOST_IP_ADDRESS}:6382,redis://${HOST_IP_ADDRESS}:6383,redis://${HOST_IP_ADDRESS}:6384

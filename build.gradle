@@ -142,6 +142,7 @@ dependencies {
     implementation("org.apache.commons:commons-lang3")
     implementation("org.codehaus.janino:janino")
     implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("redis.clients:jedis")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.yaml:snakeyaml")
