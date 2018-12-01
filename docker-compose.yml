@@ -178,8 +178,20 @@ services:
     container_name: rabbitmq
     hostname: rabbitmq
     ports:
-    - 5672:5672
-    - 15672:15672
+    - "5672:5672"
+    - "15672:15672"
     environment:
     - RABBITMQ_DEFAULT_USER=rabbitmq
     - RABBITMQ_DEFAULT_PASS=12345678
+
+  rabbitmq_exporter:
+    image: kbudde/rabbitmq-exporter:latest
+    container_name: rabbitmq_exporter
+    ports:
+    - "9419:9419"
+    environment:
+    - RABBIT_URL=http://${HOST_IP_ADDRESS}:15672
+    - RABBIT_USER=rabbitmq
+    - RABBIT_PASSWORD=12345678
+    - RABBIT_CAPABILITIES=bert,no_sort
+    - PUBLISH_PORT=9419
