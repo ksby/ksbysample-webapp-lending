@@ -27,110 +27,113 @@ services:
   #############################################################################
   # 単体 Redis サーバ
   # redis:
-  #   image: redis:5.0.1
+  #   image: redis:${REDIS_VERSION}
   #   container_name: redis
   #   ports:
   #   - "6379:6379"
   #
   #############################################################################
   # Redis Cluster
-  redis-cluster-6379:
-    build: ./docker/redis
-    image: redis:5.0.1-custom
-    container_name: redis-cluster-6379
+  redis-cluster-1:
+    build:
+      context: ./docker/redis
+      args:
+        - REDIS_VERSION=${REDIS_VERSION}
+    image: redis:${REDIS_VERSION}-custom
+    container_name: redis-cluster-${REDIS_CLUSTER_1_PORT}
     ports:
-    - "6379:6379"
-    - "16379:16379"
+    - "${REDIS_CLUSTER_1_PORT}:6379"
+    - "1${REDIS_CLUSTER_1_PORT}:16379"
     command:
     - /bin/sh
     - -c
     - |
       redis-server /etc/redis/redis.conf \
                   --cluster-announce-ip ${HOST_IP_ADDRESS} \
-                  --cluster-announce-port 6379 \
-                  --cluster-announce-bus-port 16379
-  redis-cluster-6380:
-    image: redis:5.0.1-custom
-    container_name: redis-cluster-6380
+                  --cluster-announce-port ${REDIS_CLUSTER_1_PORT} \
+                  --cluster-announce-bus-port 1${REDIS_CLUSTER_1_PORT}
+  redis-cluster-2:
+    image: redis:${REDIS_VERSION}-custom
+    container_name: redis-cluster-${REDIS_CLUSTER_2_PORT}
     ports:
-    - "6380:6379"
-    - "16380:16379"
+    - "${REDIS_CLUSTER_2_PORT}:6379"
+    - "1${REDIS_CLUSTER_2_PORT}:16379"
     command:
     - /bin/sh
     - -c
     - |
       redis-server /etc/redis/redis.conf \
                   --cluster-announce-ip ${HOST_IP_ADDRESS} \
-                  --cluster-announce-port 6380 \
-                  --cluster-announce-bus-port 16380
+                  --cluster-announce-port ${REDIS_CLUSTER_2_PORT} \
+                  --cluster-announce-bus-port 1${REDIS_CLUSTER_2_PORT}
     depends_on:
-    - redis-cluster-6379
-  redis-cluster-6381:
-    image: redis:5.0.1-custom
-    container_name: redis-cluster-6381
+    - redis-cluster-1
+  redis-cluster-3:
+    image: redis:${REDIS_VERSION}-custom
+    container_name: redis-cluster-${REDIS_CLUSTER_3_PORT}
     ports:
-    - "6381:6379"
-    - "16381:16379"
+    - "${REDIS_CLUSTER_3_PORT}:6379"
+    - "1${REDIS_CLUSTER_3_PORT}:16379"
     command:
     - /bin/sh
     - -c
     - |
       redis-server /etc/redis/redis.conf \
                   --cluster-announce-ip ${HOST_IP_ADDRESS} \
-                  --cluster-announce-port 6381 \
-                  --cluster-announce-bus-port 16381
+                  --cluster-announce-port ${REDIS_CLUSTER_3_PORT} \
+                  --cluster-announce-bus-port 1${REDIS_CLUSTER_3_PORT}
     depends_on:
-    - redis-cluster-6379
-  redis-cluster-6382:
-    image: redis:5.0.1-custom
-    container_name: redis-cluster-6382
+    - redis-cluster-1
+  redis-cluster-4:
+    image: redis:${REDIS_VERSION}-custom
+    container_name: redis-cluster-${REDIS_CLUSTER_4_PORT}
     ports:
-    - "6382:6379"
-    - "16382:16379"
+    - "${REDIS_CLUSTER_4_PORT}:6379"
+    - "1${REDIS_CLUSTER_4_PORT}:16379"
     command:
     - /bin/sh
     - -c
     - |
       redis-server /etc/redis/redis.conf \
                   --cluster-announce-ip ${HOST_IP_ADDRESS} \
-                  --cluster-announce-port 6382 \
-                  --cluster-announce-bus-port 16382
+                  --cluster-announce-port ${REDIS_CLUSTER_4_PORT} \
+                  --cluster-announce-bus-port 1${REDIS_CLUSTER_4_PORT}
     depends_on:
-    - redis-cluster-6379
-  redis-cluster-6383:
-    image: redis:5.0.1-custom
-    container_name: redis-cluster-6383
+    - redis-cluster-1
+  redis-cluster-5:
+    image: redis:${REDIS_VERSION}-custom
+    container_name: redis-cluster-${REDIS_CLUSTER_5_PORT}
     ports:
-    - "6383:6379"
-    - "16383:16379"
+    - "${REDIS_CLUSTER_5_PORT}:6379"
+    - "1${REDIS_CLUSTER_5_PORT}:16379"
     command:
     - /bin/sh
     - -c
     - |
       redis-server /etc/redis/redis.conf \
                   --cluster-announce-ip ${HOST_IP_ADDRESS} \
-                  --cluster-announce-port 6383 \
-                  --cluster-announce-bus-port 16383
+                  --cluster-announce-port ${REDIS_CLUSTER_5_PORT} \
+                  --cluster-announce-bus-port 1${REDIS_CLUSTER_5_PORT}
     depends_on:
-    - redis-cluster-6379
-  redis-cluster-6384:
-    image: redis:5.0.1-custom
-    container_name: redis-cluster-6384
+    - redis-cluster-1
+  redis-cluster-6:
+    image: redis:${REDIS_VERSION}-custom
+    container_name: redis-cluster-${REDIS_CLUSTER_6_PORT}
     ports:
-    - "6384:6379"
-    - "16384:16379"
+    - "${REDIS_CLUSTER_6_PORT}:6379"
+    - "1${REDIS_CLUSTER_6_PORT}:16379"
     command:
     - /bin/sh
     - -c
     - |
       redis-server /etc/redis/redis.conf \
                   --cluster-announce-ip ${HOST_IP_ADDRESS} \
-                  --cluster-announce-port 6384 \
-                  --cluster-announce-bus-port 16384
+                  --cluster-announce-port ${REDIS_CLUSTER_6_PORT} \
+                  --cluster-announce-bus-port 1${REDIS_CLUSTER_6_PORT}
     depends_on:
-    - redis-cluster-6379
+    - redis-cluster-1
   redis-cluster-make:
-    image: redis:5.0.1-custom
+    image: redis:${REDIS_VERSION}-custom
     container_name: redis-cluster-make
     command:
     - /bin/sh
@@ -138,24 +141,24 @@ services:
     - |
       expect -c "
       spawn redis-cli --cluster create \
-                        ${HOST_IP_ADDRESS}:6379 \
-                        ${HOST_IP_ADDRESS}:6380 \
-                        ${HOST_IP_ADDRESS}:6381 \
-                        ${HOST_IP_ADDRESS}:6382 \
-                        ${HOST_IP_ADDRESS}:6383 \
-                        ${HOST_IP_ADDRESS}:6384 \
+                        ${HOST_IP_ADDRESS}:${REDIS_CLUSTER_1_PORT} \
+                        ${HOST_IP_ADDRESS}:${REDIS_CLUSTER_2_PORT} \
+                        ${HOST_IP_ADDRESS}:${REDIS_CLUSTER_3_PORT} \
+                        ${HOST_IP_ADDRESS}:${REDIS_CLUSTER_4_PORT} \
+                        ${HOST_IP_ADDRESS}:${REDIS_CLUSTER_5_PORT} \
+                        ${HOST_IP_ADDRESS}:${REDIS_CLUSTER_6_PORT} \
                       --cluster-replicas 1
       expect \"Can I set the above configuration? (type 'yes' to accept): \"
       send \"yes\n\"
       expect eof
       "
     depends_on:
-    - redis-cluster-6379
-    - redis-cluster-6380
-    - redis-cluster-6381
-    - redis-cluster-6382
-    - redis-cluster-6383
-    - redis-cluster-6384
+    - redis-cluster-1
+    - redis-cluster-2
+    - redis-cluster-3
+    - redis-cluster-4
+    - redis-cluster-5
+    - redis-cluster-6
 
   redis_exporter:
     image: oliver006/redis_exporter:latest
@@ -163,4 +166,4 @@ services:
     ports:
     - "9121:9121"
     environment:
-    - REDIS_ADDR=redis://${HOST_IP_ADDRESS}:6379,redis://${HOST_IP_ADDRESS}:6380,redis://${HOST_IP_ADDRESS}:6381,redis://${HOST_IP_ADDRESS}:6382,redis://${HOST_IP_ADDRESS}:6383,redis://${HOST_IP_ADDRESS}:6384
+    - REDIS_ADDR=redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_1_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_2_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_3_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_4_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_5_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_6_PORT}
