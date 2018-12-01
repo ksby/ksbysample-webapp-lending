@@ -35,15 +35,13 @@ services:
   #############################################################################
   # Redis Cluster
   redis-cluster-1:
-    build:
-      context: ./docker/redis
-      args:
-        - REDIS_VERSION=${REDIS_VERSION}
-    image: redis:${REDIS_VERSION}-custom
+    image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_1_PORT}
     ports:
     - "${REDIS_CLUSTER_1_PORT}:6379"
     - "1${REDIS_CLUSTER_1_PORT}:16379"
+    volumes:
+    - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
     - /bin/sh
     - -c
@@ -53,11 +51,13 @@ services:
                   --cluster-announce-port ${REDIS_CLUSTER_1_PORT} \
                   --cluster-announce-bus-port 1${REDIS_CLUSTER_1_PORT}
   redis-cluster-2:
-    image: redis:${REDIS_VERSION}-custom
+    image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_2_PORT}
     ports:
     - "${REDIS_CLUSTER_2_PORT}:6379"
     - "1${REDIS_CLUSTER_2_PORT}:16379"
+    volumes:
+    - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
     - /bin/sh
     - -c
@@ -69,11 +69,13 @@ services:
     depends_on:
     - redis-cluster-1
   redis-cluster-3:
-    image: redis:${REDIS_VERSION}-custom
+    image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_3_PORT}
     ports:
     - "${REDIS_CLUSTER_3_PORT}:6379"
     - "1${REDIS_CLUSTER_3_PORT}:16379"
+    volumes:
+    - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
     - /bin/sh
     - -c
@@ -85,8 +87,10 @@ services:
     depends_on:
     - redis-cluster-1
   redis-cluster-4:
-    image: redis:${REDIS_VERSION}-custom
+    image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_4_PORT}
+    volumes:
+    - ./docker/redis/redis.conf:/etc/redis/redis.conf
     ports:
     - "${REDIS_CLUSTER_4_PORT}:6379"
     - "1${REDIS_CLUSTER_4_PORT}:16379"
@@ -101,8 +105,10 @@ services:
     depends_on:
     - redis-cluster-1
   redis-cluster-5:
-    image: redis:${REDIS_VERSION}-custom
+    image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_5_PORT}
+    volumes:
+    - ./docker/redis/redis.conf:/etc/redis/redis.conf
     ports:
     - "${REDIS_CLUSTER_5_PORT}:6379"
     - "1${REDIS_CLUSTER_5_PORT}:16379"
@@ -117,8 +123,10 @@ services:
     depends_on:
     - redis-cluster-1
   redis-cluster-6:
-    image: redis:${REDIS_VERSION}-custom
+    image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_6_PORT}
+    volumes:
+    - ./docker/redis/redis.conf:/etc/redis/redis.conf
     ports:
     - "${REDIS_CLUSTER_6_PORT}:6379"
     - "1${REDIS_CLUSTER_6_PORT}:16379"
@@ -133,6 +141,10 @@ services:
     depends_on:
     - redis-cluster-1
   redis-cluster-make:
+    build:
+      context: ./docker/redis
+      args:
+      - REDIS_VERSION=${REDIS_VERSION}
     image: redis:${REDIS_VERSION}-custom
     container_name: redis-cluster-make
     command:
@@ -174,7 +186,7 @@ services:
   # 起動したコンテナの rabbitmq に rabbitmqctl で接続して管理コマンドを実行するには以下のコマンドを実行する
   # docker exec -it rabbitmq rabbitmqctl ...
   rabbitmq:
-    image: rabbitmq:${RABBITMQ_VERSION}
+    image: rabbitmq:${RABBITMQ_VERSION}-alpine
     container_name: rabbitmq
     hostname: rabbitmq
     ports:
