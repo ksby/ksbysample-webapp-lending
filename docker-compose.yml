@@ -257,7 +257,7 @@ services:
     ports:
     - "9419:9419"
     environment:
-    - RABBIT_URL=http://${HOST_IP_ADDRESS}:15672
+    - RABBIT_URL=http://haproxy:15672
     - RABBIT_USER=${RABBITMQ_DEFAULT_USER}
     - RABBIT_PASSWORD=${RABBITMQ_DEFAULT_PASS}
     - RABBIT_CAPABILITIES=bert,no_sort
