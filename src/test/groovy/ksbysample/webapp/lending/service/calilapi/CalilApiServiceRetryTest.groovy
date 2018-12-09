@@ -7,6 +7,7 @@ import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.springframework.http.client.ClientHttpRequest
 import org.springframework.http.client.ClientHttpResponse
+import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.web.client.MockRestServiceServer
 import org.springframework.test.web.client.ResponseCreator
 import org.springframework.web.client.ResourceAccessException
@@ -21,6 +22,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @Slf4j
 @SpringBootTest
+@DirtiesContext
 class CalilApiServiceRetryTest extends Specification {
 
     /**
