@@ -41,3 +41,6 @@ calilapi.properties
 # Prometheus, Grafana の storage
 docker/grafana/storage
 docker/prometheus/storage
+
+# pgAdmin4 のデータ用ディレクトリ
+docker/pgadmin4/data
