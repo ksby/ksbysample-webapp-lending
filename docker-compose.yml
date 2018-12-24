@@ -274,7 +274,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./sql:/sql
+      - ./src/main/resources/db/init/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
     environment:
       - LANG=ja_JP.UTF-8
       - POSTGRES_PASSWORD=xxxxxxxx
@@ -292,3 +292,22 @@ services:
       # PGADMIN_DEFAULT_EMAIL には接続する PostgreSQL の ユーザ名を設定する（サーバを追加する時楽なため）
       - PGADMIN_DEFAULT_EMAIL=postgres
       - PGADMIN_DEFAULT_PASSWORD=yyyyyyyy
+
+  flyway:
+    image: boxfuse/flyway:${FLYWAY_VERSION}-alpine
+    container_name: flyway
+    volumes:
+      - ./src/main/resources/db/migration:/flyway/sql
+    command: -url=${FLYWAY_URL} -user=${FLYWAY_USER} -password=${FLYWAY_PASSWORD} -connectRetries=60 migrate
+    depends_on:
+      - postgresql
+    # 下の３行は debug 用
+    # うまく動かない時はコメントアウトを解除した後、
+    # docker exec -it postgresql /bin/sh
+    # で接続してから
+    # flyway <command に記述した文字列>
+    # を実行してみる
+    #
+    # entrypoint: /bin/sh
+    # stdin_open: true
+    # tty: true
