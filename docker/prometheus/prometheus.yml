@@ -26,8 +26,12 @@ scrape_configs:
 
 - job_name: 'redis_exporter'
   static_configs:
-  - targets: ['172.23.136.33:9121']
+  - targets: ['redis_exporter:9121']
 
 - job_name: 'rabbitmq_exporter'
   static_configs:
-  - targets: ['172.23.136.33:9419']
+    - targets: ['rabbitmq_exporter:9419']
+
+- job_name: 'postgres_exporter'
+  static_configs:
+    - targets: ['postgres_exporter:9187']

@@ -314,3 +314,11 @@ services:
     # entrypoint: /bin/sh
     # stdin_open: true
     # tty: true
+
+  postgres_exporter:
+    image: wrouesnel/postgres_exporter
+    container_name: postgres_exporter
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_EXPORTER_USER}:${POSTGRES_EXPORTER_PASSWORD}@postgresql:5432/ksbylending?sslmode=disable
+    depends_on:
+      - postgresql
