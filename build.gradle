@@ -18,7 +18,7 @@ plugins {
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "1.6.5"
+    id "com.github.spotbugs" version "1.6.8"
     id "pmd"
     id "net.ltgt.errorprone" version "0.0.16"
     id "de.undercouch.download" version "3.4.3"
@@ -29,7 +29,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 wrapper {
-    gradleVersion = "4.10.2"
+    gradleVersion = "4.10.3"
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -65,12 +65,12 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = "8.14"
+    toolVersion = "8.16"
     sourceSets = [project.sourceSets.main]
 }
 
 spotbugs {
-    toolVersion = "3.1.8"
+    toolVersion = "3.1.10"
     ignoreFailures = true
     effort = "max"
     spotbugsTest.enabled = false
@@ -83,7 +83,7 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 pmd {
-    toolVersion = "6.9.0"
+    toolVersion = "6.10.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
@@ -98,9 +98,9 @@ repositories {
 dependencyManagement {
     imports {
         // mavenBom は以下の URL のものを使用する
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.0.6.RELEASE/
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.0.7.RELEASE/
         // bomProperty に指定可能な property は以下の URL の BOM に記述がある
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.0.6.RELEASE/spring-boot-dependencies-2.0.6.RELEASE.pom
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.0.7.RELEASE/spring-boot-dependencies-2.0.7.RELEASE.pom
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
@@ -112,11 +112,11 @@ dependencyManagement {
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:42.2.5"
     def spockVersion = "1.2-groovy-2.5"
-    def domaVersion = "2.19.3"
+    def domaVersion = "2.20.0"
     def lombokVersion = "1.18.4"
     def errorproneVersion = "2.3.1"
     def powermockVersion = "2.0.0-RC.4"
-    def spotbugsVersion = "3.1.8"
+    def spotbugsVersion = "3.1.10"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -124,7 +124,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf") {
         exclude group: "org.codehaus.groovy", module: "groovy"
     }
-    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     implementation("org.thymeleaf.extras:thymeleaf-extras-java8time")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
@@ -154,14 +154,14 @@ dependencies {
     implementation("com.integralblue:log4jdbc-spring-boot-starter:1.0.2")
     implementation("org.simpleframework:simple-xml:2.7.1")
     implementation("com.univocity:univocity-parsers:2.7.6")
-    implementation("com.google.guava:guava:27.0-jre")
+    implementation("com.google.guava:guava:27.0.1-jre")
     implementation("org.flywaydb:flyway-core:5.2.4")
     testImplementation("org.dbunit:dbunit:2.6.0")
-    testImplementation("com.icegreen:greenmail:1.5.8")
+    testImplementation("com.icegreen:greenmail:1.5.9")
     testImplementation("org.assertj:assertj-core:3.11.1")
     testImplementation("com.jayway.jsonpath:json-path:2.4.0")
     testImplementation("org.jsoup:jsoup:1.11.3")
-    testImplementation("cglib:cglib-nodep:3.2.9")
+    testImplementation("cglib:cglib-nodep:3.2.10")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
     testImplementation("org.spockframework:spock-spring:${spockVersion}")
     
