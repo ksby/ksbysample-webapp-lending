@@ -44,3 +44,9 @@ docker/prometheus/storage
 
 # pgAdmin4 のデータ用ディレクトリ
 docker/pgadmin4/data
+
+# SMTPサーバのファイル
+docker/mail-server/config/checksum
+
+# Rainloop のデータ用ディレクトリ
+docker/rainloop/data
