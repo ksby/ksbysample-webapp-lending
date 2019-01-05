@@ -1,0 +1,5 @@
+disable_plaintext_auth = no
+ssl = no
+# debug したい場合には以下の行のコメントアウトを解除する
+# auth_verbose = yes
+# auth_debug = yes
