@@ -5,17 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -113,18 +109,6 @@ public class WebSecurityConfig {
     }
 
     /**
-     * @return ???
-     */
-    @Bean
-    public AuthenticationProvider daoAuhthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService);
-        daoAuthenticationProvider.setHideUserNotFoundExceptions(false);
-        daoAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-        return daoAuthenticationProvider;
-    }
-
-    /**
      * @param auth ???
      * @throws Exception
      */
@@ -141,8 +125,7 @@ public class WebSecurityConfig {
                 .withUser("actuator")
                 .password("{noop}xxxxxxxx")
                 .roles("ENDPOINT_ADMIN");
-        auth.authenticationProvider(daoAuhthenticationProvider())
-                .userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsService);
     }
 
 }
