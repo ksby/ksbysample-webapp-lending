@@ -136,7 +136,6 @@ dependencies {
     implementation("org.springframework.session:spring-session-core")
     implementation("org.springframework.session:spring-session-data-redis")
     implementation("org.springframework.retry:spring-retry")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
     implementation("org.apache.commons:commons-lang3")
     implementation("org.codehaus.janino:janino")
