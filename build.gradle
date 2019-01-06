@@ -121,9 +121,7 @@ dependencies {
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-thymeleaf") {
-        exclude group: "org.codehaus.groovy", module: "groovy"
-    }
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-freemarker")
@@ -133,7 +131,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
-    implementation("org.springframework.session:spring-session-core")
     implementation("org.springframework.session:spring-session-data-redis")
     implementation("org.springframework.retry:spring-retry")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
@@ -144,7 +141,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.yaml:snakeyaml")
-    testImplementation("org.mockito:mockito-core")
     runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
