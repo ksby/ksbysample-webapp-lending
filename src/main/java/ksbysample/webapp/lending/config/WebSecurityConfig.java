@@ -1,16 +1,20 @@
 package ksbysample.webapp.lending.config;
 
 import ksbysample.webapp.lending.security.RoleAwareAuthenticationSuccessHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.ForwardAuthenticationFailureHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -23,6 +27,7 @@ public class WebSecurityConfig {
 
     public static final String DEFAULT_SUCCESS_URL = "/booklist";
     public static final String REMEMBERME_KEY = "ksbysample-webapp-lending";
+    public static final String ACTUATOR_USERNAME = "actuator";
 
     private final UserDetailsService userDetailsService;
 
@@ -109,12 +114,44 @@ public class WebSecurityConfig {
     }
 
     /**
+     * Spring Actuator の Basic認証用ユーザの場合には AuthenticationSuccessEvent を発生させないための
+     * AuthenticationEventPublisher
+     */
+    static class CustomAuthenticationEventPublisher extends DefaultAuthenticationEventPublisher {
+
+        /**
+         * コンストラクタ
+         *
+         * @param applicationEventPublisher {@link ApplicationEventPublisher} オブジェクト
+         */
+        public CustomAuthenticationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+            super(applicationEventPublisher);
+        }
+
+        /**
+         * 認証成功時のメソッド
+         * Spring Actuator の Basic認証用ユーザの場合には AuthenticationSuccessEvent を発生させない
+         *
+         * @param authentication {@link Authentication} オブジェクト
+         */
+        @Override
+        public void publishAuthenticationSuccess(Authentication authentication) {
+            if (StringUtils.equals(authentication.getName(), ACTUATOR_USERNAME)) {
+                return;
+            }
+            super.publishAuthenticationSuccess(authentication);
+        }
+
+    }
+
+    /**
      * @param auth ???
      * @throws Exception
      */
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+    public void configAuthentication(AuthenticationManagerBuilder auth
+            , ApplicationEventPublisher applicationEventPublisher) throws Exception {
         // AuthenticationManagerBuilder#userDetailsService の後に auth.inMemoryAuthentication() を呼び出すと
         // AuthenticationManagerBuilder の defaultUserDetailsService に
         // org.springframework.security.provisioning.InMemoryUserDetailsManager がセットされて
@@ -122,10 +159,11 @@ public class WebSecurityConfig {
         // Remember Me 認証で使用する UserDetailsService を一番最後に呼び出す
         // ※今回の場合には auth.userDetailsService(userDetailsService) が一番最後に呼び出されるようにする
         auth.inMemoryAuthentication()
-                .withUser("actuator")
+                .withUser(ACTUATOR_USERNAME)
                 .password("{noop}xxxxxxxx")
                 .roles("ENDPOINT_ADMIN");
-        auth.userDetailsService(userDetailsService);
+        auth.authenticationEventPublisher(new CustomAuthenticationEventPublisher(applicationEventPublisher))
+                .userDetailsService(userDetailsService);
     }
 
 }
