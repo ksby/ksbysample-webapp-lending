@@ -90,6 +90,16 @@ pmd {
     ruleSetFiles = rootProject.files("/config/pmd/pmd-project-rulesets.xml")
     ruleSets = []
 }
+pmdMain {
+    def backupLoggerLevel
+    doFirst {
+        backupLoggerLevel = logger.context.level
+        logger.context.level = LogLevel.QUIET
+    }
+    doLast {
+        logger.context.level = backupLoggerLevel
+    }
+}
 
 repositories {
     mavenCentral()
