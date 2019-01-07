@@ -17,3 +17,5 @@ INSERT INTO public.user_role (role_id, user_id, role) VALUES (6, 3, 'ROLE_USER')
 INSERT INTO public.user_role (role_id, user_id, role) VALUES (7, 4, 'ROLE_USER');
 INSERT INTO public.user_role (role_id, user_id, role) VALUES (8, 5, 'ROLE_USER');
 INSERT INTO public.user_role (role_id, user_id, role) VALUES (9, 8, 'ROLE_USER');
+
+INSERT INTO public.library_forsearch (systemid, formal) VALUES ('Tokyo_NDL', '国立国会図書館東京本館');
