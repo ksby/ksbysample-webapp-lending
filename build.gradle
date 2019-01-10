@@ -151,7 +151,6 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.yaml:snakeyaml")
-    runtimeOnly("org.springframework.boot:spring-boot-properties-migrator")
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtimeOnly("${jdbcDriver}")
