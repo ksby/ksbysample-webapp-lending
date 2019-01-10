@@ -160,6 +160,7 @@ dependencies {
     implementation("com.univocity:univocity-parsers:2.7.6")
     implementation("com.google.guava:guava:27.0.1-jre")
     implementation("org.flywaydb:flyway-core:5.2.4")
+    implementation("com.zaxxer:HikariCP:3.3.0")
     testImplementation("org.dbunit:dbunit:2.6.0")
     testImplementation("com.icegreen:greenmail:1.5.9")
     testImplementation("org.assertj:assertj-core:3.11.1")
