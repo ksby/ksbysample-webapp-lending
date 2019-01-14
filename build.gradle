@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.0.6-RELEASE"
+        version "2.0.8-RELEASE"
     }
     repositories {
         mavenCentral()
@@ -14,7 +14,7 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.0.6.RELEASE"
+    id "org.springframework.boot" version "2.0.8.RELEASE"
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id "groovy"
     id "checkstyle"
@@ -122,10 +122,10 @@ dependencyManagement {
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:42.2.5"
     def spockVersion = "1.2-groovy-2.5"
-    def domaVersion = "2.20.0"
+    def domaVersion = "2.21.0"
     def lombokVersion = "1.18.4"
     def errorproneVersion = "2.3.1"
-    def powermockVersion = "2.0.0-RC.4"
+    def powermockVersion = "2.0.0"
     def spotbugsVersion = "3.1.10"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
