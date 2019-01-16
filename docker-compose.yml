@@ -9,6 +9,8 @@ services:
     volumes:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./docker/prometheus/storage:/prometheus
+    extra_hosts:
+      - "app:${HOST_IP_ADDRESS}"
 
   grafana:
     image: grafana/grafana:latest

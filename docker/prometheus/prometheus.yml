@@ -19,8 +19,8 @@ scrape_configs:
     password: xxxxxxxx
   static_configs:
   # Docker で起動した Prometheus からローカルPCで起動している Spring Boot のアプリケーション
-  # にアクセスするので、localhost ではなくローカルPCに割り当てられているIPアドレスを設定する
-  - targets: ['172.31.16.1:8080']
+  # にアクセスする。docker-compose.yml の extra_hosts に定義した PC のホスト名 app を設定する。
+  - targets: ['app:8080']
     labels:
       application: 'lending'
 
