@@ -246,6 +246,7 @@ services:
       - rabbitmq2
       - rabbitmq3
     ports:
+      - "1936:1936"
       - "5672:5672"
       - "15672:15672"
   haproxy-rsyslog:
