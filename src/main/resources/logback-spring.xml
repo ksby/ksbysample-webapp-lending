@@ -2,8 +2,9 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <property name="LOGGING_APPENDER" value="${logging.appender:-FILE}"/>
 
-    <if condition='"${spring.profiles.active}" == "product"'>
+    <if condition='"${spring.profiles.active}" == "product" &amp;&amp; "${LOGGING_APPENDER}" == "FILE"'>
         <then>
             <property name="LOG_FILE" value="${LOG_FILE}"/>
             <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -29,7 +30,7 @@
     <if condition='"${spring.profiles.active}" == "product"'>
         <then>
             <root>
-                <appender-ref ref="FILE"/>
+                <appender-ref ref="${LOGGING_APPENDER}"/>
             </root>
         </then>
     </if>
