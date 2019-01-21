@@ -6,6 +6,9 @@ services:
     container_name: prometheus
     ports:
       - "9090:9090"
+    # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
+    # environment:
+    #   - TZ=Asia/Tokyo
     volumes:
       - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./docker/prometheus/storage:/prometheus
@@ -17,6 +20,8 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
+    environment:
+      - TZ=Asia/Tokyo
     volumes:
       - ./docker/grafana/storage:/var/lib/grafana
 
@@ -42,6 +47,8 @@ services:
     ports:
       - "${REDIS_CLUSTER_1_PORT}:6379"
       - "1${REDIS_CLUSTER_1_PORT}:16379"
+    environment:
+      - TZ=Asia/Tokyo
     volumes:
       - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
@@ -58,6 +65,8 @@ services:
     ports:
       - "${REDIS_CLUSTER_2_PORT}:6379"
       - "1${REDIS_CLUSTER_2_PORT}:16379"
+    environment:
+      - TZ=Asia/Tokyo
     volumes:
       - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
@@ -76,6 +85,8 @@ services:
     ports:
       - "${REDIS_CLUSTER_3_PORT}:6379"
       - "1${REDIS_CLUSTER_3_PORT}:16379"
+    environment:
+      - TZ=Asia/Tokyo
     volumes:
       - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
@@ -91,11 +102,13 @@ services:
   redis-cluster-4:
     image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_4_PORT}
-    volumes:
-      - ./docker/redis/redis.conf:/etc/redis/redis.conf
     ports:
       - "${REDIS_CLUSTER_4_PORT}:6379"
       - "1${REDIS_CLUSTER_4_PORT}:16379"
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
       - /bin/sh
       - -c
@@ -109,11 +122,13 @@ services:
   redis-cluster-5:
     image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_5_PORT}
-    volumes:
-      - ./docker/redis/redis.conf:/etc/redis/redis.conf
     ports:
       - "${REDIS_CLUSTER_5_PORT}:6379"
       - "1${REDIS_CLUSTER_5_PORT}:16379"
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
       - /bin/sh
       - -c
@@ -127,11 +142,13 @@ services:
   redis-cluster-6:
     image: redis:${REDIS_VERSION}-alpine
     container_name: redis-cluster-${REDIS_CLUSTER_6_PORT}
-    volumes:
-      - ./docker/redis/redis.conf:/etc/redis/redis.conf
     ports:
       - "${REDIS_CLUSTER_6_PORT}:6379"
       - "1${REDIS_CLUSTER_6_PORT}:16379"
+    environment:
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./docker/redis/redis.conf:/etc/redis/redis.conf
     command:
       - /bin/sh
       - -c
@@ -149,6 +166,8 @@ services:
         - REDIS_VERSION=${REDIS_VERSION}
     image: redis:${REDIS_VERSION}-custom
     container_name: redis-cluster-make
+    environment:
+      - TZ=Asia/Tokyo
     command:
       - /bin/sh
       - -c
@@ -180,6 +199,8 @@ services:
     ports:
       - "9121:9121"
     environment:
+      # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
+      # - TZ=Asia/Tokyo
       - REDIS_ADDR=redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_1_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_2_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_3_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_4_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_5_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_6_PORT}
 
   # 管理コンソールは以下のURLにアクセスする
@@ -206,52 +227,63 @@ services:
   #############################################################################
   # RabbitMQ Clustering
   rabbitmq1:
-    image: rabbitmq:${RABBITMQ_VERSION}-alpine
+    build:
+      context: ./docker/rabbitmq
+      args:
+        - RABBITMQ_VERSION=${RABBITMQ_VERSION}
+    image: rabbitmq:${RABBITMQ_VERSION}-alpine-custom
     container_name: rabbitmq1
     hostname: rabbitmq1
     environment:
+      - TZ=Asia/Tokyo
       - RABBITMQ_ERLANG_COOKIE
       - RABBITMQ_DEFAULT_USER
       - RABBITMQ_DEFAULT_PASS
       - RABBITMQ_DEFAULT_VHOST
   rabbitmq2:
-    image: rabbitmq:${RABBITMQ_VERSION}-alpine
+    image: rabbitmq:${RABBITMQ_VERSION}-alpine-custom
     container_name: rabbitmq2
     hostname: rabbitmq2
-    depends_on:
-      - rabbitmq1
     environment:
+      - TZ=Asia/Tokyo
       - RABBITMQ_ERLANG_COOKIE
     volumes:
       - ./docker/rabbitmq/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /bin/sh -c /usr/local/bin/cluster-entrypoint.sh
-  rabbitmq3:
-    image: rabbitmq:${RABBITMQ_VERSION}-alpine
-    container_name: rabbitmq3
-    hostname: rabbitmq3
     depends_on:
       - rabbitmq1
+  rabbitmq3:
+    image: rabbitmq:${RABBITMQ_VERSION}-alpine-custom
+    container_name: rabbitmq3
+    hostname: rabbitmq3
     environment:
+      - TZ=Asia/Tokyo
       - RABBITMQ_ERLANG_COOKIE
     volumes:
       - ./docker/rabbitmq/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
+    depends_on:
+      - rabbitmq1
   haproxy:
     image: haproxy:1.8.14-alpine
     container_name: haproxy
+    ports:
+      - "1936:1936"
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - TZ=Asia/Tokyo
     volumes:
       - ./docker/rabbitmq/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     depends_on:
       - rabbitmq1
       - rabbitmq2
       - rabbitmq3
-    ports:
-      - "1936:1936"
-      - "5672:5672"
-      - "15672:15672"
   haproxy-rsyslog:
     image: rafpe/docker-haproxy-rsyslog
     container_name: haproxy-rsyslog
+    environment:
+      - TZ=Asia/Tokyo
     volumes:
       - ./docker/rabbitmq/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     depends_on:
@@ -263,6 +295,8 @@ services:
     ports:
       - "9419:9419"
     environment:
+      # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
+      # - TZ=Asia/Tokyo
       - RABBIT_URL=http://haproxy:15672
       - RABBIT_USER=${RABBITMQ_DEFAULT_USER}
       - RABBIT_PASSWORD=${RABBITMQ_DEFAULT_PASS}
@@ -279,11 +313,12 @@ services:
     container_name: postgresql
     ports:
       - "5432:5432"
-    volumes:
-      - ./src/main/resources/db/init/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
     environment:
+      - TZ=Asia/Tokyo
       - LANG=ja_JP.UTF-8
       - POSTGRES_PASSWORD=xxxxxxxx
+    volumes:
+      - ./src/main/resources/db/init/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
 
   # URL
   # http://localhost:12000/
@@ -292,16 +327,20 @@ services:
     container_name: pgadmin4
     ports:
       - "12000:80"
-    volumes:
-      - ./docker/pgadmin4/data:/var/lib/pgadmin
     environment:
+      # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
+      # - TZ=Asia/Tokyo
       # PGADMIN_DEFAULT_EMAIL には接続する PostgreSQL の ユーザ名を設定する（サーバを追加する時楽なため）
       - PGADMIN_DEFAULT_EMAIL=postgres
       - PGADMIN_DEFAULT_PASSWORD=yyyyyyyy
+    volumes:
+      - ./docker/pgadmin4/data:/var/lib/pgadmin
 
   flyway:
     image: boxfuse/flyway:${FLYWAY_VERSION}-alpine
     container_name: flyway
+    environment:
+      - TZ=Asia/Tokyo
     volumes:
       - ./src/main/resources/db/migration:/flyway/sql
     command: -url=${FLYWAY_URL} -user=${FLYWAY_USER} -password=${FLYWAY_PASSWORD} -connectRetries=60 migrate
@@ -322,6 +361,8 @@ services:
     image: wrouesnel/postgres_exporter
     container_name: postgres_exporter
     environment:
+      # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
+      # - TZ=Asia/Tokyo
       - DATA_SOURCE_NAME=postgresql://${POSTGRES_EXPORTER_USER}:${POSTGRES_EXPORTER_PASSWORD}@postgresql:5432/ksbylending?sslmode=disable
     depends_on:
       - postgresql
@@ -347,6 +388,7 @@ services:
     volumes:
       - ./docker/mail-server/config/:/tmp/docker-mailserver/
     environment:
+      - TZ=Asia/Tokyo
       # debug したい場合には以下の行のコメントアウトを解除する
       # - DMS_DEBUG=1
       - ENABLE_SPAMASSASSIN=0
@@ -366,5 +408,8 @@ services:
     container_name: rainloop
     ports:
       - "8888:8888"
+    # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
+    # environment:
+    #   - TZ=Asia/Tokyo
     volumes:
       - ./docker/rainloop/data/:/rainloop/data
