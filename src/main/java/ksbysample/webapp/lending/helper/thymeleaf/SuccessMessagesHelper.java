@@ -16,6 +16,7 @@ public class SuccessMessagesHelper {
      *
      */
     public SuccessMessagesHelper() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**

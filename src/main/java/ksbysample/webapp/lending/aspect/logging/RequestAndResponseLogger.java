@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 /**
@@ -29,7 +30,7 @@ import java.util.stream.StreamSupport;
 @Component
 public class RequestAndResponseLogger {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequestAndResponseLogger.class);
+    private final Logger logger = LoggerFactory.getLogger(RequestAndResponseLogger.class);
 
     private static final String POINTCUT_ALL_CLASS_AND_METHOD_UNDER_APPLICATION_PACKAGE
             = "execution(* ksbysample.webapp.lending..*.*(..))";
@@ -77,9 +78,12 @@ public class RequestAndResponseLogger {
                 = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         loggingRequest(request);
         Object ret = pjp.proceed();
-        HttpServletResponse response
-                = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        loggingResponse(response);
+        Optional.ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .flatMap(requestAttributes -> Optional.ofNullable(requestAttributes.getResponse()))
+                .flatMap(response -> {
+                    loggingResponse(response);
+                    return Optional.empty();
+                });
 
         return ret;
     }
@@ -90,9 +94,12 @@ public class RequestAndResponseLogger {
     @After(value = "allClassAndMethodUnderApplicationPackage()"
             + " && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
     public void logginResponseAfterExceptionHandler() {
-        HttpServletResponse response
-                = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-        loggingResponse(response);
+        Optional.ofNullable((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
+                .flatMap(requestAttributes -> Optional.ofNullable(requestAttributes.getResponse()))
+                .flatMap(response -> {
+                    loggingResponse(response);
+                    return Optional.empty();
+                });
     }
 
     private void loggingRequest(HttpServletRequest request) {
@@ -195,17 +202,17 @@ public class RequestAndResponseLogger {
     private void logging(String title, String name, String value) {
         StringBuilder sb = new StringBuilder(title);
         if (name != null) {
-            sb.append(name);
-            sb.append(" = ");
+            sb.append(name)
+                    .append(" = ");
         }
         sb.append(value);
         logger.info(sb.toString());
     }
 
     private void append(StringBuilder sb, String name, String value) {
-        sb.append(name);
-        sb.append(" = ");
-        sb.append(value);
+        sb.append(name)
+                .append(" = ")
+                .append(value);
     }
 
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class LendingUser implements Serializable {
 
+    @SuppressWarnings("PMD.FieldNamingConventions")
     private static final long serialVersionUID = 511849715573196163L;
 
     Long userId;

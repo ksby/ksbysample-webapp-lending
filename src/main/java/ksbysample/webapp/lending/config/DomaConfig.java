@@ -27,12 +27,6 @@ public class DomaConfig implements Config {
     private SqlFileRepository sqlFileRepository;
 
     /**
-     *
-     */
-    public DomaConfig() {
-    }
-
-    /**
      * @param dataSource ???
      */
     @SuppressWarnings("SpringJavaAutowiringInspection")

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ControllerAndEventNameLogger {
 
-    private static final Logger logger = LoggerFactory.getLogger(ControllerAndEventNameLogger.class);
+    private final Logger logger = LoggerFactory.getLogger(ControllerAndEventNameLogger.class);
 
     /**
      * @param pjp              ???
@@ -45,14 +45,14 @@ public class ControllerAndEventNameLogger {
     }
 
     private void appendControllerName(StringBuilder sb, String loggingGamenName) {
-        sb.append("ControllerName = ");
-        sb.append(loggingGamenName);
-        sb.append(", ");
+        sb.append("ControllerName = ")
+                .append(loggingGamenName)
+                .append(", ");
     }
 
     private void appendEventName(StringBuilder sb, String loggingEventName) {
-        sb.append("EventName = ");
-        sb.append(loggingEventName);
+        sb.append("EventName = ")
+                .append(loggingEventName);
     }
 
 }

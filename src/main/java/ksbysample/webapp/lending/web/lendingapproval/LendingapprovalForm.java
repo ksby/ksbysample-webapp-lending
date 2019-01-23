@@ -27,12 +27,11 @@ public class LendingapprovalForm {
      * @param lendingBookList ???
      */
     public void setApplyingBookFormListFromLendingBookList(List<LendingBook> lendingBookList) {
-        this.applyingBookFormList = null;
-        if (lendingBookList != null) {
-            this.applyingBookFormList = lendingBookList.stream()
-                    .map(ApplyingBookForm::new)
-                    .collect(Collectors.toList());
-        }
+        this.applyingBookFormList = lendingBookList == null
+                ? null
+                : lendingBookList.stream()
+                .map(ApplyingBookForm::new)
+                .collect(Collectors.toList());
     }
 
 }

@@ -1,6 +1,6 @@
 package ksbysample.webapp.lending.web.confirmresult;
 
-import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import ksbysample.common.test.helper.TestHelper;
 import ksbysample.common.test.rule.db.TestData;
 import ksbysample.common.test.rule.db.TestDataResource;
@@ -11,13 +11,16 @@ import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.util.FileCopyUtils;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 import static ksbysample.common.test.matcher.HtmlResultMatchers.html;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -155,6 +158,12 @@ public class ConfirmresultControllerTest {
         @Autowired
         public SecurityMockMvcResource mvc;
 
+        @Value("ksbysample/webapp/lending/web/confirmresult/assertdata/001/booklist-105.utf-8.csv")
+        ClassPathResource booklist105Utf8CsvResource;
+
+        @Value("ksbysample/webapp/lending/web/confirmresult/assertdata/002/booklist-105.ms932.csv")
+        ClassPathResource booklist105Ms932CsvResource;
+
         @Test
         @TestData("web/confirmresult/testdata/001")
         public void CSVダウンロード_HttpServletResponse_をクリックした場合() throws Exception {
@@ -167,10 +176,8 @@ public class ConfirmresultControllerTest {
                     .andReturn();
             String content = result.getResponse().getContentAsString();
             assertThat(content)
-                    .isEqualTo(com.google.common.io.Files.toString(
-                            new File("src/test/resources/ksbysample/webapp/lending/web/confirmresult"
-                                    + "/assertdata/001/booklist-105.utf-8.csv")
-                            , Charsets.UTF_8));
+                    .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                            booklist105Utf8CsvResource.getFile(), StandardCharsets.UTF_8)));
         }
 
         @Test
@@ -186,9 +193,8 @@ public class ConfirmresultControllerTest {
                     .andReturn();
             String content = result.getResponse().getContentAsString();
             assertThat(content)
-                    .isEqualTo(com.google.common.io.Files.toString(
-                            new File("src/test/resources/ksbysample/webapp/lending/web/confirmresult/assertdata/002/booklist-105.ms932.csv")
-                            , Charset.forName("MS932")));
+                    .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                            booklist105Ms932CsvResource.getFile(), Charset.forName("MS932"))));
         }
 
     }

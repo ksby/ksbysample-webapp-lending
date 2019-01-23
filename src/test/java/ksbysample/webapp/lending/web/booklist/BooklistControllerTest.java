@@ -78,7 +78,7 @@ public class BooklistControllerTest {
             BooklistCsvFileServiceTest booklistCsvFileServiceTest = new BooklistCsvFileServiceTest();
             MockMultipartFile multipartFile = booklistCsvFileServiceTest.createErrorCsvFile();
             mvc.authSuzukiHanako.perform(
-                    fileUpload("/booklist/fileupload")
+                    multipart("/booklist/fileupload")
                             // 単に .file(multipartFile) ではダメで、
                             // 第１引数に <input type="file" name="..."> の name 属性の文字列を、第２引数にファイルのバイト配列を渡す
                             .file("fileupload", multipartFile.getBytes())
@@ -122,7 +122,7 @@ public class BooklistControllerTest {
 
             // CSVファイルをアップロードする
             MvcResult result = mvc.authSuzukiHanako.perform(
-                    fileUpload("/booklist/fileupload")
+                    multipart("/booklist/fileupload")
                             // 単に .file(multipartFile) ではダメで、
                             // 第１引数に <input type="file" name="..."> の name 属性の文字列を、第２引数にファイルのバイト配列を渡す
                             .file("fileupload", multipartFile.getBytes())

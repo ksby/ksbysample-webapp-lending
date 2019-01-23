@@ -1,18 +1,21 @@
 package ksbysample.webapp.lending.config;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
+import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
@@ -34,14 +37,19 @@ public class ApplicationConfig {
 
     private final MessageSource messageSource;
 
+    private final MBeanExporter mbeanExporter;
+
     /**
      * @param connectionFactory {@link ConnectionFactory} bean
      * @param messageSource     {@link MessageSource} bean
+     * @param mbeanExporter     {@link MBeanExporter} bean
      */
     public ApplicationConfig(ConnectionFactory connectionFactory
-            , MessageSource messageSource) {
+            , MessageSource messageSource
+            , @Autowired(required = false) MBeanExporter mbeanExporter) {
         this.connectionFactory = connectionFactory;
         this.messageSource = messageSource;
+        this.mbeanExporter = mbeanExporter;
     }
 
     /**
@@ -93,13 +101,16 @@ public class ApplicationConfig {
     }
 
     /**
-     * @return Tomcat JDBC Connection Pool の DataSource オブジェクト
+     * @return HikariCP の DataSource オブジェクト
      */
     @Bean
-    @ConfigurationProperties("spring.datasource.tomcat")
+    @ConfigurationProperties("spring.datasource.hikari")
     public DataSource dataSource() {
+        if (mbeanExporter != null) {
+            mbeanExporter.addExcludedBean("dataSource");
+        }
         return DataSourceBuilder.create()
-                .type(org.apache.tomcat.jdbc.pool.DataSource.class)
+                .type(HikariDataSource.class)
                 .build();
     }
 

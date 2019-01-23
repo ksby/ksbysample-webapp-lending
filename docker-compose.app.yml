@@ -1,0 +1,45 @@
+# docker-compose -f docker-compose.app.yml --compatibility up -d
+# docker-compose -f docker-compose.app.yml --compatibility down
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    image: ksbysample-webapp-lending
+    volumes:
+      - ./build/libs/ksbysample-webapp-lending-2.0.8-RELEASE.jar:/app.jar
+      - ./docker/app/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+    environment:
+      - SPRING_DATASOURCE_HIKARI_JDBC_URL=jdbc:postgresql://postgresql/ksbylending
+      - SPRING_MAIL_HOST=mail-server
+      - SPRING_RABBITMQ_HOST=haproxy
+    deploy:
+      mode: replicated
+      replicas: 3
+    # entrypoint: /bin/sh
+    # stdin_open: true
+    # tty: true
+
+  haproxy-app:
+    image: haproxy:1.8.14-alpine
+    container_name: haproxy-app
+    volumes:
+      - ./docker/app/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      - app
+  haproxy-app-rsyslog:
+    image: rafpe/docker-haproxy-rsyslog
+    container_name: haproxy-app-rsyslog
+    volumes:
+      - ./docker/app/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - haproxy-app
+
+networks:
+  default:
+    external:
+      name: ksbysample-webapp-lending_default

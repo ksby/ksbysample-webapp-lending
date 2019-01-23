@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MethodLogger {
 
-    private static final Logger logger = LoggerFactory.getLogger(MethodLogger.class);
+    private final Logger logger = LoggerFactory.getLogger(MethodLogger.class);
 
 
     @SuppressWarnings({"PMD.UnusedPrivateMethod"})

@@ -15,6 +15,7 @@ public class CookieLastLendingAppId extends CookieGenerator {
      *
      */
     public CookieLastLendingAppId() {
+        super();
         setCookieName(COOKIE_NAME);
         setCookieMaxAge(COOKIE_MAX_AGE);
     }

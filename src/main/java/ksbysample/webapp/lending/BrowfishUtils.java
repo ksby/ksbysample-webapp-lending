@@ -13,6 +13,7 @@ import java.util.Base64;
 /**
  * ???
  */
+@SuppressWarnings({"PMD.HardCodedCryptoKey"})
 public class BrowfishUtils {
 
     private static final String KEY = "sample";
