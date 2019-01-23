@@ -1,8 +1,9 @@
 package ksbysample.webapp.lending.web.springmvcmemo;
 
 import lombok.Data;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * ???

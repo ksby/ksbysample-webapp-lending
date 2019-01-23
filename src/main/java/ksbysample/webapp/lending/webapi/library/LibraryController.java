@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/webapi/library")
 public class LibraryController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LibraryController.class);
+    private final Logger logger = LoggerFactory.getLogger(LibraryController.class);
 
     private final CalilApiService calilApiService;
 
@@ -36,8 +36,9 @@ public class LibraryController {
      * @return ???
      * @throws Exception
      */
+    @SuppressWarnings("PMD.AvoidCatchingGenericException")
     @RequestMapping("/getLibraryList")
-    public CommonWebApiResponse<List<Library>> getLibraryList(String pref) throws Exception {
+    public CommonWebApiResponse<List<Library>> getLibraryList(String pref) {
         CommonWebApiResponse<List<Library>> response = new CommonWebApiResponse<>();
         response.setContent(Collections.emptyList());
 

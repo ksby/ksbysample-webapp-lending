@@ -2,6 +2,7 @@ package ksbysample.webapp.lending.web.lendingapproval;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -20,6 +21,7 @@ public class LendingapprovalFormValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+        Assert.notNull(target, "target must not be null");
         LendingapprovalForm lendingapprovalForm = (LendingapprovalForm) target;
 
         // 以下の点をチェックする
@@ -34,7 +36,8 @@ public class LendingapprovalFormValidator implements Validator {
 
             if (StringUtils.equals(applyingBookForm.getApprovalResult(), REJECT.getValue())
                     && StringUtils.isBlank(applyingBookForm.getApprovalReason())) {
-                errors.rejectValue(String.format("applyingBookFormList[%d].approvalReason", i), null);
+                errors.rejectValue(String.format("applyingBookFormList[%d].approvalReason", i)
+                        , "LendingapprovalForm.applyingBookFormList.approvalReason.empty");
             }
 
             i++;

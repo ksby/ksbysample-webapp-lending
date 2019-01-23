@@ -1,53 +1,55 @@
-group 'ksbysample'
-version '1.5.4-RELEASE'
-
 buildscript {
     ext {
-        springBootVersion = '1.5.4.RELEASE'
+        group "ksbysample"
+        version "2.0.8-RELEASE"
     }
     repositories {
-        jcenter()
+        mavenCentral()
         maven { url "https://repo.spring.io/release/" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        // for Error Prone ( http://errorprone.info/ )
-        classpath("net.ltgt.gradle:gradle-errorprone-plugin:0.0.10")
-        // for Grgit
-        classpath("org.ajoberstar:grgit:1.9.3")
-        // Gradle Download Task
-        classpath("de.undercouch:gradle-download-task:3.2.0")
-    }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'de.undercouch.download'
-apply plugin: 'groovy'
-apply plugin: 'net.ltgt.errorprone'
-apply plugin: 'checkstyle'
-apply plugin: 'findbugs'
-apply plugin: 'pmd'
+plugins {
+    id "java"
+    id "eclipse"
+    id "idea"
+    id "org.springframework.boot" version "2.0.8.RELEASE"
+    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "groovy"
+    id "checkstyle"
+    id "com.github.spotbugs" version "1.6.8"
+    id "pmd"
+    id "net.ltgt.errorprone" version "0.0.16"
+    id "de.undercouch.download" version "3.4.3"
+    id "com.gorylenko.gradle-git-properties" version "2.0.0-beta1"
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.5'
+wrapper {
+    gradleVersion = "4.10.3"
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
-[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ['-Xlint:all,-options,-processing,-path']
-compileJava.options.compilerArgs += ['-Xep:RemoveUnusedImports:WARN', '-Xep:InsecureCryptoUsage:OFF']
+[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = [
+        "-Xlint:all,-options,-processing,-path"
+        , "-Xep:RemoveUnusedImports:WARN"
+        , "-Xep:InsecureCryptoUsage:OFF"
+        , "-Xep:ParameterName:OFF"
+]
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
 processResources.destinationDir = compileJava.destinationDir
 // コンパイルより前にSQLファイルを出力先ディレクトリにコピーするために依存関係を逆転する
 compileJava.dependsOn processResources
+
+springBoot {
+    buildInfo()
+}
 
 idea {
     module {
@@ -63,34 +65,17 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = '7.8.1'
+    toolVersion = "8.16"
     sourceSets = [project.sourceSets.main]
 }
 
-findbugs {
-    toolVersion = '3.0.1'
-    sourceSets = [project.sourceSets.main]
+spotbugs {
+    toolVersion = "3.1.10"
     ignoreFailures = true
     effort = "max"
-    excludeFilter = file("${rootProject.projectDir}/config/findbugs/findbugs-exclude.xml")
+    spotbugsTest.enabled = false
 }
-
-tasks.withType(FindBugs) {
-    // Gradle 3.3以降 + FindBugs Gradle Plugin を組み合わせると、"The following errors occurred during analysis:"
-    // の後に "Cannot open codebase filesystem:..." というメッセージが大量に出力されるので、以下の doFirst { ... }
-    // のコードを入れることで出力されないようにする
-    doFirst {
-        def fc = classes
-        if (fc == null) {
-            return
-        }
-        fc.exclude '**/*.properties'
-        fc.exclude '**/*.xml'
-        fc.exclude '**/META-INF/**'
-        fc.exclude '**/static/**'
-        fc.exclude '**/templates/**'
-        classes = files(fc.files)
-    }
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
     reports {
         xml.enabled = false
         html.enabled = true
@@ -98,93 +83,100 @@ tasks.withType(FindBugs) {
 }
 
 pmd {
-    toolVersion = "5.8.1"
+    toolVersion = "6.10.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
     ruleSetFiles = rootProject.files("/config/pmd/pmd-project-rulesets.xml")
     ruleSets = []
 }
+pmdMain {
+    def backupLoggerLevel
+    doFirst {
+        backupLoggerLevel = logger.context.level
+        logger.context.level = LogLevel.QUIET
+    }
+    doLast {
+        logger.context.level = backupLoggerLevel
+    }
+}
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencyManagement {
     imports {
-        // BOM は https://repo.spring.io/release/io/spring/platform/platform-bom/Brussels-SR3/
-        // の下を見ること
-        mavenBom("io.spring.platform:platform-bom:Brussels-SR3") {
-            bomProperty 'guava.version', '21.0'
-            bomProperty 'thymeleaf.version', '3.0.6.RELEASE'
-            bomProperty 'thymeleaf-extras-springsecurity4.version', '3.0.2.RELEASE'
-            bomProperty 'thymeleaf-layout-dialect.version', '2.2.2'
-            bomProperty 'thymeleaf-extras-data-attribute.version', '2.0.1'
-            bomProperty 'thymeleaf-extras-java8time.version', '3.0.0.RELEASE'
+        // mavenBom は以下の URL のものを使用する
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.0.7.RELEASE/
+        // bomProperty に指定可能な property は以下の URL の BOM に記述がある
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.0.7.RELEASE/spring-boot-dependencies-2.0.7.RELEASE.pom
+        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
+            // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
+            // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
+            bomProperty "groovy.version", "2.5.4"
         }
     }
 }
 
-bootRepackage {
-    mainClass = 'ksbysample.webapp.lending.Application'
-}
-
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:42.1.1"
-    def spockVersion = "1.1-groovy-2.4"
-    def domaVersion = "2.16.1"
-    def lombokVersion = "1.16.16"
-    def errorproneVersion = "2.0.15"
-    def powermockVersion = "1.6.6"
+    def jdbcDriver = "org.postgresql:postgresql:42.2.5"
+    def spockVersion = "1.2-groovy-2.5"
+    def domaVersion = "2.21.0"
+    def lombokVersion = "1.18.4"
+    def errorproneVersion = "2.3.1"
+    def powermockVersion = "2.0.0"
+    def spotbugsVersion = "3.1.10"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
-    // Appendix A. Dependency versions ( http://docs.spring.io/platform/docs/current/reference/htmlsingle/#appendix-dependency-versions ) 参照
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-thymeleaf") {
-        exclude group: "org.codehaus.groovy", module: "groovy"
-    }
-    compile("org.thymeleaf.extras:thymeleaf-extras-springsecurity4")
-    compile("org.thymeleaf.extras:thymeleaf-extras-java8time")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("org.springframework.boot:spring-boot-starter-freemarker")
-    compile("org.springframework.boot:spring-boot-starter-mail")
-    compile("org.springframework.boot:spring-boot-starter-security")
-    compile("org.springframework.boot:spring-boot-starter-data-redis")
-    compile("org.springframework.boot:spring-boot-starter-amqp")
-    compile("org.springframework.boot:spring-boot-devtools")
-    compile("org.springframework.session:spring-session")
-    compile("org.springframework.retry:spring-retry")
-    compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-    compile("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
-    compile("com.google.guava:guava")
-    compile("org.apache.commons:commons-lang3")
-    compile("org.codehaus.janino:janino")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
-    testCompile("org.springframework.security:spring-security-test")
-    testCompile("org.yaml:snakeyaml")
-    testCompile("org.mockito:mockito-core")
+    // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-freemarker")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    runtimeOnly("org.springframework.boot:spring-boot-devtools")
+    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
+    implementation("org.springframework.session:spring-session-data-redis")
+    implementation("org.springframework.retry:spring-retry")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
+    implementation("org.apache.commons:commons-lang3")
+    implementation("org.codehaus.janino:janino")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.yaml:snakeyaml")
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
-    runtime("${jdbcDriver}")
-    compile("com.integralblue:log4jdbc-spring-boot-starter:1.0.1")
-    compile("org.simpleframework:simple-xml:2.7.1")
-    compile("com.univocity:univocity-parsers:2.4.1")
-    testCompile("org.dbunit:dbunit:2.5.3")
-    testCompile("com.icegreen:greenmail:1.5.5")
-    testCompile("org.assertj:assertj-core:3.8.0")
-    testCompile("com.jayway.jsonpath:json-path:2.2.0")
-    testCompile("org.jsoup:jsoup:1.10.3")
-    testCompile("cglib:cglib-nodep:3.2.5")
-    testCompile("org.spockframework:spock-core:${spockVersion}")
-    testCompile("org.spockframework:spock-spring:${spockVersion}")
-    testCompile("com.google.code.findbugs:jsr305:3.0.2")
-
+    runtimeOnly("${jdbcDriver}")
+    implementation("com.integralblue:log4jdbc-spring-boot-starter:1.0.2")
+    implementation("org.simpleframework:simple-xml:2.7.1")
+    implementation("com.univocity:univocity-parsers:2.7.6")
+    implementation("com.google.guava:guava:27.0.1-jre")
+    implementation("org.flywaydb:flyway-core:5.2.4")
+    implementation("com.zaxxer:HikariCP:3.3.0")
+    testImplementation("org.dbunit:dbunit:2.6.0")
+    testImplementation("com.icegreen:greenmail:1.5.9")
+    testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation("com.jayway.jsonpath:json-path:2.4.0")
+    testImplementation("org.jsoup:jsoup:1.11.3")
+    testImplementation("cglib:cglib-nodep:3.2.10")
+    testImplementation("org.spockframework:spock-core:${spockVersion}")
+    testImplementation("org.spockframework:spock-spring:${spockVersion}")
+    
     // for lombok
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
     testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
 
     // for Doma
-    compile("org.seasar.doma:doma:${domaVersion}")
+    annotationProcessor("org.seasar.doma:doma:${domaVersion}")
+    implementation("org.seasar.doma:doma:${domaVersion}")
     domaGenRuntime("org.seasar.doma:doma-gen:${domaVersion}")
     domaGenRuntime("${jdbcDriver}")
 
@@ -193,11 +185,18 @@ dependencies {
     compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
 
     // PowerMock
-    testCompile("org.powermock:powermock-module-junit4:${powermockVersion}")
-    testCompile("org.powermock:powermock-api-mockito:${powermockVersion}")
+    testImplementation("org.powermock:powermock-module-junit4:${powermockVersion}")
+    testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
+
+    // for SpotBugs
+    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}")
+    compileOnly("net.jcip:jcip-annotations:1.0")
+    compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
+    testImplementation("com.google.code.findbugs:jsr305:3.0.2")
 }
 
 bootRun {
+    // -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
     jvmArgs = [
             "-ea",
             "-Dspring.profiles.active=develop",
@@ -207,6 +206,7 @@ bootRun {
 }
 
 test {
+    // -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
     jvmArgs = [
             "-ea",
             "-Dspring.profiles.active=unittest",
@@ -219,15 +219,15 @@ test {
 task domaGen {
     doLast {
         // まず変更が必要なもの
-        def rootPackageName = 'ksbysample.webapp.lending'
-        def daoPackagePath = 'src/main/java/ksbysample/webapp/lending/dao'
-        def dbUrl = 'jdbc:postgresql://localhost/ksbylending'
-        def dbUser = 'ksbylending_user'
-        def dbPassword = 'xxxxxxxx'
-        def tableNamePattern = '.*'
+        def rootPackageName = "ksbysample.webapp.lending"
+        def daoPackagePath = "src/main/java/ksbysample/webapp/lending/dao"
+        def dbUrl = "jdbc:postgresql://localhost/ksbylending"
+        def dbUser = "ksbylending_user"
+        def dbPassword = "xxxxxxxx"
+        def tableNamePattern = ".*"
         // おそらく変更不要なもの
         def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
-        def workDirPath = 'work'
+        def workDirPath = "work"
         def workDaoDirPath = "${workDirPath}/dao"
 
         // 作業用ディレクトリを削除する
@@ -240,7 +240,7 @@ task domaGen {
         }
 
         // Dao インターフェース、Entity クラスを生成する
-        ant.taskdef(resource: 'domagentask.properties',
+        ant.taskdef(resource: "domagentask.properties",
                 classpath: configurations.domaGenRuntime.asPath)
         ant.gen(url: "${dbUrl}", user: "${dbUser}", password: "${dbPassword}", tableNamePattern: "${tableNamePattern}") {
             entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
@@ -255,8 +255,8 @@ task domaGen {
             into "${workDaoDirPath}/replace"
             filter {
                 line ->
-                    line.replaceAll('import org.seasar.doma.Dao;', "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
-                            .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+                    line.replaceAll("import org.seasar.doma.Dao;", "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
+                            .replaceAll("@Dao", "@Dao\n@ComponentAndAutowiredDomaConfig")
             }
         }
 
@@ -283,14 +283,14 @@ task domaGen {
 
 task downloadCssFontsJs {
     doLast {
-        def staticDirPath = 'src/main/resources/static'
-        def workDirPath = 'work'
-        def adminLTEVersion = '2.2.0'
-        def jQueryVersion = '2.1.4'
-        def fontAwesomeVersion = '4.3.0'
-        def ioniconsVersion = '2.0.1'
-        def html5shivJsVersion = '3.7.2'
-        def respondMinJsVersion = '1.4.2'
+        def staticDirPath = "src/main/resources/static"
+        def workDirPath = "work"
+        def adminLTEVersion = "2.2.0"
+        def jQueryVersion = "2.1.4"
+        def fontAwesomeVersion = "4.3.0"
+        def ioniconsVersion = "2.0.1"
+        def html5shivJsVersion = "3.7.2"
+        def respondMinJsVersion = "1.4.2"
 
         // 作業用ディレクトリを削除する
         clearDir("${workDirPath}")
@@ -369,7 +369,7 @@ void clearDir(String dirPath) {
 
 void addGit() {
     def grgit = org.ajoberstar.grgit.Grgit.open(dir: project.projectDir)
-    grgit.add(patterns: ['.'])
+    grgit.add(patterns: ["."])
 }
 
 void downloadAdminLTE(String adminLTEVersion, String jQueryVersion, String workDirPath, String staticDirPath) {

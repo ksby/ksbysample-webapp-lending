@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Component
 public class InquiringStatusOfBookQueueListener {
 
-    private static final Logger logger = LoggerFactory.getLogger(InquiringStatusOfBookQueueListener.class);
+    private final Logger logger = LoggerFactory.getLogger(InquiringStatusOfBookQueueListener.class);
 
     private final InquiringStatusOfBookQueueService inquiringStatusOfBookQueueService;
 

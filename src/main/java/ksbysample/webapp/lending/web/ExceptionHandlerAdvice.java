@@ -27,7 +27,7 @@ import java.util.Map;
 @ControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
+    private final Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
 
     /**
      * @param e        ???
@@ -40,14 +40,14 @@ public class ExceptionHandlerAdvice {
     public ModelAndView handleException(Exception e
             , HttpServletRequest request
             , HttpServletResponse response) throws IOException {
-        String url;
+        StringBuilder url = new StringBuilder();
         if (StringUtils.equals(request.getRequestURI(), "/error")) {
-            url = (String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI);
+            url.append((String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI));
         } else {
-            url = request.getRequestURL().toString();
+            url.append(request.getRequestURL().toString());
         }
-        url += (StringUtils.isNotEmpty(request.getQueryString()) ? "?" + request.getQueryString() : "");
-        logger.error("URL = {}", url, e);
+        url.append(StringUtils.isNotEmpty(request.getQueryString()) ? "?" + request.getQueryString() : "");
+        logger.error("URL = {}", url.toString(), e);
 
         ModelAndView model = new ModelAndView("error");
         List<String> errorInfoList = new ArrayList<>();

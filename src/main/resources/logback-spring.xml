@@ -2,8 +2,9 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <property name="LOGGING_APPENDER" value="${logging.appender:-FILE}"/>
 
-    <if condition='"${spring.profiles.active}" == "product"'>
+    <if condition='"${spring.profiles.active}" == "product" &amp;&amp; "${LOGGING_APPENDER}" == "FILE"'>
         <then>
             <property name="LOG_FILE" value="${LOG_FILE}"/>
             <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
@@ -19,27 +20,6 @@
         </then>
     </if>
 
-    <!-- Tomcat JDBC Connection Pool SlowQueryReport interceptor 用ログファイル -->
-    <if condition='"${spring.profiles.active}" == "product" &amp;&amp; "${slowquery.logging.file}" != ""'>
-        <then>
-            <springProperty scope="context" name="slowQueryLogFile" source="slowquery.logging.file"/>
-            <appender name="SLOWQUERY_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-                <encoder>
-                    <pattern>${FILE_LOG_PATTERN}</pattern>
-                </encoder>
-                <file>${slowQueryLogFile}</file>
-                <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-                    <fileNamePattern>${slowQueryLogFile}.%d{yyyy-MM-dd}</fileNamePattern>
-                    <maxHistory>30</maxHistory>
-                </rollingPolicy>
-            </appender>
-
-            <logger name="org.apache.tomcat.jdbc.pool.interceptor.SlowQueryReport" level="INFO">
-                <appender-ref ref="SLOWQUERY_LOG_FILE"/>
-            </logger>
-        </then>
-    </if>
-
     <if condition='"${spring.profiles.active}" == "develop"'>
         <then>
             <root>
@@ -50,7 +30,7 @@
     <if condition='"${spring.profiles.active}" == "product"'>
         <then>
             <root>
-                <appender-ref ref="FILE"/>
+                <appender-ref ref="${LOGGING_APPENDER}"/>
             </root>
         </then>
     </if>

@@ -21,6 +21,7 @@ public class RegisterBooklistForm {
      *
      */
     public RegisterBooklistForm() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**

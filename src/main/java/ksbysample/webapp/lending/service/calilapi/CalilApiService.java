@@ -1,6 +1,8 @@
 package ksbysample.webapp.lending.service.calilapi;
 
 import com.google.common.base.Joiner;
+import ksbysample.webapp.lending.exception.WebApplicationRuntimeException;
+import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
 import ksbysample.webapp.lending.service.calilapi.response.Book;
 import ksbysample.webapp.lending.service.calilapi.response.CheckApiResponse;
 import ksbysample.webapp.lending.service.calilapi.response.Libraries;
@@ -32,7 +34,7 @@ import java.util.Map;
 @PropertySource("classpath:calilapi.properties")
 public class CalilApiService {
 
-    private static final Logger logger = LoggerFactory.getLogger(CalilApiService.class);
+    private final Logger logger = LoggerFactory.getLogger(CalilApiService.class);
 
     private static final int RETRY_MAX_CNT = 5;
     private static final long RETRY_SLEEP_MILLS = 3000;
@@ -54,17 +56,22 @@ public class CalilApiService {
 
     private final RetryTemplate simpleRetryTemplate;
 
+    private final MessagesPropertiesHelper mph;
+
     /**
      * @param restTemplateForCalilApi      ???
      * @param restTemplateForCalilApiByXml ???
      * @param simpleRetryTemplate          ???
+     * @param mph                          ???
      */
     public CalilApiService(@Qualifier("restTemplateForCalilApi") RestTemplate restTemplateForCalilApi
             , @Qualifier("restTemplateForCalilApiByXml") RestTemplate restTemplateForCalilApiByXml
-            , @Qualifier("simpleRetryTemplate") RetryTemplate simpleRetryTemplate) {
+            , @Qualifier("simpleRetryTemplate") RetryTemplate simpleRetryTemplate
+            , MessagesPropertiesHelper mph) {
         this.restTemplateForCalilApi = restTemplateForCalilApi;
         this.restTemplateForCalilApiByXml = restTemplateForCalilApiByXml;
         this.simpleRetryTemplate = simpleRetryTemplate;
+        this.mph = mph;
     }
 
     /**
@@ -72,6 +79,7 @@ public class CalilApiService {
      * @return ???
      * @throws Exception
      */
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     public Libraries getLibraryList(String pref) throws Exception {
         // 図書館データベースAPIを呼び出して XMLレスポンスを受信する
         ResponseEntity<String> response = getForEntityWithRetry(this.restTemplateForCalilApi
@@ -87,7 +95,7 @@ public class CalilApiService {
      * @return ???
      * @throws Exception
      */
-    public LibrariesForJackson2Xml getLibraryListByJackson2Xml(String pref) throws Exception {
+    public LibrariesForJackson2Xml getLibraryListByJackson2Xml(String pref) {
         // 図書館データベースAPIを呼び出して XMLレスポンスを受信する
         ResponseEntity<LibrariesForJackson2Xml> response = getForEntityWithRetry(this.restTemplateForCalilApiByXml
                 , URL_CALILAPI_LIBRALY, LibrariesForJackson2Xml.class, this.calilApiKey, pref);
@@ -106,12 +114,19 @@ public class CalilApiService {
         vars.put("isbn", Joiner.on(",").join(isbnList));
 
         ResponseEntity<CheckApiResponse> response = null;
+        CheckApiResponse checkApiResponse = null;
         String url = URL_CALILAPI_CHECK;
         for (int retry = 0; retry < RETRY_MAX_CNT; retry++) {
             // 蔵書検索APIを呼び出して蔵書の有無と貸出状況を取得する
             response = getForEntityWithRetry(this.restTemplateForCalilApiByXml, url, CheckApiResponse.class, vars);
-            logger.info("カーリルの蔵書検索API を呼び出し、レスポンスを取得しました。{}", response.getBody().toString());
-            if (response.getBody().getContinueValue() == 0) {
+            checkApiResponse = response.getBody();
+            if (checkApiResponse == null) {
+                throw new WebApplicationRuntimeException(
+                        mph.getMessage("CalilApiService.checkapi.response.emptybody", null));
+            }
+
+            logger.info("カーリルの蔵書検索API を呼び出し、レスポンスを取得しました。{}", checkApiResponse.toString());
+            if (checkApiResponse.getContinueValue() == 0) {
                 break;
             }
 
@@ -123,10 +138,10 @@ public class CalilApiService {
             }
             url = URL_CALILAPI_CHECK_FOR_RETRY;
             vars.clear();
-            vars.put("session", response.getBody().getSession());
+            vars.put("session", checkApiResponse.getSession());
         }
 
-        return response.getBody().getBookList();
+        return checkApiResponse.getBookList();
     }
 
     private <T> ResponseEntity<T> getForEntityWithRetry(RestTemplate restTemplate, String url
@@ -134,7 +149,7 @@ public class CalilApiService {
         @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
-                logger.info("★★★ リトライ回数 = " + context.getRetryCount());
+                logger.info("★★★ リトライ回数 = {}", context.getRetryCount());
             }
             ResponseEntity<T> innerResponse = restTemplate.getForEntity(url, responseType, uriVariables);
             return innerResponse;
@@ -148,7 +163,7 @@ public class CalilApiService {
         @SuppressWarnings({"PMD.UnnecessaryLocalBeforeReturn"})
         ResponseEntity<T> response = this.simpleRetryTemplate.execute(context -> {
             if (context.getRetryCount() > 0) {
-                logger.info("★★★ リトライ回数 = " + context.getRetryCount());
+                logger.info("★★★ リトライ回数 = {}", context.getRetryCount());
             }
             ResponseEntity<T> innerResponse = restTemplate.getForEntity(url, responseType, uriVariables);
             return innerResponse;

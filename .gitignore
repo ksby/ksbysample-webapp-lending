@@ -37,3 +37,16 @@ bin/
 
 #カーリル図書館API用設定ファイル
 calilapi.properties
+
+# Prometheus, Grafana の storage
+docker/grafana/storage
+docker/prometheus/storage
+
+# pgAdmin4 のデータ用ディレクトリ
+docker/pgadmin4/data
+
+# SMTPサーバのファイル
+docker/mail-server/config/chksum
+
+# Rainloop のデータ用ディレクトリ
+docker/rainloop/data

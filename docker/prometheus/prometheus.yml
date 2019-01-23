@@ -1,0 +1,37 @@
+global:
+  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds.
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+# The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+- job_name: 'prometheus'
+  scrape_interval: 15s
+  static_configs:
+  - targets: ['localhost:9090']
+
+- job_name: 'spring-actuator'
+  metrics_path: '/actuator/prometheus'
+  scrape_interval: 15s
+  basic_auth:
+    username: actuator
+    password: xxxxxxxx
+  static_configs:
+  # Docker で起動した Prometheus からローカルPCで起動している Spring Boot のアプリケーション
+  # にアクセスする。docker-compose.yml の extra_hosts に定義した PC のホスト名 app を設定する。
+  - targets: ['app:8080']
+    labels:
+      application: 'lending'
+
+- job_name: 'redis_exporter'
+  static_configs:
+  - targets: ['redis_exporter:9121']
+
+- job_name: 'rabbitmq_exporter'
+  static_configs:
+    - targets: ['rabbitmq_exporter:9419']
+
+- job_name: 'postgres_exporter'
+  static_configs:
+    - targets: ['postgres_exporter:9187']

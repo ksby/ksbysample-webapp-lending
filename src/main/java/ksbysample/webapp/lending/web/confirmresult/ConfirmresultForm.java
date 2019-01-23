@@ -29,12 +29,11 @@ public class ConfirmresultForm {
      * @param lendingBookList ???
      */
     public void setApprovedBookFormListFromLendingBookList(List<LendingBook> lendingBookList) {
-        this.approvedBookFormList = null;
-        if (lendingBookList != null) {
-            this.approvedBookFormList = lendingBookList.stream()
-                    .map(ApprovedBookForm::new)
-                    .collect(Collectors.toList());
-        }
+        this.approvedBookFormList = lendingBookList == null
+                ? null
+                : lendingBookList.stream()
+                .map(ApprovedBookForm::new)
+                .collect(Collectors.toList());
     }
 
 }
