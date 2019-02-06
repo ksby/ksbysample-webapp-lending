@@ -29,7 +29,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 wrapper {
-    gradleVersion = "4.10.3"
+    gradleVersion = "5.2"
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -59,6 +59,10 @@ idea {
 }
 
 configurations {
+    // annotationProcessor と testAnnotationProcessor、compileOnly と testCompileOnly を併記不要にする
+    testAnnotationProcessor.extendsFrom annotationProcessor
+    testImplementation.extendsFrom compileOnly
+
     // for Doma 2
     domaGenRuntime
 }
@@ -170,9 +174,9 @@ dependencies {
     testImplementation("org.spockframework:spock-spring:${spockVersion}")
     
     // for lombok
+    // testAnnotationProcessor、testCompileOnly を併記しなくてよいよう configurations で設定している
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
-    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
 
     // for Doma
     annotationProcessor("org.seasar.doma:doma:${domaVersion}")
