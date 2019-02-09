@@ -20,7 +20,8 @@ plugins {
     id "checkstyle"
     id "com.github.spotbugs" version "1.6.9"
     id "pmd"
-    id "net.ltgt.errorprone" version "0.0.16"
+// compileエラーが出るので error-prone を一旦コメントアウトする 
+//    id "net.ltgt.errorprone" version "0.0.16"
     id "de.undercouch.download" version "3.4.3"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
 }
@@ -36,9 +37,10 @@ wrapper {
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
 [compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = [
         "-Xlint:all,-options,-processing,-path"
-        , "-Xep:RemoveUnusedImports:WARN"
-        , "-Xep:InsecureCryptoUsage:OFF"
-        , "-Xep:ParameterName:OFF"
+// compileエラーが出るので error-prone を一旦コメントアウトする 
+//        , "-Xep:RemoveUnusedImports:WARN"
+//        , "-Xep:InsecureCryptoUsage:OFF"
+//        , "-Xep:ParameterName:OFF"
 ]
 
 // for Doma 2
@@ -184,8 +186,9 @@ dependencies {
     domaGenRuntime("${jdbcDriver}")
 
     // for Error Prone ( http://errorprone.info/ )
-    errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
-    compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
+// compileエラーが出るので error-prone を一旦コメントアウトする 
+//    errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
+//    compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
 
     // PowerMock
     testImplementation("org.powermock:powermock-module-junit4:${powermockVersion}")
