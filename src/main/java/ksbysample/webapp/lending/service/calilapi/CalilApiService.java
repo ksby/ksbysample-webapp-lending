@@ -23,6 +23,7 @@ import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -178,8 +179,8 @@ public class CalilApiService {
     @Configuration
     public static class CalilApiConfig {
 
-        private static final int CONNECT_TIMEOUT = 5000;
-        private static final int READ_TIMEOUT = 5000;
+        private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(5);
+        private static final Duration READ_TIMEOUT = Duration.ofSeconds(5);
 
         private final RestTemplateBuilder restTemplateBuilder;
 

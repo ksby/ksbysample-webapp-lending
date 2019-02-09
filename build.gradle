@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.0.8-RELEASE"
+        version "2.1.2-RELEASE"
     }
     repositories {
         mavenCentral()
@@ -14,15 +14,15 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.0.8.RELEASE"
+    id "org.springframework.boot" version "2.1.2.RELEASE"
     id "io.spring.dependency-management" version "1.0.6.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "1.6.8"
+    id "com.github.spotbugs" version "1.6.9"
     id "pmd"
     id "net.ltgt.errorprone" version "0.0.16"
     id "de.undercouch.download" version "3.4.3"
-    id "com.gorylenko.gradle-git-properties" version "2.0.0-beta1"
+    id "com.gorylenko.gradle-git-properties" version "2.0.0"
 }
 
 sourceCompatibility = 1.8
@@ -69,12 +69,12 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = "8.16"
+    toolVersion = "8.17"
     sourceSets = [project.sourceSets.main]
 }
 
 spotbugs {
-    toolVersion = "3.1.10"
+    toolVersion = "3.1.11"
     ignoreFailures = true
     effort = "max"
     spotbugsTest.enabled = false
@@ -87,7 +87,7 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 pmd {
-    toolVersion = "6.10.0"
+    toolVersion = "6.11.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
@@ -118,7 +118,6 @@ dependencyManagement {
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
-            bomProperty "groovy.version", "2.5.4"
         }
     }
 }
@@ -126,11 +125,11 @@ dependencyManagement {
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:42.2.5"
     def spockVersion = "1.2-groovy-2.5"
-    def domaVersion = "2.21.0"
+    def domaVersion = "2.23.0"
     def lombokVersion = "1.18.4"
     def errorproneVersion = "2.3.1"
     def powermockVersion = "2.0.0"
-    def spotbugsVersion = "3.1.10"
+    def spotbugsVersion = "3.1.11"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -160,7 +159,7 @@ dependencies {
     runtimeOnly("${jdbcDriver}")
     implementation("com.integralblue:log4jdbc-spring-boot-starter:1.0.2")
     implementation("org.simpleframework:simple-xml:2.7.1")
-    implementation("com.univocity:univocity-parsers:2.7.6")
+    implementation("com.univocity:univocity-parsers:2.8.1")
     implementation("com.google.guava:guava:27.0.1-jre")
     implementation("org.flywaydb:flyway-core:5.2.4")
     implementation("com.zaxxer:HikariCP:3.3.0")
