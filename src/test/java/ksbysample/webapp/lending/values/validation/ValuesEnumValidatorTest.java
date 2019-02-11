@@ -47,12 +47,12 @@ public class ValuesEnumValidatorTest {
         private String testStr;
     }
 
-    private Validator mvcValidator;
+    private Validator validator;
 
     @Before
     public void setup() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        mvcValidator = factory.getValidator();
+        validator = factory.getValidator();
     }
 
     @Test
@@ -61,32 +61,32 @@ public class ValuesEnumValidatorTest {
 
         // null の場合にはエラーにはエラーは発生しない ( チェックが実行されない )
         notAllowEmptyTestClass.setTestStr(null);
-        Set<ConstraintViolation<NotAllowEmptyTestClass>> constraintViolations = mvcValidator.validate(notAllowEmptyTestClass);
+        Set<ConstraintViolation<NotAllowEmptyTestClass>> constraintViolations = validator.validate(notAllowEmptyTestClass);
         assertThat(constraintViolations).hasSize(0);
 
         // Value に定義されている値の場合にはエラーは発生しない
         notAllowEmptyTestClass.setTestStr("1");
-        constraintViolations = mvcValidator.validate(notAllowEmptyTestClass);
+        constraintViolations = validator.validate(notAllowEmptyTestClass);
         assertThat(constraintViolations).hasSize(0);
 
         // Value に定義されていない値の場合にはエラーが発生する
         notAllowEmptyTestClass.setTestStr("4");
-        constraintViolations = mvcValidator.validate(notAllowEmptyTestClass);
+        constraintViolations = validator.validate(notAllowEmptyTestClass);
         assertThat(constraintViolations).hasSize(1);
 
         // Value に定義されている値が含まれていてもエラーが発生する
         notAllowEmptyTestClass.setTestStr("2test");
-        constraintViolations = mvcValidator.validate(notAllowEmptyTestClass);
+        constraintViolations = validator.validate(notAllowEmptyTestClass);
         assertThat(constraintViolations).hasSize(1);
 
         // Text に定義されている値の場合にはエラーが発生する
         notAllowEmptyTestClass.setTestStr("３番目");
-        constraintViolations = mvcValidator.validate(notAllowEmptyTestClass);
+        constraintViolations = validator.validate(notAllowEmptyTestClass);
         assertThat(constraintViolations).hasSize(1);
 
         // 空文字列の場合にはエラーが発生する
         notAllowEmptyTestClass.setTestStr("");
-        constraintViolations = mvcValidator.validate(notAllowEmptyTestClass);
+        constraintViolations = validator.validate(notAllowEmptyTestClass);
         assertThat(constraintViolations).hasSize(1);
     }
 
@@ -96,32 +96,32 @@ public class ValuesEnumValidatorTest {
 
         // null の場合にはエラーにはエラーは発生しない ( チェックが実行されない )
         allowEmptyTestClass.setTestStr(null);
-        Set<ConstraintViolation<AllowEmptyTestClass>> constraintViolations = mvcValidator.validate(allowEmptyTestClass);
+        Set<ConstraintViolation<AllowEmptyTestClass>> constraintViolations = validator.validate(allowEmptyTestClass);
         assertThat(constraintViolations).hasSize(0);
 
         // Value に定義されている値の場合にはエラーは発生しない
         allowEmptyTestClass.setTestStr("1");
-        constraintViolations = mvcValidator.validate(allowEmptyTestClass);
+        constraintViolations = validator.validate(allowEmptyTestClass);
         assertThat(constraintViolations).hasSize(0);
 
         // Value に定義されていない値の場合にはエラーが発生する
         allowEmptyTestClass.setTestStr("4");
-        constraintViolations = mvcValidator.validate(allowEmptyTestClass);
+        constraintViolations = validator.validate(allowEmptyTestClass);
         assertThat(constraintViolations).hasSize(1);
 
         // Value に定義されている値が含まれていてもエラーが発生する
         allowEmptyTestClass.setTestStr("2test");
-        constraintViolations = mvcValidator.validate(allowEmptyTestClass);
+        constraintViolations = validator.validate(allowEmptyTestClass);
         assertThat(constraintViolations).hasSize(1);
 
         // Text に定義されている値の場合にはエラーが発生する
         allowEmptyTestClass.setTestStr("３番目");
-        constraintViolations = mvcValidator.validate(allowEmptyTestClass);
+        constraintViolations = validator.validate(allowEmptyTestClass);
         assertThat(constraintViolations).hasSize(1);
 
         // 空文字列の場合にはエラーは発生しない
         allowEmptyTestClass.setTestStr("");
-        constraintViolations = mvcValidator.validate(allowEmptyTestClass);
+        constraintViolations = validator.validate(allowEmptyTestClass);
         assertThat(constraintViolations).hasSize(0);
     }
 
