@@ -114,9 +114,9 @@ repositories {
 dependencyManagement {
     imports {
         // mavenBom は以下の URL のものを使用する
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.0.7.RELEASE/
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.1.2.RELEASE/
         // bomProperty に指定可能な property は以下の URL の BOM に記述がある
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.0.7.RELEASE/spring-boot-dependencies-2.0.7.RELEASE.pom
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.1.2.RELEASE/spring-boot-dependencies-2.1.2.RELEASE.pom
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
