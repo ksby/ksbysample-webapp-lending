@@ -30,7 +30,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 wrapper {
-    gradleVersion = "5.2"
+    gradleVersion = "5.2.1"
     distributionType = Wrapper.DistributionType.ALL
 }
 
