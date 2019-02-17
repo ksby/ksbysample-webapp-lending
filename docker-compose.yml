@@ -264,6 +264,7 @@ services:
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
     depends_on:
       - rabbitmq1
+  # http://localhost:1936/haproxy?stats
   haproxy:
     image: haproxy:1.8.14-alpine
     container_name: haproxy
