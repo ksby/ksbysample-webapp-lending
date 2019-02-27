@@ -121,6 +121,7 @@ dependencyManagement {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
         }
+        mavenBom("org.junit:junit-bom:5.4.0")
     }
 }
 
@@ -172,7 +173,7 @@ dependencies {
     testImplementation("cglib:cglib-nodep:3.2.10")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
     testImplementation("org.spockframework:spock-spring:${spockVersion}")
-    
+
     // for lombok
     // testAnnotationProcessor、testCompileOnly を併記しなくてよいよう configurations で設定している
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
@@ -183,6 +184,11 @@ dependencies {
     implementation("org.seasar.doma:doma:${domaVersion}")
     domaGenRuntime("org.seasar.doma:doma-gen:${domaVersion}")
     domaGenRuntime("${jdbcDriver}")
+
+    // for JUnit 5
+    // junit-jupiter で junit-jupiter-api, junit-jupiter-params, junit-jupiter-engine の３つが依存関係に追加される
+    testCompile("org.junit.jupiter:junit-jupiter")
+    testRuntime("org.junit.platform:junit-platform-launcher")
 
     // for Error Prone ( http://errorprone.info/ )
 // compileエラーが出るので error-prone を一旦コメントアウトする 
@@ -200,24 +206,38 @@ dependencies {
     testImplementation("com.google.code.findbugs:jsr305:3.0.2")
 }
 
-bootRun {
-    // -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
-    jvmArgs = [
-            "-ea",
-            "-Dspring.profiles.active=develop",
-            "-Dfile.encoding=UTF-8",
-            "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
-    ]
+// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
+def jvmArgsForTask = [
+        "-ea",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
+]
+def printTestCount = { desc, result ->
+    if (!desc.parent) { // will match the outermost suite
+        println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+    }
 }
 
+bootRun {
+    jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=develop"]
+}
+
+task testJUnit4AndSpock(type: Test) {
+    jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=unittest"]
+    testLogging {
+        afterSuite printTestCount
+    }
+}
+test.dependsOn testJUnit4AndSpock
 test {
-    // -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
-    jvmArgs = [
-            "-ea",
-            "-Dspring.profiles.active=unittest",
-            "-Dfile.encoding=UTF-8",
-            "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
-    ]
+    jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=unittest"]
+
+    // for JUnit 5
+    useJUnitPlatform()
+
+    testLogging {
+        afterSuite printTestCount
+    }
 }
 
 // for Doma-Gen
