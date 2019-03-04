@@ -2,18 +2,15 @@ package ksbysample.webapp.lending.web.booklist;
 
 import ksbysample.common.test.helper.TestHelper;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.multipart.MultipartFile;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class UploadBooklistFormValidatorTest {
 
@@ -23,7 +20,7 @@ public class UploadBooklistFormValidatorTest {
     private BooklistCsvFileServiceTest booklistCsvFileServiceTest = new BooklistCsvFileServiceTest();
 
     @Test
-    public void testValidate_NoErrorCsvFile() throws Exception {
+    void testValidate_NoErrorCsvFile() throws Exception {
         UploadBooklistForm uploadBooklistForm = new UploadBooklistForm();
         MultipartFile multipartFile = booklistCsvFileServiceTest.createNoErrorCsvFile();
         uploadBooklistForm.setFileupload(multipartFile);
@@ -33,7 +30,7 @@ public class UploadBooklistFormValidatorTest {
     }
 
     @Test
-    public void testValidate_ErrorCsvFile() throws Exception {
+    void testValidate_ErrorCsvFile() throws Exception {
         UploadBooklistForm uploadBooklistForm = new UploadBooklistForm();
         MultipartFile multipartFile = booklistCsvFileServiceTest.createErrorCsvFile();
         uploadBooklistForm.setFileupload(multipartFile);

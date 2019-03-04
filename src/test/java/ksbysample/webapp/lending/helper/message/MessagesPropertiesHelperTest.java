@@ -1,14 +1,11 @@
 package ksbysample.webapp.lending.helper.message;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class MessagesPropertiesHelperTest {
 
@@ -16,7 +13,7 @@ public class MessagesPropertiesHelperTest {
     private MessagesPropertiesHelper mph;
 
     @Test
-    public void testGetMessage_NoArgs() throws Exception {
+    void testGetMessage_NoArgs() {
         String message
                 = mph.getMessage("AbstractUserDetailsAuthenticationProvider.locked"
                 , null);
@@ -24,7 +21,7 @@ public class MessagesPropertiesHelperTest {
     }
 
     @Test
-    public void testGetMessage_Args() throws Exception {
+    void testGetMessage_Args() {
         int line = 1;
         int length = 3;
         String message

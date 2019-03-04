@@ -4,11 +4,8 @@ import ksbysample.webapp.lending.values.Values;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -18,7 +15,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class ValuesEnumValidatorTest {
 
@@ -47,16 +43,10 @@ public class ValuesEnumValidatorTest {
         private String testStr;
     }
 
-    private Validator validator;
-
-    @Before
-    public void setup() {
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
-    }
-
     @Test
-    public void ValuesEnumBeanValidationTest_AllowEmpty_False() {
+    void ValuesEnumBeanValidationTest_AllowEmpty_False() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
         NotAllowEmptyTestClass notAllowEmptyTestClass = new NotAllowEmptyTestClass();
 
         // null の場合にはエラーにはエラーは発生しない ( チェックが実行されない )
@@ -91,7 +81,9 @@ public class ValuesEnumValidatorTest {
     }
 
     @Test
-    public void ValuesEnumBeanValidationTest_AllowEmpty_True() {
+    void ValuesEnumBeanValidationTest_AllowEmpty_True() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
         AllowEmptyTestClass allowEmptyTestClass = new AllowEmptyTestClass();
 
         // null の場合にはエラーにはエラーは発生しない ( チェックが実行されない )
