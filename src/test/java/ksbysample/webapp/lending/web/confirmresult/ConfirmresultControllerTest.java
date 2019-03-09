@@ -1,20 +1,18 @@
 package ksbysample.webapp.lending.web.confirmresult;
 
 import com.google.common.io.Files;
+import ksbysample.common.test.extension.db.TestData;
+import ksbysample.common.test.extension.db.TestDataExtension;
+import ksbysample.common.test.extension.mockmvc.SecurityMockMvcExtension;
 import ksbysample.common.test.helper.TestHelper;
-import ksbysample.common.test.rule.db.TestData;
-import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.helper.message.MessagesPropertiesHelper;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.FileCopyUtils;
 import org.yaml.snakeyaml.Yaml;
@@ -29,33 +27,32 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(Enclosed.class)
 public class ConfirmresultControllerTest {
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class 貸出申請結果確認画面の初期表示のテスト_エラー処理 {
+    class 貸出申請結果確認画面の初期表示のテスト_エラー処理 {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Autowired
         private MessagesPropertiesHelper mph;
 
         @Test
-        public void ログインしていなければ貸出申請結果確認画面は表示できない() throws Exception {
+        void ログインしていなければ貸出申請結果確認画面は表示できない() throws Exception {
             mvc.noauth.perform(get("/confirmresult?lendingAppId=105"))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("http://localhost/"));
         }
 
         @Test
-        public void lendingAppIdパラメータがなければエラーになる() throws Exception {
+        void lendingAppIdパラメータがなければエラーになる() throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -65,7 +62,7 @@ public class ConfirmresultControllerTest {
         }
 
         @Test
-        public void lendingAppIdパラメータで指定された値が数値でなければエラーになる() throws Exception {
+        void lendingAppIdパラメータで指定された値が数値でなければエラーになる() throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult?lendingAppId=a"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -76,7 +73,7 @@ public class ConfirmresultControllerTest {
 
         @Test
         @TestData("web/confirmresult/testdata/001")
-        public void lendingAppIdパラメータで指定されたデータが登録されていなければエラーになる() throws Exception {
+        void lendingAppIdパラメータで指定されたデータが登録されていなければエラーになる() throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult?lendingAppId=1"))
                     .andExpect(status().isOk())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -87,7 +84,7 @@ public class ConfirmresultControllerTest {
 
         @Test
         @TestData("web/confirmresult/testdata/001")
-        public void 申請者でなければ貸出申請結果確認画面を表示できない() throws Exception {
+        void 申請者でなければ貸出申請結果確認画面を表示できない() throws Exception {
             mvc.authSuzukiHanako.perform(get("/confirmresult?lendingAppId=105"))
                     .andExpect(status().isForbidden())
                     .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -98,21 +95,21 @@ public class ConfirmresultControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class 貸出申請結果確認画面の初期表示のテスト_正常処理 {
+    class 貸出申請結果確認画面の初期表示のテスト_正常処理 {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Test
         @TestData("web/confirmresult/testdata/001")
-        public void lendingAppIdパラメータで指定されたデータが登録されており申請者ならば貸出申請結果確認画面が表示される()
+        void lendingAppIdパラメータで指定されたデータが登録されており申請者ならば貸出申請結果確認画面が表示される()
                 throws Exception {
             mvc.authTanakaTaro.perform(get("/confirmresult?lendingAppId=105"))
                     .andExpect(status().isOk())
@@ -142,21 +139,21 @@ public class ConfirmresultControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class 貸出申請結果確認画面の正常処理時のテスト {
+    class 貸出申請結果確認画面の正常処理時のテスト {
 
         // テストデータ
         private ConfirmresultForm confirmresultForm_001
                 = (ConfirmresultForm) new Yaml().load(getClass().getResourceAsStream("ConfirmresultForm_001.yaml"));
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Value("ksbysample/webapp/lending/web/confirmresult/assertdata/001/booklist-105.utf-8.csv")
         ClassPathResource booklist105Utf8CsvResource;
@@ -166,7 +163,7 @@ public class ConfirmresultControllerTest {
 
         @Test
         @TestData("web/confirmresult/testdata/001")
-        public void CSVダウンロード_HttpServletResponse_をクリックした場合() throws Exception {
+        void CSVダウンロード_HttpServletResponse_をクリックした場合() throws Exception {
             MvcResult result = mvc.authTanakaTaro.perform(
                     TestHelper.postForm("/confirmresult/filedownloadByResponse"
                             , this.confirmresultForm_001).with(csrf()))
@@ -182,7 +179,7 @@ public class ConfirmresultControllerTest {
 
         @Test
         @TestData("web/confirmresult/testdata/001")
-        public void CSVダウンロード_AbstractView_をクリックした場合() throws Exception {
+        void CSVダウンロード_AbstractView_をクリックした場合() throws Exception {
             MvcResult result = mvc.authTanakaTaro.perform(
                     TestHelper.postForm("/confirmresult/filedownloadByView"
                             , this.confirmresultForm_001).with(csrf()))

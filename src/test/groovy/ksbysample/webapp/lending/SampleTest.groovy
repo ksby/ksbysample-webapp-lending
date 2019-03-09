@@ -1,21 +1,18 @@
 package ksbysample.webapp.lending
 
 import groovy.sql.Sql
-import ksbysample.common.test.rule.db.BaseTestData
-import ksbysample.common.test.rule.db.TestDataResource
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
-import org.junit.experimental.runners.Enclosed
-import org.junit.runner.RunWith
+import ksbysample.common.test.extension.db.BaseTestData
+import ksbysample.common.test.extension.db.TestDataExtension
+import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.junit4.SpringRunner
 
 import javax.sql.DataSource
 
-@RunWith(Enclosed)
 class SampleTest {
 
     // テストクラス内で共通で使用する定数を定義する
@@ -24,34 +21,34 @@ class SampleTest {
         static def TEST_ROLE_02 = "ROLE_ADMIN"
     }
 
-    @RunWith(SpringRunner)
+    @Nested
     @SpringBootTest
     // @BaseTestData は TestDataResource クラスが使用する自作のアノテーション
     @BaseTestData("testdata/base")
-    static class テストクラス {
+    class テストクラス {
 
         @Autowired
         private DataSource dataSource
 
         // 自作のテーブルのバックアップ・リストア用クラス
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource
+        public TestDataExtension testDataExtension
 
         Sql sql
 
-        @Before
-        void setUp() {
+        @BeforeEach
+        void before() {
             sql = new Sql(dataSource)
         }
 
-        @After
-        void tearDown() {
+        @AfterEach
+        void after() {
             sql.close()
         }
 
         @Test
-        void "Groovy + JUnit4 + Groovy SQL のテストサンプル１"() {
+        void "Groovy + JUnit5 + Groovy SQL のテストサンプル１"() {
             setup: "データを追加する"
             sql.execute("INSERT INTO user_role(role_id, user_id, role) VALUES (?, ?, ?)"
                     , [100, 1, TestConst.TEST_ROLE_01])
@@ -62,7 +59,7 @@ class SampleTest {
         }
 
         @Test
-        void "Groovy + JUnit4 + Groovy SQL のテストサンプル２"() {
+        void "Groovy + JUnit5 + Groovy SQL のテストサンプル２"() {
             setup: "データを３件追加する"
             sql.withBatch("INSERT INTO user_role(role_id, user_id, role) VALUES (?, ?, ?)") {
                 it.addBatch([100, 6, TestConst.TEST_ROLE_01])

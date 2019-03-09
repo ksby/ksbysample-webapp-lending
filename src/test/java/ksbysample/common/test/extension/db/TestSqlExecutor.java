@@ -1,6 +1,6 @@
-package ksbysample.common.test.rule.db;
+package ksbysample.common.test.extension.db;
 
-import org.junit.runner.Description;
+import ksbysample.common.test.helper.TestContextWrapper;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -24,18 +24,18 @@ public class TestSqlExecutor<L extends Annotation, I extends Annotation> {
         this.testSqlClass = testSqlClass;
     }
 
-    public void execute(Connection connection, Description description) throws SQLException {
+    public void execute(Connection connection, TestContextWrapper testContextWrapper) throws SQLException {
         try (Statement stmt = connection.createStatement()) {
             // テストクラスに付加されている @BaseTestSql, @TestSql アノテーションの SQL を実行する
-            Class<?> testClass = description.getTestClass();
+            Class<?> testClass = testContextWrapper.getTestClass();
             executeTestSqlListOrTestSql(stmt
                     , testClass.getAnnotation(this.testSqlListClass)
                     , testClass.getAnnotation(this.testSqlClass));
 
             // TestDataResource クラスのフィールドに付加されている @BaseTestSql, @TestSql アノテーションの SQL を実行する
-            Field[] fields = description.getTestClass().getDeclaredFields();
+            Field[] fields = testContextWrapper.getTestClass().getDeclaredFields();
             for (Field field : fields) {
-                if (field.getType().equals(TestDataResource.class)) {
+                if (field.getType().equals(TestDataExtension.class)) {
                     executeTestSqlListOrTestSql(stmt
                             , field.getAnnotation(this.testSqlListClass)
                             , field.getAnnotation(this.testSqlClass));
@@ -44,8 +44,8 @@ public class TestSqlExecutor<L extends Annotation, I extends Annotation> {
 
             // テストメソッドに付加されている @BaseTestSql, @TestSql アノテーションの SQL を実行する
             executeTestSqlListOrTestSql(stmt
-                    , description.getAnnotation(this.testSqlListClass)
-                    , description.getAnnotation(this.testSqlClass));
+                    , testContextWrapper.getAnnotation(this.testSqlListClass)
+                    , testContextWrapper.getAnnotation(this.testSqlClass));
         }
     }
 

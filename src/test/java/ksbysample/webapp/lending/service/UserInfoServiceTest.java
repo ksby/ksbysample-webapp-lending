@@ -1,26 +1,23 @@
 package ksbysample.webapp.lending.service;
 
-import ksbysample.common.test.rule.db.TestDataResource;
+import ksbysample.common.test.extension.db.TestDataExtension;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.entity.UserInfo;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class UserInfoServiceTest {
 
-    private final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
+    private static final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public TestDataResource testDataResource;
+    public TestDataExtension testDataExtension;
 
     @Autowired
     private UserInfoDao userInfoDao;
@@ -29,7 +26,7 @@ public class UserInfoServiceTest {
     private UserInfoService userInfoService;
 
     @Test
-    public void testIncCntBadcredentials() throws Exception {
+    void testIncCntBadcredentials() {
         UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_TANAKA_TARO);
         assertThat(userInfo.getCntBadcredentials()).isZero();
 
@@ -40,7 +37,7 @@ public class UserInfoServiceTest {
     }
 
     @Test
-    public void testInitCntBadcredentials() throws Exception {
+    void testInitCntBadcredentials() {
         userInfoService.incCntBadcredentials(MAILADDR_TANAKA_TARO);
         UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_TANAKA_TARO);
         assertThat(userInfo.getCntBadcredentials()).isNotZero();

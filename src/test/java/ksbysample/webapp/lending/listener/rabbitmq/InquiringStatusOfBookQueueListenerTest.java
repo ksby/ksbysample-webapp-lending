@@ -1,10 +1,10 @@
 package ksbysample.webapp.lending.listener.rabbitmq;
 
 import com.google.common.io.Files;
-import ksbysample.common.test.rule.db.TableDataAssert;
-import ksbysample.common.test.rule.db.TestData;
-import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.common.test.rule.mail.MailServerResource;
+import ksbysample.common.test.extension.db.TableDataAssert;
+import ksbysample.common.test.extension.db.TestData;
+import ksbysample.common.test.extension.db.TestDataExtension;
+import ksbysample.common.test.extension.mail.MailServerExtension;
 import ksbysample.webapp.lending.dao.LibraryForsearchDao;
 import ksbysample.webapp.lending.entity.LibraryForsearch;
 import ksbysample.webapp.lending.service.calilapi.CalilApiService;
@@ -14,9 +14,8 @@ import ksbysample.webapp.lending.service.calilapi.response.SystemData;
 import ksbysample.webapp.lending.service.queue.InquiringStatusOfBookQueueMessage;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePropertiesBuilder;
 import org.springframework.amqp.support.converter.MessageConverter;
@@ -25,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.FileCopyUtils;
 
 import javax.mail.internet.MimeMessage;
@@ -37,20 +35,20 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class InquiringStatusOfBookQueueListenerTest {
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public TestDataResource testDataResource;
+    public TestDataExtension testDataExtension;
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public MailServerResource mailServer;
+    public MailServerExtension mailServer;
 
     @Autowired
     private DataSource dataSource;
@@ -72,7 +70,7 @@ public class InquiringStatusOfBookQueueListenerTest {
 
     @Test
     @TestData("listener/rabbitmq/testdata/001")
-    public void testReceiveMessage() throws Exception {
+    void testReceiveMessage() throws Exception {
         /**
          * モック定義部
          */
@@ -112,12 +110,14 @@ public class InquiringStatusOfBookQueueListenerTest {
         // 送信されたメールを検証する
         assertThat(mailServer.getMessagesCount()).isEqualTo(1);
         MimeMessage mimeMessage = mailServer.getFirstMessage();
-        assertThat(mimeMessage.getRecipients(javax.mail.Message.RecipientType.TO))
-                .extracting(Object::toString)
-                .containsOnly("tanaka.taro@sample.com");
-        assertThat(mimeMessage.getContent())
-                .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
-                        messageTxtResource.getFile(), StandardCharsets.UTF_8)));
+        assertAll(
+                () -> assertThat(mimeMessage.getRecipients(javax.mail.Message.RecipientType.TO))
+                        .extracting(Object::toString)
+                        .containsOnly("tanaka.taro@sample.com"),
+                () -> assertThat(mimeMessage.getContent())
+                        .isEqualTo(FileCopyUtils.copyToString(Files.newReader(
+                                messageTxtResource.getFile(), StandardCharsets.UTF_8)))
+        );
     }
 
 }
