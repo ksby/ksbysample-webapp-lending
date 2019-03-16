@@ -206,11 +206,22 @@ dependencies {
     testImplementation("com.google.code.findbugs:jsr305:3.0.2")
 }
 
-// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
 def jvmArgsForTask = [
         "-ea",
         "-Dfile.encoding=UTF-8",
         "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
+]
+// JDK 11 に変更後、test タスク実行時に groovy と powermock が JDKの内部部分にアクセスするためにコードでリフレクションを使用
+// していて WARNING が出るため、JVM の起動時オプションの --add-opens を指定して WARNING が出ないようにする
+def jvmArgsAddOpens = [
+        "--add-opens=java.base/java.io=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.ref=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.net=ALL-UNNAMED",
+        "--add-opens=java.base/java.security=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED"
 ]
 def printTestCount = { desc, result ->
     if (!desc.parent) { // will match the outermost suite
@@ -218,19 +229,26 @@ def printTestCount = { desc, result ->
     }
 }
 
+// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
 bootRun {
     jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=develop"]
 }
 
+// -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
 task testJUnit4AndSpock(type: Test) {
-    jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=unittest"]
+    jvmArgs = jvmArgsForTask +
+            jvmArgsAddOpens +
+            ["-Dspring.profiles.active=unittest"]
+
     testLogging {
         afterSuite printTestCount
     }
 }
 test.dependsOn testJUnit4AndSpock
 test {
-    jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=unittest"]
+    jvmArgs = jvmArgsForTask +
+            jvmArgsAddOpens +
+            ["-Dspring.profiles.active=unittest"]
 
     // for JUnit 5
     useJUnitPlatform()

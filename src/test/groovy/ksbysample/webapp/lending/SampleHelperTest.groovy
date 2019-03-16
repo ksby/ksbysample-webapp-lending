@@ -45,7 +45,7 @@ class SampleHelperTest {
     @PowerMockRunnerDelegate(SpringRunner)
     @SpringBootTest
     @PrepareForTest(BrowfishUtils)
-    @PowerMockIgnore("javax.management.*")
+    @PowerMockIgnore(["javax.management.*", "com.sun.org.apache.xerces.*", "javax.xml.*", "org.xml.*", "org.w3c.dom.*"])
     static class 異常処理のテスト {
 
         @Autowired
