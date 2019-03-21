@@ -20,8 +20,7 @@ plugins {
     id "checkstyle"
     id "com.github.spotbugs" version "1.6.9"
     id "pmd"
-// compileエラーが出るので error-prone を一旦コメントアウトする 
-//    id "net.ltgt.errorprone" version "0.0.16"
+    id "net.ltgt.errorprone" version "0.7.1"
     id "de.undercouch.download" version "3.4.3"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
 }
@@ -35,13 +34,10 @@ wrapper {
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
-[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = [
-        "-Xlint:all,-options,-processing,-path"
-// compileエラーが出るので error-prone を一旦コメントアウトする 
-//        , "-Xep:RemoveUnusedImports:WARN"
-//        , "-Xep:InsecureCryptoUsage:OFF"
-//        , "-Xep:ParameterName:OFF"
-]
+[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ["-Xlint:all,-options,-processing,-path"]
+tasks.named("compileTestJava").configure {
+    options.errorprone.enabled = false
+}
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
@@ -130,7 +126,7 @@ dependencies {
     def spockVersion = "1.2-groovy-2.5"
     def domaVersion = "2.23.0"
     def lombokVersion = "1.18.6"
-    def errorproneVersion = "2.3.1"
+    def errorproneVersion = "2.3.3"
     def powermockVersion = "2.0.0"
     def spotbugsVersion = "3.1.11"
 
@@ -191,9 +187,8 @@ dependencies {
     testRuntime("org.junit.platform:junit-platform-launcher")
 
     // for Error Prone ( http://errorprone.info/ )
-// compileエラーが出るので error-prone を一旦コメントアウトする 
-//    errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
-//    compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
+    errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
+    compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
 
     // PowerMock
     testImplementation("org.powermock:powermock-module-junit4:${powermockVersion}")
