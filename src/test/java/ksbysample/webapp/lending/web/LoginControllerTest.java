@@ -17,7 +17,9 @@ import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
@@ -233,6 +235,9 @@ public class LoginControllerTest {
         @Autowired
         public SecurityMockMvcExtension mvc;
 
+        @Autowired
+        ServletContext servletContext;
+
         @Test
         void 次回から自動的にログインするをチェックすれば次はログインしていなくてもログイン後の画面にアクセスできる()
                 throws Exception {
@@ -243,7 +248,6 @@ public class LoginControllerTest {
                     .andExpect(unauthenticated());
 
             // 「次回から自動的にログインする」をチェックしてログインし、remember-me Cookie を生成する
-            MockServletContext servletContext = new MockServletContext();
             org.springframework.mock.web.MockHttpServletRequest request
                     = formLogin()
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
