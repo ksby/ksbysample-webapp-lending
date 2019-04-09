@@ -1,13 +1,11 @@
 package ksbysample.webapp.lending.webapi.library;
 
-import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import ksbysample.common.test.extension.db.TestDataExtension;
+import ksbysample.common.test.extension.mockmvc.SecurityMockMvcExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.startsWith;
@@ -15,20 +13,19 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class LibraryControllerTest {
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public TestDataResource testDataResource;
+    public TestDataExtension testDataExtension;
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public SecurityMockMvcResource mvc;
+    public SecurityMockMvcExtension mvc;
 
     @Test
-    public void 正しい都道府県を指定した場合には図書館一覧が返る() throws Exception {
+    void 正しい都道府県を指定した場合には図書館一覧が返る() throws Exception {
         mvc.noauth.perform(get("/webapi/library/getLibraryList?pref=東京都"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
@@ -39,7 +36,7 @@ public class LibraryControllerTest {
     }
 
     @Test
-    public void 間違った都道府県を指定した場合にはエラーが返る() throws Exception {
+    void 間違った都道府県を指定した場合にはエラーが返る() throws Exception {
         mvc.noauth.perform(get("/webapi/library/getLibraryList?pref=東a京都"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))

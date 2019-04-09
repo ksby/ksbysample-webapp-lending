@@ -1,7 +1,10 @@
-package ksbysample.common.test.rule.mail;
+package ksbysample.common.test.extension.mail;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.rules.ExternalResource;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class MailServerResource extends ExternalResource {
+public class MailServerExtension extends ExternalResource
+        implements BeforeEachCallback, AfterEachCallback {
 
     private GreenMail greenMail = new GreenMail(new ServerSetup(25, "localhost", ServerSetup.PROTOCOL_SMTP));
 
@@ -22,6 +26,16 @@ public class MailServerResource extends ExternalResource {
     @Override
     protected void after() {
         greenMail.stop();
+    }
+
+    @Override
+    public void beforeEach(ExtensionContext context) {
+        before();
+    }
+
+    @Override
+    public void afterEach(ExtensionContext context) {
+        after();
     }
 
     public int getMessagesCount() {

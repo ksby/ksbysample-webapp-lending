@@ -10,7 +10,7 @@ class SuccessMessagesHelperTest extends Specification {
         def model = new ExtendedModelMap()
 
         expect:
-        def successMessagesHelper = new SuccessMessagesHelper(str);
+        def successMessagesHelper = new SuccessMessagesHelper(str)
         successMessagesHelper.setToModel(model)
         model.get("successMessages") == result
 
@@ -21,7 +21,7 @@ class SuccessMessagesHelperTest extends Specification {
 
     def "SuccessMessagesHelperTestのテスト_addMsgを使用する場合"() {
         setup:
-        def successMessagesHelper = new SuccessMessagesHelper();
+        def successMessagesHelper = new SuccessMessagesHelper()
         def model = new ExtendedModelMap()
 
         expect:

@@ -9,11 +9,9 @@ import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,13 +24,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Ignore("CSVライブラリuniVocity-parsersのテストで本機能とは関係ないのでテストを実行対象外にする")
-@RunWith(SpringRunner.class)
+@Disabled("CSVライブラリuniVocity-parsersのテストで本機能とは関係ないのでテストを実行対象外にする")
 @SpringBootTest
 public class UniVocityParsersTest {
 
     @Test
-    public void uniVocityParsersTest_001() throws Exception {
+    void uniVocityParsersTest_001() throws Exception {
         CsvParserSettings settings = new CsvParserSettings();
         settings.getFormat().setLineSeparator("\r\n");  // 改行コードは CR+LF
         settings.setHeaderExtractionEnabled(true);      // 1行目はヘッダ行としてスキップする
@@ -50,7 +47,7 @@ public class UniVocityParsersTest {
     }
 
     @Test
-    public void uniVocityParsersTest_002() throws Exception {
+    void uniVocityParsersTest_002() throws Exception {
         CsvParserSettings settings = new CsvParserSettings();
         settings.getFormat().setLineSeparator("\r\n");  // 改行コードは CR+LF
         settings.setHeaderExtractionEnabled(true);      // 1行目はヘッダ行としてスキップする
@@ -73,7 +70,7 @@ public class UniVocityParsersTest {
     }
 
     @Test
-    public void uniVocityParsersTest_003() throws Exception {
+    void uniVocityParsersTest_003() throws Exception {
         CsvParserSettings settings = new CsvParserSettings();
         settings.getFormat().setLineSeparator("\r\n");  // 改行コードは CR+LF
         settings.setHeaderExtractionEnabled(true);      // 1行目はヘッダ行としてスキップする
@@ -99,7 +96,7 @@ public class UniVocityParsersTest {
     }
 
     @Test
-    public void uniVocityParsersTest_004() throws Exception {
+    void uniVocityParsersTest_004() throws Exception {
         CsvParserSettings settings = new CsvParserSettings();
         settings.getFormat().setLineSeparator("\r\n");  // 改行コードは CR+LF
         settings.setHeaderExtractionEnabled(true);      // 1行目はヘッダ行としてスキップする
@@ -121,7 +118,7 @@ public class UniVocityParsersTest {
     }
 
     @Test
-    public void uniVocityParsersTest_005() throws Exception {
+    void uniVocityParsersTest_005() throws Exception {
         try (
                 BufferedWriter bw
                         = Files.newBufferedWriter(Paths.get("C:/tmp/テストデータ２.csv")
@@ -137,7 +134,7 @@ public class UniVocityParsersTest {
     }
 
     @Test
-    public void uniVocityParsersTest_006() throws Exception {
+    void uniVocityParsersTest_006() throws Exception {
         List<Item> itemList = new ArrayList<>();
         // １件目
         Item item = new Item();

@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -65,7 +66,7 @@ public class ExceptionHandlerAdvice {
                     + " " + HttpStatus.valueOf(response.getStatus()).getReasonPhrase());
         }
         // エラー発生日時
-        model.addObject("currentdt", LocalDateTime.now());
+        model.addObject("currentdt", LocalDateTime.now(ZoneId.of("Asia/Tokyo")));
         // URL
         errorInfoList.add("　");
         errorInfoList.add("エラーが発生したURL：　" + url);

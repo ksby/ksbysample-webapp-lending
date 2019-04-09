@@ -1,16 +1,14 @@
 package ksbysample.webapp.lending.web.booklist;
 
-import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
+import ksbysample.common.test.extension.db.TestDataExtension;
+import ksbysample.common.test.extension.mockmvc.SecurityMockMvcExtension;
 import ksbysample.webapp.lending.service.file.BooklistCsvFileServiceTest;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 
 import static ksbysample.common.test.matcher.ErrorsResultMatchers.errors;
@@ -18,63 +16,62 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(Enclosed.class)
 public class BooklistControllerTest {
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class ユーザ権限とURLの呼び出し可否のテスト {
+    class ユーザ権限とURLの呼び出し可否のテスト {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Test
-        public void ログインしていなければ貸出希望書籍CSVファイルアップロード画面は表示できない() throws Exception {
+        void ログインしていなければ貸出希望書籍CSVファイルアップロード画面は表示できない() throws Exception {
             mvc.noauth.perform(get("/booklist"))
                     .andExpect(status().isFound())
                     .andExpect(redirectedUrl("http://localhost/"));
         }
 
         @Test
-        public void 一般ユーザ権限を持つユーザは貸出希望書籍CSVファイルアップロード画面を表示できる() throws Exception {
+        void 一般ユーザ権限を持つユーザは貸出希望書籍CSVファイルアップロード画面を表示できる() throws Exception {
             mvc.authSuzukiHanako.perform(get("/booklist"))
                     .andExpect(status().isOk())
                     .andExpect(view().name("booklist/booklist"));
         }
 
         @Test
-        public void ログインしていなければアップロード用のURLは呼び出せない() throws Exception {
+        void ログインしていなければアップロード用のURLは呼び出せない() throws Exception {
             mvc.noauth.perform(post("/booklist/fileupload"))
                     .andExpect(status().isForbidden());
         }
 
         @Test
-        public void ログインしていなければ確認画面の登録ボタン用のURLは呼び出せない() throws Exception {
+        void ログインしていなければ確認画面の登録ボタン用のURLは呼び出せない() throws Exception {
             mvc.noauth.perform(post("/booklist/register"))
                     .andExpect(status().isForbidden());
         }
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class ファイルアップロードのテスト_エラーになる場合 {
+    class ファイルアップロードのテスト_エラーになる場合 {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Test
-        public void エラーが出るCSVファイルをアップロードするとアップロード画面にエラーメッセージを表示する() throws Exception {
+        void エラーが出るCSVファイルをアップロードするとアップロード画面にエラーメッセージを表示する() throws Exception {
             BooklistCsvFileServiceTest booklistCsvFileServiceTest = new BooklistCsvFileServiceTest();
             MockMultipartFile multipartFile = booklistCsvFileServiceTest.createErrorCsvFile();
             mvc.authSuzukiHanako.perform(
@@ -103,20 +100,20 @@ public class BooklistControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class ファイルアップロードのテスト_正常な場合 {
+    class ファイルアップロードのテスト_正常な場合 {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Test
-        public void エラーのないCSVファイルをアップロードしてから確認画面で登録ボタンをクリックすると完了画面が表示される() throws Exception {
+        void エラーのないCSVファイルをアップロードしてから確認画面で登録ボタンをクリックすると完了画面が表示される() throws Exception {
             BooklistCsvFileServiceTest booklistCsvFileServiceTest = new BooklistCsvFileServiceTest();
             MockMultipartFile multipartFile = booklistCsvFileServiceTest.createNoErrorCsvFile();
 

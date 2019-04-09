@@ -1,27 +1,24 @@
 package ksbysample.webapp.lending.security;
 
-import ksbysample.common.test.rule.db.TestDataResource;
+import ksbysample.common.test.extension.db.TestDataExtension;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.entity.UserInfo;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class LendingUserDetailsHelperTest {
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public TestDataResource testDataResource;
+    public TestDataExtension testDataExtension;
 
     @Autowired
     private UserInfoDao userInfoDao;
@@ -30,7 +27,7 @@ public class LendingUserDetailsHelperTest {
     private LendingUserDetailsHelper lendingUserDetailsHelper;
 
     @Test
-    public void testGetLoginUserId() throws Exception {
+    void testGetLoginUserId() {
         UserInfo userInfo = userInfoDao.selectById(1L);
         LendingUserDetails lendingUserDetails = new LendingUserDetails(userInfo, null);
         Authentication auth = new TestingAuthenticationToken(lendingUserDetails, null);

@@ -1,4 +1,4 @@
-package ksbysample.common.test.rule.db;
+package ksbysample.common.test.extension.db;
 
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.dataset.IDataSet;

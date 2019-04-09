@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.0.8-RELEASE"
+        version "2.1.4-RELEASE"
     }
     repositories {
         mavenCentral()
@@ -14,32 +14,30 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.0.8.RELEASE"
-    id "io.spring.dependency-management" version "1.0.6.RELEASE"
+    id "org.springframework.boot" version "2.1.4.RELEASE"
+    id "io.spring.dependency-management" version "1.0.7.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "1.6.8"
+    id "com.github.spotbugs" version "1.6.9"
     id "pmd"
-    id "net.ltgt.errorprone" version "0.0.16"
+    id "net.ltgt.errorprone" version "0.7.1"
     id "de.undercouch.download" version "3.4.3"
-    id "com.gorylenko.gradle-git-properties" version "2.0.0-beta1"
+    id "com.gorylenko.gradle-git-properties" version "2.0.0"
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
 
 wrapper {
-    gradleVersion = "4.10.3"
+    gradleVersion = "5.3.1"
     distributionType = Wrapper.DistributionType.ALL
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
-[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = [
-        "-Xlint:all,-options,-processing,-path"
-        , "-Xep:RemoveUnusedImports:WARN"
-        , "-Xep:InsecureCryptoUsage:OFF"
-        , "-Xep:ParameterName:OFF"
-]
+[compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ["-Xlint:all,-options,-processing,-path"]
+tasks.named("compileTestJava").configure {
+    options.errorprone.enabled = false
+}
 
 // for Doma 2
 // JavaクラスとSQLファイルの出力先ディレクトリを同じにする
@@ -59,18 +57,22 @@ idea {
 }
 
 configurations {
+    // annotationProcessor と testAnnotationProcessor、compileOnly と testCompileOnly を併記不要にする
+    testAnnotationProcessor.extendsFrom annotationProcessor
+    testImplementation.extendsFrom compileOnly
+
     // for Doma 2
     domaGenRuntime
 }
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = "8.16"
+    toolVersion = "8.19"
     sourceSets = [project.sourceSets.main]
 }
 
 spotbugs {
-    toolVersion = "3.1.10"
+    toolVersion = "3.1.11"
     ignoreFailures = true
     effort = "max"
     spotbugsTest.enabled = false
@@ -83,7 +85,7 @@ tasks.withType(com.github.spotbugs.SpotBugsTask) {
 }
 
 pmd {
-    toolVersion = "6.10.0"
+    toolVersion = "6.13.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
@@ -108,25 +110,25 @@ repositories {
 dependencyManagement {
     imports {
         // mavenBom は以下の URL のものを使用する
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.0.7.RELEASE/
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.1.2.RELEASE/
         // bomProperty に指定可能な property は以下の URL の BOM に記述がある
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.0.7.RELEASE/spring-boot-dependencies-2.0.7.RELEASE.pom
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.1.2.RELEASE/spring-boot-dependencies-2.1.2.RELEASE.pom
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
-            bomProperty "groovy.version", "2.5.4"
         }
+        mavenBom("org.junit:junit-bom:5.4.1")
     }
 }
 
 dependencies {
     def jdbcDriver = "org.postgresql:postgresql:42.2.5"
-    def spockVersion = "1.2-groovy-2.5"
-    def domaVersion = "2.21.0"
-    def lombokVersion = "1.18.4"
-    def errorproneVersion = "2.3.1"
+    def spockVersion = "1.3-groovy-2.5"
+    def domaVersion = "2.24.0"
+    def lombokVersion = "1.18.6"
+    def errorproneVersion = "2.3.3"
     def powermockVersion = "2.0.0"
-    def spotbugsVersion = "3.1.10"
+    def spotbugsVersion = "3.1.11"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -156,29 +158,33 @@ dependencies {
     runtimeOnly("${jdbcDriver}")
     implementation("com.integralblue:log4jdbc-spring-boot-starter:1.0.2")
     implementation("org.simpleframework:simple-xml:2.7.1")
-    implementation("com.univocity:univocity-parsers:2.7.6")
-    implementation("com.google.guava:guava:27.0.1-jre")
+    implementation("com.univocity:univocity-parsers:2.8.1")
+    implementation("com.google.guava:guava:27.1-jre")
     implementation("org.flywaydb:flyway-core:5.2.4")
-    implementation("com.zaxxer:HikariCP:3.3.0")
     testImplementation("org.dbunit:dbunit:2.6.0")
-    testImplementation("com.icegreen:greenmail:1.5.9")
-    testImplementation("org.assertj:assertj-core:3.11.1")
+    testImplementation("com.icegreen:greenmail:1.5.10")
+    testImplementation("org.assertj:assertj-core:3.12.2")
     testImplementation("com.jayway.jsonpath:json-path:2.4.0")
     testImplementation("org.jsoup:jsoup:1.11.3")
     testImplementation("cglib:cglib-nodep:3.2.10")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
     testImplementation("org.spockframework:spock-spring:${spockVersion}")
-    
+
     // for lombok
+    // testAnnotationProcessor、testCompileOnly を併記しなくてよいよう configurations で設定している
     annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
-    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
 
     // for Doma
     annotationProcessor("org.seasar.doma:doma:${domaVersion}")
     implementation("org.seasar.doma:doma:${domaVersion}")
     domaGenRuntime("org.seasar.doma:doma-gen:${domaVersion}")
     domaGenRuntime("${jdbcDriver}")
+
+    // for JUnit 5
+    // junit-jupiter で junit-jupiter-api, junit-jupiter-params, junit-jupiter-engine の３つが依存関係に追加される
+    testCompile("org.junit.jupiter:junit-jupiter")
+    testRuntime("org.junit.platform:junit-platform-launcher")
 
     // for Error Prone ( http://errorprone.info/ )
     errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
@@ -195,24 +201,56 @@ dependencies {
     testImplementation("com.google.code.findbugs:jsr305:3.0.2")
 }
 
-bootRun {
-    // -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
-    jvmArgs = [
-            "-ea",
-            "-Dspring.profiles.active=develop",
-            "-Dfile.encoding=UTF-8",
-            "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
-    ]
+def jvmArgsForTask = [
+        "-ea",
+        "-Dfile.encoding=UTF-8",
+        "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
+]
+// JDK 11 に変更後、test タスク実行時に groovy と powermock が JDKの内部部分にアクセスするためにコードでリフレクションを使用
+// していて WARNING が出るため、JVM の起動時オプションの --add-opens を指定して WARNING が出ないようにする
+def jvmArgsAddOpens = [
+        "--add-opens=java.base/java.io=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.ref=ALL-UNNAMED",
+        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
+        "--add-opens=java.base/java.net=ALL-UNNAMED",
+        "--add-opens=java.base/java.security=ALL-UNNAMED",
+        "--add-opens=java.base/java.util=ALL-UNNAMED"
+]
+def printTestCount = { desc, result ->
+    if (!desc.parent) { // will match the outermost suite
+        println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
+    }
 }
 
+// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
+bootRun {
+    jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=develop"]
+}
+
+// -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED
+task testJUnit4AndSpock(type: Test) {
+    jvmArgs = jvmArgsForTask +
+            jvmArgsAddOpens +
+            ["-Dspring.profiles.active=unittest"]
+
+    testLogging {
+        afterSuite printTestCount
+    }
+}
+test.dependsOn testJUnit4AndSpock
 test {
-    // -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
-    jvmArgs = [
-            "-ea",
-            "-Dspring.profiles.active=unittest",
-            "-Dfile.encoding=UTF-8",
-            "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
-    ]
+    jvmArgs = jvmArgsForTask +
+            jvmArgsAddOpens +
+            ["-Dspring.profiles.active=unittest"]
+
+    // for JUnit 5
+    useJUnitPlatform()
+
+    testLogging {
+        afterSuite printTestCount
+    }
 }
 
 // for Doma-Gen

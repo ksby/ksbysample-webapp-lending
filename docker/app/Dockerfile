@@ -1,4 +1,4 @@
-FROM openjdk:8-jdk-alpine
+FROM adoptopenjdk/openjdk11:jdk-11.0.2.9-alpine-slim
 RUN apk add --no-cache tzdata
 ENV TZ="Asia/Tokyo"
 ENV LANG="ja_JP.UTF-8"

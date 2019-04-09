@@ -1,5 +1,8 @@
-package ksbysample.common.test.rule.db;
+package ksbysample.common.test.extension.db;
 
+import ksbysample.common.test.helper.DescriptionWrapper;
+import ksbysample.common.test.helper.ExtensionContextWrapper;
+import ksbysample.common.test.helper.TestContextWrapper;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.IDatabaseConnection;
 import org.dbunit.database.QueryDataSet;
@@ -9,6 +12,9 @@ import org.dbunit.dataset.ReplacementDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.dbunit.operation.DatabaseOperation;
+import org.junit.jupiter.api.extension.AfterEachCallback;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
+import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +38,8 @@ import java.util.List;
 import static java.util.Comparator.comparing;
 
 @Component
-public class TestDataResource extends TestWatcher {
+public class TestDataExtension extends TestWatcher
+        implements BeforeEachCallback, AfterEachCallback {
 
     private static final String BASETESTDATA_ROOT_DIR = "src/test/resources/";
     private static final String TESTDATA_ROOT_DIR = "src/test/resources/ksbysample/webapp/lending/";
@@ -49,14 +56,34 @@ public class TestDataResource extends TestWatcher {
 
     @Override
     protected void starting(Description description) {
+        before(new DescriptionWrapper(description));
+    }
+
+    @SuppressWarnings("Finally")
+    @Override
+    protected void finished(Description description) {
+        after(new DescriptionWrapper(description));
+    }
+
+    @Override
+    public void beforeEach(ExtensionContext context) {
+        before(new ExtensionContextWrapper(context));
+    }
+
+    @Override
+    public void afterEach(ExtensionContext context) {
+        after(new ExtensionContextWrapper(context));
+    }
+
+    private void before(TestContextWrapper testContextWrapper) {
         // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
-        if (!hasNoUseTestDataResourceAnnotation(description)) {
+        if (!hasNoUseTestDataResourceAnnotation(testContextWrapper)) {
             IDatabaseConnection conn = null;
             try (Connection connection = dataSource.getConnection()) {
                 conn = DbUnitUtils.createDatabaseConnection(connection);
 
                 // バックアップ＆ロード＆リストア対象のテストデータのパスを取得する
-                String testDataBaseDir = getBaseTestDir(description);
+                String testDataBaseDir = getBaseTestDir(testContextWrapper);
 
                 // バックアップを取得する
                 backupDb(conn, testDataBaseDir);
@@ -67,16 +94,16 @@ public class TestDataResource extends TestWatcher {
                 // @BaseTestSql アノテーションで指定された SQL を実行する
                 TestSqlExecutor<BaseTestSqlList, BaseTestSql> baseTestSqlExecutor
                         = new TestSqlExecutor<>(BaseTestSqlList.class, BaseTestSql.class);
-                baseTestSqlExecutor.execute(connection, description);
+                baseTestSqlExecutor.execute(connection, testContextWrapper);
 
                 // テストメソッドに @TestData アノテーションが付加されている場合には、
                 // アノテーションで指定されたテストデータをロードする
-                loadTestData(conn, description);
+                loadTestData(conn, testContextWrapper);
 
                 // @TestSql アノテーションで指定された SQL を実行する
                 TestSqlExecutor<TestSqlList, TestSql> testSqlExecutor
                         = new TestSqlExecutor<>(TestSqlList.class, TestSql.class);
-                testSqlExecutor.execute(connection, description);
+                testSqlExecutor.execute(connection, testContextWrapper);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             } finally {
@@ -88,13 +115,11 @@ public class TestDataResource extends TestWatcher {
         }
     }
 
-    @SuppressWarnings("Finally")
-    @Override
-    protected void finished(Description description) {
+    private void after(TestContextWrapper testContextWrapper) {
         IDatabaseConnection conn = null;
         try (Connection connection = dataSource.getConnection()) {
             // @NouseTestDataResource アノテーションがテストメソッドに付加されていない場合には処理を実行する
-            if (!hasNoUseTestDataResourceAnnotation(description)) {
+            if (!hasNoUseTestDataResourceAnnotation(testContextWrapper)) {
                 conn = DbUnitUtils.createDatabaseConnection(connection);
 
                 // バックアップからリストアする
@@ -119,27 +144,27 @@ public class TestDataResource extends TestWatcher {
         }
     }
 
-    private boolean hasNoUseTestDataResourceAnnotation(Description description) {
-        Collection<Annotation> annotationList = description.getAnnotations();
+    private boolean hasNoUseTestDataResourceAnnotation(TestContextWrapper testContextWrapper) {
+        Collection<Annotation> annotationList = testContextWrapper.getAnnotations();
         boolean result = annotationList.stream()
                 .anyMatch(annotation -> annotation instanceof NoUseTestDataResource);
         return result;
     }
 
-    private String getBaseTestDir(Description description) {
+    private String getBaseTestDir(TestContextWrapper testContextWrapper) {
         // @BaseTestData アノテーションで指定されている場合にはそれを使用し、指定されていない場合には
         // BASETESTDATA_DIR 定数で指定されているものと使用する
 
         // テストメソッドに @BaseTestData アノテーションが付加されているかチェックする
-        BaseTestData baseTestData = description.getAnnotation(BaseTestData.class);
+        BaseTestData baseTestData = testContextWrapper.getAnnotation(BaseTestData.class);
         if (baseTestData != null) {
             return BASETESTDATA_ROOT_DIR + baseTestData.value();
         }
 
         // TestDataResource クラスのフィールドに @BaseTestData アノテーションが付加されているかチェックする
-        Field[] fields = description.getTestClass().getDeclaredFields();
+        Field[] fields = testContextWrapper.getTestClass().getDeclaredFields();
         for (Field field : fields) {
-            if (field.getType().equals(TestDataResource.class)) {
+            if (field.getType().equals(TestDataExtension.class)) {
                 baseTestData = field.getAnnotation(BaseTestData.class);
                 if (baseTestData != null) {
                     return BASETESTDATA_ROOT_DIR + baseTestData.value();
@@ -148,7 +173,7 @@ public class TestDataResource extends TestWatcher {
         }
 
         // テストクラスに @BaseTestData アノテーションが付加されているかチェックする
-        Class<?> testClass = description.getTestClass();
+        Class<?> testClass = testContextWrapper.getTestClass();
         baseTestData = testClass.getAnnotation(BaseTestData.class);
         if (baseTestData != null) {
             return BASETESTDATA_ROOT_DIR + baseTestData.value();
@@ -186,8 +211,8 @@ public class TestDataResource extends TestWatcher {
         }
     }
 
-    private void loadTestData(IDatabaseConnection conn, Description description) {
-        description.getAnnotations().stream()
+    private void loadTestData(IDatabaseConnection conn, TestContextWrapper testContextWrapper) {
+        testContextWrapper.getAnnotations().stream()
                 .filter(annotation -> annotation instanceof TestDataList || annotation instanceof TestData)
                 .forEach(annotation -> {
                     if (annotation instanceof TestDataList) {

@@ -1,21 +1,17 @@
-package ksbysample.common.test.rule.db;
+package ksbysample.common.test.extension.db;
 
 import java.lang.annotation.Documented;
-import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Target({ METHOD })
+@Target({METHOD})
 @Retention(RUNTIME)
 @Documented
-@Repeatable(TestSqlList.class)
-public @interface TestSql {
+public @interface TestDataList {
 
-    long order() default 1;
-
-    String sql();
+    TestData[] value();
 
 }

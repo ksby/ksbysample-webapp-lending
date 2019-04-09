@@ -1,25 +1,25 @@
 package ksbysample.webapp.lending.web;
 
+import ksbysample.common.test.extension.db.TestDataExtension;
+import ksbysample.common.test.extension.mockmvc.SecurityMockMvcExtension;
 import ksbysample.common.test.helper.SimpleRequestBuilder;
-import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
 import ksbysample.webapp.lending.config.Constant;
 import ksbysample.webapp.lending.config.WebSecurityConfig;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.entity.UserInfo;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockServletContext;
 import org.springframework.security.authentication.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpSession;
 
@@ -31,23 +31,22 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(Enclosed.class)
 public class LoginControllerTest {
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class ログイン画面の初期表示のテスト {
+    class ログイン画面の初期表示のテスト {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Test
-        public void ログイン画面を表示する() throws Exception {
+        void ログイン画面を表示する() throws Exception {
             // ログイン画面が表示されることを確認する
             mvc.noauth.perform(get("/"))
                     .andExpect(status().isOk())
@@ -58,20 +57,20 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class ログイン成功のテスト {
+    class ログイン成功のテスト {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Test
-        public void 有効なユーザ名とパスワードを入力すればログインに成功する() throws Exception {
+        void 有効なユーザ名とパスワードを入力すればログインに成功する() throws Exception {
             mvc.noauth.perform(formLogin()
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "taro")
@@ -83,23 +82,23 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class ログインエラーのテスト {
+    class ログインエラーのテスト {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Autowired
         private UserInfoDao userInfoDao;
 
         @Test
-        public void 存在しないユーザ名とパスワードを入力すればログインはエラーになる() throws Exception {
+        void 存在しないユーザ名とパスワードを入力すればログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
                     .user("id", "user.notexists@sample.com")
                     .password("password", "notexists")
@@ -110,7 +109,7 @@ public class LoginControllerTest {
         }
 
         @Test
-        public void 存在するユーザ名でもパスワードが正しくなければログインはエラーになる() throws Exception {
+        void 存在するユーザ名でもパスワードが正しくなければログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
                     .password("password", "tanaka")
@@ -121,7 +120,7 @@ public class LoginControllerTest {
         }
 
         @Test
-        public void enabledが0のユーザならばログインはエラーになる() throws Exception {
+        void enabledが0のユーザならばログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
                     .user("id", mvc.MAILADDR_KIMURA_MASAO)
                     .password("password", "masao")
@@ -132,7 +131,7 @@ public class LoginControllerTest {
         }
 
         @Test
-        public void アカウントの有効期限が切れているユーザならばログインはエラーになる() throws Exception {
+        void アカウントの有効期限が切れているユーザならばログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
                     .user("id", mvc.MAILADDR_ENDO_YOKO)
                     .password("password", "yoko")
@@ -143,7 +142,7 @@ public class LoginControllerTest {
         }
 
         @Test
-        public void パスワードの有効期限が切れているユーザならばログインはエラーになる() throws Exception {
+        void パスワードの有効期限が切れているユーザならばログインはエラーになる() throws Exception {
             mvc.noauth.perform(formLogin()
                     .user("id", mvc.MAILADDR_SATO_MASAHIKO)
                     .password("password", "masahiko")
@@ -154,7 +153,7 @@ public class LoginControllerTest {
         }
 
         @Test
-        public void ログインを5回失敗すればアカウントはロックされる() throws Exception {
+        void ログインを5回失敗すればアカウントはロックされる() throws Exception {
             // 1回目
             mvc.noauth.perform(formLogin()
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
@@ -224,20 +223,23 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class 次回から自動的にログインするのテスト {
+    class 次回から自動的にログインするのテスト {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
+
+        @Autowired
+        ServletContext servletContext;
 
         @Test
-        public void 次回から自動的にログインするをチェックすれば次はログインしていなくてもログイン後の画面にアクセスできる()
+        void 次回から自動的にログインするをチェックすれば次はログインしていなくてもログイン後の画面にアクセスできる()
                 throws Exception {
             // ログイン前にはログイン後の画面にアクセスできない
             mvc.noauth.perform(get(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
@@ -246,7 +248,6 @@ public class LoginControllerTest {
                     .andExpect(unauthenticated());
 
             // 「次回から自動的にログインする」をチェックしてログインし、remember-me Cookie を生成する
-            MockServletContext servletContext = new MockServletContext();
             org.springframework.mock.web.MockHttpServletRequest request
                     = formLogin()
                     .user("id", mvc.MAILADDR_TANAKA_TARO)
@@ -277,20 +278,20 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class ログアウトのテスト {
+    class ログアウトのテスト {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
         @Test
-        public void 有効なユーザ名とパスワードを入力すればログインに成功する() throws Exception {
+        void 有効なユーザ名とパスワードを入力すればログインに成功する() throws Exception {
             // ログイン前にはログイン後の画面にアクセスできない
             mvc.noauth.perform(get(Constant.URL_AFTER_LOGIN_FOR_ROLE_ADMIN))
                     .andExpect(status().isFound())
@@ -331,45 +332,31 @@ public class LoginControllerTest {
 
     }
 
-    @RunWith(SpringRunner.class)
+    @Nested
     @SpringBootTest
-    public static class urlloginのテスト {
+    class urlloginのテスト {
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public TestDataResource testDataResource;
+        public TestDataExtension testDataExtension;
 
-        @Rule
+        @RegisterExtension
         @Autowired
-        public SecurityMockMvcResource mvc;
+        public SecurityMockMvcExtension mvc;
 
-        @RunWith(SpringRunner.class)
-        @SpringBootTest
-        public static class encodeのテスト {
-
-            @Rule
-            @Autowired
-            public TestDataResource testDataResource;
-
-            @Rule
-            @Autowired
-            public SecurityMockMvcResource mvc;
-
-            @Test
-            public void encodeで生成したパスワードの暗号化文字列が正しいことを確認する() throws Exception {
-                MvcResult result = mvc.noauth.perform(get("/encode?password=ptest"))
-                        .andExpect(status().isOk())
-                        .andExpect(content().contentType("text/plain;charset=UTF-8"))
-                        .andReturn();
-                String crypt = result.getResponse().getContentAsString();
-                BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-                assertThat(passwordEncoder.matches("ptest", crypt)).isTrue();
-            }
-
+        @Test
+        void encodeで生成したパスワードの暗号化文字列が正しいことを確認する() throws Exception {
+            MvcResult result = mvc.noauth.perform(get("/encode?password=ptest"))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType("text/plain;charset=UTF-8"))
+                    .andReturn();
+            String crypt = result.getResponse().getContentAsString();
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            assertThat(passwordEncoder.matches("ptest", crypt)).isTrue();
         }
 
         @Test
-        public void 存在するメールアドレスを指定すればログインに成功する() throws Exception {
+        void 存在するメールアドレスを指定すればログインに成功する() throws Exception {
             // ログイン前にはログイン後の画面にアクセスできない
             mvc.noauth.perform(get(WebSecurityConfig.DEFAULT_SUCCESS_URL))
                     .andExpect(status().isFound())

@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class LendingUserDetails implements UserDetails {
      */
     public LendingUserDetails(UserInfo userInfo
             , Set<? extends GrantedAuthority> authorities) {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Tokyo"));
         lendingUser = new LendingUser(userInfo);
         this.authorities = authorities;
         this.accountNonExpired = !userInfo.getExpiredAccount().isBefore(now);

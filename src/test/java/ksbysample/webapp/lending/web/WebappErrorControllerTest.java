@@ -1,13 +1,11 @@
 package ksbysample.webapp.lending.web;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.RequestDispatcher;
@@ -16,7 +14,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class WebappErrorControllerTest {
 
@@ -27,7 +24,7 @@ public class WebappErrorControllerTest {
 
     @SuppressWarnings("unchecked")
     @Test
-    public void testIndex() throws Exception {
+    void testIndex() throws Exception {
         // setup
         Exception e = new Exception("");
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -46,4 +43,5 @@ public class WebappErrorControllerTest {
         assertThat(errorInfoList)
                 .contains("エラーが発生したURL：　" + REQUEST_URI_NOT_FOUND);
     }
+
 }

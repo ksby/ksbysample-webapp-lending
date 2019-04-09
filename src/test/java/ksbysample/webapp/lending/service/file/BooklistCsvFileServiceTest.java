@@ -3,12 +3,10 @@ package ksbysample.webapp.lending.service.file;
 import com.univocity.parsers.csv.CsvWriter;
 import com.univocity.parsers.csv.CsvWriterSettings;
 import ksbysample.common.test.helper.TestHelper;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 
@@ -21,7 +19,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class BooklistCsvFileServiceTest {
 
@@ -29,7 +26,7 @@ public class BooklistCsvFileServiceTest {
     private BooklistCsvFileService booklistCsvFileService;
 
     @Test
-    public void testValidateUploadFile_NoErrorCsvFile() throws Exception {
+    void testValidateUploadFile_NoErrorCsvFile() throws Exception {
         MockMultipartFile multipartFile = createNoErrorCsvFile();
         Errors errors = TestHelper.createErrors();
         booklistCsvFileService.validateUploadFile(multipartFile, errors);
@@ -37,7 +34,7 @@ public class BooklistCsvFileServiceTest {
     }
 
     @Test
-    public void testValidateUploadFile_ErrorCsvFile() throws Exception {
+    void testValidateUploadFile_ErrorCsvFile() throws Exception {
         MockMultipartFile multipartFile = createErrorCsvFile();
         Errors errors = TestHelper.createErrors();
         booklistCsvFileService.validateUploadFile(multipartFile, errors);

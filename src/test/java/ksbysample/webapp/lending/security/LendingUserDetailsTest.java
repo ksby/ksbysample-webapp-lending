@@ -1,17 +1,15 @@
 package ksbysample.webapp.lending.security;
 
-import ksbysample.common.test.rule.db.TestDataResource;
+import ksbysample.common.test.extension.db.TestDataExtension;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.dao.UserRoleDao;
 import ksbysample.webapp.lending.entity.UserInfo;
 import ksbysample.webapp.lending.entity.UserRole;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,41 +17,43 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class LendingUserDetailsTest {
 
-    private final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
-    private final String MAILADDR_KATO_HIROSHI = "kato.hiroshi@sample.com";
+    private static final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
+    private static final String MAILADDR_KATO_HIROSHI = "kato.hiroshi@sample.com";
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public TestDataResource testDataResource;
+    public TestDataExtension testDataExtension;
 
     @Autowired
     private UserInfoDao userInfoDao;
-
-    @Test
-    public void 利用不可能でロック中で全て有効期限切れのユーザでのテスト() {
-        UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_KATO_HIROSHI);
-        LendingUserDetails lendingUserDetails = new LendingUserDetails(userInfo, null);
-
-        assertThat(lendingUserDetails.getUsername()).isEqualTo(userInfo.getMailAddress());
-        assertThat(lendingUserDetails.getPassword()).isEqualTo(userInfo.getPassword());
-        assertThat(lendingUserDetails.getName()).isEqualTo(userInfo.getUsername());
-        assertThat(lendingUserDetails.getAuthorities()).isNull();
-        assertThat(lendingUserDetails.isAccountNonExpired()).isFalse();
-        assertThat(lendingUserDetails.isAccountNonLocked()).isFalse();
-        assertThat(lendingUserDetails.isCredentialsNonExpired()).isFalse();
-        assertThat(lendingUserDetails.isEnabled()).isFalse();
-    }
 
     @Autowired
     private UserRoleDao userRoleDao;
 
     @Test
-    public void 利用可能でロックされておらず有効期限切れもないユーザでのテスト() {
+    void 利用不可能でロック中で全て有効期限切れのユーザでのテスト() {
+        UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_KATO_HIROSHI);
+        LendingUserDetails lendingUserDetails = new LendingUserDetails(userInfo, null);
+
+        assertAll(
+                () -> assertThat(lendingUserDetails.getUsername()).isEqualTo(userInfo.getMailAddress()),
+                () -> assertThat(lendingUserDetails.getPassword()).isEqualTo(userInfo.getPassword()),
+                () -> assertThat(lendingUserDetails.getName()).isEqualTo(userInfo.getUsername()),
+                () -> assertThat(lendingUserDetails.getAuthorities()).isNull(),
+                () -> assertThat(lendingUserDetails.isAccountNonExpired()).isFalse(),
+                () -> assertThat(lendingUserDetails.isAccountNonLocked()).isFalse(),
+                () -> assertThat(lendingUserDetails.isCredentialsNonExpired()).isFalse(),
+                () -> assertThat(lendingUserDetails.isEnabled()).isFalse()
+        );
+    }
+
+    @Test
+    void 利用可能でロックされておらず有効期限切れもないユーザでのテスト() {
         UserInfo userInfo = userInfoDao.selectByMailAddress(MAILADDR_TANAKA_TARO);
         List<UserRole> userRoleList = userRoleDao.selectByUserId(userInfo.getUserId());
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
@@ -64,15 +64,17 @@ public class LendingUserDetailsTest {
 
         LendingUserDetails lendingUserDetails = new LendingUserDetails(userInfo, authorities);
 
-        assertThat(lendingUserDetails.getUsername()).isEqualTo(userInfo.getMailAddress());
-        assertThat(lendingUserDetails.getPassword()).isEqualTo(userInfo.getPassword());
-        assertThat(lendingUserDetails.getName()).isEqualTo(userInfo.getUsername());
-        assertThat(lendingUserDetails.getAuthorities()).extracting("authority")
-                .containsOnly("ROLE_USER", "ROLE_ADMIN", "ROLE_APPROVER");
-        assertThat(lendingUserDetails.isAccountNonExpired()).isTrue();
-        assertThat(lendingUserDetails.isAccountNonLocked()).isTrue();
-        assertThat(lendingUserDetails.isCredentialsNonExpired()).isTrue();
-        assertThat(lendingUserDetails.isEnabled()).isTrue();
+        assertAll(
+                () -> assertThat(lendingUserDetails.getUsername()).isEqualTo(userInfo.getMailAddress()),
+                () -> assertThat(lendingUserDetails.getPassword()).isEqualTo(userInfo.getPassword()),
+                () -> assertThat(lendingUserDetails.getName()).isEqualTo(userInfo.getUsername()),
+                () -> assertThat(lendingUserDetails.getAuthorities()).extracting("authority")
+                        .containsOnly("ROLE_USER", "ROLE_ADMIN", "ROLE_APPROVER"),
+                () -> assertThat(lendingUserDetails.isAccountNonExpired()).isTrue(),
+                () -> assertThat(lendingUserDetails.isAccountNonLocked()).isTrue(),
+                () -> assertThat(lendingUserDetails.isCredentialsNonExpired()).isTrue(),
+                () -> assertThat(lendingUserDetails.isEnabled()).isTrue()
+        );
     }
 
 }
