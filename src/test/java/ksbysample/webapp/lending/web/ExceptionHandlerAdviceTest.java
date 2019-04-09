@@ -1,14 +1,12 @@
 package ksbysample.webapp.lending.web;
 
-import ksbysample.common.test.rule.db.TestDataResource;
-import ksbysample.common.test.rule.mockmvc.SecurityMockMvcResource;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import ksbysample.common.test.extension.db.TestDataExtension;
+import ksbysample.common.test.extension.mockmvc.SecurityMockMvcExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Controller;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -16,23 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class ExceptionHandlerAdviceTest {
 
     private static final String MESSAGE_EXCEPTION = "Exception が throw されました";
     private static final String MESSAGE_RUNTIMEEXCEPTION = "RuntimeException が throw されました";
 
+    @RegisterExtension
     @Autowired
-    private ExceptionHandlerAdvice exceptionHandlerAdvice;
+    public TestDataExtension testDataExtension;
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public TestDataResource testDataResource;
-
-    @Rule
-    @Autowired
-    public SecurityMockMvcResource mvc;
+    public SecurityMockMvcExtension mvc;
 
     @Controller
     @RequestMapping("/exceptionHandlerAdviceTest")
@@ -55,7 +49,7 @@ public class ExceptionHandlerAdviceTest {
     }
 
     @Test
-    public void testHandleException_Controllerクラス内でExceptionがthrowされた場合() throws Exception {
+    void testHandleException_Controllerクラス内でExceptionがthrowされた場合() throws Exception {
         // when
         MvcResult result = mvc.authTanakaTaro.perform(get("/exceptionHandlerAdviceTest/exception?parama=1&paramb=2"))
                 // 以下のコメントを解除すると MockMvc で取得したコンテンツが標準出力に出力される
@@ -76,7 +70,7 @@ public class ExceptionHandlerAdviceTest {
     }
 
     @Test
-    public void testHandleException_Controllerクラス内でRuntimeExceptionがthrowされた場合() throws Exception {
+    void testHandleException_Controllerクラス内でRuntimeExceptionがthrowされた場合() throws Exception {
         // when
         MvcResult result = mvc.authTanakaTaro.perform(get("/exceptionHandlerAdviceTest/runtimeException"))
                 .andExpect(status().isOk())

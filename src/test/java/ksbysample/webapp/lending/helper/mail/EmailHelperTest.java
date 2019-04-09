@@ -1,29 +1,26 @@
 package ksbysample.webapp.lending.helper.mail;
 
-import ksbysample.common.test.rule.mail.MailServerResource;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import ksbysample.common.test.extension.mail.MailServerExtension;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class EmailHelperTest {
 
-    @Rule
+    @RegisterExtension
     @Autowired
-    public MailServerResource mailServer;
+    public MailServerExtension mailServer;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -32,7 +29,7 @@ public class EmailHelperTest {
     private EmailHelper emailHelper;
 
     @Test
-    public void testSendSimpleMail() throws Exception {
+    void testSendSimpleMail() throws Exception {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("test@sample.com");
         message.setTo("xxx@yyy.zzz");
@@ -40,16 +37,18 @@ public class EmailHelperTest {
         message.setText("これはテストです");
         emailHelper.sendSimpleMail(message);
 
-        assertThat(mailServer.getMessagesCount(), is(1));
+        assertThat(mailServer.getMessagesCount()).isEqualTo(1);
         MimeMessage receiveMessage = mailServer.getFirstMessage();
-        assertThat(receiveMessage.getFrom()[0], is(new InternetAddress("test@sample.com")));
-        assertThat(receiveMessage.getAllRecipients()[0], is(new InternetAddress("xxx@yyy.zzz")));
-        assertThat(receiveMessage.getSubject(), is("テスト"));
-        assertThat(receiveMessage.getContent(), is("これはテストです"));
+        assertAll(
+                () -> assertThat(receiveMessage.getFrom()[0]).isEqualTo(new InternetAddress("test@sample.com")),
+                () -> assertThat(receiveMessage.getAllRecipients()[0]).isEqualTo(new InternetAddress("xxx@yyy.zzz")),
+                () -> assertThat(receiveMessage.getSubject()).isEqualTo("テスト"),
+                () -> assertThat(receiveMessage.getContent()).isEqualTo("これはテストです")
+        );
     }
 
     @Test
-    public void testSendMail() throws Exception {
+    void testSendMail() throws Exception {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
         message.setFrom("test@sample.com");
@@ -58,12 +57,14 @@ public class EmailHelperTest {
         message.setText("これはテストです");
         emailHelper.sendMail(message.getMimeMessage());
 
-        assertThat(mailServer.getMessagesCount(), is(1));
+        assertThat(mailServer.getMessagesCount()).isEqualTo(1);
         MimeMessage receiveMessage = mailServer.getFirstMessage();
-        assertThat(receiveMessage.getFrom()[0], is(new InternetAddress("test@sample.com")));
-        assertThat(receiveMessage.getAllRecipients()[0], is(new InternetAddress("xxx@yyy.zzz")));
-        assertThat(receiveMessage.getSubject(), is("テスト"));
-        assertThat(receiveMessage.getContent(), is("これはテストです"));
+        assertAll(
+                () -> assertThat(receiveMessage.getFrom()[0]).isEqualTo(new InternetAddress("test@sample.com")),
+                () -> assertThat(receiveMessage.getAllRecipients()[0]).isEqualTo(new InternetAddress("xxx@yyy.zzz")),
+                () -> assertThat(receiveMessage.getSubject()).isEqualTo("テスト"),
+                () -> assertThat(receiveMessage.getContent()).isEqualTo("これはテストです")
+        );
     }
 
 }

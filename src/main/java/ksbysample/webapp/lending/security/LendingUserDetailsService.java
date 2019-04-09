@@ -43,7 +43,7 @@ public class LendingUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
         UserInfo userInfo = userInfoDao.selectByMailAddress(username);
         if (userInfo == null) {
             throw new UsernameNotFoundException(

@@ -1,4 +1,4 @@
-package ksbysample.common.test.rule.db;
+package ksbysample.common.test.extension.db;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -10,11 +10,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, FIELD, METHOD})
 @Retention(RUNTIME)
 @Documented
-public @interface BaseTestSqlList {
+public @interface BaseTestData {
 
     /**
      * @return ???
      */
-    BaseTestSql[] value();
+    String value();
 
 }

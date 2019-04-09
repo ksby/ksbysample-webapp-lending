@@ -15,13 +15,13 @@ public class BeanValidationGroupController {
 
     private static final String THYMELEAF_TEMPLATE = "springmvcmemo/beanValidationGroup";
 
-    private final Validator mvcValidator;
+    private final Validator validator;
 
     /**
-     * @param mvcValidator ???
+     * @param validator ???
      */
-    public BeanValidationGroupController(Validator mvcValidator) {
-        this.mvcValidator = mvcValidator;
+    public BeanValidationGroupController(Validator validator) {
+        this.validator = validator;
     }
 
     /**
@@ -58,7 +58,7 @@ public class BeanValidationGroupController {
     public String edit(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , EditFormChecker editFormChecker) {
-        mvcValidator.validate(editFormChecker, bindingResult);
+        validator.validate(editFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
             return THYMELEAF_TEMPLATE;
         }
@@ -76,7 +76,7 @@ public class BeanValidationGroupController {
     public String sendmail(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , SendmailFormChecker sendmailFormChecker) {
-        mvcValidator.validate(sendmailFormChecker, bindingResult);
+        validator.validate(sendmailFormChecker, bindingResult);
         if (bindingResult.hasErrors()) {
             return THYMELEAF_TEMPLATE;
         }

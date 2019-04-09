@@ -19,7 +19,6 @@ import org.springframework.jmx.export.MBeanExporter;
 import org.springframework.retry.backoff.FixedBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
-import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.thymeleaf.extras.java8time.dialect.Java8TimeDialect;
 
@@ -87,14 +86,13 @@ public class ApplicationConfig {
     }
 
     /**
-     * Controller クラスで直接 {@link Validator} を呼び出すために Bean として定義している
-     * また Hibernate Validator のメッセージを ValidationMessages.properties ではなく
-     * messages.properties に記述できるようにするためにも使用している
+     * javax.validation や Hibernate Validator のメッセージを ValidationMessages.properties ではなく
+     * messages.properties に記述できるようにするために定義している
      *
      * @return new {@link LocalValidatorFactoryBean}
      */
     @Bean
-    public Validator mvcValidator() {
+    public LocalValidatorFactoryBean validator() {
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         localValidatorFactoryBean.setValidationMessageSource(this.messageSource);
         return localValidatorFactoryBean;

@@ -21,8 +21,6 @@ scrape_configs:
   # Docker で起動した Prometheus からローカルPCで起動している Spring Boot のアプリケーション
   # にアクセスする。docker-compose.yml の extra_hosts に定義した PC のホスト名 app を設定する。
   - targets: ['app:8080']
-    labels:
-      application: 'lending'
 
 - job_name: 'redis_exporter'
   static_configs:

@@ -1,4 +1,4 @@
-package ksbysample.common.test.rule.db;
+package ksbysample.common.test.extension.db;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
