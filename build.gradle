@@ -229,6 +229,13 @@ bootRun {
     jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=develop"]
 }
 
+clean {
+    doLast {
+        rootProject.file("src/main/generated").deleteDir()
+        rootProject.file("src/test/generated_tests").deleteDir()
+    }
+}
+
 // -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED
 task testJUnit4AndSpock(type: Test) {
     jvmArgs = jvmArgsForTask +

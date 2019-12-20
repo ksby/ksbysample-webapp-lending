@@ -28,6 +28,8 @@ proguard/
 *.iws
 .idea/
 out/
+src/main/generated
+src/test/generated_tests
 
 #Gradle
 .gradletasknamecache
