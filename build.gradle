@@ -6,7 +6,7 @@ buildscript {
     repositories {
         mavenCentral()
         maven { url "https://repo.spring.io/release/" }
-        maven { url "https://plugins.gradle.org/m2/" }
+        gradlePluginPortal()
     }
 }
 
@@ -18,10 +18,9 @@ plugins {
     id "io.spring.dependency-management" version "1.0.8.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "1.6.9"
+//    id "com.github.spotbugs" version "1.6.9"
     id "pmd"
     id "net.ltgt.errorprone" version "0.7.1"
-    id "de.undercouch.download" version "3.4.3"
     id "com.gorylenko.gradle-git-properties" version "2.0.0"
 }
 
@@ -29,7 +28,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 wrapper {
-    gradleVersion = "5.6.4"
+    gradleVersion = "6.0.1"
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -77,18 +76,18 @@ checkstyle {
     sourceSets = [project.sourceSets.main]
 }
 
-spotbugs {
-    toolVersion = "3.1.11"
-    ignoreFailures = true
-    effort = "max"
-    spotbugsTest.enabled = false
-}
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
-    reports {
-        xml.enabled = false
-        html.enabled = true
-    }
-}
+//spotbugs {
+//    toolVersion = "3.1.11"
+//    ignoreFailures = true
+//    effort = "max"
+//    spotbugsTest.enabled = false
+//}
+//tasks.withType(com.github.spotbugs.SpotBugsTask) {
+//    reports {
+//        xml.enabled = false
+//        html.enabled = true
+//    }
+//}
 
 pmd {
     toolVersion = "6.13.0"
@@ -124,7 +123,7 @@ dependencies {
     def lombokVersion = "1.18.6"
     def errorproneVersion = "2.3.3"
     def powermockVersion = "2.0.0"
-    def spotbugsVersion = "3.1.11"
+//    def spotbugsVersion = "3.1.11"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -179,8 +178,8 @@ dependencies {
 
     // for JUnit 5
     // junit-jupiter で junit-jupiter-api, junit-jupiter-params, junit-jupiter-engine の３つが依存関係に追加される
-    testCompile("org.junit.jupiter:junit-jupiter")
-    testRuntime("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     // for Error Prone ( http://errorprone.info/ )
     errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
@@ -191,10 +190,10 @@ dependencies {
     testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
 
     // for SpotBugs
-    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}")
-    compileOnly("net.jcip:jcip-annotations:1.0")
-    compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
-    testImplementation("com.google.code.findbugs:jsr305:3.0.2")
+//    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}")
+//    compileOnly("net.jcip:jcip-annotations:1.0")
+//    compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
+//    testImplementation("com.google.code.findbugs:jsr305:3.0.2")
 }
 
 def jvmArgsForTask = [
@@ -315,50 +314,7 @@ task domaGen {
         }
 
         // 作業用ディレクトリを削除する
-        clearDir("${workDirPath}")
-
-        // 自動生成したファイルを git add する
-        addGit()
-    }
-}
-
-task downloadCssFontsJs {
-    doLast {
-        def staticDirPath = "src/main/resources/static"
-        def workDirPath = "work"
-        def adminLTEVersion = "2.2.0"
-        def jQueryVersion = "2.1.4"
-        def fontAwesomeVersion = "4.3.0"
-        def ioniconsVersion = "2.0.1"
-        def html5shivJsVersion = "3.7.2"
-        def respondMinJsVersion = "1.4.2"
-
-        // 作業用ディレクトリを削除する
-        clearDir("${workDirPath}")
-
-        // Bootstrap & AdminLTE Dashboard & Control Panel Template
-        downloadAdminLTE("${adminLTEVersion}", "${jQueryVersion}", "${workDirPath}", "${staticDirPath}")
-
-        // Font Awesome Icons
-        downloadFontAwesome("${fontAwesomeVersion}", "${workDirPath}", "${staticDirPath}")
-
-        // Ionicons
-        downloadIonicons("${ioniconsVersion}", "${workDirPath}", "${staticDirPath}")
-
-        // html5shiv.js
-        downloadHtml5shivJs("${html5shivJsVersion}", "${workDirPath}", "${staticDirPath}")
-
-        // respond.min.js
-        downloadRespondMinJs("${respondMinJsVersion}", "${workDirPath}", "${staticDirPath}")
-
-        // fileinput.min.js ( v4.2.7 )
-        downloadBootstrapFileInputMinJs("${workDirPath}", "${staticDirPath}")
-
-        // 作業用ディレクトリを削除する
-        clearDir("${workDirPath}")
-
-        // 追加したファイルを git add する
-        addGit()
+        delete "${workDirPath}"
     }
 }
 
@@ -403,135 +359,6 @@ task printClassWhatNotMakeTest {
 /* -----------------------------------------------------------------------------
  * メソッド定義部
  ---------------------------------------------------------------------------- */
-
-void clearDir(String dirPath) {
-    delete dirPath
-}
-
-void addGit() {
-    def grgit = org.ajoberstar.grgit.Grgit.open(dir: project.projectDir)
-    grgit.add(patterns: ["."])
-}
-
-void downloadAdminLTE(String adminLTEVersion, String jQueryVersion, String workDirPath, String staticDirPath) {
-    download {
-        src "https://codeload.github.com/almasaeed2010/AdminLTE/zip/v${adminLTEVersion}"
-        dest new File("${workDirPath}/download/AdminLTE-${adminLTEVersion}.zip")
-    }
-    copy {
-        from zipTree("${workDirPath}/download/AdminLTE-${adminLTEVersion}.zip")
-        into "${workDirPath}/unzip"
-    }
-    copy {
-        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/bootstrap/css"
-        into "${staticDirPath}/css"
-    }
-    copy {
-        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/bootstrap/fonts"
-        into "${staticDirPath}/fonts"
-    }
-    copy {
-        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/bootstrap/js"
-        into "${staticDirPath}/js"
-    }
-    copy {
-        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/dist/css"
-        into "${staticDirPath}/css"
-    }
-    copy {
-        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/dist/js"
-        into "${staticDirPath}/js"
-    }
-    copy {
-        from "${workDirPath}/unzip/AdminLTE-${adminLTEVersion}/plugins/jQuery/jQuery-${jQueryVersion}.min.js"
-        into "${staticDirPath}/js"
-    }
-    delete "${staticDirPath}/js/pages"
-    delete "${staticDirPath}/js/demo.js"
-}
-
-void downloadFontAwesome(String fontAwesomeVersion, String workDirPath, String staticDirPath) {
-    download {
-        src "http://fortawesome.github.io/Font-Awesome/assets/font-awesome-${fontAwesomeVersion}.zip"
-        dest new File("${workDirPath}/download/font-awesome-${fontAwesomeVersion}.zip")
-    }
-    copy {
-        from zipTree("${workDirPath}/download/font-awesome-${fontAwesomeVersion}.zip")
-        into "${workDirPath}/unzip"
-    }
-    copy {
-        from "${workDirPath}/unzip/font-awesome-${fontAwesomeVersion}/css/font-awesome.min.css"
-        into "${staticDirPath}/css"
-    }
-    copy {
-        from "${workDirPath}/unzip/font-awesome-${fontAwesomeVersion}/fonts"
-        into "${staticDirPath}/fonts"
-    }
-}
-
-void downloadIonicons(String ioniconsVersion, String workDirPath, String staticDirPath) {
-    download {
-        src "https://codeload.github.com/driftyco/ionicons/zip/v${ioniconsVersion}"
-        dest new File("${workDirPath}/download/ionicons-${ioniconsVersion}.zip")
-    }
-    copy {
-        from zipTree("${workDirPath}/download/ionicons-${ioniconsVersion}.zip")
-        into "${workDirPath}/unzip"
-    }
-    copy {
-        from "${workDirPath}/unzip/ionicons-${ioniconsVersion}/css/ionicons.min.css"
-        into "${staticDirPath}/css"
-    }
-    copy {
-        from "${workDirPath}/unzip/ionicons-${ioniconsVersion}/fonts"
-        into "${staticDirPath}/fonts"
-    }
-}
-
-void downloadHtml5shivJs(String html5shivJsVersion, String workDirPath, String staticDirPath) {
-    download {
-        src "https://oss.maxcdn.com/html5shiv/${html5shivJsVersion}/html5shiv.min.js"
-        dest new File("${workDirPath}/download/html5shiv.min.js")
-    }
-    copy {
-        from "${workDirPath}/download/html5shiv.min.js"
-        into "${staticDirPath}/js"
-    }
-}
-
-void downloadRespondMinJs(String respondMinJsVersion, String workDirPath, String staticDirPath) {
-    download {
-        src "https://oss.maxcdn.com/respond/${respondMinJsVersion}/respond.min.js"
-        dest new File("${workDirPath}/download/respond.min.js")
-    }
-    copy {
-        from "${workDirPath}/download/respond.min.js"
-        into "${staticDirPath}/js"
-    }
-}
-
-void downloadBootstrapFileInputMinJs(String workDirPath, String staticDirPath) {
-    download {
-        src "https://github.com/kartik-v/bootstrap-fileinput/zipball/master"
-        dest new File("${workDirPath}/download/kartik-v-bootstrap-fileinput.zip")
-    }
-    copy {
-        from zipTree("${workDirPath}/download/kartik-v-bootstrap-fileinput.zip")
-        into "${workDirPath}/unzip"
-    }
-    copy {
-        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/js/fileinput.min.js"
-        into "${staticDirPath}/js"
-    }
-    copy {
-        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/js/fileinput_locale_ja.js"
-        into "${staticDirPath}/js"
-    }
-    copy {
-        from "${workDirPath}/unzip/kartik-v-bootstrap-fileinput-883d8b6/css/fileinput.min.css"
-        into "${staticDirPath}/css"
-    }
-}
 
 def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
     def existFlg
