@@ -28,7 +28,7 @@ public class LibraryControllerTest {
     void 正しい都道府県を指定した場合には図書館一覧が返る() throws Exception {
         mvc.noauth.perform(get("/webapi/library/getLibraryList?pref=東京都"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.errcode", is(0)))
                 .andExpect(jsonPath("$.errmsg", is("")))
                 .andExpect(jsonPath("$.content[0].address", startsWith("東京都")))
@@ -39,7 +39,7 @@ public class LibraryControllerTest {
     void 間違った都道府県を指定した場合にはエラーが返る() throws Exception {
         mvc.noauth.perform(get("/webapi/library/getLibraryList?pref=東a京都"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.errcode", is(-2)))
                 .andExpect(jsonPath("$.errmsg", is("都道府県名が正しくありません。")))
                 .andExpect(jsonPath("$.content", hasSize(0)));

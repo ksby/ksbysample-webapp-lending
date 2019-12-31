@@ -37,7 +37,7 @@ public class LibraryController {
      * @throws Exception
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    @RequestMapping("/getLibraryList")
+    @RequestMapping(value = "/getLibraryList")
     public CommonWebApiResponse<List<Library>> getLibraryList(String pref) {
         CommonWebApiResponse<List<Library>> response = new CommonWebApiResponse<>();
         response.setContent(Collections.emptyList());
