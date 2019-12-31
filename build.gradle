@@ -225,9 +225,17 @@ def printTestCount = { desc, result ->
     }
 }
 
-// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP
+// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP -XX:TieredStopAtLevel=1
+// ※-XX:TieredStopAtLevel=1 オプションは 64bit VM でも起動時に最初はクライアントVM を使用するようにするもの
+//   開発環境でのみ使用し、本番環境では指定しないこと
+//   「Javaパフォーマンスチューニング基礎」参照
+//   https://www.slideshare.net/setoazusa/tuning-28987271
 bootRun {
-    jvmArgs = jvmArgsForTask + ["-Dspring.profiles.active=develop"]
+    jvmArgs = jvmArgsForTask +
+            [
+                    "-Dspring.profiles.active=develop",
+                    "-XX:TieredStopAtLevel=1"
+            ]
 }
 
 clean {
