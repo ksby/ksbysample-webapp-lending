@@ -43,7 +43,7 @@ services:
   # http://localhost:8888/?admin
   # http://localhost:8888/
   rainloop:
-    image: hardware/rainloop
+    image: hardware/rainloop:1.13.0
     container_name: rainloop
     ports:
       - "8888:8888"
