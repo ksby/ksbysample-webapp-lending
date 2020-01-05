@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.config;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ksbysample.webapp.lending.security.RoleAwareAuthenticationSuccessHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,6 +150,7 @@ public class WebSecurityConfig {
      * @throws Exception
      */
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
+    @SuppressFBWarnings("HARD_CODE_PASSWORD")
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth
             , ApplicationEventPublisher applicationEventPublisher) throws Exception {

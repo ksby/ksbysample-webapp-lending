@@ -206,7 +206,7 @@ public class RequestAndResponseLogger {
                     .append(" = ");
         }
         sb.append(value);
-        logger.info(sb.toString());
+        logger.info(sb.toString().replaceAll("[\r\n]",""));
     }
 
     private void append(StringBuilder sb, String name, String value) {

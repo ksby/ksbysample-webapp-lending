@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -45,7 +47,7 @@ public class BooklistController {
      * @param uploadBooklistForm ???
      * @return ???
      */
-    @RequestMapping
+    @GetMapping
     public String index(UploadBooklistForm uploadBooklistForm) {
         return "booklist/booklist";
     }
@@ -56,7 +58,7 @@ public class BooklistController {
      * @param model              ???
      * @return ???
      */
-    @RequestMapping("/fileupload")
+    @PostMapping("/fileupload")
     public String fileupload(@Validated UploadBooklistForm uploadBooklistForm
             , BindingResult bindingResult
             , Model model) {
@@ -80,7 +82,7 @@ public class BooklistController {
      * @param redirectAttributes   ???
      * @return ???
      */
-    @RequestMapping("/register")
+    @PostMapping("/register")
     public String register(RegisterBooklistForm registerBooklistForm
             , RedirectAttributes redirectAttributes) {
         booklistService.sendMessageToInquiringStatusOfBookQueue(registerBooklistForm);
@@ -91,7 +93,7 @@ public class BooklistController {
     /**
      * @return ???
      */
-    @RequestMapping("/complete")
+    @GetMapping("/complete")
     public String complete() {
         return "booklist/complete";
     }

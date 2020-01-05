@@ -7,6 +7,7 @@ import ksbysample.webapp.lending.webapi.common.CommonWebApiResponse;
 import org.simpleframework.xml.core.ValueRequiredException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +38,7 @@ public class LibraryController {
      * @throws Exception
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
-    @RequestMapping(value = "/getLibraryList")
+    @GetMapping(value = "/getLibraryList")
     public CommonWebApiResponse<List<Library>> getLibraryList(String pref) {
         CommonWebApiResponse<List<Library>> response = new CommonWebApiResponse<>();
         response.setContent(Collections.emptyList());

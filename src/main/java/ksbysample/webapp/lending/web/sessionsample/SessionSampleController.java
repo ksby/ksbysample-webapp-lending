@@ -1,8 +1,8 @@
 package ksbysample.webapp.lending.web.sessionsample;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
 /**
@@ -17,7 +17,8 @@ public class SessionSampleController {
      * @param sessionSampleForm ???
      * @return ???
      */
-    @RequestMapping
+    @SuppressFBWarnings("SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING")
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public String index(SessionSampleForm sessionSampleForm) {
         return "sessionsample/first";
     }
@@ -26,7 +27,7 @@ public class SessionSampleController {
      * @param sessionSampleForm ???
      * @return ???
      */
-    @RequestMapping("/next")
+    @PostMapping("/next")
     public String next(SessionSampleForm sessionSampleForm) {
         return "sessionsample/next";
     }
@@ -35,7 +36,7 @@ public class SessionSampleController {
      * @param sessionSampleForm ???
      * @return ???
      */
-    @RequestMapping("/confirm")
+    @PostMapping("/confirm")
     public String confirm(SessionSampleForm sessionSampleForm) {
         return "sessionsample/confirm";
     }
@@ -44,7 +45,7 @@ public class SessionSampleController {
      * @param sessionStatus ???
      * @return ???
      */
-    @RequestMapping("/clear")
+    @PostMapping("/clear")
     public String clear(SessionStatus sessionStatus) {
         sessionStatus.setComplete();
         return "redirect:/sessionsample";
