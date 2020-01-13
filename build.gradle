@@ -233,7 +233,7 @@ def printTestCount = { desc, result ->
     }
 }
 
-// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP -XX:TieredStopAtLevel=1
+// -ea -Dspring.profiles.active=develop -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP -XX:TieredStopAtLevel=1 -Dspring.main.lazy-initialization=true
 // ※-XX:TieredStopAtLevel=1 オプションは 64bit VM でも起動時に最初はクライアントVM を使用するようにするもの
 //   開発環境でのみ使用し、本番環境では指定しないこと
 //   「Javaパフォーマンスチューニング基礎」参照
@@ -250,7 +250,7 @@ clean {
     }
 }
 
-// -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED
+// -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP -XX:TieredStopAtLevel=1 -Dspring.main.lazy-initialization=true --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED
 task testJUnit4AndSpock(type: Test) {
     jvmArgs = jvmArgsForTask +
             jvmArgsAddOpens +
