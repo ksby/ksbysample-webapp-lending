@@ -211,7 +211,9 @@ dependencies {
 def jvmArgsForTask = [
         "-ea",
         "-Dfile.encoding=UTF-8",
-        "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP"
+        "-Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP",
+        "-XX:TieredStopAtLevel=1",
+        "-Dspring.main.lazy-initialization=true"
 ]
 // JDK 11 に変更後、test タスク実行時に groovy と powermock が JDKの内部部分にアクセスするためにコードでリフレクションを使用
 // していて WARNING が出るため、JVM の起動時オプションの --add-opens を指定して WARNING が出ないようにする
@@ -238,10 +240,7 @@ def printTestCount = { desc, result ->
 //   https://www.slideshare.net/setoazusa/tuning-28987271
 bootRun {
     jvmArgs = jvmArgsForTask +
-            [
-                    "-Dspring.profiles.active=develop",
-                    "-XX:TieredStopAtLevel=1"
-            ]
+            ["-Dspring.profiles.active=develop"]
 }
 
 clean {
