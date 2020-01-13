@@ -265,7 +265,7 @@ services:
       - rabbitmq1
   # http://localhost:1936/haproxy?stats
   haproxy:
-    image: haproxy:2.1.2
+    image: haproxy:2.1.2-alpine
     container_name: haproxy
     ports:
       - "1936:1936"
