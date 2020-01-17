@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.helper.freemarker;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -44,6 +45,7 @@ public class FreeMarkerHelper {
         }
     }
 
+    @SuppressFBWarnings("TEMPLATE_INJECTION_FREEMARKER")
     private String process(Template template, Map<String, Object> model) {
         try {
             StringWriter sw = new StringWriter();

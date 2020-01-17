@@ -2,7 +2,7 @@ version: '3'
 
 services:
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v2.15.1
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -16,7 +16,7 @@ services:
       - "app:${HOST_IP_ADDRESS}"
 
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:6.5.2
     container_name: grafana
     ports:
       - "3000:3000"
@@ -194,14 +194,13 @@ services:
       - redis-cluster-6
 
   redis_exporter:
-    image: oliver006/redis_exporter:latest
+    image: oliver006/redis_exporter:v1.3.5-alpine
     container_name: redis_exporter
     ports:
       - "9121:9121"
-    environment:
+    # environment:
       # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
       # - TZ=Asia/Tokyo
-      - REDIS_ADDR=redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_1_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_2_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_3_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_4_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_5_PORT},redis://${HOST_IP_ADDRESS}:${REDIS_CLUSTER_6_PORT}
 
   # 管理コンソールは以下のURLにアクセスする
   # http://localhost:15672/
@@ -266,7 +265,7 @@ services:
       - rabbitmq1
   # http://localhost:1936/haproxy?stats
   haproxy:
-    image: haproxy:1.8.14-alpine
+    image: haproxy:2.1.2-alpine
     container_name: haproxy
     ports:
       - "1936:1936"
@@ -281,7 +280,7 @@ services:
       - rabbitmq2
       - rabbitmq3
   haproxy-rsyslog:
-    image: rafpe/docker-haproxy-rsyslog
+    image: rafpe/docker-haproxy-rsyslog:latest
     container_name: haproxy-rsyslog
     environment:
       - TZ=Asia/Tokyo
@@ -338,7 +337,7 @@ services:
       - ./docker/pgadmin4/data:/var/lib/pgadmin
 
   flyway:
-    image: boxfuse/flyway:${FLYWAY_VERSION}-alpine
+    image: flyway/flyway:${FLYWAY_VERSION}-alpine
     container_name: flyway
     environment:
       - TZ=Asia/Tokyo
@@ -359,7 +358,7 @@ services:
     # tty: true
 
   postgres_exporter:
-    image: wrouesnel/postgres_exporter
+    image: wrouesnel/postgres_exporter:v0.8.0
     container_name: postgres_exporter
     environment:
       # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく

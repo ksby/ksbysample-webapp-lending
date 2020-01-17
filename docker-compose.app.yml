@@ -10,7 +10,7 @@ services:
       dockerfile: docker/app/Dockerfile
     image: ksbysample-webapp-lending
     volumes:
-      - ./build/libs/ksbysample-webapp-lending-2.1.3-RELEASE.jar:/app.jar
+      - ./build/libs/ksbysample-webapp-lending-2.2.2-RELEASE.jar:/app.jar
       - ./docker/app/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
     environment:
       - SPRING_DATASOURCE_HIKARI_JDBC_URL=jdbc:postgresql://postgresql/ksbylending
@@ -24,7 +24,7 @@ services:
     # tty: true
 
   haproxy-app:
-    image: haproxy:1.8.14-alpine
+    image: haproxy:2.1.2-alpine
     container_name: haproxy-app
     volumes:
       - ./docker/app/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
@@ -33,7 +33,7 @@ services:
     depends_on:
       - app
   haproxy-app-rsyslog:
-    image: rafpe/docker-haproxy-rsyslog
+    image: rafpe/docker-haproxy-rsyslog:latest
     container_name: haproxy-app-rsyslog
     volumes:
       - ./docker/app/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro

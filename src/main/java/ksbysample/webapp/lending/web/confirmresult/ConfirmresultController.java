@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,7 +57,7 @@ public class ConfirmresultController {
      * @param response                         ???
      * @return ???
      */
-    @RequestMapping
+    @GetMapping
     @LoggingEventName("初期表示処理")
     public String index(@Validated ConfirmresultParamForm confirmresultParamForm
             , BindingResult bindingResult

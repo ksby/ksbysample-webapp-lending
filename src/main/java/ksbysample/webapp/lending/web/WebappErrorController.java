@@ -2,6 +2,7 @@ package ksbysample.webapp.lending.web;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -40,7 +41,7 @@ public class WebappErrorController implements ErrorController {
      * @return ???
      * @throws IOException
      */
-    @RequestMapping
+    @GetMapping
     public ModelAndView index(Exception e, HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         return exceptionHandlerAdvice.handleException(e, request, response);

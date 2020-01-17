@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.config;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ksbysample.webapp.lending.security.RoleAwareAuthenticationSuccessHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointR
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -22,6 +24,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 /**
  * ???
  */
+@Lazy(false)
 @Configuration
 public class WebSecurityConfig {
 
@@ -149,6 +152,7 @@ public class WebSecurityConfig {
      * @throws Exception
      */
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
+    @SuppressFBWarnings("HARD_CODE_PASSWORD")
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth
             , ApplicationEventPublisher applicationEventPublisher) throws Exception {
