@@ -1,5 +1,6 @@
 package ksbysample.webapp.lending.web;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import ksbysample.webapp.lending.config.WebSecurityConfig;
 import ksbysample.webapp.lending.dao.UserInfoDao;
 import ksbysample.webapp.lending.dao.UserRoleDao;
@@ -20,9 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -67,7 +66,8 @@ public class LoginController {
      * @param response ???
      * @return ???
      */
-    @RequestMapping
+    @SuppressFBWarnings("SPRING_CSRF_UNRESTRICTED_REQUEST_MAPPING")
+    @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
     public String index(HttpServletRequest request, HttpServletResponse response) {
         // 有効な remember-me Cookie が存在する場合にはログイン画面を表示させず自動ログインさせる
         TokenBasedRememberMeServices rememberMeServices
@@ -86,7 +86,7 @@ public class LoginController {
      * @param password ???
      * @return ???
      */
-    @RequestMapping("/encode")
+    @GetMapping("/encode")
     @ResponseBody
     public String encode(@RequestParam String password) {
         return new BCryptPasswordEncoder().encode(password);
@@ -95,7 +95,7 @@ public class LoginController {
     /**
      * @return ???
      */
-    @RequestMapping("/loginsuccess")
+    @GetMapping("/loginsuccess")
     public String loginsuccess() {
         return "loginsuccess";
     }
@@ -105,7 +105,7 @@ public class LoginController {
      * @param request ???
      * @return ???
      */
-    @RequestMapping("/urllogin")
+    @GetMapping("/urllogin")
     public String urllogin(@RequestParam String user
             , HttpServletRequest request) {
         // user パラメータで指定されたメールアドレスのユーザが user_info テーブルに存在するかチェックする

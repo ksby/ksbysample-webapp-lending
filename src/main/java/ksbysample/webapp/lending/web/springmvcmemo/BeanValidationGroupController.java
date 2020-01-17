@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Validator;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -28,7 +30,7 @@ public class BeanValidationGroupController {
      * @param beanValidationGroupForm ???
      * @return ???
      */
-    @RequestMapping
+    @GetMapping
     public String beanValidationGroup(BeanValidationGroupForm beanValidationGroupForm) {
         return THYMELEAF_TEMPLATE;
     }
@@ -38,7 +40,7 @@ public class BeanValidationGroupController {
      * @param bindingResult           ???
      * @return ???
      */
-    @RequestMapping("/fileupload")
+    @PostMapping("/fileupload")
     public String fileupload(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -54,7 +56,7 @@ public class BeanValidationGroupController {
      * @param editFormChecker         ???
      * @return ???
      */
-    @RequestMapping("/edit")
+    @PostMapping("/edit")
     public String edit(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , EditFormChecker editFormChecker) {
@@ -72,7 +74,7 @@ public class BeanValidationGroupController {
      * @param sendmailFormChecker     ???
      * @return ???
      */
-    @RequestMapping("/sendmail")
+    @PostMapping("/sendmail")
     public String sendmail(@Validated BeanValidationGroupForm beanValidationGroupForm
             , BindingResult bindingResult
             , SendmailFormChecker sendmailFormChecker) {

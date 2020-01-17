@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class BookListCsvDownloadHelper implements DataDownloadHelper {
 
-    private static final String[] CSV_HEADER = new String[]{"ISBN", "書名", "申請理由", "承認／却下", "却下理由"};
+    private static final String[] CSV_HEADER = {"ISBN", "書名", "申請理由", "承認／却下", "却下理由"};
     private static final String CSV_FILE_NAME_FORMAT = "booklist-%s.csv";
 
     private final Long lendingAppId;

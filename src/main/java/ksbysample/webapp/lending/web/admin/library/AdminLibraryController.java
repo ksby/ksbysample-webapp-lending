@@ -3,6 +3,8 @@ package ksbysample.webapp.lending.web.admin.library;
 import ksbysample.webapp.lending.config.Constant;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -25,7 +27,7 @@ public class AdminLibraryController {
     /**
      * @return ???
      */
-    @RequestMapping
+    @GetMapping
     public String index() {
         return "admin/library/library";
     }
@@ -34,7 +36,7 @@ public class AdminLibraryController {
      * @param setSelectedLibraryForm ???
      * @return ???
      */
-    @RequestMapping("/addSearchLibrary")
+    @PostMapping("/addSearchLibrary")
     public String addSearchLibrary(SetSelectedLibraryForm setSelectedLibraryForm) {
         adminLibraryService.deleteAndInsertLibraryForSearch(setSelectedLibraryForm);
         return "redirect:" + Constant.URL_ADMIN_LIBRARY;

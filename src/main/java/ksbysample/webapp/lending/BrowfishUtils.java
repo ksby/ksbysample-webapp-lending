@@ -1,5 +1,7 @@
 package ksbysample.webapp.lending;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -14,6 +16,7 @@ import java.util.Base64;
  * ???
  */
 @SuppressWarnings({"PMD.HardCodedCryptoKey"})
+@SuppressFBWarnings("CIPHER_INTEGRITY")
 public class BrowfishUtils {
 
     private static final String KEY = "sample";

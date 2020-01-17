@@ -1,6 +1,7 @@
 package ksbysample.webapp.lending.web;
 
 import com.google.common.base.Joiner;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,7 @@ public class ExceptionHandlerAdvice {
      * @return ???
      * @throws IOException
      */
+    @SuppressFBWarnings("INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE")
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception e
             , HttpServletRequest request

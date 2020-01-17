@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Component
 public class Mail003Helper {
 
-    private static final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail003-body.ftl";
+    private static final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail003-body.ftlh";
 
     private static final String FROM_ADDR = "lendingapp@sample.com";
     private static final String SUBJECT = "貸出申請が承認・却下されました";

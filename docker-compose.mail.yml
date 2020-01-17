@@ -39,8 +39,11 @@ services:
     restart: always
 
   # Webmail クライアント
+  # 管理画面（ログイン／パスワードは admin/12345）
+  # http://localhost:8888/?admin
+  # http://localhost:8888/
   rainloop:
-    image: hardware/rainloop
+    image: hardware/rainloop:1.13.0
     container_name: rainloop
     ports:
       - "8888:8888"

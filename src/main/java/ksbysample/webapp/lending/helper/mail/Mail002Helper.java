@@ -16,7 +16,7 @@ import java.util.Map;
 @Component
 public class Mail002Helper {
 
-    private static final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail002-body.ftl";
+    private static final String TEMPLATE_LOCATION_TEXTMAIL = "mail/mail002-body.ftlh";
 
     private static final String FROM_ADDR = "lendingapp@sample.com";
     private static final String SUBJECT = "貸出申請がありました";
