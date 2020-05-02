@@ -166,7 +166,9 @@ dependencies {
     implementation("com.univocity:univocity-parsers:2.8.4")
     implementation("com.google.guava:guava:28.1-jre")
     implementation("org.flywaydb:flyway-core:6.1.3")
-    testImplementation("org.dbunit:dbunit:2.6.0")
+    testImplementation("org.dbunit:dbunit:2.6.0") {
+        exclude group: "postgresql", module: "postgresql"
+    }
     testImplementation("com.icegreen:greenmail:1.5.11")
     testImplementation("org.assertj:assertj-core:3.14.0")
     testImplementation("com.jayway.jsonpath:json-path:2.4.0")
