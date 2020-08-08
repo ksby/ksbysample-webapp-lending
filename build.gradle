@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.2.2-RELEASE"
+        version "2.2.9-RELEASE"
     }
     repositories {
         mavenCentral()
@@ -14,8 +14,8 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.2.2.RELEASE"
-    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+    id "org.springframework.boot" version "2.2.9.RELEASE"
+    id "io.spring.dependency-management" version "1.0.9.RELEASE"
     id "groovy"
     id "checkstyle"
     id "com.github.spotbugs" version "3.0.0"
@@ -113,12 +113,13 @@ repositories {
 dependencyManagement {
     imports {
         // mavenBom は以下の URL のものを使用する
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.2.2.RELEASE/
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.2.9.RELEASE/
         // bomProperty に指定可能な property は以下の URL の BOM に記述がある
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.2.2.RELEASE/spring-boot-dependencies-2.2.2.RELEASE.pom
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.2.9.RELEASE/spring-boot-dependencies-2.2.9.RELEASE.pom
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
+            bomProperty "groovy.version", "2.5.12"
         }
         mavenBom("org.junit:junit-bom:5.5.2")
     }
@@ -202,7 +203,9 @@ dependencies {
     testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
 
     // for SpotBugs
-    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}")
+    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}") {
+        exclude group: "pull-parser", module: "pull-parser"
+    }
     compileOnly("net.jcip:jcip-annotations:1.0")
     compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
     testImplementation("com.google.code.findbugs:jsr305:3.0.2")
