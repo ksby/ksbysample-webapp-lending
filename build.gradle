@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.2.9-RELEASE"
+        version "2.3.2-RELEASE"
     }
     repositories {
         mavenCentral()
@@ -14,14 +14,14 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.2.9.RELEASE"
+    id "org.springframework.boot" version "2.3.2.RELEASE"
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
     id "groovy"
     id "checkstyle"
 //    id "com.github.spotbugs" version "3.0.0"
     id "pmd"
     id "net.ltgt.errorprone" version "1.1.1"
-    id "com.gorylenko.gradle-git-properties" version "2.2.0"
+    id "com.gorylenko.gradle-git-properties" version "2.2.3"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -62,8 +62,6 @@ idea {
 }
 
 configurations {
-    developmentOnly
-    runtimeClasspath.extendsFrom developmentOnly
     compileOnly.extendsFrom annotationProcessor
 
     // annotationProcessor と testAnnotationProcessor、compileOnly と testCompileOnly を併記不要にする
@@ -121,22 +119,23 @@ dependencyManagement {
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
             bomProperty "groovy.version", "2.5.12"
         }
-        mavenBom("org.junit:junit-bom:5.5.2")
+        mavenBom("org.junit:junit-bom:5.6.2")
     }
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:42.2.9"
+    def jdbcDriver = "org.postgresql:postgresql:42.2.14"
     def spockVersion = "1.3-groovy-2.5"
     def domaVersion = "2.26.0"
-    def lombokVersion = "1.18.10"
+    def lombokVersion = "1.18.12"
     def errorproneVersion = "2.3.4"
-    def powermockVersion = "2.0.4"
+    def powermockVersion = "2.0.7"
     def spotbugsVersion = "4.0.0-beta4"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -165,15 +164,15 @@ dependencies {
     implementation("com.integralblue:log4jdbc-spring-boot-starter:2.0.0")
     implementation("org.simpleframework:simple-xml:2.7.1")
     implementation("com.univocity:univocity-parsers:2.8.4")
-    implementation("com.google.guava:guava:28.1-jre")
-    implementation("org.flywaydb:flyway-core:6.1.3")
-    testImplementation("org.dbunit:dbunit:2.6.0") {
+    implementation("com.google.guava:guava:29.0-jre")
+    implementation("org.flywaydb:flyway-core:6.5.3")
+    testImplementation("org.dbunit:dbunit:2.7.0") {
         exclude group: "postgresql", module: "postgresql"
     }
-    testImplementation("com.icegreen:greenmail:1.5.11")
-    testImplementation("org.assertj:assertj-core:3.14.0")
+    testImplementation("com.icegreen:greenmail:1.5.14")
+    testImplementation("org.assertj:assertj-core:3.16.1")
     testImplementation("com.jayway.jsonpath:json-path:2.4.0")
-    testImplementation("org.jsoup:jsoup:1.12.1")
+    testImplementation("org.jsoup:jsoup:1.13.1")
     testImplementation("cglib:cglib-nodep:3.3.0")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
     testImplementation("org.spockframework:spock-spring:${spockVersion}")

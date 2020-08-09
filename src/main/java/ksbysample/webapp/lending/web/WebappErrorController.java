@@ -29,6 +29,7 @@ public class WebappErrorController implements ErrorController {
     /**
      * @return ???
      */
+    @SuppressWarnings("deprecation")
     @Override
     public String getErrorPath() {
         return "/error";
