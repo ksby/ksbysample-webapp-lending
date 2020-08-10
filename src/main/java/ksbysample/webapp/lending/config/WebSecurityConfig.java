@@ -90,6 +90,7 @@ public class WebSecurityConfig {
                     .antMatchers("/sessionsample/**").permitAll()
                     .antMatchers("/textareamemo/**").permitAll()
                     .antMatchers("/sample/**").permitAll()
+                    .antMatchers("/gracefulShutdownTest/**").permitAll()
                     .anyRequest().hasAnyRole("USER", "ADMIN", "APPROVER");
             http.formLogin()
                     .loginPage("/")
