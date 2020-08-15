@@ -17,7 +17,7 @@ public class SelectOptionsUtils {
         int offset = pageable.getPageNumber() * pageable.getPageSize();
         int limit = pageable.getPageSize();
 
-        SelectOptions selectOptions = null;
+        SelectOptions selectOptions;
         if (countFlg) {
             selectOptions = SelectOptions.get().offset(offset).limit(limit).count();
         } else {

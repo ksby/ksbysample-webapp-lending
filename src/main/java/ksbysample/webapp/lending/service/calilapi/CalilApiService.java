@@ -114,7 +114,7 @@ public class CalilApiService {
         vars.put("systemid", systemid);
         vars.put("isbn", Joiner.on(",").join(isbnList));
 
-        ResponseEntity<CheckApiResponse> response = null;
+        ResponseEntity<CheckApiResponse> response;
         CheckApiResponse checkApiResponse = null;
         String url = URL_CALILAPI_CHECK;
         for (int retry = 0; retry < RETRY_MAX_CNT; retry++) {
