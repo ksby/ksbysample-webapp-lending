@@ -12,6 +12,8 @@ public class UserInfoService {
     private final UserInfoDao userInfoDao;
 
     /**
+     * ???
+     *
      * @param userInfoDao ???
      */
     public UserInfoService(UserInfoDao userInfoDao) {
@@ -19,6 +21,8 @@ public class UserInfoService {
     }
 
     /**
+     * ???
+     *
      * @param mailAddress ???
      */
     public void incCntBadcredentials(String mailAddress) {
@@ -26,6 +30,8 @@ public class UserInfoService {
     }
 
     /**
+     * ???
+     *
      * @param mailAddress ???
      */
     public void initCntBadcredentials(String mailAddress) {

@@ -14,7 +14,7 @@ public class GracefulShutdownTestController {
      * アクセス後 5分 sleep してからレスポンスを返す
      *
      * @return "OK"の文字列
-     * @throws InterruptedException
+     * @throws InterruptedException ???
      */
     @GetMapping("/gracefulShutdownTest")
     @ResponseBody

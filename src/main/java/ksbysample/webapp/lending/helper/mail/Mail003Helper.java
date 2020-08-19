@@ -34,6 +34,8 @@ public class Mail003Helper {
     public final ValuesHelper vh;
 
     /**
+     * ???
+     *
      * @param freeMarkerHelper ???
      * @param mailSender       ???
      * @param vh               ???
@@ -47,11 +49,13 @@ public class Mail003Helper {
     }
 
     /**
+     * ???
+     *
      * @param toAddr          ???
      * @param lendingAppId    ???
      * @param lendingBookList ???
      * @return ???
-     * @throws MessagingException
+     * @throws MessagingException ???
      */
     public MimeMessage createMessage(String toAddr, Long lendingAppId, List<LendingBook> lendingBookList)
             throws MessagingException {

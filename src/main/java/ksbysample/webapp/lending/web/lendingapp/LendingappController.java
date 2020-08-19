@@ -38,6 +38,8 @@ public class LendingappController {
     private final LendingappFormValidator lendingappFormValidator;
 
     /**
+     * ???
+     *
      * @param lendingappService       ???
      * @param mph                     ???
      * @param lendingappFormValidator ???
@@ -51,6 +53,8 @@ public class LendingappController {
     }
 
     /**
+     * ???
+     *
      * @param binder ???
      */
     @InitBinder(value = "lendingappForm")
@@ -59,6 +63,8 @@ public class LendingappController {
     }
 
     /**
+     * ???
+     *
      * @param lendingappParamForm ???
      * @param bindingResult       ???
      * @param lendingappForm      ???
@@ -88,11 +94,13 @@ public class LendingappController {
     }
 
     /**
+     * ???
+     *
      * @param lendingappForm ???
      * @param bindingResult  ???
      * @param response       ???
      * @return ???
-     * @throws MessagingException
+     * @throws MessagingException ???
      */
     @PostMapping("/apply")
     public String apply(@Validated LendingappForm lendingappForm
@@ -119,6 +127,8 @@ public class LendingappController {
     }
 
     /**
+     * ???
+     *
      * @param lendingappForm ???
      * @param bindingResult  ???
      * @param model          ???

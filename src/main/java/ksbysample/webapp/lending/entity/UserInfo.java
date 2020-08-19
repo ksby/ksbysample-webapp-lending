@@ -5,6 +5,7 @@ import org.seasar.doma.*;
 import java.time.LocalDateTime;
 
 /**
+ * ???
  */
 @Entity
 @Table(name = "user_info")

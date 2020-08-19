@@ -35,6 +35,8 @@ public class WebSecurityConfig {
     private final UserDetailsService userDetailsService;
 
     /**
+     * ???
+     *
      * @param userDetailsService ???
      */
     public WebSecurityConfig(@Qualifier("lendingUserDetailsService") UserDetailsService userDetailsService) {
@@ -149,8 +151,10 @@ public class WebSecurityConfig {
     }
 
     /**
+     * ???
+     *
      * @param auth ???
-     * @throws Exception
+     * @throws Exception ???
      */
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     @SuppressFBWarnings("HARD_CODE_PASSWORD")

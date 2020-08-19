@@ -60,6 +60,8 @@ public class CalilApiService {
     private final MessagesPropertiesHelper mph;
 
     /**
+     * ???
+     *
      * @param restTemplateForCalilApi      ???
      * @param restTemplateForCalilApiByXml ???
      * @param simpleRetryTemplate          ???
@@ -76,9 +78,11 @@ public class CalilApiService {
     }
 
     /**
+     * ???
+     *
      * @param pref ???
      * @return ???
-     * @throws Exception
+     * @throws Exception ???
      */
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     public Libraries getLibraryList(String pref) throws Exception {
@@ -92,9 +96,10 @@ public class CalilApiService {
     }
 
     /**
+     * ???
+     *
      * @param pref ???
      * @return ???
-     * @throws Exception
      */
     public LibrariesForJackson2Xml getLibraryListByJackson2Xml(String pref) {
         // 図書館データベースAPIを呼び出して XMLレスポンスを受信する
@@ -104,6 +109,8 @@ public class CalilApiService {
     }
 
     /**
+     * ???
+     *
      * @param systemid ???
      * @param isbnList ???
      * @return ???

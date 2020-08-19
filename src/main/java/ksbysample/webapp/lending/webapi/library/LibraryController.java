@@ -26,6 +26,8 @@ public class LibraryController {
     private final CalilApiService calilApiService;
 
     /**
+     * ???
+     *
      * @param calilApiService ???
      */
     public LibraryController(CalilApiService calilApiService) {
@@ -33,9 +35,10 @@ public class LibraryController {
     }
 
     /**
+     * ???
+     *
      * @param pref ???
      * @return ???
-     * @throws Exception
      */
     @SuppressWarnings("PMD.AvoidCatchingGenericException")
     @GetMapping(value = "/getLibraryList")

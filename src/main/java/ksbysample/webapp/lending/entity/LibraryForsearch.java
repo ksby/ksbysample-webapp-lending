@@ -6,6 +6,7 @@ import org.seasar.doma.Id;
 import org.seasar.doma.Table;
 
 /**
+ * ???
  */
 @Entity
 @Table(name = "library_forsearch")

@@ -15,6 +15,8 @@ public class UserHelper {
     private final UserInfoDao userInfoDao;
 
     /**
+     * ???
+     *
      * @param userInfoDao ???
      */
     public UserHelper(UserInfoDao userInfoDao) {
@@ -22,6 +24,8 @@ public class UserHelper {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     public String[] getApprovalMailAddrList() {

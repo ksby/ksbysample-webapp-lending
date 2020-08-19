@@ -28,11 +28,11 @@ public class BrowfishUtils {
      *
      * @param str 暗号化する文字列
      * @return 暗号化された文字列
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws BadPaddingException
-     * @throws IllegalBlockSizeException
+     * @throws NoSuchPaddingException    ???
+     * @throws NoSuchAlgorithmException  ???
+     * @throws InvalidKeyException       ???
+     * @throws BadPaddingException       ???
+     * @throws IllegalBlockSizeException ???
      */
     public static String encrypt(String str)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException

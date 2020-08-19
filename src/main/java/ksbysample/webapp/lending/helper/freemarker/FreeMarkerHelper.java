@@ -19,6 +19,7 @@ public class FreeMarkerHelper {
     private final Configuration freeMarkerConfiguration;
 
     /**
+     * ???
      *
      * @param freeMarkerConfiguration ???
      */
@@ -27,6 +28,7 @@ public class FreeMarkerHelper {
     }
 
     /**
+     * ???
      *
      * @param templateLocation ???
      * @param model ???

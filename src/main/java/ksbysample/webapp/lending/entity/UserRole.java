@@ -3,6 +3,7 @@ package ksbysample.webapp.lending.entity;
 import org.seasar.doma.*;
 
 /**
+ * ???
  */
 @Entity
 @Table(name = "user_role")

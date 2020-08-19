@@ -7,12 +7,15 @@ import org.seasar.doma.*;
 import java.util.List;
 
 /**
+ * ???
  */
 @Dao
 @ComponentAndAutowiredDomaConfig
 public interface UserRoleDao {
 
     /**
+     * ???
+     *
      * @param roleId ???
      * @return the UserRole entity
      */
@@ -20,6 +23,8 @@ public interface UserRoleDao {
     UserRole selectById(Long roleId);
 
     /**
+     * ???
+     *
      * @param userId ???
      * @return ???
      */
@@ -27,6 +32,8 @@ public interface UserRoleDao {
     List<UserRole> selectByUserId(Long userId);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -34,6 +41,8 @@ public interface UserRoleDao {
     int insert(UserRole entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -41,6 +50,8 @@ public interface UserRoleDao {
     int update(UserRole entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */

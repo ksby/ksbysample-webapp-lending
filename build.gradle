@@ -20,7 +20,7 @@ plugins {
     id "checkstyle"
 //    id "com.github.spotbugs" version "3.0.0"
     id "pmd"
-    id "net.ltgt.errorprone" version "1.1.1"
+    id "net.ltgt.errorprone" version "1.2.1"
     id "com.gorylenko.gradle-git-properties" version "2.2.3"
 }
 
@@ -34,6 +34,9 @@ wrapper {
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
 [compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ["-Xlint:all,-options,-processing,-path"]
+tasks.withType(JavaCompile).configureEach {
+    options.errorprone.disableWarningsInGeneratedCode = true
+}
 tasks.named("compileTestJava").configure {
     options.errorprone.enabled = false
 }
@@ -128,7 +131,7 @@ dependencies {
     def spockVersion = "1.3-groovy-2.5"
     def domaVersion = "2.26.0"
     def lombokVersion = "1.18.12"
-    def errorproneVersion = "2.3.4"
+    def errorproneVersion = "2.4.0"
     def powermockVersion = "2.0.7"
     def spotbugsVersion = "4.0.0-beta4"
 
