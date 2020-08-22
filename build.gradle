@@ -18,7 +18,7 @@ plugins {
     id "io.spring.dependency-management" version "1.0.9.RELEASE"
     id "groovy"
     id "checkstyle"
-//    id "com.github.spotbugs" version "3.0.0"
+    id "com.github.spotbugs" version "4.5.0"
     id "pmd"
     id "net.ltgt.errorprone" version "1.2.1"
     id "com.gorylenko.gradle-git-properties" version "2.2.3"
@@ -84,19 +84,19 @@ checkstyle {
     sourceSets = [project.sourceSets.main]
 }
 
-//spotbugs {
-//    toolVersion = "4.0.0-beta4"
-//    ignoreFailures = true
-//    effort = "max"
-//    spotbugsTest.enabled = false
-//}
-//tasks.withType(com.github.spotbugs.SpotBugsTask) {
-//    reports {
-//        xml.enabled = false
-//        html.enabled = true
-//        html.stylesheet = resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, "color.xsl")
-//    }
-//}
+spotbugs {
+    toolVersion = "4.1.1"
+    ignoreFailures = true
+    spotbugsTest.enabled = false
+}
+spotbugsMain {
+    reports {
+        html {
+            enabled = true
+            stylesheet = "color.xsl"
+        }
+    }
+}
 
 pmd {
     toolVersion = "6.26.0"
@@ -133,7 +133,7 @@ dependencies {
     def lombokVersion = "1.18.12"
     def errorproneVersion = "2.4.0"
     def powermockVersion = "2.0.7"
-    def spotbugsVersion = "4.0.0-beta4"
+    def spotbugsVersion = "4.1.1"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -205,14 +205,9 @@ dependencies {
     testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
 
     // for SpotBugs
-//    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}") {
-//        exclude group: "pull-parser", module: "pull-parser"
-//    }
-//    compileOnly("net.jcip:jcip-annotations:1.0")
+    spotbugs("com.github.spotbugs:spotbugs:${spotbugsVersion}")
     compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
-//    testImplementation("com.google.code.findbugs:jsr305:3.0.2")
-//    spotbugsStylesheets("com.github.spotbugs:spotbugs:${spotbugsVersion}")
-//    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1")
 }
 
 def jvmArgsForTask = [
