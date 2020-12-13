@@ -331,8 +331,11 @@ services:
       # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
       # - TZ=Asia/Tokyo
       # PGADMIN_DEFAULT_EMAIL には接続する PostgreSQL の ユーザ名を設定する（サーバを追加する時楽なため）
-      - PGADMIN_DEFAULT_EMAIL=postgres
+      - PGADMIN_DEFAULT_EMAIL=postgres@example.com
       - PGADMIN_DEFAULT_PASSWORD=yyyyyyyy
+      # PGADMIN_CONFIG_CONSOLE_LOG_LEVEL は debug 用
+      # 設定値は https://www.pgadmin.org/docs/pgadmin4/development/config_py.html の CONSOLE_LOG_LEVEL 参照
+      - PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=10
     volumes:
       - ./docker/pgadmin4/data:/var/lib/pgadmin
 
@@ -348,7 +351,7 @@ services:
       - postgresql
     # 下の３行は debug 用
     # うまく動かない時はコメントアウトを解除した後、
-    # docker exec -it postgresql /bin/sh
+    # docker exec -it flyway /bin/sh
     # で接続してから
     # flyway <command に記述した文字列>
     # を実行してみる
