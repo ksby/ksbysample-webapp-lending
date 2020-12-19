@@ -2,7 +2,7 @@ version: '3'
 
 services:
   prometheus:
-    image: prom/prometheus:v2.15.1
+    image: prom/prometheus:v2.23.0
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -16,7 +16,7 @@ services:
       - "app:${HOST_IP_ADDRESS}"
 
   grafana:
-    image: grafana/grafana:6.5.2
+    image: grafana/grafana:7.3.6
     container_name: grafana
     ports:
       - "3000:3000"
