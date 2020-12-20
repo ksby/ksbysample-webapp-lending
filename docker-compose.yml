@@ -306,20 +306,6 @@ services:
     depends_on:
       - haproxy
 
-  rabbitmq_exporter:
-    image: kbudde/rabbitmq-exporter:latest
-    container_name: rabbitmq_exporter
-    ports:
-      - "9419:9419"
-    environment:
-      # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
-      # - TZ=Asia/Tokyo
-      - RABBIT_URL=http://haproxy:15672
-      - RABBIT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBIT_PASSWORD=${RABBITMQ_DEFAULT_PASS}
-      - RABBIT_CAPABILITIES=bert,no_sort
-      - PUBLISH_PORT=9419
-
   # 起動したコンテナに /bin/sh でアクセスする場合には以下のコマンドを実行する
   # docker exec -it postgresql /bin/sh
   #
