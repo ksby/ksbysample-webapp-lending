@@ -1,11 +1,18 @@
 package ksbysample.webapp.lending.entity;
 
-import org.seasar.doma.*;
+import org.seasar.doma.Column;
+import org.seasar.doma.Entity;
+import org.seasar.doma.GeneratedValue;
+import org.seasar.doma.GenerationType;
+import org.seasar.doma.Id;
+import org.seasar.doma.Metamodel;
+import org.seasar.doma.Table;
+import org.seasar.doma.Version;
 
 /**
- * ???
  */
-@Entity
+@SuppressWarnings({"PMD.TooManyFields"})
+@Entity(metamodel = @Metamodel)
 @Table(name = "lending_app")
 public class LendingApp {
 
@@ -32,90 +39,90 @@ public class LendingApp {
     @Column(name = "version")
     Long version;
 
-    /**
+    /** 
      * Returns the lendingAppId.
-     *
+     * 
      * @return the lendingAppId
      */
     public Long getLendingAppId() {
         return lendingAppId;
     }
 
-    /**
+    /** 
      * Sets the lendingAppId.
-     *
+     * 
      * @param lendingAppId the lendingAppId
      */
     public void setLendingAppId(Long lendingAppId) {
         this.lendingAppId = lendingAppId;
     }
 
-    /**
+    /** 
      * Returns the status.
-     *
+     * 
      * @return the status
      */
     public String getStatus() {
         return status;
     }
 
-    /**
+    /** 
      * Sets the status.
-     *
+     * 
      * @param status the status
      */
     public void setStatus(String status) {
         this.status = status;
     }
 
-    /**
+    /** 
      * Returns the lendingUserId.
-     *
+     * 
      * @return the lendingUserId
      */
     public Long getLendingUserId() {
         return lendingUserId;
     }
 
-    /**
+    /** 
      * Sets the lendingUserId.
-     *
+     * 
      * @param lendingUserId the lendingUserId
      */
     public void setLendingUserId(Long lendingUserId) {
         this.lendingUserId = lendingUserId;
     }
 
-    /**
+    /** 
      * Returns the approvalUserId.
-     *
+     * 
      * @return the approvalUserId
      */
     public Long getApprovalUserId() {
         return approvalUserId;
     }
 
-    /**
+    /** 
      * Sets the approvalUserId.
-     *
+     * 
      * @param approvalUserId the approvalUserId
      */
     public void setApprovalUserId(Long approvalUserId) {
         this.approvalUserId = approvalUserId;
     }
 
-    /**
+    /** 
      * Returns the version.
-     *
+     * 
      * @return the version
      */
     public Long getVersion() {
         return version;
     }
 
-    /**
+    /** 
      * Sets the version.
-     *
+     * 
      * @param version the version
      */
     public void setVersion(Long version) {

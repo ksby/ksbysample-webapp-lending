@@ -3,12 +3,13 @@ package ksbysample.webapp.lending.entity;
 import org.seasar.doma.Column;
 import org.seasar.doma.Entity;
 import org.seasar.doma.Id;
+import org.seasar.doma.Metamodel;
 import org.seasar.doma.Table;
 
 /**
- * ???
  */
-@Entity
+@SuppressWarnings({"PMD.TooManyFields"})
+@Entity(metamodel = @Metamodel)
 @Table(name = "library_forsearch")
 public class LibraryForsearch {
 
