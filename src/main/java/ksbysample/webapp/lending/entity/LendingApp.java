@@ -10,6 +10,7 @@ import org.seasar.doma.Table;
 import org.seasar.doma.Version;
 
 /**
+ * ???
  */
 @SuppressWarnings({"PMD.TooManyFields"})
 @Entity(metamodel = @Metamodel)
