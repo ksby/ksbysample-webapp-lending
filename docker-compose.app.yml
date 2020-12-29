@@ -4,22 +4,39 @@
 version: '3'
 
 services:
+#  # docker/app/Dockerfile で生成した docker image を利用する場合の設定
+#  app:
+#    build:
+#      context: .
+#      dockerfile: docker/app/Dockerfile
+#    image: ksbysample-webapp-lending
+#    volumes:
+#      - ./build/libs/ksbysample-webapp-lending-2.3.7-RELEASE.jar:/app.jar
+#      - ./docker/app/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+#    environment:
+#      - SPRING_DATASOURCE_HIKARI_JDBC_URL=jdbc:postgresql://postgresql/ksbylending
+#      - SPRING_MAIL_HOST=mail-server
+#      - SPRING_RABBITMQ_HOST=haproxy
+#    deploy:
+#      mode: replicated
+#      replicas: 3
+#    # entrypoint: /bin/sh
+#    # stdin_open: true
+#    # tty: true
+
+  # bootBuildImage で生成した docker image を利用する場合の設定
+  # docker exec -it ksbysample-webapp-lending_app_1 /bin/bash
   app:
-    build:
-      context: .
-      dockerfile: docker/app/Dockerfile
-    image: ksbysample-webapp-lending
-    volumes:
-      - ./build/libs/ksbysample-webapp-lending-2.3.7-RELEASE.jar:/app.jar
-      - ./docker/app/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
+    image: ksbysample-webapp-lending:2.3.7-RELEASE
     environment:
+      - JAVA_TOOL_OPTIONS=-Dspring.profiles.active=product -Dlogging.appender=CONSOLE
       - SPRING_DATASOURCE_HIKARI_JDBC_URL=jdbc:postgresql://postgresql/ksbylending
       - SPRING_MAIL_HOST=mail-server
       - SPRING_RABBITMQ_HOST=haproxy
     deploy:
       mode: replicated
       replicas: 3
-    # entrypoint: /bin/sh
+    # entrypoint: /bin/bash
     # stdin_open: true
     # tty: true
 
