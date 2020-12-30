@@ -42,6 +42,8 @@ public class LendingapprovalService {
     private final LendingUserDetailsHelper lendingUserDetailsHelper;
 
     /**
+     * ???
+     *
      * @param lendingAppDao            ???
      * @param userInfoDao              ???
      * @param lendingBookDao           ???
@@ -64,6 +66,8 @@ public class LendingapprovalService {
     }
 
     /**
+     * ???
+     *
      * @param lendingAppId        ???
      * @param lendingapprovalForm ???
      */
@@ -84,16 +88,17 @@ public class LendingapprovalService {
     }
 
     /**
+     * ???
+     *
      * @param lendingapprovalForm ???
-     * @throws MessagingException
+     * @throws MessagingException ???
      */
     @SuppressWarnings({"PMD.AvoidInstantiatingObjectsInLoops", "UnusedVariable"})
     public void complete(LendingapprovalForm lendingapprovalForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
         Long lendingAppId = lendingapprovalForm.getLendingApp().getLendingAppId();
         LendingApp lendingApp = lendingAppDao.selectById(lendingAppId, SelectOptions.get().forUpdate());
-        List<LendingBook> lendingBookList
-                = lendingBookDao.selectByLendingAppId(lendingAppId, SelectOptions.get().forUpdate());
+        lendingBookDao.selectByLendingAppId(lendingAppId, SelectOptions.get().forUpdate());
 
         // lending_app.status を 4(承認済) にする
         lendingApp.setStatus(APPLOVED.getValue());
@@ -101,7 +106,7 @@ public class LendingapprovalService {
         lendingAppDao.update(lendingApp);
 
         // lending_book の approval_result, approval_reason を更新する
-        lendingBookList = new ArrayList<>();
+        List<LendingBook> lendingBookList = new ArrayList<>();
         for (ApplyingBookForm applyingBookForm : lendingapprovalForm.getApplyingBookFormList()) {
             LendingBook lendingBook = new LendingBook();
             BeanUtils.copyProperties(applyingBookForm, lendingBook);

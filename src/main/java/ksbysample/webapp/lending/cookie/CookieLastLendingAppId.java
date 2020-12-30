@@ -12,7 +12,7 @@ public class CookieLastLendingAppId extends CookieGenerator {
     private static final Integer COOKIE_MAX_AGE = 24 * 60 * 60 * 3; // 3日間
 
     /**
-     *
+     * ???
      */
     public CookieLastLendingAppId() {
         super();

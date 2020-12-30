@@ -30,6 +30,8 @@ public class LendingUserDetailsService implements UserDetailsService {
     private final MessageSource messageSource;
 
     /**
+     * ???
+     *
      * @param userInfoDao   ???
      * @param userRoleDao   ???
      * @param messageSource ???
@@ -42,6 +44,12 @@ public class LendingUserDetailsService implements UserDetailsService {
         this.messageSource = messageSource;
     }
 
+    /**
+     * ???
+     *
+     * @param username ???
+     * @return ???
+     */
     @Override
     public UserDetails loadUserByUsername(String username) {
         UserInfo userInfo = userInfoDao.selectByMailAddress(username);

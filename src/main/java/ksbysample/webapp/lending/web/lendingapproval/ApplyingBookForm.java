@@ -33,6 +33,8 @@ public class ApplyingBookForm {
     private Long version;
 
     /**
+     * ???
+     *
      * @param lendingBook ???
      */
     public ApplyingBookForm(LendingBook lendingBook) {

@@ -13,6 +13,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface LoggingEventName {
 
     /**
+     * ???
+     *
      * @return ???
      */
     String value();

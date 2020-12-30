@@ -26,6 +26,8 @@ public class Mail001Helper {
     private final JavaMailSender mailSender;
 
     /**
+     * ???
+     *
      * @param freeMarkerHelper ???
      * @param mailSender       ???
      */
@@ -36,10 +38,12 @@ public class Mail001Helper {
     }
 
     /**
+     * ???
+     *
      * @param toAddr       ???
      * @param lendingAppId ???
      * @return ???
-     * @throws MessagingException
+     * @throws MessagingException ???
      */
     public MimeMessage createMessage(String toAddr, Long lendingAppId) throws MessagingException {
         MimeMessage mimeMessage = this.mailSender.createMimeMessage();

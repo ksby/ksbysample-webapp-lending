@@ -25,6 +25,8 @@ public class ApprovedBookForm {
     private String approvalReason;
 
     /**
+     * ???
+     *
      * @param lendingBook ???
      */
     public ApprovedBookForm(LendingBook lendingBook) {

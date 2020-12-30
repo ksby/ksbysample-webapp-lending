@@ -19,6 +19,15 @@ public class RoleAwareAuthenticationSuccessHandler extends SavedRequestAwareAuth
 
     private final RequestCache requestCache = new HttpSessionRequestCache();
 
+    /**
+     * ???
+     *
+     * @param request        ???
+     * @param response       ???
+     * @param authentication ???
+     * @throws ServletException ???
+     * @throws IOException      ???
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response
             , Authentication authentication) throws ServletException, IOException {

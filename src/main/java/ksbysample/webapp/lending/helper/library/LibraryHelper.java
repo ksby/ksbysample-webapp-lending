@@ -13,6 +13,8 @@ public class LibraryHelper {
     private final LibraryForsearchDao libraryForsearchDao;
 
     /**
+     * ???
+     *
      * @param libraryForsearchDao ???
      */
     public LibraryHelper(LibraryForsearchDao libraryForsearchDao) {
@@ -20,6 +22,8 @@ public class LibraryHelper {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     public String getSelectedLibrary() {

@@ -1,11 +1,13 @@
 package ksbysample.webapp.lending.values;
 
-import com.google.common.reflect.ClassPath;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
+import org.springframework.core.type.filter.RegexPatternTypeFilter;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -16,29 +18,30 @@ public final class ValuesHelper {
 
     private final Map<String, String> valuesObjList;
 
-    private ValuesHelper(@Value("${valueshelper.classpath.prefix:}") String classpathPrefix) throws IOException {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        valuesObjList = ClassPath.from(loader)
-                .getTopLevelClassesRecursive(classpathPrefix + this.getClass().getPackage().getName())
-                .stream()
-                .filter(classInfo -> {
+    private ValuesHelper() {
+        ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+        provider.addIncludeFilter(new RegexPatternTypeFilter(Pattern.compile(".*")));
+        Set<BeanDefinition> beans = provider.findCandidateComponents(this.getClass().getPackage().getName());
+        valuesObjList = beans.stream()
+                .map(bean -> {
                     try {
-                        Class<?> clazz = Class.forName(classInfo.getName().replace(classpathPrefix, ""));
-                        return !clazz.equals(Values.class) && Values.class.isAssignableFrom(clazz);
+                        return Class.forName(bean.getBeanClassName());
                     } catch (ClassNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                 })
-                .collect(Collectors.toMap(classInfo -> classInfo.getSimpleName()
-                        , classInfo -> classInfo.getName().replace(classpathPrefix, "")));
+                .filter(clazz -> !clazz.equals(Values.class) && Values.class.isAssignableFrom(clazz))
+                .collect(Collectors.toMap(clazz -> clazz.getSimpleName(), clazz -> clazz.getName()));
     }
 
     /**
+     * ???
+     *
      * @param classSimpleName ???
      * @param valueName       ???
      * @param <T>             ???
      * @return ???
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException ???
      */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T> & Values> String getValue(String classSimpleName, String valueName)
@@ -49,6 +52,8 @@ public final class ValuesHelper {
     }
 
     /**
+     * ???
+     *
      * @param enumType  ???
      * @param valueName ???
      * @param <T>       ???
@@ -60,11 +65,13 @@ public final class ValuesHelper {
     }
 
     /**
+     * ???
+     *
      * @param classSimpleName ???
      * @param value           ???
      * @param <T>             ???
      * @return ???
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException ???
      */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T> & Values> String getText(String classSimpleName, String value)
@@ -81,6 +88,8 @@ public final class ValuesHelper {
     }
 
     /**
+     * ???
+     *
      * @param enumType ???
      * @param value    ???
      * @param <T>      ???
@@ -98,10 +107,12 @@ public final class ValuesHelper {
     }
 
     /**
+     * ???
+     *
      * @param classSimpleName ???
      * @param <T>             ???
      * @return ???
-     * @throws ClassNotFoundException
+     * @throws ClassNotFoundException ???
      */
     @SuppressWarnings("unchecked")
     public <T extends Enum<T> & Values> T[] values(String classSimpleName)

@@ -7,12 +7,15 @@ import org.seasar.doma.*;
 import java.util.List;
 
 /**
+ * ???
  */
 @Dao
 @ComponentAndAutowiredDomaConfig
 public interface UserInfoDao {
 
     /**
+     * ???
+     *
      * @param userId ???
      * @return the UserInfo entity
      */
@@ -20,6 +23,8 @@ public interface UserInfoDao {
     UserInfo selectById(Long userId);
 
     /**
+     * ???
+     *
      * @param mailAddress ???
      * @return ???
      */
@@ -27,12 +32,16 @@ public interface UserInfoDao {
     UserInfo selectByMailAddress(String mailAddress);
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Select
     List<String> selectApproverMailAddrList();
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -40,6 +49,8 @@ public interface UserInfoDao {
     int insert(UserInfo entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -47,6 +58,8 @@ public interface UserInfoDao {
     int update(UserInfo entity);
 
     /**
+     * ???
+     *
      * @param mailAddress ???
      * @return ???
      */
@@ -54,6 +67,8 @@ public interface UserInfoDao {
     int incCntBadcredentialsByMailAddress(String mailAddress);
 
     /**
+     * ???
+     *
      * @param mailAddress ???
      * @return ???
      */
@@ -61,6 +76,8 @@ public interface UserInfoDao {
     int initCntBadcredentialsByMailAddress(String mailAddress);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */

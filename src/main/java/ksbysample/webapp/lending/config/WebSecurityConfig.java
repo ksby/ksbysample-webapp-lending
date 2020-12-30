@@ -35,6 +35,8 @@ public class WebSecurityConfig {
     private final UserDetailsService userDetailsService;
 
     /**
+     * ???
+     *
      * @param userDetailsService ???
      */
     public WebSecurityConfig(@Qualifier("lendingUserDetailsService") UserDetailsService userDetailsService) {
@@ -90,6 +92,7 @@ public class WebSecurityConfig {
                     .antMatchers("/sessionsample/**").permitAll()
                     .antMatchers("/textareamemo/**").permitAll()
                     .antMatchers("/sample/**").permitAll()
+                    .antMatchers("/gracefulShutdownTest/**").permitAll()
                     .anyRequest().hasAnyRole("USER", "ADMIN", "APPROVER");
             http.formLogin()
                     .loginPage("/")
@@ -148,8 +151,10 @@ public class WebSecurityConfig {
     }
 
     /**
+     * ???
+     *
      * @param auth ???
-     * @throws Exception
+     * @throws Exception ???
      */
     @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     @SuppressFBWarnings("HARD_CODE_PASSWORD")

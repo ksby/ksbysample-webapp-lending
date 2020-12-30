@@ -66,9 +66,11 @@ public class RequestAndResponseLogger {
     }
 
     /**
+     * ???
+     *
      * @param pjp ???
      * @return ???
-     * @throws Throwable
+     * @throws Throwable ???
      */
     @Around(value = "allClassAndMethodUnderApplicationPackage()"
             + " && (requestMappingAnnotation() || requestMappingComposedAnnotations())")
@@ -206,7 +208,7 @@ public class RequestAndResponseLogger {
                     .append(" = ");
         }
         sb.append(value);
-        logger.info(sb.toString().replaceAll("[\r\n]",""));
+        logger.info(sb.toString().replaceAll("[\r\n]", ""));
     }
 
     private void append(StringBuilder sb, String name, String value) {

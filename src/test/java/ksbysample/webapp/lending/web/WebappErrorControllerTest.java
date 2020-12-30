@@ -41,7 +41,7 @@ public class WebappErrorControllerTest {
         assertThat(model.get("errorMessage")).isEqualTo(HttpStatus.NOT_FOUND.value() + " " + HttpStatus.NOT_FOUND.getReasonPhrase());
         List<String> errorInfoList = (List<String>) model.get("errorInfoList");
         assertThat(errorInfoList)
-                .contains("エラーが発生したURL：　" + REQUEST_URI_NOT_FOUND);
+                .contains("エラーが発生したURI：　" + REQUEST_URI_NOT_FOUND);
     }
 
 }

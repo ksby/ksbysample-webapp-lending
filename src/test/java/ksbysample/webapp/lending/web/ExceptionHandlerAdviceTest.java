@@ -62,7 +62,7 @@ public class ExceptionHandlerAdviceTest {
         // then
         String content = result.getResponse().getContentAsString();
         assertThat(content)
-                .contains("エラーが発生したURL：　http://localhost/exceptionHandlerAdviceTest/exception")
+                .contains("エラーが発生したURI：　/exceptionHandlerAdviceTest/exception")
                 .contains("<span>" + MESSAGE_EXCEPTION + "</span>")
                 .contains("parama：1")
                 .contains("paramb：2")
@@ -81,7 +81,7 @@ public class ExceptionHandlerAdviceTest {
         // then
         String content = result.getResponse().getContentAsString();
         assertThat(content)
-                .contains("エラーが発生したURL：　http://localhost/exceptionHandlerAdviceTest/runtimeException")
+                .contains("エラーが発生したURI：　/exceptionHandlerAdviceTest/runtimeException")
                 .contains("<span>" + MESSAGE_RUNTIMEEXCEPTION + "</span>")
                 .contains("<span>java.lang.RuntimeException: " + MESSAGE_RUNTIMEEXCEPTION + "</span>");
     }

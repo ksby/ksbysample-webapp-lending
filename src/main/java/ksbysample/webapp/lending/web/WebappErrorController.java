@@ -20,6 +20,8 @@ public class WebappErrorController implements ErrorController {
     private final ExceptionHandlerAdvice exceptionHandlerAdvice;
 
     /**
+     * ???
+     *
      * @param exceptionHandlerAdvice ???
      */
     public WebappErrorController(ExceptionHandlerAdvice exceptionHandlerAdvice) {
@@ -27,19 +29,24 @@ public class WebappErrorController implements ErrorController {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
+    @SuppressWarnings("deprecation")
     @Override
     public String getErrorPath() {
         return "/error";
     }
 
     /**
+     * ???
+     *
      * @param e        ???
      * @param request  ???
      * @param response ???
      * @return ???
-     * @throws IOException
+     * @throws IOException ???
      */
     @GetMapping
     public ModelAndView index(Exception e, HttpServletRequest request, HttpServletResponse response)

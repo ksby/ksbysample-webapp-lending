@@ -16,12 +16,19 @@ public class AuthenticationFailureBadCredentialsEventListener
     private final UserInfoService userInfoService;
 
     /**
+     * ???
+     *
      * @param userInfoService ???
      */
     public AuthenticationFailureBadCredentialsEventListener(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
     }
 
+    /**
+     * ???
+     *
+     * @param event ???
+     */
     @Override
     public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
         // UsernameNotFoundException は何もしない

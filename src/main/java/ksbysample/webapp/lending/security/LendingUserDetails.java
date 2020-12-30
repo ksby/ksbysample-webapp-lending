@@ -25,6 +25,8 @@ public class LendingUserDetails implements UserDetails {
     private final boolean enabled;
 
     /**
+     * ???
+     *
      * @param userInfo    ???
      * @param authorities ???
      */
@@ -50,6 +52,8 @@ public class LendingUserDetails implements UserDetails {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     public Long getUserId() {
@@ -57,6 +61,8 @@ public class LendingUserDetails implements UserDetails {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Override
@@ -65,6 +71,8 @@ public class LendingUserDetails implements UserDetails {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     public String getName() {
@@ -72,6 +80,8 @@ public class LendingUserDetails implements UserDetails {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Override

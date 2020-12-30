@@ -32,25 +32,27 @@ public class ExceptionHandlerAdvice {
     private final Logger logger = LoggerFactory.getLogger(ExceptionHandlerAdvice.class);
 
     /**
+     * ???
+     *
      * @param e        ???
      * @param request  ???
      * @param response ???
      * @return ???
-     * @throws IOException
+     * @throws IOException ???
      */
     @SuppressFBWarnings("INFORMATION_EXPOSURE_THROUGH_AN_ERROR_MESSAGE")
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception e
             , HttpServletRequest request
             , HttpServletResponse response) throws IOException {
-        StringBuilder url = new StringBuilder();
+        StringBuilder uri = new StringBuilder();
         if (StringUtils.equals(request.getRequestURI(), "/error")) {
-            url.append((String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI));
+            uri.append((String) request.getAttribute(RequestDispatcher.ERROR_REQUEST_URI));
         } else {
-            url.append(request.getRequestURL().toString());
+            uri.append(request.getRequestURI());
         }
-        url.append(StringUtils.isNotEmpty(request.getQueryString()) ? "?" + request.getQueryString() : "");
-        logger.error("URL = {}", url.toString(), e);
+        uri.append(StringUtils.isNotEmpty(request.getQueryString()) ? "?" + request.getQueryString() : "");
+        logger.error("URL = {}", uri.toString(), e);
 
         ModelAndView model = new ModelAndView("error");
         List<String> errorInfoList = new ArrayList<>();
@@ -71,7 +73,7 @@ public class ExceptionHandlerAdvice {
         model.addObject("currentdt", LocalDateTime.now(ZoneId.of("Asia/Tokyo")));
         // URL
         errorInfoList.add("　");
-        errorInfoList.add("エラーが発生したURL：　" + url);
+        errorInfoList.add("エラーが発生したURI：　" + uri);
         // URLパラメータ
         errorInfoList.add("URLパラメータ一覧：");
         Map<String, String[]> params = request.getParameterMap();

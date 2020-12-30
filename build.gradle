@@ -1,12 +1,16 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.2.2-RELEASE"
+        version "2.3.7-RELEASE"
     }
     repositories {
         mavenCentral()
         maven { url "https://repo.spring.io/release/" }
         gradlePluginPortal()
+    }
+    dependencies {
+        // for doma-codegen-plugin
+        classpath "org.postgresql:postgresql:42.2.14"
     }
 }
 
@@ -14,26 +18,30 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.2.2.RELEASE"
-    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+    id "org.springframework.boot" version "2.3.7.RELEASE"
+    id "io.spring.dependency-management" version "1.0.10.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "3.0.0"
+    id "com.github.spotbugs" version "4.5.0"
     id "pmd"
-    id "net.ltgt.errorprone" version "1.1.1"
-    id "com.gorylenko.gradle-git-properties" version "2.2.0"
+    id "net.ltgt.errorprone" version "1.2.1"
+    id "com.gorylenko.gradle-git-properties" version "2.2.3"
+    id "org.seasar.doma.codegen" version "1.2.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 wrapper {
-    gradleVersion = "6.0.1"
+    gradleVersion = "6.5.1"
     distributionType = Wrapper.DistributionType.ALL
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
 [compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ["-Xlint:all,-options,-processing,-path"]
+tasks.withType(JavaCompile).configureEach {
+    options.errorprone.disableWarningsInGeneratedCode = true
+}
 tasks.named("compileTestJava").configure {
     options.errorprone.enabled = false
 }
@@ -41,7 +49,7 @@ tasks.named("compileTestJava").configure {
 // for Doma 2
 // Copy the resources referred by the Doma annotation processors to
 // the destinationDir of the compileJava task
-task copyDomaResources(type: Sync)  {
+task copyDomaResources(type: Sync) {
     from sourceSets.main.resources.srcDirs
     into compileJava.destinationDir
     include "doma.compile.config"
@@ -62,16 +70,11 @@ idea {
 }
 
 configurations {
-    developmentOnly
-    runtimeClasspath.extendsFrom developmentOnly
     compileOnly.extendsFrom annotationProcessor
 
     // annotationProcessor と testAnnotationProcessor、compileOnly と testCompileOnly を併記不要にする
     testAnnotationProcessor.extendsFrom annotationProcessor
     testImplementation.extendsFrom compileOnly
-
-    // for Doma 2
-    domaGenRuntime
 
     // for SpotBugs
     spotbugsStylesheets { transitive = false }
@@ -79,26 +82,26 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = "8.28"
+    toolVersion = "8.35"
     sourceSets = [project.sourceSets.main]
 }
 
 spotbugs {
-    toolVersion = "4.0.0-beta4"
+    toolVersion = "4.1.1"
     ignoreFailures = true
-    effort = "max"
     spotbugsTest.enabled = false
 }
-tasks.withType(com.github.spotbugs.SpotBugsTask) {
+spotbugsMain {
     reports {
-        xml.enabled = false
-        html.enabled = true
-        html.stylesheet = resources.text.fromArchiveEntry(configurations.spotbugsStylesheets, "color.xsl")
+        html {
+            enabled = true
+            stylesheet = "color.xsl"
+        }
     }
 }
 
 pmd {
-    toolVersion = "6.20.0"
+    toolVersion = "6.26.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
@@ -113,29 +116,31 @@ repositories {
 dependencyManagement {
     imports {
         // mavenBom は以下の URL のものを使用する
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.2.2.RELEASE/
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.2.9.RELEASE/
         // bomProperty に指定可能な property は以下の URL の BOM に記述がある
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.2.2.RELEASE/spring-boot-dependencies-2.2.2.RELEASE.pom
+        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.2.9.RELEASE/spring-boot-dependencies-2.2.9.RELEASE.pom
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
+            bomProperty "groovy.version", "2.5.12"
         }
-        mavenBom("org.junit:junit-bom:5.5.2")
+        mavenBom("org.junit:junit-bom:5.6.2")
     }
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:42.2.9"
+    def jdbcDriver = "org.postgresql:postgresql:42.2.14"
     def spockVersion = "1.3-groovy-2.5"
-    def domaVersion = "2.26.0"
-    def lombokVersion = "1.18.10"
-    def errorproneVersion = "2.3.4"
-    def powermockVersion = "2.0.4"
-    def spotbugsVersion = "4.0.0-beta4"
+    def domaVersion = "2.44.3"
+    def lombokVersion = "1.18.12"
+    def errorproneVersion = "2.4.0"
+    def powermockVersion = "2.0.7"
+    def spotbugsVersion = "4.1.1"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -164,15 +169,15 @@ dependencies {
     implementation("com.integralblue:log4jdbc-spring-boot-starter:2.0.0")
     implementation("org.simpleframework:simple-xml:2.7.1")
     implementation("com.univocity:univocity-parsers:2.8.4")
-    implementation("com.google.guava:guava:28.1-jre")
-    implementation("org.flywaydb:flyway-core:6.1.3")
-    testImplementation("org.dbunit:dbunit:2.6.0") {
+    implementation("com.google.guava:guava:29.0-jre")
+    implementation("org.flywaydb:flyway-core:6.5.3")
+    testImplementation("org.dbunit:dbunit:2.7.0") {
         exclude group: "postgresql", module: "postgresql"
     }
-    testImplementation("com.icegreen:greenmail:1.5.11")
-    testImplementation("org.assertj:assertj-core:3.14.0")
+    testImplementation("com.icegreen:greenmail:1.5.14")
+    testImplementation("org.assertj:assertj-core:3.16.1")
     testImplementation("com.jayway.jsonpath:json-path:2.4.0")
-    testImplementation("org.jsoup:jsoup:1.12.1")
+    testImplementation("org.jsoup:jsoup:1.13.1")
     testImplementation("cglib:cglib-nodep:3.3.0")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
     testImplementation("org.spockframework:spock-spring:${spockVersion}")
@@ -183,10 +188,9 @@ dependencies {
     compileOnly("org.projectlombok:lombok:${lombokVersion}")
 
     // for Doma
-    annotationProcessor("org.seasar.doma:doma:${domaVersion}")
-    implementation("org.seasar.doma:doma:${domaVersion}")
-    domaGenRuntime("org.seasar.doma:doma-gen:${domaVersion}")
-    domaGenRuntime("${jdbcDriver}")
+    implementation("org.seasar.doma:doma-core:${domaVersion}")
+    implementation("org.seasar.doma:doma-slf4j:${domaVersion}")
+    annotationProcessor("org.seasar.doma:doma-processor:${domaVersion}")
 
     // for JUnit 5
     // junit-jupiter で junit-jupiter-api, junit-jupiter-params, junit-jupiter-engine の３つが依存関係に追加される
@@ -202,11 +206,8 @@ dependencies {
     testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
 
     // for SpotBugs
-    compileOnly("com.github.spotbugs:spotbugs:${spotbugsVersion}")
-    compileOnly("net.jcip:jcip-annotations:1.0")
+    spotbugs("com.github.spotbugs:spotbugs:${spotbugsVersion}")
     compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
-    testImplementation("com.google.code.findbugs:jsr305:3.0.2")
-    spotbugsStylesheets("com.github.spotbugs:spotbugs:${spotbugsVersion}")
     spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1")
 }
 
@@ -276,68 +277,130 @@ test {
     }
 }
 
-// for Doma-Gen
-task domaGen {
+// for doma-codegen-plugin
+// まず変更が必要なもの
+def rootPackageName = "ksbysample.webapp.lending"
+def rootPackagePath = "src/main/java/ksbysample/webapp/lending"
+def dbUrl = "jdbc:postgresql://localhost/ksbylending"
+def dbUser = "ksbylending_user"
+def dbPassword = "xxxxxxxx"
+def dbTableNamePattern = ".*"
+// おそらく変更不要なもの
+def packageEntityPath = rootPackagePath + "/entity"
+def packageDaoPath = rootPackagePath + "/dao"
+def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
+def workPath = "work"
+def workEntityPath = "${workPath}/entity"
+def workDaoPath = "${workPath}/dao"
+task domaGen(group: "doma code generation") {
+    // このタスク自体は何もしない。実行する時の起点用タスクとして作成している。
+}
+task beforeDomaCodeGen {
     doLast {
-        // まず変更が必要なもの
-        def rootPackageName = "ksbysample.webapp.lending"
-        def daoPackagePath = "src/main/java/ksbysample/webapp/lending/dao"
-        def dbUrl = "jdbc:postgresql://localhost/ksbylending"
-        def dbUser = "ksbylending_user"
-        def dbPassword = "xxxxxxxx"
-        def tableNamePattern = ".*"
-        // おそらく変更不要なもの
-        def importOfComponentAndAutowiredDomaConfig = "${rootPackageName}.util.doma.ComponentAndAutowiredDomaConfig"
-        def workDirPath = "work"
-        def workDaoDirPath = "${workDirPath}/dao"
-
         // 作業用ディレクトリを削除する
-        clearDir("${workDirPath}")
+        delete "${workPath}"
 
-        // 現在の Dao インターフェースのバックアップを取得する
+        // 現在の dao, entity パッケージのバックアップを取得する
         copy() {
-            from "${daoPackagePath}"
-            into "${workDaoDirPath}/org"
+            from "${packageDaoPath}"
+            into "${workDaoPath}/org"
+        }
+        copy() {
+            from "${packageEntityPath}"
+            into "${workEntityPath}/org"
         }
 
-        // Dao インターフェース、Entity クラスを生成する
-        ant.taskdef(resource: "domagentask.properties",
-                classpath: configurations.domaGenRuntime.asPath)
-        ant.gen(url: "${dbUrl}", user: "${dbUser}", password: "${dbPassword}", tableNamePattern: "${tableNamePattern}") {
-            entityConfig(packageName: "${rootPackageName}.entity", useListener: false)
-            daoConfig(packageName: "${rootPackageName}.dao")
-            sqlConfig()
+        // dao, entity パッケージを削除する
+        delete "${packageDaoPath}"
+        delete "${packageEntityPath}"
+    }
+}
+domaCodeGen {
+    db {
+        url = "${dbUrl}"
+        user = "${dbUser}"
+        password = "${dbPassword}"
+        tableNamePattern = "${dbTableNamePattern}"
+        ignoredTableNamePattern = "flyway_schema_history|SPRING_SESSION.*"
+        entity {
+            packageName = "${rootPackageName}.entity"
+            useListener = false
+            useMappedSuperclass = false
+        }
+        dao {
+            packageName = "${rootPackageName}.dao"
+        }
+    }
+}
+task afterDomaCodeGen {
+    doLast {
+        // 生成された Entity クラスを作業用ディレクトリにコピーし、
+        // @SuppressWarnings({"PMD.TooManyFields"}) アノテーションを付加する
+        copy() {
+            from "${packageEntityPath}"
+            into "${workEntityPath}/replace"
+            filter {
+                line ->
+                    line.replaceAll('@Entity', '@SuppressWarnings({"PMD.TooManyFields"})\n@Entity')
+            }
+        }
+
+        // 生成された Dao インターフェースからバックアップにあるクラスを削除する
+        // ※生成済の Dao インターフェースを再生成したい場合には事前に削除すること！
+        for (workDaoFile in new File("${workDaoPath}/org").listFiles()) {
+            def packageDaoFile = new File("${packageDaoPath}/${workDaoFile.name}")
+            if (packageDaoFile.exists()) {
+                packageDaoFile.delete()
+            }
         }
 
         // 生成された Dao インターフェースを作業用ディレクトリにコピーし、
-        // @ComponentAndAutowiredDomaConfig アノテーションを付加する
+        // @ComponentAndAutowiredDomaConfig アノテーションを付加し、
+        // Javadoc の @param に説明文を追加する
         copy() {
-            from "${daoPackagePath}"
-            into "${workDaoDirPath}/replace"
+            from "${packageDaoPath}"
+            into "${workDaoPath}/replace"
             filter {
                 line ->
-                    line.replaceAll("import org.seasar.doma.Dao;", "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
-                            .replaceAll("@Dao", "@Dao\n@ComponentAndAutowiredDomaConfig")
+                    line.replaceAll('import org.seasar.doma.Dao;', "import ${importOfComponentAndAutowiredDomaConfig};\nimport org.seasar.doma.Dao;")
+                            .replaceAll('@Dao', '@Dao\n@ComponentAndAutowiredDomaConfig')
+                            .replaceAll('@param (\\S+)$', '@param $1 $1')
             }
+        }
+
+        // 元々 dao, entity パッケージ内にあったファイルを元に戻す
+        copy() {
+            from "${workDaoPath}/org"
+            into "${packageDaoPath}"
+        }
+        copy() {
+            from "${workEntityPath}/org"
+            into "${packageEntityPath}"
         }
 
         // @ComponentAndAutowiredDomaConfig アノテーションを付加した Dao インターフェースを
         // dao パッケージへ戻す
         copy() {
-            from "${workDaoDirPath}/replace"
-            into "${daoPackagePath}"
+            from "${workDaoPath}/replace"
+            into "${packageDaoPath}"
         }
 
-        // 元々 dao パッケージ内にあったファイルを元に戻す
+        // @SuppressWarnings({"PMD.TooManyFields"}) アノテーションを付加した Entity クラスを
+        // entity パッケージへ戻す
         copy() {
-            from "${workDaoDirPath}/org"
-            into "${daoPackagePath}"
+            from "${workEntityPath}/replace"
+            into "${packageEntityPath}"
         }
 
         // 作業用ディレクトリを削除する
-        delete "${workDirPath}"
+        delete "${workPath}"
     }
 }
+// beforeDomaCodeGen --> domaCodeGenDbEntity --> domaCodeGenDbDao --> domaGen --> afterDomaCodeGen
+domaCodeGenDbEntity.dependsOn beforeDomaCodeGen
+domaCodeGenDbDao.dependsOn domaCodeGenDbEntity
+domaGen.dependsOn domaCodeGenDbDao
+domaGen.finalizedBy afterDomaCodeGen
 
 task printClassWhatNotMakeTest {
     doLast {

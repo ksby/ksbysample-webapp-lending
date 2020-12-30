@@ -10,8 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.util.AssertionErrors.assertTrue;
 
 public class ErrorsResultMatchers extends ModelResultMatchers {
@@ -34,7 +33,7 @@ public class ErrorsResultMatchers extends ModelResultMatchers {
             List<ObjectError> objectErrorList = bindingResult.getGlobalErrors();
             List<String> objectErrorListAsCode
                     = objectErrorList.stream().map(ObjectError::getCode).collect(Collectors.toList());
-            assertThat("Expected error code '" + error + "'", objectErrorListAsCode, hasItem(error));
+            assertThat(objectErrorListAsCode).contains(error);
         };
     }
 
@@ -50,7 +49,7 @@ public class ErrorsResultMatchers extends ModelResultMatchers {
             List<FieldError> fieldErrorList = bindingResult.getFieldErrors(fieldName);
             List<String> fieldErrorListAsCode
                     = fieldErrorList.stream().map(FieldError::getCode).collect(Collectors.toList());
-            assertThat("Expected error code '" + error + "'", fieldErrorListAsCode, hasItem(error));
+            assertThat(fieldErrorListAsCode).contains(error);
         };
     }
 

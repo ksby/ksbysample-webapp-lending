@@ -2,7 +2,7 @@ version: '3'
 
 services:
   prometheus:
-    image: prom/prometheus:v2.15.1
+    image: prom/prometheus:v2.23.0
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -16,7 +16,7 @@ services:
       - "app:${HOST_IP_ADDRESS}"
 
   grafana:
-    image: grafana/grafana:6.5.2
+    image: grafana/grafana:7.3.6
     container_name: grafana
     ports:
       - "3000:3000"
@@ -194,7 +194,7 @@ services:
       - redis-cluster-6
 
   redis_exporter:
-    image: oliver006/redis_exporter:v1.3.5-alpine
+    image: oliver006/redis_exporter:v1.14.0-alpine
     container_name: redis_exporter
     ports:
       - "9121:9121"
@@ -235,20 +235,38 @@ services:
     hostname: rabbitmq1
     environment:
       - TZ=Asia/Tokyo
-      - RABBITMQ_ERLANG_COOKIE
       - RABBITMQ_DEFAULT_USER
       - RABBITMQ_DEFAULT_PASS
       - RABBITMQ_DEFAULT_VHOST
+    command:
+      - /bin/sh
+      - -c
+      - |
+        cp -p /tmp/.erlang.cookie /var/lib/rabbitmq/
+        ls -al /var/lib/rabbitmq/
+        rabbitmq-server
+  rabbitmq-create-user:
+    image: rabbitmq:${RABBITMQ_VERSION}-alpine-custom
+    container_name: rabbitmq-create-user
+    hostname: rabbitmq-create-user
+    environment:
+      - TZ=Asia/Tokyo
+      - RABBITMQ_DEFAULT_USER
+      - RABBITMQ_DEFAULT_PASS
+    volumes:
+      - ./docker/rabbitmq/create-user-entrypoint.sh:/usr/local/bin/create-user-entrypoint.sh
+    entrypoint: /usr/local/bin/create-user-entrypoint.sh
+    depends_on:
+      - rabbitmq1
   rabbitmq2:
     image: rabbitmq:${RABBITMQ_VERSION}-alpine-custom
     container_name: rabbitmq2
     hostname: rabbitmq2
     environment:
       - TZ=Asia/Tokyo
-      - RABBITMQ_ERLANG_COOKIE
     volumes:
       - ./docker/rabbitmq/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
-    entrypoint: /bin/sh -c /usr/local/bin/cluster-entrypoint.sh
+    entrypoint: /usr/local/bin/cluster-entrypoint.sh
     depends_on:
       - rabbitmq1
   rabbitmq3:
@@ -257,7 +275,6 @@ services:
     hostname: rabbitmq3
     environment:
       - TZ=Asia/Tokyo
-      - RABBITMQ_ERLANG_COOKIE
     volumes:
       - ./docker/rabbitmq/cluster-entrypoint.sh:/usr/local/bin/cluster-entrypoint.sh
     entrypoint: /usr/local/bin/cluster-entrypoint.sh
@@ -265,7 +282,7 @@ services:
       - rabbitmq1
   # http://localhost:1936/haproxy?stats
   haproxy:
-    image: haproxy:2.1.2-alpine
+    image: haproxy:2.3.2-alpine
     container_name: haproxy
     ports:
       - "1936:1936"
@@ -288,20 +305,6 @@ services:
       - ./docker/rabbitmq/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
     depends_on:
       - haproxy
-
-  rabbitmq_exporter:
-    image: kbudde/rabbitmq-exporter:latest
-    container_name: rabbitmq_exporter
-    ports:
-      - "9419:9419"
-    environment:
-      # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
-      # - TZ=Asia/Tokyo
-      - RABBIT_URL=http://haproxy:15672
-      - RABBIT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBIT_PASSWORD=${RABBITMQ_DEFAULT_PASS}
-      - RABBIT_CAPABILITIES=bert,no_sort
-      - PUBLISH_PORT=9419
 
   # 起動したコンテナに /bin/sh でアクセスする場合には以下のコマンドを実行する
   # docker exec -it postgresql /bin/sh
@@ -331,8 +334,11 @@ services:
       # TZ=Asia/Tokyo を設定してみたが日本時間に変わらなかったのでコメントアウトしておく
       # - TZ=Asia/Tokyo
       # PGADMIN_DEFAULT_EMAIL には接続する PostgreSQL の ユーザ名を設定する（サーバを追加する時楽なため）
-      - PGADMIN_DEFAULT_EMAIL=postgres
+      - PGADMIN_DEFAULT_EMAIL=postgres@example.com
       - PGADMIN_DEFAULT_PASSWORD=yyyyyyyy
+      # PGADMIN_CONFIG_CONSOLE_LOG_LEVEL は debug 用
+      # 設定値は https://www.pgadmin.org/docs/pgadmin4/development/config_py.html の CONSOLE_LOG_LEVEL 参照
+      - PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=10
     volumes:
       - ./docker/pgadmin4/data:/var/lib/pgadmin
 
@@ -348,7 +354,7 @@ services:
       - postgresql
     # 下の３行は debug 用
     # うまく動かない時はコメントアウトを解除した後、
-    # docker exec -it postgresql /bin/sh
+    # docker exec -it flyway /bin/sh
     # で接続してから
     # flyway <command に記述した文字列>
     # を実行してみる
