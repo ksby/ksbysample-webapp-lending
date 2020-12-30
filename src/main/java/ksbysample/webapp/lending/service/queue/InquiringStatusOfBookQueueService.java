@@ -20,6 +20,8 @@ public class InquiringStatusOfBookQueueService {
     private final RabbitTemplate rabbitTemplate;
 
     /**
+     * ???
+     *
      * @param converter      ???
      * @param rabbitTemplate ???
      */
@@ -30,6 +32,8 @@ public class InquiringStatusOfBookQueueService {
     }
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      */
     public void sendMessage(Long lendingAppId) {
@@ -41,6 +45,8 @@ public class InquiringStatusOfBookQueueService {
     }
 
     /**
+     * ???
+     *
      * @param message ???
      * @return ???
      */

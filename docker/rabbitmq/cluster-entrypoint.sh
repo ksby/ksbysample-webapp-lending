@@ -2,13 +2,21 @@
 
 set -e
 
+cp -p /tmp/.erlang.cookie /var/lib/rabbitmq/
+ls -al /var/lib/rabbitmq/
+rabbitmq-diagnostics erlang_cookie_sources
+
 # Start RMQ from entry point.
 # This will ensure that environment variables passed
 # will be honored
-/usr/local/bin/docker-entrypoint.sh rabbitmq-server -detached
+rabbitmq-server -detached
+
+# Wait a while for rabbitmq1 to start
+sleep 15s
 
 # Do the cluster dance
 rabbitmqctl stop_app
+rabbitmqctl reset
 rabbitmqctl join_cluster rabbit@rabbitmq1
 
 # Stop the entire RMQ server. This is done so that we
@@ -17,7 +25,7 @@ rabbitmqctl join_cluster rabbit@rabbitmq1
 rabbitmqctl stop
 
 # Wait a while for the app to really stop
-sleep 2s
+sleep 3s
 
 # Start it
 rabbitmq-server

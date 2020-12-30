@@ -15,12 +15,19 @@ public class AuthenticationSuccessEventListener
     private final UserInfoService userInfoService;
 
     /**
+     * ???
+     *
      * @param userInfoService ???
      */
     public AuthenticationSuccessEventListener(UserInfoService userInfoService) {
         this.userInfoService = userInfoService;
     }
 
+    /**
+     * ???
+     *
+     * @param event ???
+     */
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
         // ログインしたユーザのユーザ名(username)の user_info.cnt_badcredentials を 0 にする

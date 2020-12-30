@@ -16,6 +16,11 @@ public class ValuesEnumValidator implements ConstraintValidator<ValuesEnum, Stri
 
     private boolean allowEmpty;
 
+    /**
+     * ???
+     *
+     * @param constraintAnnotation ???
+     */
     @Override
     public void initialize(ValuesEnum constraintAnnotation) {
         this.enumClass = constraintAnnotation.enumClass();
@@ -33,6 +38,13 @@ public class ValuesEnumValidator implements ConstraintValidator<ValuesEnum, Stri
         }
     }
 
+    /**
+     * ???
+     *
+     * @param value   ???
+     * @param context ???
+     * @return ???
+     */
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) {

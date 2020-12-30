@@ -5,12 +5,15 @@ import ksbysample.webapp.lending.util.doma.ComponentAndAutowiredDomaConfig;
 import org.seasar.doma.*;
 
 /**
+ * ???
  */
 @Dao
 @ComponentAndAutowiredDomaConfig
 public interface LibraryForsearchDao {
 
     /**
+     * ???
+     *
      * @param systemid ???
      * @return the LibraryForsearch entity ???
      */
@@ -18,12 +21,16 @@ public interface LibraryForsearchDao {
     LibraryForsearch selectById(String systemid);
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Select
     LibraryForsearch selectSelectedLibrary();
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows ???
      */
@@ -31,6 +38,8 @@ public interface LibraryForsearchDao {
     int insert(LibraryForsearch entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows ???
      */
@@ -38,6 +47,8 @@ public interface LibraryForsearchDao {
     int update(LibraryForsearch entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows ???
      */
@@ -45,6 +56,8 @@ public interface LibraryForsearchDao {
     int delete(LibraryForsearch entity);
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Delete(sqlFile = true)

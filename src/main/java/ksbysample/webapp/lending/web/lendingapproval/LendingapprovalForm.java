@@ -24,6 +24,8 @@ public class LendingapprovalForm {
     private List<ApplyingBookForm> applyingBookFormList;
 
     /**
+     * ???
+     *
      * @param lendingBookList ???
      */
     public void setApplyingBookFormListFromLendingBookList(List<LendingBook> lendingBookList) {

@@ -54,6 +54,8 @@ public class InquiringStatusOfBookQueueListener {
     private final UserInfoDao userInfoDao;
 
     /**
+     * ???
+     *
      * @param inquiringStatusOfBookQueueService ???
      * @param calilApiService                   ???
      * @param emailHelper                       ???
@@ -82,8 +84,10 @@ public class InquiringStatusOfBookQueueListener {
     }
 
     /**
+     * ???
+     *
      * @param message ???
-     * @throws MessagingException
+     * @throws MessagingException ???
      */
     @RabbitListener(queues = {Constant.QUEUE_NAME_INQUIRING_STATUSOFBOOK})
     public void receiveMessage(Message message) throws MessagingException {

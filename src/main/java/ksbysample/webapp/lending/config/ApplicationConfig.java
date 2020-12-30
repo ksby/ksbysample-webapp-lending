@@ -39,6 +39,8 @@ public class ApplicationConfig {
     private final MBeanExporter mbeanExporter;
 
     /**
+     * ???
+     *
      * @param connectionFactory {@link ConnectionFactory} bean
      * @param messageSource     {@link MessageSource} bean
      * @param mbeanExporter     {@link MBeanExporter} bean
@@ -52,6 +54,8 @@ public class ApplicationConfig {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Bean
@@ -60,6 +64,8 @@ public class ApplicationConfig {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Bean
@@ -68,6 +74,8 @@ public class ApplicationConfig {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Bean
@@ -78,6 +86,8 @@ public class ApplicationConfig {
     }
 
     /**
+     * ???
+     *
      * @return ???
      */
     @Bean
@@ -99,6 +109,8 @@ public class ApplicationConfig {
     }
 
     /**
+     * ???
+     *
      * @return HikariCP の DataSource オブジェクト
      */
     @Bean

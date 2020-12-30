@@ -22,6 +22,8 @@ public class LendingappForm {
     private List<LendingBookDto> lendingBookDtoList;
 
     /**
+     * ???
+     *
      * @param lendingBookList ???
      */
     public void setLendingBookList(List<LendingBook> lendingBookList) {

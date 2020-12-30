@@ -19,8 +19,15 @@ import java.util.Map;
 public class BookListCsvView extends AbstractView {
 
     private static final String[] CSV_HEADER = {"ISBN", "書名", "申請理由", "承認／却下", "却下理由"};
-    private static final String CSV_FILE_NAME_FORMAT = "booklist-%s.csv";
 
+    /**
+     * ???
+     *
+     * @param model    ???
+     * @param request  ???
+     * @param response ???
+     * @throws Exception ???
+     */
     @SuppressWarnings("unchecked")
     @Override
     protected void renderMergedOutputModel(Map<String, Object> model
@@ -30,7 +37,7 @@ public class BookListCsvView extends AbstractView {
 
         response.setContentType("application/octet-stream; charset=Windows-31J;");
         response.setHeader("Content-Disposition"
-                , String.format("attachment; filename=\"%s\"", String.format(CSV_FILE_NAME_FORMAT, lendingAppId)));
+                , String.format("attachment; filename=\"%s\"", String.format("booklist-%s.csv", lendingAppId)));
 
         CsvWriterSettings settings = new CsvWriterSettings();
         settings.setHeaders(CSV_HEADER);

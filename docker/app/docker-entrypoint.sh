@@ -3,6 +3,7 @@
 
 export JAVA_OPTS="-Xms1024m -Xmx1024m -XX:MaxMetaspaceSize=384m"
 
+/usr/glibc-compat/bin/locale -a
 exec java $JAVA_OPTS \
           -Djava.security.egd=file:/dev/./urandom \
           -Dspring.profiles.active=product \

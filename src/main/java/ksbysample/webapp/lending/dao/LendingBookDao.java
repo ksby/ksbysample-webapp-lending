@@ -8,12 +8,15 @@ import org.seasar.doma.jdbc.SelectOptions;
 import java.util.List;
 
 /**
+ * ???
  */
 @Dao
 @ComponentAndAutowiredDomaConfig
 public interface LendingBookDao {
 
     /**
+     * ???
+     *
      * @param lendingBookId ???
      * @return the LendingBook entity
      */
@@ -21,6 +24,8 @@ public interface LendingBookDao {
     LendingBook selectById(Long lendingBookId);
 
     /**
+     * ???
+     *
      * @param lendingBookId ???
      * @param version       ???
      * @return ???
@@ -29,6 +34,8 @@ public interface LendingBookDao {
     LendingBook selectByIdAndVersion(Long lendingBookId, Long version);
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @return ???
      */
@@ -36,6 +43,8 @@ public interface LendingBookDao {
     List<LendingBook> selectByLendingAppId(Long lendingAppId);
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @param options      ???
      * @return ???
@@ -44,6 +53,8 @@ public interface LendingBookDao {
     List<LendingBook> selectByLendingAppId(Long lendingAppId, SelectOptions options);
 
     /**
+     * ???
+     *
      * @param lendingAppId  ???
      * @param lendingAppFlg ???
      * @return ???
@@ -52,6 +63,8 @@ public interface LendingBookDao {
     List<LendingBook> selectByLendingAppIdAndLendingAppFlg(Long lendingAppId, String lendingAppFlg);
 
     /**
+     * ???
+     *
      * @param lendingAppId  ???
      * @param lendingAppFlg ???
      * @param options       ???
@@ -62,6 +75,8 @@ public interface LendingBookDao {
             , SelectOptions options);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -69,6 +84,8 @@ public interface LendingBookDao {
     int insert(LendingBook entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -76,6 +93,8 @@ public interface LendingBookDao {
     int update(LendingBook entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return ???
      */
@@ -83,6 +102,8 @@ public interface LendingBookDao {
     int updateLendingState(LendingBook entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return ???
      */
@@ -90,6 +111,8 @@ public interface LendingBookDao {
     int updateLendingAppFlgAndReason(LendingBook entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return ???
      */
@@ -97,6 +120,8 @@ public interface LendingBookDao {
     int updateApprovalResultAndReason(LendingBook entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */

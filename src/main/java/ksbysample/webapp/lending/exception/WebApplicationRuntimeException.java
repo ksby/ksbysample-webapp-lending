@@ -9,13 +9,15 @@ public class WebApplicationRuntimeException extends RuntimeException {
     private static final long serialVersionUID = 3845674924872653036L;
 
     /**
-     *
+     * ???
      */
     public WebApplicationRuntimeException() {
         super();
     }
 
     /**
+     * ???
+     *
      * @param message ???
      */
     public WebApplicationRuntimeException(String message) {
@@ -23,6 +25,8 @@ public class WebApplicationRuntimeException extends RuntimeException {
     }
 
     /**
+     * ???
+     *
      * @param message ???
      * @param cause   ???
      */
@@ -31,6 +35,8 @@ public class WebApplicationRuntimeException extends RuntimeException {
     }
 
     /**
+     * ???
+     *
      * @param cause ???
      */
     public WebApplicationRuntimeException(Throwable cause) {

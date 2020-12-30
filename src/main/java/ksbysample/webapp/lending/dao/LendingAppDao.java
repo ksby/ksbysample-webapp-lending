@@ -8,12 +8,15 @@ import org.seasar.doma.jdbc.SelectOptions;
 import java.util.List;
 
 /**
+ * ???
  */
 @Dao
 @ComponentAndAutowiredDomaConfig
 public interface LendingAppDao {
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @return the LendingApp entity
      */
@@ -21,6 +24,8 @@ public interface LendingAppDao {
     LendingApp selectById(Long lendingAppId);
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @param version      ???
      * @return ???
@@ -29,6 +34,8 @@ public interface LendingAppDao {
     LendingApp selectByIdAndVersion(Long lendingAppId, Long version);
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @param options      ???
      * @return ???
@@ -37,6 +44,8 @@ public interface LendingAppDao {
     LendingApp selectById(Long lendingAppId, SelectOptions options);
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @param version      ???
      * @param options      ???
@@ -46,6 +55,8 @@ public interface LendingAppDao {
     LendingApp selectByIdAndVersion(Long lendingAppId, Long version, SelectOptions options);
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @param statusList   ???
      * @return ???
@@ -54,6 +65,8 @@ public interface LendingAppDao {
     LendingApp selectByIdAndStatus(Long lendingAppId, List<String> statusList);
 
     /**
+     * ???
+     *
      * @param lendingAppId ???
      * @param statusList   ???
      * @param options      ???
@@ -63,6 +76,8 @@ public interface LendingAppDao {
     LendingApp selectByIdAndStatus(Long lendingAppId, List<String> statusList, SelectOptions options);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -70,6 +85,8 @@ public interface LendingAppDao {
     int insert(LendingApp entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */
@@ -77,6 +94,8 @@ public interface LendingAppDao {
     int update(LendingApp entity);
 
     /**
+     * ???
+     *
      * @param entity ???
      * @return affected rows
      */

@@ -19,6 +19,12 @@ public class LendingappFormValidator implements Validator {
         return clazz.equals(LendingappForm.class);
     }
 
+    /**
+     * ???
+     *
+     * @param target ???
+     * @param errors ???
+     */
     @Override
     public void validate(Object target, Errors errors) {
         Assert.notNull(target, "target must not be null");

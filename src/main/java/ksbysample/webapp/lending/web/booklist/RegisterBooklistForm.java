@@ -18,13 +18,15 @@ public class RegisterBooklistForm {
     private Long lendingAppId;
 
     /**
-     *
+     * ???
      */
     public RegisterBooklistForm() {
         // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**
+     * ???
+     *
      * @param lendingBookList ???
      * @param lendingAppId    ???
      */
@@ -36,7 +38,7 @@ public class RegisterBooklistForm {
     }
 
     /**
-     *
+     * ???
      */
     @Data
     public static class RegisterBooklistRow {
@@ -44,6 +46,8 @@ public class RegisterBooklistForm {
         private String bookName;
 
         /**
+         * ???
+         *
          * @param lendingBook ???
          */
         public RegisterBooklistRow(LendingBook lendingBook) {

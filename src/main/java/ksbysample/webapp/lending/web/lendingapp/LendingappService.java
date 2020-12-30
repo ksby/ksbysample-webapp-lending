@@ -40,6 +40,8 @@ public class LendingappService {
     private final UserHelper userHelper;
 
     /**
+     * ???
+     *
      * @param lendingAppDao  ???
      * @param lendingBookDao ???
      * @param mph            ???
@@ -62,6 +64,8 @@ public class LendingappService {
     }
 
     /**
+     * ???
+     *
      * @param lendingAppId   ???
      * @param lendingappForm ???
      */
@@ -78,8 +82,10 @@ public class LendingappService {
     }
 
     /**
+     * ???
+     *
      * @param lendingappForm ???
-     * @throws MessagingException
+     * @throws MessagingException ???
      */
     public void apply(LendingappForm lendingappForm) throws MessagingException {
         // 更新対象のデータを取得する(ロックする)
@@ -109,6 +115,8 @@ public class LendingappService {
     }
 
     /**
+     * ???
+     *
      * @param lendingappForm ???
      */
     public void temporarySave(LendingappForm lendingappForm) {

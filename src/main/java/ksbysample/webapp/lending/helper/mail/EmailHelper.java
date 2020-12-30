@@ -15,6 +15,8 @@ public class EmailHelper {
     private final JavaMailSender mailSender;
 
     /**
+     * ???
+     *
      * @param mailSender ???
      */
     public EmailHelper(JavaMailSender mailSender) {
@@ -22,6 +24,8 @@ public class EmailHelper {
     }
 
     /**
+     * ???
+     *
      * @param mailMessage ???
      */
     public void sendSimpleMail(SimpleMailMessage mailMessage) {
@@ -29,6 +33,8 @@ public class EmailHelper {
     }
 
     /**
+     * ???
+     *
      * @param message ???
      */
     public void sendMail(MimeMessage message) {

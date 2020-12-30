@@ -13,13 +13,15 @@ public class SuccessMessagesHelper {
     private final List<String> successMessages = new ArrayList<>();
 
     /**
-     *
+     * ???
      */
     public SuccessMessagesHelper() {
         // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**
+     * ???
+     *
      * @param msg ???
      */
     public SuccessMessagesHelper(String msg) {
@@ -27,6 +29,8 @@ public class SuccessMessagesHelper {
     }
 
     /**
+     * ???
+     *
      * @param msg ???
      */
     public void addMsg(String msg) {
@@ -34,6 +38,8 @@ public class SuccessMessagesHelper {
     }
 
     /**
+     * ???
+     *
      * @param model ???
      */
     public void setToModel(Model model) {
