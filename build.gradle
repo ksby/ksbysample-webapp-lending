@@ -124,7 +124,7 @@ dependencyManagement {
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
             bomProperty "groovy.version", "2.5.12"
         }
-        mavenBom("org.junit:junit-bom:5.6.2")
+        mavenBom("org.junit:junit-bom:5.7.0")
     }
 }
 
