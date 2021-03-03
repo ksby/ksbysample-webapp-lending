@@ -53,6 +53,9 @@ public @interface ValuesEnum {
      */
     boolean allowEmpty() default false;
 
+    /**
+     * ???
+     */
     @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
     @Retention(RUNTIME)
     @Documented
