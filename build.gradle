@@ -101,7 +101,7 @@ spotbugsMain {
 }
 
 pmd {
-    toolVersion = "6.26.0"
+    toolVersion = "6.32.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
