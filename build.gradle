@@ -22,7 +22,7 @@ plugins {
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "4.5.0"
+    id "com.github.spotbugs" version "4.6.1"
     id "pmd"
     id "net.ltgt.errorprone" version "1.3.0"
     id "com.gorylenko.gradle-git-properties" version "2.2.4"
@@ -90,7 +90,7 @@ checkstyle {
 }
 
 spotbugs {
-    toolVersion = "4.1.1"
+    toolVersion = "${spotbugs.toolVersion.get()}"
     ignoreFailures = true
     spotbugsTest.enabled = false
 }
@@ -138,7 +138,6 @@ dependencies {
     def lombokVersion = "1.18.18"
     def errorproneVersion = "2.5.1"
     def powermockVersion = "2.0.9"
-    def spotbugsVersion = "4.1.1"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -209,9 +208,9 @@ dependencies {
     testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
 
     // for SpotBugs
-    spotbugs("com.github.spotbugs:spotbugs:${spotbugsVersion}")
-    compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
-    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1")
+    spotbugs(configurations.spotbugsPlugins.dependencies)
+    annotationProcessor("com.github.spotbugs:spotbugs-annotations:${spotbugs.toolVersion.get()}")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0")
 }
 
 def jvmArgsForTask = [
