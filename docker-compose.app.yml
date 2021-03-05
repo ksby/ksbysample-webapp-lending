@@ -41,7 +41,7 @@ services:
     # tty: true
 
   haproxy-app:
-    image: haproxy:2.3.2-alpine
+    image: haproxy:${HAPROXY_VERSION}-alpine
     container_name: haproxy-app
     volumes:
       - ./docker/app/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
