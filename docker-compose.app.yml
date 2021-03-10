@@ -27,7 +27,7 @@ services:
   # bootBuildImage で生成した docker image を利用する場合の設定
   # docker exec -it ksbysample-webapp-lending_app_1 /bin/bash
   app:
-    image: ksbysample-webapp-lending:2.3.7-RELEASE
+    image: ksbysample-webapp-lending:2.4.3
     environment:
       - JAVA_TOOL_OPTIONS=-Dspring.profiles.active=product -Dlogging.appender=CONSOLE
       - SPRING_DATASOURCE_HIKARI_JDBC_URL=jdbc:postgresql://postgresql/ksbylending
