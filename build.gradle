@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.3.7-RELEASE"
+        version "2.4.3"
     }
     repositories {
         mavenCentral()
@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         // for doma-codegen-plugin
-        classpath "org.postgresql:postgresql:42.2.14"
+        classpath "org.postgresql:postgresql:42.2.19"
     }
 }
 
@@ -18,14 +18,14 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.3.7.RELEASE"
-    id "io.spring.dependency-management" version "1.0.10.RELEASE"
+    id "org.springframework.boot" version "2.4.3"
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "4.5.0"
+    id "com.github.spotbugs" version "4.6.1"
     id "pmd"
-    id "net.ltgt.errorprone" version "1.2.1"
-    id "com.gorylenko.gradle-git-properties" version "2.2.3"
+    id "net.ltgt.errorprone" version "1.3.0"
+    id "com.gorylenko.gradle-git-properties" version "2.2.4"
     id "org.seasar.doma.codegen" version "1.2.1"
 }
 
@@ -33,14 +33,17 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 wrapper {
-    gradleVersion = "6.5.1"
+    gradleVersion = "6.8.3"
     distributionType = Wrapper.DistributionType.ALL
 }
 
 [compileJava, compileTestGroovy, compileTestJava]*.options*.encoding = "UTF-8"
 [compileJava, compileTestGroovy, compileTestJava]*.options*.compilerArgs = ["-Xlint:all,-options,-processing,-path"]
 tasks.withType(JavaCompile).configureEach {
-    options.errorprone.disableWarningsInGeneratedCode = true
+    options.errorprone {
+        disableWarningsInGeneratedCode = true
+        disable("SameNameButDifferent")
+    }
 }
 tasks.named("compileTestJava").configure {
     options.errorprone.enabled = false
@@ -82,12 +85,12 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = "8.35"
+    toolVersion = "8.41"
     sourceSets = [project.sourceSets.main]
 }
 
 spotbugs {
-    toolVersion = "4.1.1"
+    toolVersion = "${spotbugs.toolVersion.get()}"
     ignoreFailures = true
     spotbugsTest.enabled = false
 }
@@ -101,7 +104,7 @@ spotbugsMain {
 }
 
 pmd {
-    toolVersion = "6.26.0"
+    toolVersion = "6.32.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
@@ -124,18 +127,17 @@ dependencyManagement {
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
             bomProperty "groovy.version", "2.5.12"
         }
-        mavenBom("org.junit:junit-bom:5.7.0")
+        mavenBom("org.junit:junit-bom:5.7.1")
     }
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:42.2.14"
+    def jdbcDriver = "org.postgresql:postgresql:42.2.19"
     def spockVersion = "1.3-groovy-2.5"
-    def domaVersion = "2.44.3"
-    def lombokVersion = "1.18.12"
-    def errorproneVersion = "2.4.0"
-    def powermockVersion = "2.0.7"
-    def spotbugsVersion = "4.1.1"
+    def domaVersion = "2.45.0"
+    def lombokVersion = "1.18.18"
+    def errorproneVersion = "2.5.1"
+    def powermockVersion = "2.0.9"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -151,7 +153,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-amqp")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    compileOnly("org.springframework.boot:spring-boot-configuration-processor")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     implementation("org.springframework.session:spring-session-data-redis")
     implementation("org.springframework.retry:spring-retry")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
@@ -168,15 +170,15 @@ dependencies {
     runtimeOnly("${jdbcDriver}")
     implementation("com.integralblue:log4jdbc-spring-boot-starter:2.0.0")
     implementation("org.simpleframework:simple-xml:2.7.1")
-    implementation("com.univocity:univocity-parsers:2.8.4")
-    implementation("com.google.guava:guava:29.0-jre")
-    implementation("org.flywaydb:flyway-core:6.5.3")
+    implementation("com.univocity:univocity-parsers:2.9.1")
+    implementation("com.google.guava:guava:30.1-jre")
+    implementation("org.flywaydb:flyway-core:7.5.4")
     testImplementation("org.dbunit:dbunit:2.7.0") {
         exclude group: "postgresql", module: "postgresql"
     }
-    testImplementation("com.icegreen:greenmail:1.5.14")
-    testImplementation("org.assertj:assertj-core:3.16.1")
-    testImplementation("com.jayway.jsonpath:json-path:2.4.0")
+    testImplementation("com.icegreen:greenmail:1.6.2")
+    testImplementation("org.assertj:assertj-core:3.19.0")
+    testImplementation("com.jayway.jsonpath:json-path:2.5.0")
     testImplementation("org.jsoup:jsoup:1.13.1")
     testImplementation("cglib:cglib-nodep:3.3.0")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
@@ -206,9 +208,9 @@ dependencies {
     testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
 
     // for SpotBugs
-    spotbugs("com.github.spotbugs:spotbugs:${spotbugsVersion}")
-    compileOnly("com.github.spotbugs:spotbugs-annotations:${spotbugsVersion}")
-    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.10.1")
+    spotbugs(configurations.spotbugsPlugins.dependencies)
+    annotationProcessor("com.github.spotbugs:spotbugs-annotations:${spotbugs.toolVersion.get()}")
+    spotbugsPlugins("com.h3xstream.findsecbugs:findsecbugs-plugin:1.11.0")
 }
 
 def jvmArgsForTask = [
