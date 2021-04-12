@@ -396,10 +396,11 @@ task afterDomaCodeGen {
         delete "${workPath}"
     }
 }
-// beforeDomaCodeGen --> domaCodeGenDbEntity --> domaCodeGenDbDao --> domaGen --> afterDomaCodeGen
+// beforeDomaCodeGen --> domaCodeGenDbEntity --> domaCodeGenDbDao --> domaCodeGenDbSql --> domaGen --> afterDomaCodeGen
 domaCodeGenDbEntity.dependsOn beforeDomaCodeGen
 domaCodeGenDbDao.dependsOn domaCodeGenDbEntity
-domaGen.dependsOn domaCodeGenDbDao
+domaCodeGenDbSql.dependsOn domaCodeGenDbDao
+domaGen.dependsOn domaCodeGenDbSql
 domaGen.finalizedBy afterDomaCodeGen
 
 task printClassWhatNotMakeTest {
