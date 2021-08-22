@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.4.3"
+        version "2.4.10"
     }
     repositories {
         mavenCentral()
@@ -18,7 +18,7 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.4.3"
+    id "org.springframework.boot" version "2.4.10"
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
     id "groovy"
     id "checkstyle"
@@ -33,7 +33,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 wrapper {
-    gradleVersion = "6.8.3"
+    gradleVersion = "6.9.1"
     distributionType = Wrapper.DistributionType.ALL
 }
 
