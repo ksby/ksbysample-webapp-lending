@@ -33,7 +33,7 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 wrapper {
-    gradleVersion = "6.9.1"
+    gradleVersion = "7.2"
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -48,13 +48,19 @@ tasks.withType(JavaCompile).configureEach {
 tasks.named("compileTestJava").configure {
     options.errorprone.enabled = false
 }
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+jar {
+    enabled = false
+}
 
 // for Doma 2
 // Copy the resources referred by the Doma annotation processors to
 // the destinationDir of the compileJava task
 task copyDomaResources(type: Sync) {
     from sourceSets.main.resources.srcDirs
-    into compileJava.destinationDir
+    into compileJava.destinationDirectory
     include "doma.compile.config"
     include "META-INF/**/*.sql"
     include "META-INF/**/*.script"
