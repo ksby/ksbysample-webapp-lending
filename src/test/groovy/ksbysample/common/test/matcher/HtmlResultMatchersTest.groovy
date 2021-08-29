@@ -4,7 +4,6 @@ import org.springframework.mock.web.MockHttpServletRequest
 import org.springframework.mock.web.MockHttpServletResponse
 import org.springframework.test.web.servlet.DefaultMvcResult
 import spock.lang.Specification
-import spock.lang.Unroll
 
 class HtmlResultMatchersTest extends Specification {
 
@@ -31,7 +30,6 @@ class HtmlResultMatchersTest extends Specification {
         this.mvcResult = new DefaultMvcResult(mockRequest, mockResponse)
     }
 
-    @Unroll
     def "html(#cssQuery).text(#text)_要素がありテキストが一致する場合"() {
         expect:
         def htmlResultMatchers = HtmlResultMatchers.html(cssQuery)
@@ -66,7 +64,6 @@ class HtmlResultMatchersTest extends Specification {
         e.getMessage() contains "指定された cssQuery の Element は存在しません ( cssQuery = #titlex )"
     }
 
-    @Unroll
     def "html(#cssQuery).count(#count)"() {
         expect:
         def htmlResultMatchers = HtmlResultMatchers.html(cssQuery)
