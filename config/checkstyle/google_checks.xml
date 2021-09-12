@@ -46,7 +46,10 @@
         <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
     </module>
 
+    <module name="SuppressWarningsFilter"/>
+
     <module name="TreeWalker">
+        <module name="SuppressWarningsHolder"/>
         <module name="OuterTypeFilename"/>
         <module name="IllegalTokenText">
             <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
@@ -153,13 +156,13 @@
             <property name="option" value="nl"/>
         </module>
         <module name="SeparatorWrap">
-            <!-- ELLIPSIS is EOL until https://github.com/google/styleguide/issues/258 -->
+            <!-- ELLIPSIS is EOL until https://github.com/google/styleguide/issues/259 -->
             <property name="id" value="SeparatorWrapEllipsis"/>
             <property name="tokens" value="ELLIPSIS"/>
             <property name="option" value="EOL"/>
         </module>
         <module name="SeparatorWrap">
-            <!-- ARRAY_DECLARATOR is EOL until https://github.com/google/styleguide/issues/259 -->
+            <!-- ARRAY_DECLARATOR is EOL until https://github.com/google/styleguide/issues/258 -->
             <property name="id" value="SeparatorWrapArrayDeclarator"/>
             <property name="tokens" value="ARRAY_DECLARATOR"/>
             <property name="option" value="EOL"/>
@@ -251,6 +254,7 @@
                       value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
                     PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF"/>
         </module>
+        <module name="NoWhitespaceBeforeCaseDefaultColon"/>
         <!-- Doma2 の Dao interface で警告が出て対応のしようがないのでコメントアウトする -->
         <!--<module name="OverloadMethodsDeclarationOrder"/>-->
         <module name="VariableDeclarationUsageDistance">
@@ -259,10 +263,10 @@
         </module>
         <!-- import 文の順序は IntelliJ IDEA 任せにしているのでチェックしない -->
         <!--<module name="CustomImportOrder">-->
-        <!--<property name="sortImportsInGroupAlphabetically" value="true"/>-->
-        <!--<property name="separateLineBetweenGroups" value="true"/>-->
-        <!--<property name="customImportOrderRules" value="STATIC###THIRD_PARTY_PACKAGE"/>-->
-        <!--<property name="tokens" value="IMPORT, STATIC_IMPORT, PACKAGE_DEF"/>-->
+            <!--<property name="sortImportsInGroupAlphabetically" value="true"/>-->
+            <!--<property name="separateLineBetweenGroups" value="true"/>-->
+            <!--<property name="customImportOrderRules" value="STATIC###THIRD_PARTY_PACKAGE"/>-->
+            <!--<property name="tokens" value="IMPORT, STATIC_IMPORT, PACKAGE_DEF"/>-->
         <!--</module>-->
         <module name="MethodParamPad">
             <property name="tokens"
@@ -286,7 +290,8 @@
             <property name="option" value="NL"/>
             <property name="tokens"
                       value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR,
-                    LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR, METHOD_REF "/>
+                    LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR, METHOD_REF,
+                    TYPE_EXTENSION_AND "/>
         </module>
         <module name="AnnotationLocation">
             <property name="id" value="AnnotationLocationMostCases"/>
@@ -318,7 +323,7 @@
                       value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
         <module name="JavadocMethod">
-            <property name="scope" value="public"/>
+            <property name="accessModifiers" value="public"/>
             <property name="allowMissingParamTags" value="true"/>
             <property name="allowMissingReturnTag" value="true"/>
             <property name="allowedAnnotations" value="Override, Test"/>

@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.4.3"
+        version "2.5.4"
     }
     repositories {
         mavenCentral()
@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         // for doma-codegen-plugin
-        classpath "org.postgresql:postgresql:42.2.19"
+        classpath "org.postgresql:postgresql:42.2.23"
     }
 }
 
@@ -18,22 +18,22 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.4.3"
+    id "org.springframework.boot" version "2.5.4"
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
     id "groovy"
     id "checkstyle"
-    id "com.github.spotbugs" version "4.6.1"
+    id "com.github.spotbugs" version "4.7.3"
     id "pmd"
-    id "net.ltgt.errorprone" version "1.3.0"
-    id "com.gorylenko.gradle-git-properties" version "2.2.4"
-    id "org.seasar.doma.codegen" version "1.2.1"
+    id "net.ltgt.errorprone" version "2.0.2"
+    id "com.gorylenko.gradle-git-properties" version "2.3.1"
+    id "org.seasar.doma.codegen" version "1.4.1"
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 wrapper {
-    gradleVersion = "6.8.3"
+    gradleVersion = "7.2"
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -48,13 +48,19 @@ tasks.withType(JavaCompile).configureEach {
 tasks.named("compileTestJava").configure {
     options.errorprone.enabled = false
 }
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+jar {
+    enabled = false
+}
 
 // for Doma 2
 // Copy the resources referred by the Doma annotation processors to
 // the destinationDir of the compileJava task
 task copyDomaResources(type: Sync) {
     from sourceSets.main.resources.srcDirs
-    into compileJava.destinationDir
+    into compileJava.destinationDirectory
     include "doma.compile.config"
     include "META-INF/**/*.sql"
     include "META-INF/**/*.script"
@@ -85,7 +91,7 @@ configurations {
 
 checkstyle {
     configFile = file("${rootProject.projectDir}/config/checkstyle/google_checks.xml")
-    toolVersion = "8.41"
+    toolVersion = "9.0"
     sourceSets = [project.sourceSets.main]
 }
 
@@ -93,18 +99,18 @@ spotbugs {
     toolVersion = "${spotbugs.toolVersion.get()}"
     ignoreFailures = true
     spotbugsTest.enabled = false
+    excludeFilter = file("${rootProject.projectDir}/config/spotbugs/exclude.xml")
 }
 spotbugsMain {
     reports {
         html {
             enabled = true
-            stylesheet = "color.xsl"
         }
     }
 }
 
 pmd {
-    toolVersion = "6.32.0"
+    toolVersion = "6.38.0"
     sourceSets = [project.sourceSets.main]
     ignoreFailures = true
     consoleOutput = true
@@ -118,26 +124,22 @@ repositories {
 
 dependencyManagement {
     imports {
-        // mavenBom は以下の URL のものを使用する
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-starter-parent/2.2.9.RELEASE/
         // bomProperty に指定可能な property は以下の URL の BOM に記述がある
-        // https://repo.spring.io/release/org/springframework/boot/spring-boot-dependencies/2.2.9.RELEASE/spring-boot-dependencies-2.2.9.RELEASE.pom
+        // https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-dependencies/2.5.4/spring-boot-dependencies-2.5.4.pom
         mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES) {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
-            bomProperty "groovy.version", "2.5.12"
         }
-        mavenBom("org.junit:junit-bom:5.7.1")
+        mavenBom("org.junit:junit-bom:5.7.2")
     }
 }
 
 dependencies {
-    def jdbcDriver = "org.postgresql:postgresql:42.2.19"
-    def spockVersion = "1.3-groovy-2.5"
-    def domaVersion = "2.45.0"
-    def lombokVersion = "1.18.18"
-    def errorproneVersion = "2.5.1"
-    def powermockVersion = "2.0.9"
+    def spockVersion = "2.0-groovy-3.0"
+    def jdbcDriver = "org.postgresql:postgresql:42.2.23"
+    def domaVersion = "2.47.1"
+    def lombokVersion = "1.18.20"
+    def errorproneVersion = "2.9.0"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの
     // Appendix F. Dependency versions ( https://docs.spring.io/spring-boot/docs/current/reference/html/appendix-dependency-versions.html ) 参照
@@ -163,21 +165,23 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.yaml:snakeyaml")
+    testImplementation("org.codehaus.groovy:groovy-sql")
+    testImplementation("org.mockito:mockito-inline")
 
     // dependency-management-plugin によりバージョン番号が自動で設定されないもの、あるいは最新バージョンを指定したいもの
     runtimeOnly("${jdbcDriver}")
     implementation("com.integralblue:log4jdbc-spring-boot-starter:2.0.0")
     implementation("org.simpleframework:simple-xml:2.7.1")
     implementation("com.univocity:univocity-parsers:2.9.1")
-    implementation("com.google.guava:guava:30.1-jre")
-    implementation("org.flywaydb:flyway-core:7.5.4")
-    testImplementation("org.dbunit:dbunit:2.7.0") {
+    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("org.flywaydb:flyway-core:7.14.0")
+    testImplementation("org.dbunit:dbunit:2.7.2") {
         exclude group: "postgresql", module: "postgresql"
     }
-    testImplementation("com.icegreen:greenmail:1.6.2")
-    testImplementation("org.assertj:assertj-core:3.19.0")
-    testImplementation("com.jayway.jsonpath:json-path:2.5.0")
-    testImplementation("org.jsoup:jsoup:1.13.1")
+    testImplementation("com.icegreen:greenmail:1.6.5")
+    testImplementation("org.assertj:assertj-core:3.20.2")
+    testImplementation("com.jayway.jsonpath:json-path:2.6.0")
+    testImplementation("org.jsoup:jsoup:1.14.2")
     testImplementation("cglib:cglib-nodep:3.3.0")
     testImplementation("org.spockframework:spock-core:${spockVersion}")
     testImplementation("org.spockframework:spock-spring:${spockVersion}")
@@ -200,10 +204,6 @@ dependencies {
     // for Error Prone ( http://errorprone.info/ )
     errorprone("com.google.errorprone:error_prone_core:${errorproneVersion}")
     compileOnly("com.google.errorprone:error_prone_annotations:${errorproneVersion}")
-
-    // PowerMock
-    testImplementation("org.powermock:powermock-module-junit4:${powermockVersion}")
-    testImplementation("org.powermock:powermock-api-mockito2:${powermockVersion}")
 
     // for SpotBugs
     spotbugs(configurations.spotbugsPlugins.dependencies)
@@ -254,16 +254,6 @@ clean {
 }
 
 // -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP -XX:TieredStopAtLevel=1 -Dspring.main.lazy-initialization=true --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED
-task testJUnit4AndSpock(type: Test) {
-    jvmArgs = jvmArgsForTask +
-            jvmArgsAddOpens +
-            ["-Dspring.profiles.active=unittest"]
-
-    testLogging {
-        afterSuite printTestCount
-    }
-}
-test.dependsOn testJUnit4AndSpock
 test {
     jvmArgs = jvmArgsForTask +
             jvmArgsAddOpens +

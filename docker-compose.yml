@@ -2,7 +2,7 @@ version: '3'
 
 services:
   prometheus:
-    image: prom/prometheus:v2.25.0
+    image: prom/prometheus:v2.29.2
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -16,7 +16,7 @@ services:
       - "app:${HOST_IP_ADDRESS}"
 
   grafana:
-    image: grafana/grafana:7.4.3
+    image: grafana/grafana:8.1.3
     container_name: grafana
     ports:
       - "3000:3000"
@@ -194,7 +194,7 @@ services:
       - redis-cluster-6
 
   redis_exporter:
-    image: oliver006/redis_exporter:v1.17.1-alpine
+    image: oliver006/redis_exporter:v1.27.0-alpine
     container_name: redis_exporter
     ports:
       - "9121:9121"
@@ -326,7 +326,11 @@ services:
   # URL
   # http://localhost:12000/
   pgadmin4:
-    image: dpage/pgadmin4:${PGADMIN4_VERSION}
+    build:
+      context: ./docker/pgadmin4
+      args:
+        - PGADMIN4_VERSION=${PGADMIN4_VERSION}
+    image: dpage/pgadmin4:${PGADMIN4_VERSION}-custom
     container_name: pgadmin4
     ports:
       - "12000:80"
@@ -339,6 +343,7 @@ services:
       # PGADMIN_CONFIG_CONSOLE_LOG_LEVEL は debug 用
       # 設定値は https://www.pgadmin.org/docs/pgadmin4/development/config_py.html の CONSOLE_LOG_LEVEL 参照
       - PGADMIN_CONFIG_CONSOLE_LOG_LEVEL=10
+      - PGADMIN_CONFIG_SESSION_DB_PATH='/var/lib/pgadmin_session'
     volumes:
       - ./docker/pgadmin4/data:/var/lib/pgadmin
 

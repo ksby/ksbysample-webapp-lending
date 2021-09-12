@@ -12,10 +12,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * ???
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = { ValuesEnumValidator.class })
+@Constraint(validatedBy = {ValuesEnumValidator.class})
 public @interface ValuesEnum {
 
     /**
@@ -30,14 +30,14 @@ public @interface ValuesEnum {
      *
      * @return ???
      */
-    Class<?>[] groups() default { };
+    Class<?>[] groups() default {};
 
     /**
      * ???
      *
      * @return ???
      */
-    Class<? extends Payload>[] payload() default { };
+    Class<? extends Payload>[] payload() default {};
 
     /**
      * ???
@@ -56,11 +56,18 @@ public @interface ValuesEnum {
     /**
      * ???
      */
-    @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
+    @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
     @Retention(RUNTIME)
     @Documented
     @interface List {
+
+        /**
+         * ???
+         *
+         * @return ???
+         */
         ValuesEnum[] value();
+
     }
 
 }

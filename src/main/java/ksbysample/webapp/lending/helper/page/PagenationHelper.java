@@ -32,6 +32,7 @@ public class PagenationHelper {
      *
      * @param page ???
      */
+    @SuppressWarnings("PMD.CognitiveComplexity")
     public PagenationHelper(Page<?> page) {
         int number = page.getNumber();
         int totalPages = page.getTotalPages();
