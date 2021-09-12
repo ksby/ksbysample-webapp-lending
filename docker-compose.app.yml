@@ -11,7 +11,7 @@ services:
 #      dockerfile: docker/app/Dockerfile
 #    image: ksbysample-webapp-lending
 #    volumes:
-#      - ./build/libs/ksbysample-webapp-lending-2.4.3.jar:/app.jar
+#      - ./build/libs/ksbysample-webapp-lending-2.5.4.jar:/app.jar
 #      - ./docker/app/docker-entrypoint.sh:/usr/local/bin/docker-entrypoint.sh
 #    environment:
 #      - SPRING_DATASOURCE_HIKARI_JDBC_URL=jdbc:postgresql://postgresql/ksbylending
