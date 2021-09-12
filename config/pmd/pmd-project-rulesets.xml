@@ -12,7 +12,16 @@
         https://pmd.github.io/pmd-6.7.0/pmd_rules_java.html
         ※"pmd-6.7.0" の部分は適用しているバージョンに変更すること。
     -->
-    <rule ref="category/java/bestpractices.xml"/>
+    <rule ref="category/java/bestpractices.xml">
+        <!-- CommentRequired はここでは exclude し、下で別途定義する -->
+        <exclude name="GuardLogStatement"/>
+    </rule>
+    <rule ref="category/java/bestpractices.xml/GuardLogStatement">
+        <properties>
+            <property name="logLevels" value="trace,debug"/>
+            <property name="guardsMethods" value="isTraceEnabled,isDebugEnabled"/>
+        </properties>
+    </rule>
     <rule ref="category/java/codestyle.xml">
         <exclude name="AtLeastOneConstructor"/>
         <exclude name="ClassNamingConventions"/>

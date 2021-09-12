@@ -5,7 +5,6 @@ import ksbysample.webapp.lending.values.lendingbook.LendingBookLendingAppFlgValu
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
-import spock.lang.Unroll
 
 @SpringBootTest
 class ValuesHelperTest extends Specification {
@@ -13,7 +12,6 @@ class ValuesHelperTest extends Specification {
     @Autowired
     ValuesHelper vh;
 
-    @Unroll
     def "GetValue(#classSimpleName, #valueName) --> #result"() {
         expect:
         vh.getValue(classSimpleName, valueName) == result
@@ -25,7 +23,6 @@ class ValuesHelperTest extends Specification {
         "LendingBookLendingAppFlgValues" | "NOT_APPLY"      || ""
     }
 
-    @Unroll
     def "GetText(#classSimpleName, #value) --> #result"() {
         expect:
         vh.getText(classSimpleName, value) == result
@@ -37,7 +34,6 @@ class ValuesHelperTest extends Specification {
         "LendingBookLendingAppFlgValues" | ""    || "しない"
     }
 
-    @Unroll
     def "Values(#classSimpleName)"() {
         expect:
         vh.values(classSimpleName) == result
