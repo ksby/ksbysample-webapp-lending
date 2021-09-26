@@ -218,18 +218,6 @@ def jvmArgsForTask = [
         "-XX:TieredStopAtLevel=1",
         "-Dspring.main.lazy-initialization=true"
 ]
-// JDK 11 に変更後、test タスク実行時に groovy と powermock が JDKの内部部分にアクセスするためにコードでリフレクションを使用
-// していて WARNING が出るため、JVM の起動時オプションの --add-opens を指定して WARNING が出ないようにする
-def jvmArgsAddOpens = [
-        "--add-opens=java.base/java.io=ALL-UNNAMED",
-        "--add-opens=java.base/java.lang=ALL-UNNAMED",
-        "--add-opens=java.base/java.lang.invoke=ALL-UNNAMED",
-        "--add-opens=java.base/java.lang.ref=ALL-UNNAMED",
-        "--add-opens=java.base/java.lang.reflect=ALL-UNNAMED",
-        "--add-opens=java.base/java.net=ALL-UNNAMED",
-        "--add-opens=java.base/java.security=ALL-UNNAMED",
-        "--add-opens=java.base/java.util=ALL-UNNAMED"
-]
 def printTestCount = { desc, result ->
     if (!desc.parent) { // will match the outermost suite
         println "Results: ${result.resultType} (${result.testCount} tests, ${result.successfulTestCount} successes, ${result.failedTestCount} failures, ${result.skippedTestCount} skipped)"
@@ -253,10 +241,9 @@ clean {
     }
 }
 
-// -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP -XX:TieredStopAtLevel=1 -Dspring.main.lazy-initialization=true --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.ref=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED
+// -ea -Dspring.profiles.active=unittest -Dfile.encoding=UTF-8 -Dsun.nio.cs.map=x-windows-iso2022jp/ISO-2022-JP -XX:TieredStopAtLevel=1 -Dspring.main.lazy-initialization=true
 test {
     jvmArgs = jvmArgsForTask +
-            jvmArgsAddOpens +
             ["-Dspring.profiles.active=unittest"]
 
     // for JUnit 5
@@ -392,95 +379,3 @@ domaCodeGenDbDao.dependsOn domaCodeGenDbEntity
 domaCodeGenDbSql.dependsOn domaCodeGenDbDao
 domaGen.dependsOn domaCodeGenDbSql
 domaGen.finalizedBy afterDomaCodeGen
-
-task printClassWhatNotMakeTest {
-    doLast {
-        def srcDir = new File("src/main/java")
-        def excludePaths = [
-                "src/main/java/ksbysample/webapp/lending/Application.java"
-                , "src/main/java/ksbysample/webapp/lending/config"
-                , "src/main/java/ksbysample/webapp/lending/cookie"
-                , "src/main/java/ksbysample/webapp/lending/dao"
-                , "src/main/java/ksbysample/webapp/lending/entity"
-                , "src/main/java/ksbysample/webapp/lending/exception"
-                , "src/main/java/ksbysample/webapp/lending/helper/download/booklistcsv"
-                , "src/main/java/ksbysample/webapp/lending/helper/download/DataDownloadHelper.java"
-                , "src/main/java/ksbysample/webapp/lending/helper/page/PagenationHelper.java"
-                , "src/main/java/ksbysample/webapp/lending/security/LendingUser.java"
-                , "src/main/java/ksbysample/webapp/lending/security/RoleAwareAuthenticationSuccessHandler.java"
-                , "src/main/java/ksbysample/webapp/lending/service/calilapi/response"
-                , "src/main/java/ksbysample/webapp/lending/service/file/BooklistCSVRecord.java"
-                , "src/main/java/ksbysample/webapp/lending/service/openweathermapapi"
-                , "src/main/java/ksbysample/webapp/lending/service/queue/InquiringStatusOfBookQueueMessage.java"
-                , "src/main/java/ksbysample/webapp/lending/util/doma"
-                , "src/main/java/ksbysample/webapp/lending/util/velocity/VelocityUtils.java"
-                , "src/main/java/ksbysample/webapp/lending/values/validation/ValuesEnum.java"
-                , "src/main/java/ksbysample/webapp/lending/view/BookListCsvView.java"
-                , "src/main/java/ksbysample/webapp/lending/web/.+/.+Service.java"
-                , "src/main/java/ksbysample/webapp/lending/webapi/common/CommonWebApiResponse.java"
-                , "src/main/java/ksbysample/webapp/lending/webapi/weather"
-        ]
-        def excludeFileNamePatterns = [
-                ".*EventListener.java"
-                , ".*Dto.java"
-                , ".*Form.java"
-                , ".*Values.java"
-        ]
-
-        compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns)
-    }
-}
-
-/* -----------------------------------------------------------------------------
- * メソッド定義部
- ---------------------------------------------------------------------------- */
-
-def compareSrcAndTestDir(srcDir, excludePaths, excludeFileNamePatterns) {
-    def existFlg
-    def testDirAndTestClassNameList = [
-            ["src/test/java", "Test.java"]
-            , ["src/test/groovy", "Test.groovy"]
-    ]
-
-    for (srcFile in srcDir.listFiles()) {
-        String srcFilePath = (srcFile.toPath() as String).replaceAll("\\\\", "/")
-        existFlg = false
-
-        for (exclude in excludePaths) {
-            if (srcFilePath =~ /^${exclude as String}/) {
-                existFlg = true
-                break
-            }
-        }
-        if (existFlg == true) continue
-
-        for (exclude in excludeFileNamePatterns) {
-            if (srcFilePath =~ /${exclude as String}/) {
-                existFlg = true
-                break
-            }
-        }
-        if (existFlg == true) continue
-
-        if (srcFile.isDirectory()) {
-            compareSrcAndTestDir(srcFile, excludePaths, excludeFileNamePatterns)
-        } else {
-            def nextFlg = false
-            for (testDirAndTestClassName in testDirAndTestClassNameList) {
-                def testDir = testDirAndTestClassName[0]
-                def testClassName = testDirAndTestClassName[1]
-
-                String testFilePath = srcFilePath.replaceFirst(/^src\/main\/java/, testDir)
-                        .replaceFirst(/\.java$/, testClassName)
-                def testFile = new File(testFilePath)
-                if (testFile.exists()) {
-                    nextFlg = true
-                    break
-                }
-            }
-            if (nextFlg) continue
-
-            println(srcFilePath)
-        }
-    }
-}
