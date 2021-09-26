@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group "ksbysample"
-        version "2.5.4"
+        version "2.5.5"
     }
     repositories {
         mavenCentral()
@@ -10,7 +10,7 @@ buildscript {
     }
     dependencies {
         // for doma-codegen-plugin
-        classpath "org.postgresql:postgresql:42.2.23"
+        classpath "org.postgresql:postgresql:42.2.24"
     }
 }
 
@@ -18,7 +18,7 @@ plugins {
     id "java"
     id "eclipse"
     id "idea"
-    id "org.springframework.boot" version "2.5.4"
+    id "org.springframework.boot" version "2.5.5"
     id "io.spring.dependency-management" version "1.0.11.RELEASE"
     id "groovy"
     id "checkstyle"
@@ -29,8 +29,8 @@ plugins {
     id "org.seasar.doma.codegen" version "1.4.1"
 }
 
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 wrapper {
     gradleVersion = "7.2"
@@ -130,14 +130,14 @@ dependencyManagement {
             // Spring Boot の BOM に定義されているバージョンから変更する場合には、ここに以下のように記述する
             // bomProperty "thymeleaf.version", "3.0.9.RELEASE"
         }
-        mavenBom("org.junit:junit-bom:5.7.2")
+        mavenBom("org.junit:junit-bom:5.8.1")
     }
 }
 
 dependencies {
     def spockVersion = "2.0-groovy-3.0"
-    def jdbcDriver = "org.postgresql:postgresql:42.2.23"
-    def domaVersion = "2.47.1"
+    def jdbcDriver = "org.postgresql:postgresql:42.2.24"
+    def domaVersion = "2.49.0"
     def lombokVersion = "1.18.20"
     def errorproneVersion = "2.9.0"
 
