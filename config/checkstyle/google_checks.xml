@@ -84,7 +84,7 @@
                     INTERFACE_DEF, LAMBDA, LITERAL_CASE, LITERAL_CATCH, LITERAL_DEFAULT,
                     LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF,
                     LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, METHOD_DEF,
-                    OBJBLOCK, STATIC_INIT, COMPACT_CTOR_DEF"/>
+                    OBJBLOCK, STATIC_INIT, RECORD_DEF, COMPACT_CTOR_DEF"/>
         </module>
         <module name="RightCurly">
             <property name="id" value="RightCurlySame"/>
@@ -97,7 +97,7 @@
             <property name="option" value="alone"/>
             <property name="tokens"
                       value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, STATIC_INIT,
-                    INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF,
+                    INSTANCE_INIT, ANNOTATION_DEF, ENUM_DEF, INTERFACE_DEF, RECORD_DEF,
                     COMPACT_CTOR_DEF"/>
         </module>
         <module name="SuppressionXpathSingleFilter">
@@ -141,7 +141,7 @@
         <module name="EmptyLineSeparator">
             <property name="tokens"
                       value="PACKAGE_DEF, IMPORT, STATIC_IMPORT, CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
-                    STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF,
+                    STATIC_INIT, INSTANCE_INIT, METHOD_DEF, CTOR_DEF, VARIABLE_DEF, RECORD_DEF,
                     COMPACT_CTOR_DEF"/>
             <property name="allowNoEmptyLineBetweenFields" value="true"/>
         </module>
@@ -179,7 +179,7 @@
         </module>
         <module name="TypeName">
             <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
-                    ANNOTATION_DEF"/>
+                    ANNOTATION_DEF, RECORD_DEF"/>
             <message key="name.invalidPattern"
                      value="Type name ''{0}'' must match pattern ''{1}''."/>
         </module>
@@ -218,6 +218,16 @@
             <message key="name.invalidPattern"
                      value="Class type name ''{0}'' must match pattern ''{1}''."/>
         </module>
+        <module name="RecordComponentName">
+            <property name="format" value="^[a-z]([a-z0-9][a-zA-Z0-9]*)?$"/>
+            <message key="name.invalidPattern"
+                     value="Record component name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <module name="RecordTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern"
+                     value="Record type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
         <module name="MethodTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
             <message key="name.invalidPattern"
@@ -252,7 +262,8 @@
             <property name="allowedAbbreviationLength" value="1"/>
             <property name="tokens"
                       value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, ANNOTATION_DEF, ANNOTATION_FIELD_DEF,
-                    PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF"/>
+                    PARAMETER_DEF, VARIABLE_DEF, METHOD_DEF, PATTERN_VARIABLE_DEF, RECORD_DEF,
+                    RECORD_COMPONENT_DEF"/>
         </module>
         <module name="NoWhitespaceBeforeCaseDefaultColon"/>
         <!-- Doma2 の Dao interface で警告が出て対応のしようがないのでコメントアウトする -->
@@ -271,7 +282,7 @@
         <module name="MethodParamPad">
             <property name="tokens"
                       value="CTOR_DEF, LITERAL_NEW, METHOD_CALL, METHOD_DEF,
-                    SUPER_CTOR_CALL, ENUM_CONSTANT_DEF"/>
+                    SUPER_CTOR_CALL, ENUM_CONSTANT_DEF, RECORD_DEF"/>
         </module>
         <module name="NoWhitespaceBefore">
             <property name="tokens"
@@ -284,7 +295,8 @@
                       value="ANNOTATION, ANNOTATION_FIELD_DEF, CTOR_CALL, CTOR_DEF, DOT, ENUM_CONSTANT_DEF,
                     EXPR, LITERAL_CATCH, LITERAL_DO, LITERAL_FOR, LITERAL_IF, LITERAL_NEW,
                     LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_WHILE, METHOD_CALL,
-                    METHOD_DEF, QUESTION, RESOURCE_SPECIFICATION, SUPER_CTOR_CALL, LAMBDA"/>
+                    METHOD_DEF, QUESTION, RESOURCE_SPECIFICATION, SUPER_CTOR_CALL, LAMBDA,
+                    RECORD_DEF"/>
         </module>
         <module name="OperatorWrap">
             <property name="option" value="NL"/>
@@ -297,7 +309,7 @@
             <property name="id" value="AnnotationLocationMostCases"/>
             <property name="tokens"
                       value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF,
-                      COMPACT_CTOR_DEF"/>
+                      RECORD_DEF, COMPACT_CTOR_DEF"/>
         </module>
         <module name="AnnotationLocation">
             <property name="id" value="AnnotationLocationVariables"/>
@@ -340,7 +352,7 @@
             <property name="scope" value="protected"/>
             <property name="tokens"
                       value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF,
-                      ANNOTATION_DEF"/>
+                      RECORD_DEF, ANNOTATION_DEF"/>
             <property name="excludeScope" value="nothing"/>
         </module>
         <module name="MethodName">
