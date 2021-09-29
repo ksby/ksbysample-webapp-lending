@@ -55,5 +55,5 @@ services:
 
 networks:
   default:
-    external:
-      name: ksbysample-webapp-lending_default
+    name: ksbysample-webapp-lending_default
+    external: true

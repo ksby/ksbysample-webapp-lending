@@ -1,6 +1,6 @@
-# docker-compose -f docker-compose.app.yml --compatibility build --no-cache
-# docker-compose -f docker-compose.app.yml --compatibility up -d
-# docker-compose -f docker-compose.app.yml --compatibility down
+# docker-compose -f docker-compose.app.yml build --no-cache
+# docker-compose -f docker-compose.app.yml up -d
+# docker-compose -f docker-compose.app.yml down
 version: '3'
 
 services:
@@ -27,7 +27,7 @@ services:
   # bootBuildImage で生成した docker image を利用する場合の設定
   # docker exec -it ksbysample-webapp-lending_app_1 /bin/bash
   app:
-    image: ksbysample-webapp-lending:2.5.4
+    image: ksbysample-webapp-lending:2.5.5
     environment:
       - JAVA_TOOL_OPTIONS=-Dspring.profiles.active=product -Dlogging.appender=CONSOLE
       - SPRING_DATASOURCE_HIKARI_JDBC_URL=jdbc:postgresql://postgresql/ksbylending
@@ -59,5 +59,5 @@ services:
 
 networks:
   default:
-    external:
-      name: ksbysample-webapp-lending_default
+    name: ksbysample-webapp-lending_default
+    external: true
