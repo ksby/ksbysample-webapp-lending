@@ -1,4 +1,4 @@
-FROM adoptopenjdk/openjdk11:jdk-11.0.12_7-alpine-slim
+FROM eclipse-temurin:17_35-jdk-alpine
 
 RUN apk update && \
     apk upgrade; \
