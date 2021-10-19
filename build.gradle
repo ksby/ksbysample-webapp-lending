@@ -241,6 +241,7 @@ bootRun {
 
 clean {
     doLast {
+        rootProject.file("out").deleteDir()
         rootProject.file("src/main/generated").deleteDir()
         rootProject.file("src/test/generated_tests").deleteDir()
     }
