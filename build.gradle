@@ -143,7 +143,7 @@ dependencies {
     def spockVersion = "2.0-groovy-3.0"
     def jdbcDriver = "org.postgresql:postgresql:42.2.24"
     def domaVersion = "2.49.0"
-    def lombokVersion = "1.18.20"
+    def lombokVersion = "1.18.22"
     def errorproneVersion = "2.9.0"
 
     // dependency-management-plugin によりバージョン番号が自動で設定されるもの

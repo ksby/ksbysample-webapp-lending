@@ -14,7 +14,6 @@ import java.util.Set;
  */
 public class LendingUserDetails implements UserDetails {
 
-    @SuppressWarnings("PMD.FieldNamingConventions")
     private static final long serialVersionUID = 4775912062739295150L;
 
     private final LendingUser lendingUser;
