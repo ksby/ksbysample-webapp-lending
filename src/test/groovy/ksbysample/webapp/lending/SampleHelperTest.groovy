@@ -1,8 +1,7 @@
 package ksbysample.webapp.lending
 
-import org.junit.experimental.runners.Enclosed
+
 import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -12,7 +11,6 @@ import javax.crypto.NoSuchPaddingException
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy
 
-@RunWith(Enclosed)
 class SampleHelperTest {
 
     @SpringBootTest

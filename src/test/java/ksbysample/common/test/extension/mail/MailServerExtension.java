@@ -5,7 +5,6 @@ import com.icegreen.greenmail.util.ServerSetup;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.rules.ExternalResource;
 import org.springframework.stereotype.Component;
 
 import javax.mail.internet.MimeMessage;
@@ -13,29 +12,18 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class MailServerExtension extends ExternalResource
-        implements BeforeEachCallback, AfterEachCallback {
+public class MailServerExtension implements BeforeEachCallback, AfterEachCallback {
 
     private GreenMail greenMail = new GreenMail(new ServerSetup(25, "localhost", ServerSetup.PROTOCOL_SMTP));
 
     @Override
-    protected void before() {
+    public void beforeEach(ExtensionContext context) {
         greenMail.start();
     }
 
     @Override
-    protected void after() {
-        greenMail.stop();
-    }
-
-    @Override
-    public void beforeEach(ExtensionContext context) {
-        before();
-    }
-
-    @Override
     public void afterEach(ExtensionContext context) {
-        after();
+        greenMail.stop();
     }
 
     public int getMessagesCount() {

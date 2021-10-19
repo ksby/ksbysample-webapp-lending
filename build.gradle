@@ -85,6 +85,11 @@ configurations {
     testAnnotationProcessor.extendsFrom annotationProcessor
     testImplementation.extendsFrom compileOnly
 
+    // JUnit 4 が依存関係に入らないようにする
+    all {
+        exclude group: "junit", module: "junit"
+    }
+
     // for SpotBugs
     spotbugsStylesheets { transitive = false }
 }

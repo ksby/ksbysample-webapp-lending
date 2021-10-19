@@ -2,7 +2,6 @@ package ksbysample.common.test.extension.mockmvc;
 
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.rules.ExternalResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,8 +17,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 @Component
 @ConditionalOnWebApplication
-public class SecurityMockMvcExtension extends ExternalResource
-        implements BeforeEachCallback {
+public class SecurityMockMvcExtension implements BeforeEachCallback {
 
     public final String MAILADDR_TANAKA_TARO = "tanaka.taro@sample.com";
     public final String MAILADDR_SUZUKI_HANAKO = "suzuki.hanako@test.co.jp";
@@ -41,7 +39,7 @@ public class SecurityMockMvcExtension extends ExternalResource
     public MockMvc noauth;
 
     @Override
-    protected void before() {
+    public void beforeEach(ExtensionContext context) {
         // 認証ユーザ用MockMvc ( user = tanaka.taro@sample.com )
         UserDetails userDetailsTanakaTaro = userDetailsService.loadUserByUsername(MAILADDR_TANAKA_TARO);
         this.authTanakaTaro = MockMvcBuilders.webAppContextSetup(this.context)
@@ -67,11 +65,6 @@ public class SecurityMockMvcExtension extends ExternalResource
         this.noauth = MockMvcBuilders.webAppContextSetup(this.context)
                 .apply(springSecurity())
                 .build();
-    }
-
-    @Override
-    public void beforeEach(ExtensionContext context) {
-        before();
     }
 
 }
