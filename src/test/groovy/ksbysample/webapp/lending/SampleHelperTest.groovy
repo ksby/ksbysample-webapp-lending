@@ -1,8 +1,8 @@
 package ksbysample.webapp.lending
 
-import org.junit.experimental.runners.Enclosed
+
 import org.junit.jupiter.api.Test
-import org.junit.runner.RunWith
+import org.mockito.MockedStatic
 import org.mockito.Mockito
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -12,7 +12,6 @@ import javax.crypto.NoSuchPaddingException
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy
 
-@RunWith(Enclosed)
 class SampleHelperTest {
 
     @SpringBootTest
@@ -41,15 +40,16 @@ class SampleHelperTest {
 
         @Test
         void "SampleHelper_encryptを呼ぶとRuntimeExceptionをthrowする"() {
-            // setup:
-            Mockito.mockStatic(BrowfishUtils)
-            Mockito.when(BrowfishUtils.encrypt(Mockito.any()))
-                    .thenThrow(new NoSuchPaddingException())
+            try (MockedStatic mockedBrowfishUtils = Mockito.mockStatic(BrowfishUtils)) {
+                // setup:
+                Mockito.when(BrowfishUtils.encrypt(Mockito.any()))
+                        .thenThrow(new NoSuchPaddingException())
 
-            // expect:
-            assertThatThrownBy(() -> {
-                sampleHelper.encrypt("test")
-            }).isInstanceOf(RuntimeException)
+                // expect:
+                assertThatThrownBy(() -> {
+                    sampleHelper.encrypt("test")
+                }).isInstanceOf(RuntimeException)
+            }
         }
 
     }

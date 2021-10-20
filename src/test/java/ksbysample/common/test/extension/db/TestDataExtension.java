@@ -1,6 +1,5 @@
 package ksbysample.common.test.extension.db;
 
-import ksbysample.common.test.helper.DescriptionWrapper;
 import ksbysample.common.test.helper.ExtensionContextWrapper;
 import ksbysample.common.test.helper.TestContextWrapper;
 import org.dbunit.DatabaseUnitException;
@@ -15,8 +14,6 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -38,8 +35,7 @@ import java.util.List;
 import static java.util.Comparator.comparing;
 
 @Component
-public class TestDataExtension extends TestWatcher
-        implements BeforeEachCallback, AfterEachCallback {
+public class TestDataExtension implements BeforeEachCallback, AfterEachCallback {
 
     private static final String BASETESTDATA_ROOT_DIR = "src/test/resources/";
     private static final String TESTDATA_ROOT_DIR = "src/test/resources/ksbysample/webapp/lending/";
@@ -53,17 +49,6 @@ public class TestDataExtension extends TestWatcher
     private TestDataLoader testDataLoader;
 
     private File backupFile;
-
-    @Override
-    protected void starting(Description description) {
-        before(new DescriptionWrapper(description));
-    }
-
-    @SuppressWarnings("Finally")
-    @Override
-    protected void finished(Description description) {
-        after(new DescriptionWrapper(description));
-    }
 
     @Override
     public void beforeEach(ExtensionContext context) {
